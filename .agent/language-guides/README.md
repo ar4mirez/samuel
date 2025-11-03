@@ -6,7 +6,7 @@ This directory contains language and framework-specific guardrails and best prac
 
 AI automatically loads the relevant language guide when:
 1. Tech stack is defined in `.agent/project.md`
-2. File extensions detected (`.ts`, `.py`, `.go`, `.rs`)
+2. File extensions detected (`.ts`, `.py`, `.go`, `.rs`, `.kt`, `.kts`)
 3. User explicitly requests: `@.agent/language-guides/typescript.md`
 
 ## Available Guides
@@ -15,6 +15,7 @@ AI automatically loads the relevant language guide when:
 - **[python.md](python.md)** - Python (Django, FastAPI, Flask)
 - **[go.md](go.md)** - Go microservices and APIs
 - **[rust.md](rust.md)** - Rust systems programming
+- **[kotlin.md](kotlin.md)** - Kotlin (Android, Spring Boot, Ktor)
 
 ## How AI Should Use These
 
