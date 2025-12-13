@@ -3,18 +3,19 @@
 > **Production-ready AI-assisted development framework**
 > Cross-tool compatible • Opinionated guardrails • Tech-stack agnostic • Token-optimized
 
-[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](CLAUDE.md)
+[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](CLAUDE.md)
 [![AGENTS.md](https://img.shields.io/badge/AGENTS.md-compatible-brightgreen.svg)](https://agents.md)
 [![Status](https://img.shields.io/badge/status-production%20ready-brightgreen.svg)](CLAUDE.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
 
-## What's New in v1.2.0
+## What's New in v1.4.0
 
+- **21 Language Guides** - Comprehensive coverage for all major programming languages
+- **New in v1.4.0**: SQL, Shell/Bash, R, Dart/Flutter, HTML/CSS, Lua, Assembly, CUDA, Solidity, Zig
+- **New in v1.3.0**: Java, C#, PHP, Swift, C/C++, Ruby
 - **AGENTS.md Compatible** - Works with Claude Code, Cursor, Codex, Copilot, and 20+ other AI tools
-- **Operations Section** - Commands first, context second (industry standard)
-- **Cross-Tool Workflow** - Generate standalone AGENTS.md for multi-tool teams
 
 ---
 
@@ -81,7 +82,7 @@ An **opinionated AI development framework** designed for professional software t
 | Feature | Description |
 |---------|-------------|
 | **35+ Guardrails** | Testable rules, not vague suggestions |
-| **5 Language Guides** | TypeScript, Python, Go, Rust, Kotlin (auto-loading) |
+| **21 Language Guides** | All major languages with auto-loading support |
 | **5 Workflows** | PRD, tasks, init, troubleshooting, AGENTS.md generator |
 | **3 Modes** | ATOMIC/FEATURE/COMPLEX (scales from bugs to architecture) |
 | **4D Methodology** | Deconstruct → Diagnose → Develop → Deliver |
@@ -400,6 +401,22 @@ AI will:
 | Go | `.go` | [go.md](.agent/language-guides/go.md) |
 | Rust | `.rs` | [rust.md](.agent/language-guides/rust.md) |
 | Kotlin | `.kt`, `.kts` | [kotlin.md](.agent/language-guides/kotlin.md) |
+| Java | `.java` | [java.md](.agent/language-guides/java.md) |
+| C# | `.cs` | [csharp.md](.agent/language-guides/csharp.md) |
+| PHP | `.php` | [php.md](.agent/language-guides/php.md) |
+| Swift | `.swift` | [swift.md](.agent/language-guides/swift.md) |
+| C/C++ | `.c`, `.cpp`, `.h`, `.hpp` | [cpp.md](.agent/language-guides/cpp.md) |
+| Ruby | `.rb` | [ruby.md](.agent/language-guides/ruby.md) |
+| SQL | `.sql` | [sql.md](.agent/language-guides/sql.md) |
+| Shell/Bash | `.sh`, `.bash` | [shell.md](.agent/language-guides/shell.md) |
+| R | `.r`, `.R` | [r.md](.agent/language-guides/r.md) |
+| Dart/Flutter | `.dart` | [dart.md](.agent/language-guides/dart.md) |
+| HTML/CSS | `.html`, `.css`, `.scss` | [html-css.md](.agent/language-guides/html-css.md) |
+| Lua | `.lua` | [lua.md](.agent/language-guides/lua.md) |
+| Assembly | `.asm`, `.s` | [assembly.md](.agent/language-guides/assembly.md) |
+| CUDA | `.cu`, `.cuh` | [cuda.md](.agent/language-guides/cuda.md) |
+| Solidity | `.sol` | [solidity.md](.agent/language-guides/solidity.md) |
+| Zig | `.zig` | [zig.md](.agent/language-guides/zig.md) |
 
 ### Workflows (On-Demand)
 
@@ -417,12 +434,12 @@ AI will:
 
 | Metric | Value |
 |--------|-------|
-| **Version** | 1.2.0 |
+| **Version** | 1.4.0 |
 | **Status** | Production Ready |
 | **AGENTS.md** | Compatible |
-| **Total Files** | 18 markdown files |
+| **Total Files** | 34 markdown files |
 | **CLAUDE.md** | ~500 lines |
-| **Language Guides** | 5 (TypeScript, Python, Go, Rust, Kotlin) |
+| **Language Guides** | 21 (all major programming languages) |
 | **Workflows** | 5 (PRD, tasks, init, troubleshoot, AGENTS.md) |
 | **Guardrails** | 35+ testable rules |
 
@@ -475,8 +492,8 @@ AI will:
 ## Contributing
 
 Contributions welcome! Ideas:
-- Additional language guides (Java, C#, PHP, Swift)
-- Framework-specific templates (Next.js, Django, Rails)
+- Additional language guides (Scala, Elixir, Haskell, OCaml)
+- Framework-specific templates (Next.js, Django, Rails, Spring Boot)
 - Integration examples with other AI tools
 - Real-world case studies
 

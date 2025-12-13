@@ -9,6 +9,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Add unreleased changes here -->
 
+## [1.4.0] - 2025-12-13
+
+### Added
+
+#### Language Guides - Specialized Domains
+- **10 new language guides** for specialized programming domains:
+  - **[sql.md](.agent/language-guides/sql.md)** - SQL (PostgreSQL, MySQL, query optimization, migrations)
+  - **[shell.md](.agent/language-guides/shell.md)** - Shell/Bash (scripting, automation, POSIX compliance)
+  - **[r.md](.agent/language-guides/r.md)** - R (statistical computing, tidyverse, Shiny)
+  - **[dart.md](.agent/language-guides/dart.md)** - Dart (Flutter, mobile development)
+  - **[html-css.md](.agent/language-guides/html-css.md)** - HTML/CSS (web standards, accessibility, BEM)
+  - **[lua.md](.agent/language-guides/lua.md)** - Lua (scripting, Love2D, Neovim)
+  - **[assembly.md](.agent/language-guides/assembly.md)** - Assembly (x86-64, ARM64, RISC-V)
+  - **[cuda.md](.agent/language-guides/cuda.md)** - CUDA (GPU computing, parallel processing)
+  - **[solidity.md](.agent/language-guides/solidity.md)** - Solidity (Ethereum, smart contracts, DeFi)
+  - **[zig.md](.agent/language-guides/zig.md)** - Zig (systems programming, C interop)
+
+### Changed
+
+- **Total language guides**: Now 21 (up from 11 in v1.3.0)
+- **CLAUDE.md**: Updated Quick Reference with all 21 language guides
+- **README.md**: Updated language guides table with all supported languages
+- **.agent/language-guides/README.md**: Reorganized with categorized sections
+
+## [1.3.0] - 2025-12-13
+
+### Added
+
+#### Language Guides - Enterprise & Systems
+- **6 new language guides** for enterprise and systems programming:
+  - **[java.md](.agent/language-guides/java.md)** - Java (Spring Boot, Jakarta EE, JUnit 5)
+  - **[csharp.md](.agent/language-guides/csharp.md)** - C# (.NET 8, ASP.NET Core, xUnit)
+  - **[php.md](.agent/language-guides/php.md)** - PHP (Laravel, Symfony, PHPUnit)
+  - **[swift.md](.agent/language-guides/swift.md)** - Swift (iOS, macOS, SwiftUI)
+  - **[cpp.md](.agent/language-guides/cpp.md)** - C/C++ (C++20, CMake, GoogleTest)
+  - **[ruby.md](.agent/language-guides/ruby.md)** - Ruby (Rails 7, RSpec, Sidekiq)
+
+### Changed
+
+- **Total language guides**: Now 11 (up from 5 in v1.2.0)
+- **CLAUDE.md**: Updated context system documentation with new language guides
+- **README.md**: Added new languages to documentation table
+
 ## [1.2.0] - 2025-12-13
 
 ### Added
@@ -214,6 +257,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.4.0 | 2025-12-13 | 10 specialized language guides (SQL, Shell, R, Dart, HTML/CSS, Lua, Assembly, CUDA, Solidity, Zig) |
+| 1.3.0 | 2025-12-13 | 6 enterprise language guides (Java, C#, PHP, Swift, C++, Ruby) |
 | 1.2.0 | 2025-12-13 | AGENTS.md compatibility, MkDocs documentation site, Kotlin guide |
 | 1.1.0 | 2025-01-15 | 4 language guides, 2 new workflows, 18% size reduction |
 | 1.0.0 | 2025-01-14 | Initial release with 30+ guardrails, 4D methodology |
@@ -221,6 +266,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## Migration Guide
+
+### From 1.3.0 to 1.4.0
+
+No breaking changes. New specialized language guides are additive:
+- SQL, Shell/Bash, R, Dart/Flutter, HTML/CSS, Lua, Assembly, CUDA, Solidity, Zig
+
+### From 1.2.0 to 1.3.0
+
+No breaking changes. New enterprise language guides are additive:
+- Java, C#, PHP, Swift, C/C++, Ruby
 
 ### From 1.1.0 to 1.2.0
 
@@ -247,7 +302,9 @@ No breaking changes. New language guides and workflows are additive.
 - [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md) - Quick start guide
 - [AGENTS.md Standard](https://agents.md) - Cross-tool compatibility standard
 
-[Unreleased]: https://github.com/ar4mirez/ai-claude-code/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/ar4mirez/ai-claude-code/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.3.0...v1.4.0
+[1.3.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/ar4mirez/ai-claude-code/releases/tag/v1.0.0

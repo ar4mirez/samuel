@@ -6,16 +6,43 @@ This directory contains language and framework-specific guardrails and best prac
 
 AI automatically loads the relevant language guide when:
 1. Tech stack is defined in `.agent/project.md`
-2. File extensions detected (`.ts`, `.py`, `.go`, `.rs`, `.kt`, `.kts`)
+2. File extensions detected (`.ts`, `.tsx`, `.js`, `.jsx`, `.py`, `.go`, `.rs`, `.kt`, `.kts`, `.java`, `.cs`, `.php`, `.swift`, `.c`, `.cpp`, `.h`, `.hpp`, `.rb`, `.sql`, `.sh`, `.bash`, `.r`, `.R`, `.dart`, `.html`, `.css`, `.scss`, `.lua`, `.asm`, `.s`, `.cu`, `.cuh`, `.sol`, `.zig`)
 3. User explicitly requests: `@.agent/language-guides/typescript.md`
 
 ## Available Guides
 
+### Core Languages
 - **[typescript.md](typescript.md)** - TypeScript & JavaScript (React, Node.js, Next.js)
 - **[python.md](python.md)** - Python (Django, FastAPI, Flask)
 - **[go.md](go.md)** - Go microservices and APIs
 - **[rust.md](rust.md)** - Rust systems programming
 - **[kotlin.md](kotlin.md)** - Kotlin (Android, Spring Boot, Ktor)
+
+### Enterprise & Web Languages
+- **[java.md](java.md)** - Java (Spring Boot, Jakarta EE, enterprise)
+- **[csharp.md](csharp.md)** - C# (.NET 8, ASP.NET Core, xUnit)
+- **[php.md](php.md)** - PHP (Laravel, Symfony, PHPUnit)
+- **[ruby.md](ruby.md)** - Ruby (Rails 7, RSpec, Sidekiq)
+
+### Systems & Native Languages
+- **[swift.md](swift.md)** - Swift (iOS, macOS, SwiftUI)
+- **[cpp.md](cpp.md)** - C/C++ (C++20, CMake, GoogleTest)
+
+### Data & Scripting Languages
+- **[sql.md](sql.md)** - SQL (PostgreSQL, MySQL, query optimization)
+- **[shell.md](shell.md)** - Shell/Bash (scripting, automation, POSIX)
+- **[r.md](r.md)** - R (statistical computing, tidyverse, Shiny)
+
+### Mobile & Web Frontend
+- **[dart.md](dart.md)** - Dart (Flutter, mobile development)
+- **[html-css.md](html-css.md)** - HTML/CSS (web standards, accessibility, BEM)
+
+### Specialized Languages
+- **[lua.md](lua.md)** - Lua (scripting, Love2D, Neovim)
+- **[assembly.md](assembly.md)** - Assembly (x86-64, ARM64, RISC-V)
+- **[cuda.md](cuda.md)** - CUDA (GPU computing, parallel processing)
+- **[solidity.md](solidity.md)** - Solidity (Ethereum, smart contracts, DeFi)
+- **[zig.md](zig.md)** - Zig (systems programming, C interop)
 
 ## How AI Should Use These
 
