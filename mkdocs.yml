@@ -1,0 +1,202 @@
+# MkDocs configuration for AI Code Template documentation
+# https://squidfunk.github.io/mkdocs-material/
+
+site_name: AI Code Template
+site_description: Production-ready AI-assisted development framework with guardrails
+site_author: ar4mirez
+site_url: https://ar4mirez.github.io/ai-code-template/
+
+# Repository
+repo_name: ar4mirez/ai-code-template
+repo_url: https://github.com/ar4mirez/ai-code-template
+edit_uri: edit/main/docs/
+
+# Copyright
+copyright: Copyright &copy; 2025 ar4mirez
+
+# Theme configuration
+theme:
+  name: material
+
+  # Light/Dark mode toggle with system preference detection
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  features:
+    # Navigation
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+
+    # Search
+    - search.suggest
+    - search.highlight
+    - search.share
+
+    # Content
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+
+    # Table of contents
+    - toc.follow
+
+    # Header
+    - header.autohide
+    - announce.dismiss
+
+  # Icons
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+
+  # Logo and favicon
+  logo: assets/logo.svg
+  favicon: assets/favicon.png
+
+  # Language
+  language: en
+
+# Plugins
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
+  - minify:
+      minify_html: true
+
+# Extensions
+markdown_extensions:
+  # Python Markdown
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+
+  # Python Markdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: ar4mirez
+      repo: ai-code-template
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/abbreviations.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Page tree / Navigation
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Quick Start: getting-started/quick-start.md
+    - Installation: getting-started/installation.md
+    - Your First Task: getting-started/first-task.md
+  - Core System:
+    - Overview: core/overview.md
+    - CLAUDE.md: core/claude-md.md
+    - The 4D Methodology: core/methodology.md
+    - Guardrails: core/guardrails.md
+    - The .agent Directory: core/agent-directory.md
+  - Language Guides:
+    - Overview: languages/index.md
+    - TypeScript: languages/typescript.md
+    - Python: languages/python.md
+    - Go: languages/go.md
+    - Rust: languages/rust.md
+    - Kotlin: languages/kotlin.md
+  - Workflows:
+    - Overview: workflows/index.md
+    - Initialize Project: workflows/initialize-project.md
+    - Create PRD: workflows/create-prd.md
+    - Generate Tasks: workflows/generate-tasks.md
+    - Troubleshooting: workflows/troubleshooting.md
+    - Generate AGENTS.md: workflows/generate-agents-md.md
+  - Reference:
+    - Cross-Tool Compatibility: reference/cross-tool.md
+    - FAQ: reference/faq.md
+    - Changelog: reference/changelog.md
+    - Contributing: reference/contributing.md
+
+# Extra configuration
+extra:
+  # Social links
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ar4mirez/ai-code-template
+      name: GitHub Repository
+
+  # Version
+  version:
+    provider: mike
+    default: latest
+
+  # Analytics (optional - uncomment and configure if needed)
+  # analytics:
+  #   provider: google
+  #   property: G-XXXXXXXXXX
+
+  # Generator notice
+  generator: false
+
+# Extra CSS
+extra_css:
+  - stylesheets/extra.css
+
+# Extra JavaScript
+extra_javascript:
+  - javascripts/extra.js

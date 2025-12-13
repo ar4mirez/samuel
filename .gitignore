@@ -49,3 +49,10 @@ build/
 *.dylib
 *.dll
 *.exe
+
+# MkDocs documentation
+site/
+
+# Python virtual environments for docs
+.venv/
+docs_env/
