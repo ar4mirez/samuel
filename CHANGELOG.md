@@ -24,6 +24,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Cross-tool symlink instructions** - `ln -s CLAUDE.md AGENTS.md`
 - **generate-agents-md.md workflow** - generates standalone AGENTS.md for cross-tool teams
 
+#### Documentation Site
+- **MkDocs Material documentation site** with GitHub Pages
+  - Light/dark mode toggle with system preference detection
+  - Full-text search with highlighting
+  - Responsive design for mobile and desktop
+  - Code syntax highlighting with copy button
+  - Mermaid diagram support
+- **Comprehensive documentation structure**
+  - Getting Started: quick-start, installation, first-task guides
+  - Core System: overview, CLAUDE.md, methodology, guardrails, .agent directory
+  - Language Guides: TypeScript, Python, Go, Rust, Kotlin
+  - Workflows: initialize, create-prd, generate-tasks, troubleshooting, generate-agents-md
+  - Reference: cross-tool compatibility, FAQ, changelog, contributing
+- **GitHub Actions workflow** for automatic deployment to GitHub Pages
+- **requirements-docs.txt** for documentation dependencies
+
 #### Documentation
 - **Professional prompt examples** in README.md (25+ real-world prompts)
   - Bug fixes (ATOMIC mode)
@@ -198,7 +214,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
-| 1.2.0 | 2025-12-13 | AGENTS.md compatibility, Kotlin guide, professional prompts |
+| 1.2.0 | 2025-12-13 | AGENTS.md compatibility, MkDocs documentation site, Kotlin guide |
 | 1.1.0 | 2025-01-15 | 4 language guides, 2 new workflows, 18% size reduction |
 | 1.0.0 | 2025-01-14 | Initial release with 30+ guardrails, 4D methodology |
 
