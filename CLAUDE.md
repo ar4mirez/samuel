@@ -169,6 +169,12 @@ NODE_ENV=            # development | production | test
 - Go → @.agent/language-guides/go.md
 - Rust → @.agent/language-guides/rust.md
 - Kotlin → @.agent/language-guides/kotlin.md
+- Java → @.agent/language-guides/java.md
+- C# → @.agent/language-guides/csharp.md
+- PHP → @.agent/language-guides/php.md
+- Swift → @.agent/language-guides/swift.md
+- C/C++ → @.agent/language-guides/cpp.md
+- Ruby → @.agent/language-guides/ruby.md
 
 ---
 
@@ -375,10 +381,17 @@ Refs: #issue-number"
 ├── patterns.md            # Coding patterns (create when patterns emerge)
 ├── state.md              # Current work (create for multi-session work)
 ├── language-guides/      # Language-specific guardrails (pre-created)
-│   ├── typescript.md
-│   ├── python.md
-│   ├── go.md
-│   └── rust.md
+│   ├── typescript.md     # TypeScript/JavaScript, React, Node.js
+│   ├── python.md         # Python, Django, FastAPI
+│   ├── go.md             # Go, microservices
+│   ├── rust.md           # Rust, systems programming
+│   ├── kotlin.md         # Kotlin, Android, Spring Boot
+│   ├── java.md           # Java, Spring Boot, enterprise
+│   ├── csharp.md         # C#, .NET, ASP.NET Core
+│   ├── php.md            # PHP, Laravel, Symfony
+│   ├── swift.md          # Swift, iOS, macOS
+│   ├── cpp.md            # C/C++, systems, embedded
+│   └── ruby.md           # Ruby, Rails
 ├── workflows/            # Structured workflows (pre-created)
 │   ├── create-prd.md
 │   ├── generate-tasks.md
@@ -481,10 +494,22 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
 
 ## Version & Changelog
 
-**Current Version**: 1.2.0
+**Current Version**: 1.3.0
 **Last Updated**: 2025-12-13
 
 ### Changelog
+
+**v1.3.0 (2025-12-13) - Extended Language Support**
+- ✅ Added 6 new language guides covering top programming languages:
+  - Java (Spring Boot, enterprise, JUnit 5)
+  - C# (.NET 8, ASP.NET Core, xUnit)
+  - PHP (Laravel, Symfony, PHPUnit)
+  - Swift (iOS, macOS, SwiftUI)
+  - C/C++ (C++20, CMake, GoogleTest)
+  - Ruby (Rails 7, RSpec, Sidekiq)
+- ✅ Now supports 11 languages total (TypeScript, Python, Go, Rust, Kotlin + new)
+- ✅ Updated Quick Reference with all language guides
+- ✅ Updated .agent/ directory structure documentation
 
 **v1.2.0 (2025-12-13) - AGENTS.md Compatibility**
 - ✅ Added Operations section (AGENTS.md compatible)
