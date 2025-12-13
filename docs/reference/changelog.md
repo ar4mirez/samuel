@@ -9,6 +9,68 @@ All notable changes to AI Code Template.
 
 ---
 
+## [1.4.0] - 2025-12-13
+
+### Comprehensive Language Coverage Release
+
+Major expansion adding 10 specialized domain language guides, bringing the total to 21 languages.
+
+### Added
+
+- **Specialized Domain Language Guides**:
+  - SQL (PostgreSQL, MySQL, SQLite, query optimization)
+  - Shell/Bash (scripting, automation, POSIX)
+  - R (statistical computing, tidyverse, Shiny)
+  - Dart (Flutter, mobile development)
+  - HTML/CSS (web standards, accessibility, BEM)
+  - Lua (scripting, Love2D, Neovim)
+  - Assembly (x86-64, ARM64, RISC-V)
+  - CUDA (GPU computing, parallel processing)
+  - Solidity (Ethereum, smart contracts, DeFi)
+  - Zig (systems programming, C interop)
+
+### Changed
+
+- Updated Quick Reference with all 21 language guides
+- Updated `.agent/` directory structure documentation
+- Updated documentation site with all language guides
+
+### Technical
+
+- Now supports 21 programming languages total
+- All guides include: Core Principles, Guardrails, Validation, Testing, Tooling, Common Pitfalls
+
+---
+
+## [1.3.0] - 2025-12-13
+
+### Extended Language Support Release
+
+Major expansion adding 6 enterprise language guides covering top programming languages.
+
+### Added
+
+- **Enterprise Language Guides**:
+  - Java (Spring Boot, Jakarta EE, JUnit 5)
+  - C# (.NET 8, ASP.NET Core, xUnit)
+  - PHP (Laravel, Symfony, PHPUnit)
+  - Swift (iOS, macOS, SwiftUI)
+  - C/C++ (C++20, CMake, GoogleTest)
+  - Ruby (Rails 7, RSpec, Sidekiq)
+
+### Changed
+
+- Updated Quick Reference with all language guides
+- Updated `.agent/` directory structure documentation
+- Updated documentation site with enterprise language guides
+
+### Technical
+
+- Now supports 11 languages total (TypeScript, Python, Go, Rust, Kotlin + new)
+- Each guide follows standard template: Core Principles → Guardrails → Validation → Testing → Tooling → Pitfalls
+
+---
+
 ## [1.2.0] - 2025-12-13
 
 ### AGENTS.md Compatibility Release
@@ -128,6 +190,19 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ## Upgrade Guide
 
+### From 1.3.x to 1.4.x
+
+1. Copy new specialized language guides to `.agent/language-guides/`:
+   - sql.md, shell.md, r.md, dart.md, html-css.md
+   - lua.md, assembly.md, cuda.md, solidity.md, zig.md
+2. Update CLAUDE.md (includes all 21 language guide references)
+
+### From 1.2.x to 1.3.x
+
+1. Copy new enterprise language guides to `.agent/language-guides/`:
+   - java.md, csharp.md, php.md, swift.md, cpp.md, ruby.md
+2. Update CLAUDE.md (includes all 11 language guide references)
+
 ### From 1.1.x to 1.2.x
 
 1. Copy new CLAUDE.md (includes Operations section)
@@ -148,14 +223,17 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ### Potential Features
 
-- [ ] Additional language guides (Java, C#, PHP, Swift)
+- [x] ~~Additional language guides (Java, C#, PHP, Swift)~~ - Completed in v1.3.0
+- [x] ~~Specialized language guides (SQL, Shell, Lua, etc.)~~ - Completed in v1.4.0
 - [ ] Framework-specific templates (Next.js, Django, Rails)
 - [ ] IDE integrations (VS Code extension)
 - [ ] Automated guardrail checking
+- [ ] Interactive documentation tutorials
+- [ ] Project scaffold generators
 
 ### Community Contributions Welcome
 
-- New language guides
+- New language guides (Scala, Elixir, Haskell, Julia, etc.)
 - Framework templates
 - Integration examples
 - Documentation improvements

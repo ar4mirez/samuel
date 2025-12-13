@@ -154,11 +154,30 @@ nav:
     - The .agent Directory: core/agent-directory.md
   - Language Guides:
     - Overview: languages/index.md
-    - TypeScript: languages/typescript.md
-    - Python: languages/python.md
-    - Go: languages/go.md
-    - Rust: languages/rust.md
-    - Kotlin: languages/kotlin.md
+    - Core Languages:
+      - TypeScript: languages/typescript.md
+      - Python: languages/python.md
+      - Go: languages/go.md
+      - Rust: languages/rust.md
+      - Kotlin: languages/kotlin.md
+    - Enterprise Languages:
+      - Java: languages/java.md
+      - C#: languages/csharp.md
+      - PHP: languages/php.md
+      - Swift: languages/swift.md
+      - C/C++: languages/cpp.md
+      - Ruby: languages/ruby.md
+    - Specialized Domains:
+      - SQL: languages/sql.md
+      - Shell/Bash: languages/shell.md
+      - R: languages/r.md
+      - Dart/Flutter: languages/dart.md
+      - HTML/CSS: languages/html-css.md
+      - Lua: languages/lua.md
+      - Assembly: languages/assembly.md
+      - CUDA: languages/cuda.md
+      - Solidity: languages/solidity.md
+      - Zig: languages/zig.md
   - Workflows:
     - Overview: workflows/index.md
     - Initialize Project: workflows/initialize-project.md
