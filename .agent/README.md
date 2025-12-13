@@ -2,6 +2,21 @@
 
 This directory contains project-specific AI context that grows organically as the project evolves.
 
+## AGENTS.md Compatibility
+
+This system is compatible with the [AGENTS.md](https://agents.md) standard (v1.0, July 2025).
+
+**How it works:**
+- `CLAUDE.md` contains Operations section (AGENTS.md compatible) + full methodology
+- For other AI tools (Cursor, Codex, Copilot), create symlink: `ln -s CLAUDE.md AGENTS.md`
+- Or use `@.agent/workflows/generate-agents-md.md` to generate standalone AGENTS.md
+
+**File Priority:**
+| Tool | Primary | Fallback |
+|------|---------|----------|
+| Claude Code | CLAUDE.md | AGENTS.md |
+| Cursor, Codex, etc. | AGENTS.md | CLAUDE.md |
+
 ## Philosophy: Progressive Growth
 
 **Day 1**: This folder may be empty except templates. That's OK!
@@ -20,7 +35,8 @@ This directory contains project-specific AI context that grows organically as th
 ├── workflows/            # Structured workflows for complex features
 │   ├── README.md         # Workflow documentation
 │   ├── create-prd.md     # Product Requirements Document workflow
-│   └── generate-tasks.md # Task breakdown workflow
+│   ├── generate-tasks.md # Task breakdown workflow
+│   └── generate-agents-md.md # AGENTS.md generator for cross-tool compatibility
 ├── tasks/                # PRDs and task lists for complex features
 │   ├── NNNN-prd-feature-name.md
 │   └── tasks-NNNN-prd-feature-name.md

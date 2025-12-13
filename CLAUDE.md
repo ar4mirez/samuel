@@ -2,21 +2,162 @@
 
 AI-assisted development instructions. Opinionated guardrails for writing quality software.
 
+> **AGENTS.md Compatible**: This file follows the [AGENTS.md](https://agents.md) standard structure.
+> Operations section first, then methodology. For other AI tools, symlink: `ln -s CLAUDE.md AGENTS.md`
+
+---
+
+## Operations
+
+> **Purpose**: Immediate, executable instructions for AI agents. Commands first, context second.
+> This section is designed to be compatible with the AGENTS.md standard.
+
+### Setup Commands
+
+```bash
+# Clone and install (customize per project)
+git clone <repo-url> && cd <project>
+
+# Node.js/TypeScript
+npm install          # or: yarn install | pnpm install
+npm run dev          # Start development server
+
+# Python
+python -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+python manage.py runserver  # Django
+uvicorn main:app --reload   # FastAPI
+
+# Go
+go mod download
+go run ./cmd/api
+
+# Rust
+cargo build
+cargo run
+```
+
+### Testing Commands
+
+```bash
+# Node.js/TypeScript
+npm test             # Run all tests
+npm run test:watch   # Watch mode
+npm run test:cov     # With coverage (target: >80% business logic)
+
+# Python
+pytest               # Run all tests
+pytest -v            # Verbose
+pytest --cov=src     # With coverage
+
+# Go
+go test ./...        # All tests
+go test -cover ./... # With coverage
+go test -race ./...  # Race detection
+
+# Rust
+cargo test           # All tests
+cargo test -- --nocapture  # With output
+cargo tarpaulin      # Coverage
+```
+
+### Build & Deploy Commands
+
+```bash
+# Node.js/TypeScript
+npm run build        # Production build
+npm run lint         # Lint check
+npm run lint:fix     # Auto-fix lint issues
+npm run typecheck    # TypeScript validation
+
+# Python
+black .              # Format
+isort .              # Sort imports
+mypy .               # Type check
+ruff check .         # Lint
+
+# Go
+go build ./...       # Build all
+go vet ./...         # Static analysis
+golangci-lint run    # Comprehensive lint
+
+# Rust
+cargo build --release  # Production build
+cargo clippy           # Lint
+cargo fmt              # Format
+```
+
+### Code Style Commands
+
+```bash
+# Format before commit (all languages)
+npm run format       # Prettier (JS/TS)
+black . && isort .   # Python
+go fmt ./...         # Go
+cargo fmt            # Rust
+
+# Lint before commit
+npm run lint         # ESLint (JS/TS)
+ruff check .         # Python
+golangci-lint run    # Go
+cargo clippy         # Rust
+```
+
+### Environment Variables
+
+```bash
+# Copy example env file (never commit .env)
+cp .env.example .env
+
+# Required variables (set in .env)
+DATABASE_URL=        # Database connection string
+API_KEY=             # External service API key
+SECRET_KEY=          # Application secret (generate random)
+NODE_ENV=            # development | production | test
+```
+
+---
+
+## Boundaries (Do Not Touch)
+
+> **Critical**: AI agents must NOT modify these without explicit permission.
+
+### Protected Files
+- `package-lock.json`, `yarn.lock`, `Cargo.lock`, `go.sum` (dependency locks)
+- `.env`, `.env.local`, `.env.production` (environment configs)
+- Database migration files (once applied to production)
+- `tsconfig.json`, `Cargo.toml`, `go.mod` (without testing build)
+- `.github/workflows/`, CI/CD configurations
+
+### Never Commit
+- Secrets, API keys, credentials, tokens
+- `.env` files (commit `.env.example` instead)
+- `node_modules/`, `venv/`, `target/`, build artifacts
+- Personal IDE configs (`.vscode/settings.json`, `.idea/`)
+- Large binaries, datasets (use Git LFS)
+
+### Ask Before Modifying
+- Authentication/authorization logic
+- Database schemas (after production deployment)
+- Public API contracts (breaks consumers)
+- Build/deploy processes
+- Major dependency versions
+
 ---
 
 ## Quick Reference
 
 **Task Classification:**
-- **ATOMIC** (<5 files, clear scope) → Implement directly | Lines 67-74
-- **FEATURE** (5-10 files) → Break into subtasks | Lines 76-82
-- **COMPLEX** (>10 files, new subsystem) → Use PRD workflow | Lines 84-108
+- **ATOMIC** (<5 files, clear scope) → Implement directly
+- **FEATURE** (5-10 files) → Break into subtasks
+- **COMPLEX** (>10 files, new subsystem) → Use PRD workflow | @.agent/workflows/create-prd.md
 
 **Common Guardrails** (validate first):
 ✓ Function ≤50 lines | ✓ File ≤300 lines | ✓ Input validation | ✓ Parameterized queries
 ✓ Tests >80% (critical) | ✓ Conventional commits | ✓ No secrets in code
 
 **Emergency Quick Links:**
-- Security issue? → Lines 28-36
+- Security issue? → See "Security" section below
 - Tests failing? → @.agent/workflows/troubleshooting.md
 - Stuck >30 min? → @.agent/workflows/troubleshooting.md
 - Complex feature? → @.agent/workflows/create-prd.md
@@ -27,6 +168,7 @@ AI-assisted development instructions. Opinionated guardrails for writing quality
 - Python → @.agent/language-guides/python.md
 - Go → @.agent/language-guides/go.md
 - Rust → @.agent/language-guides/rust.md
+- Kotlin → @.agent/language-guides/kotlin.md
 
 ---
 
@@ -217,8 +359,9 @@ Refs: #issue-number"
 
 ### CLAUDE.md (This File)
 **Loaded**: Always (every conversation)
-**Purpose**: Guardrails, methodology, SDLC workflow
-**Current**: 400 lines (target: <500, ideal: <300)
+**Purpose**: Operations + Guardrails + Methodology + SDLC workflow
+**Compatibility**: AGENTS.md standard (symlink for other tools)
+**Current**: ~500 lines (target: <600, Operations section adds ~150 lines)
 
 ### .agent/ Directory
 **Loaded**: On-demand, when needed
@@ -262,32 +405,6 @@ Refs: #issue-number"
 - Ongoing: `.agent/memory/` captures complex decisions
 
 **For details on any .agent/ file, see:** `.agent/README.md`
-
----
-
-## Protected Boundaries
-
-### DO NOT Modify Without Explicit Permission
-- `package-lock.json`, `yarn.lock`, `Gemfile.lock` (dependency locks)
-- `.env`, `.env.local` (environment configs)
-- Database migration files (once applied)
-- `tsconfig.json`, build configs (without testing)
-- Git hooks, CI/CD configs
-
-### DO NOT Commit
-- Secrets, API keys, credentials (use environment variables)
-- `.env` files (commit `.env.example` instead)
-- `node_modules`, `venv`, build artifacts (use `.gitignore`)
-- Personal IDE configs (`.vscode/`, `.idea/` unless team-shared)
-- Large binaries, datasets (use Git LFS or external storage)
-- Debug logs, `console.log` statements in production code
-
-### ALWAYS Ask Before
-- Changing authentication/authorization logic
-- Modifying database schemas (after production deployment)
-- Updating major dependencies (breaking changes possible)
-- Refactoring public APIs (breaks consumers)
-- Changing build/deploy processes
 
 ---
 
@@ -364,14 +481,28 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
 
 ## Version & Changelog
 
-**Current Version**: 1.1.0
-**Last Updated**: 2025-01-15
+**Current Version**: 1.2.0
+**Last Updated**: 2025-12-13
 
 ### Changelog
 
+**v1.2.0 (2025-12-13) - AGENTS.md Compatibility**
+- ✅ Added Operations section (AGENTS.md compatible)
+  - Setup Commands (Node, Python, Go, Rust)
+  - Testing Commands with coverage targets
+  - Build & Deploy Commands
+  - Code Style Commands (format, lint)
+  - Environment Variables template
+- ✅ Added Boundaries section (prominent "do not touch" list)
+- ✅ Restructured for "commands first, context second" pattern
+- ✅ Added symlink instructions for cross-tool compatibility
+- ✅ Added Kotlin to language guides list
+- ✅ Consolidated Protected Boundaries into Boundaries section
+- ✅ Added AGENTS.md generator workflow
+
 **v1.1.0 (2025-01-15) - Phase 1 Optimization**
 - ✅ Reduced from 490 → 400 lines (18% reduction)
-- ✅ Added Quick Reference section (lines 7-21)
+- ✅ Added Quick Reference section
 - ✅ Added critical missing guardrails:
   - Dependency license checking
   - Database migration rollbacks
@@ -394,7 +525,10 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
 - Changing methodology
 - Project-wide quality standards shift
 - New language guides added
+- AGENTS.md standard evolves
 
 ---
 
 **Remember**: This file is your guardrails. The `.agent/` directory is your memory. Small atomic changes. Validate continuously. Document progressively.
+
+**Cross-Tool Compatibility**: `ln -s CLAUDE.md AGENTS.md` for tools that read AGENTS.md

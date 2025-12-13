@@ -8,7 +8,26 @@ Workflows provide step-by-step guidance for AI to tackle large features systemat
 
 ## Available Workflows
 
-### 1. create-prd.md
+### 1. generate-agents-md.md (NEW)
+**Use for**: Creating AGENTS.md for cross-tool compatibility
+
+**When to use**:
+- Team uses multiple AI tools (Cursor, Codex, Copilot + Claude)
+- Open-source project needs universal AI instructions
+- Symlinks not suitable for deployment
+
+**How to use**:
+```
+Generate AGENTS.md for this project using @.agent/workflows/generate-agents-md.md
+```
+
+**Output**: `./AGENTS.md`
+
+**Alternative**: Use symlink instead: `ln -s CLAUDE.md AGENTS.md`
+
+---
+
+### 2. create-prd.md
 **Use for**: Defining complex features with Product Requirements Documents
 
 **When to use**:
@@ -30,7 +49,7 @@ Reference files: @file1.ts @file2.tsx
 
 ---
 
-### 2. generate-tasks.md
+### 3. generate-tasks.md
 **Use for**: Breaking PRDs into actionable task lists
 
 **When to use**:
