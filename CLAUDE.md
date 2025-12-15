@@ -186,6 +186,52 @@ NODE_ENV=            # development | production | test
 - Solidity → @.agent/language-guides/solidity.md
 - Zig → @.agent/language-guides/zig.md
 
+**Load Framework Guide** (when using specific framework):
+- TypeScript/JavaScript:
+  - React → @.agent/framework-guides/react.md
+  - Next.js → @.agent/framework-guides/nextjs.md
+  - Express → @.agent/framework-guides/express.md
+- Python:
+  - Django → @.agent/framework-guides/django.md
+  - FastAPI → @.agent/framework-guides/fastapi.md
+  - Flask → @.agent/framework-guides/flask.md
+- Go:
+  - Gin → @.agent/framework-guides/gin.md
+  - Echo → @.agent/framework-guides/echo.md
+  - Fiber → @.agent/framework-guides/fiber.md
+- Rust:
+  - Axum → @.agent/framework-guides/axum.md
+  - Actix-web → @.agent/framework-guides/actix-web.md
+  - Rocket → @.agent/framework-guides/rocket.md
+- Kotlin:
+  - Spring Boot (Kotlin) → @.agent/framework-guides/spring-boot-kotlin.md
+  - Ktor → @.agent/framework-guides/ktor.md
+  - Android Compose → @.agent/framework-guides/android-compose.md
+- Java:
+  - Spring Boot → @.agent/framework-guides/spring-boot.md
+  - Quarkus → @.agent/framework-guides/quarkus.md
+  - Micronaut → @.agent/framework-guides/micronaut.md
+- C#:
+  - ASP.NET Core → @.agent/framework-guides/aspnet-core.md
+  - Blazor → @.agent/framework-guides/blazor.md
+  - Unity → @.agent/framework-guides/unity.md
+- PHP:
+  - Laravel → @.agent/framework-guides/laravel.md
+  - Symfony → @.agent/framework-guides/symfony.md
+  - WordPress → @.agent/framework-guides/wordpress.md
+- Swift:
+  - SwiftUI → @.agent/framework-guides/swiftui.md
+  - UIKit → @.agent/framework-guides/uikit.md
+  - Vapor → @.agent/framework-guides/vapor.md
+- Ruby:
+  - Rails → @.agent/framework-guides/rails.md
+  - Sinatra → @.agent/framework-guides/sinatra.md
+  - Hanami → @.agent/framework-guides/hanami.md
+- Dart:
+  - Flutter → @.agent/framework-guides/flutter.md
+  - Shelf → @.agent/framework-guides/shelf.md
+  - Dart Frog → @.agent/framework-guides/dart-frog.md
+
 ---
 
 ## Core Guardrails (ALWAYS ENFORCE)
@@ -390,7 +436,7 @@ Refs: #issue-number"
 ├── project.md             # Tech stack, architecture (create when tech chosen)
 ├── patterns.md            # Coding patterns (create when patterns emerge)
 ├── state.md              # Current work (create for multi-session work)
-├── language-guides/      # Language-specific guardrails (pre-created)
+├── language-guides/      # Language-specific guardrails (pre-created, 21 languages)
 │   ├── typescript.md     # TypeScript/JavaScript, React, Node.js
 │   ├── python.md         # Python, Django, FastAPI
 │   ├── go.md             # Go, microservices
@@ -412,6 +458,40 @@ Refs: #issue-number"
 │   ├── cuda.md           # CUDA, GPU computing
 │   ├── solidity.md       # Solidity, Ethereum, smart contracts
 │   └── zig.md            # Zig, systems programming
+├── framework-guides/     # Framework-specific templates (pre-created, 33 frameworks)
+│   ├── react.md          # React 18+, hooks, state management
+│   ├── nextjs.md         # Next.js 14+, App Router, RSC
+│   ├── express.md        # Express.js, middleware, REST APIs
+│   ├── django.md         # Django 5+, ORM, admin, DRF
+│   ├── fastapi.md        # FastAPI, async, Pydantic, OpenAPI
+│   ├── flask.md          # Flask, blueprints, extensions
+│   ├── gin.md            # Gin, middleware, REST APIs
+│   ├── echo.md           # Echo, middleware, routing
+│   ├── fiber.md          # Fiber, Express-style, high-performance
+│   ├── axum.md           # Axum, Tower, async Rust
+│   ├── actix-web.md      # Actix-web, actors, high-performance
+│   ├── rocket.md         # Rocket, type-safe, macros
+│   ├── spring-boot-kotlin.md  # Spring Boot with Kotlin, coroutines
+│   ├── ktor.md           # Ktor, coroutines, DSL
+│   ├── android-compose.md # Jetpack Compose, Material 3
+│   ├── spring-boot.md    # Spring Boot Java, JPA, Security
+│   ├── quarkus.md        # Quarkus, GraalVM, reactive
+│   ├── micronaut.md      # Micronaut, compile-time DI
+│   ├── aspnet-core.md    # ASP.NET Core, Minimal APIs, EF Core
+│   ├── blazor.md         # Blazor, WebAssembly, SignalR
+│   ├── unity.md          # Unity, C# scripting, game dev
+│   ├── laravel.md        # Laravel 11+, Eloquent, Blade
+│   ├── symfony.md        # Symfony 7+, Doctrine, Twig
+│   ├── wordpress.md      # WordPress, themes, plugins, REST API
+│   ├── swiftui.md        # SwiftUI, declarative UI, Combine
+│   ├── uikit.md          # UIKit, programmatic/storyboard
+│   ├── vapor.md          # Vapor, Fluent, async Swift
+│   ├── rails.md          # Rails 7+, ActiveRecord, Hotwire
+│   ├── sinatra.md        # Sinatra, lightweight Ruby
+│   ├── hanami.md         # Hanami 2+, clean architecture
+│   ├── flutter.md        # Flutter, Riverpod, go_router
+│   ├── shelf.md          # Shelf, middleware HTTP server
+│   └── dart-frog.md      # Dart Frog, file-based routing
 ├── workflows/            # Structured workflows (pre-created)
 │   ├── create-prd.md
 │   ├── generate-tasks.md
@@ -514,10 +594,27 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
 
 ## Version & Changelog
 
-**Current Version**: 1.4.0
-**Last Updated**: 2025-12-13
+**Current Version**: 1.5.0
+**Last Updated**: 2025-12-15
 
 ### Changelog
+
+**v1.5.0 (2025-12-15) - Framework-Specific Templates**
+- ✅ Added 33 framework-specific guide templates across 11 languages:
+  - TypeScript/JavaScript: React, Next.js, Express
+  - Python: Django, FastAPI, Flask
+  - Go: Gin, Echo, Fiber
+  - Rust: Axum, Actix-web, Rocket
+  - Kotlin: Spring Boot (Kotlin), Ktor, Android Compose
+  - Java: Spring Boot, Quarkus, Micronaut
+  - C#: ASP.NET Core, Blazor, Unity
+  - PHP: Laravel, Symfony, WordPress
+  - Swift: SwiftUI, UIKit, Vapor
+  - Ruby: Rails, Sinatra, Hanami
+  - Dart: Flutter, Shelf, Dart Frog
+- ✅ Added framework-guides/ directory under .agent/
+- ✅ Updated Quick Reference with "Load Framework Guide" section
+- ✅ Updated .agent/ directory structure documentation
 
 **v1.4.0 (2025-12-13) - Comprehensive Language Coverage**
 - ✅ Added 10 more language guides for specialized domains:
