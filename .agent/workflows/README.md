@@ -1,33 +1,44 @@
 # Workflows Directory
 
-This directory contains structured workflows for complex feature development using AI assistance.
+This directory contains structured workflows for AI-assisted development, covering the entire software development lifecycle.
 
 ## Purpose
 
-Workflows provide step-by-step guidance for AI to tackle large features systematically, with built-in verification checkpoints and quality guardrails.
+Workflows provide step-by-step guidance for AI to tackle complex tasks systematically, with built-in verification checkpoints and quality guardrails.
 
-## Available Workflows
+## Workflow Categories
 
-### 1. generate-agents-md.md (NEW)
-**Use for**: Creating AGENTS.md for cross-tool compatibility
-
-**When to use**:
-- Team uses multiple AI tools (Cursor, Codex, Copilot + Claude)
-- Open-source project needs universal AI instructions
-- Symlinks not suitable for deployment
-
-**How to use**:
-```
-Generate AGENTS.md for this project using @.agent/workflows/generate-agents-md.md
-```
-
-**Output**: `./AGENTS.md`
-
-**Alternative**: Use symlink instead: `ln -s CLAUDE.md AGENTS.md`
+| Category | Workflows | Purpose |
+|----------|-----------|---------|
+| **Planning** | create-prd, generate-tasks, initialize-project | Define and break down work |
+| **Quality** | code-review, security-audit, testing-strategy | Validate and improve code |
+| **Maintenance** | cleanup-project, refactoring, dependency-update | Keep codebase healthy |
+| **Utility** | troubleshooting, generate-agents-md | Support and compatibility |
 
 ---
 
-### 2. create-prd.md
+## Available Workflows
+
+### Planning Workflows
+
+#### initialize-project.md
+**Use for**: Setting up new or existing projects with AI-assisted development
+
+**When to use**:
+- Starting a new project
+- Adding AI assistance to existing project
+- Need to analyze and document project structure
+
+**How to use**:
+```
+@.agent/workflows/initialize-project.md
+```
+
+**Output**: `.agent/project.md`, analysis of project structure
+
+---
+
+#### create-prd.md
 **Use for**: Defining complex features with Product Requirements Documents
 
 **When to use**:
@@ -49,7 +60,7 @@ Reference files: @file1.ts @file2.tsx
 
 ---
 
-### 3. generate-tasks.md
+#### generate-tasks.md
 **Use for**: Breaking PRDs into actionable task lists
 
 **When to use**:
@@ -63,6 +74,212 @@ Generate tasks for @.agent/tasks/0001-prd-feature-name.md using @.agent/workflow
 ```
 
 **Output**: `.agent/tasks/tasks-NNNN-prd-feature-name.md`
+
+---
+
+### Quality Workflows
+
+#### code-review.md
+**Use for**: Systematic validation against all guardrails before committing
+
+**When to use**:
+- Before any commit (automated mode)
+- During pull request review (interactive mode)
+- After FEATURE/COMPLEX mode completion
+
+**How to use**:
+```
+@.agent/workflows/code-review.md
+
+Review the changes in src/api/
+```
+
+**Output**: Code review report with pass/fail/warning status
+
+---
+
+#### security-audit.md
+**Use for**: Proactive security assessment covering OWASP Top 10
+
+**When to use**:
+- Before production deployments
+- Monthly security review
+- After adding authentication/authorization
+- When adding external integrations
+
+**How to use**:
+```
+@.agent/workflows/security-audit.md
+
+Audit the authentication module
+```
+
+**Output**: Security audit report with findings and remediation steps
+
+---
+
+#### testing-strategy.md
+**Use for**: Planning and achieving test coverage targets
+
+**When to use**:
+- After COMPLEX features
+- When coverage drops below thresholds
+- During test debt sprints
+- Establishing testing foundation
+
+**How to use**:
+```
+@.agent/workflows/testing-strategy.md
+
+Plan testing for the payment module
+```
+
+**Output**: Test strategy with prioritized test backlog
+
+---
+
+### Maintenance Workflows
+
+#### cleanup-project.md
+**Use for**: Pruning unused guides and reducing .agent/ bloat
+
+**When to use**:
+- After initialize-project.md completes
+- Quarterly maintenance
+- Before major releases
+- When .agent/ exceeds 1MB
+
+**How to use**:
+```
+@.agent/workflows/cleanup-project.md
+
+Clean up this project's .agent/ directory
+```
+
+**Output**: Leaner .agent/ directory, active-guides.json manifest
+
+---
+
+#### refactoring.md
+**Use for**: Structured approach to technical debt remediation
+
+**When to use**:
+- Functions >50 lines, files >300 lines
+- Cyclomatic complexity >10
+- Code duplication in 3+ places
+- Quarterly debt review
+
+**How to use**:
+```
+@.agent/workflows/refactoring.md
+
+Refactor the order processing module
+```
+
+**Output**: Refactoring plan with incremental steps
+
+---
+
+#### dependency-update.md
+**Use for**: Safe and systematic dependency updates
+
+**When to use**:
+- Security vulnerability in dependency
+- Monthly maintenance
+- Major version available
+- Before releases
+
+**How to use**:
+```
+@.agent/workflows/dependency-update.md
+
+Update project dependencies
+```
+
+**Output**: Update plan with testing and rollback procedures
+
+---
+
+### Utility Workflows
+
+#### troubleshooting.md
+**Use for**: Systematic debugging when stuck
+
+**When to use**:
+- Stuck for >30 minutes
+- Tests failing unexpectedly
+- Unclear error messages
+- Need structured debugging
+
+**How to use**:
+```
+@.agent/workflows/troubleshooting.md
+
+Debug: API returns 500 error
+```
+
+**Output**: Diagnostic analysis and solution recommendations
+
+---
+
+#### generate-agents-md.md
+**Use for**: Creating AGENTS.md for cross-tool compatibility
+
+**When to use**:
+- Team uses multiple AI tools (Cursor, Codex, Copilot + Claude)
+- Open-source project needs universal AI instructions
+- Symlinks not suitable for deployment
+
+**How to use**:
+```
+@.agent/workflows/generate-agents-md.md
+```
+
+**Output**: `./AGENTS.md`
+
+**Alternative**: Use symlink instead: `ln -s CLAUDE.md AGENTS.md`
+
+---
+
+## Workflow Map
+
+```
+                    ┌─────────────────────────────────────────┐
+                    │           SDLC Stage Map                │
+                    └─────────────────────────────────────────┘
+
+    Planning              Implementation           Validation            Maintenance
+    ────────              ──────────────           ──────────            ───────────
+
+┌──────────────┐                              ┌──────────────┐    ┌──────────────┐
+│ initialize-  │─────────────────────────────▶│ cleanup-     │    │ dependency-  │
+│ project      │                              │ project      │    │ update       │
+└──────────────┘                              └──────────────┘    └──────────────┘
+       │                                                                 │
+       ▼                                                                 │
+┌──────────────┐      ┌──────────────┐      ┌──────────────┐            │
+│ create-prd   │─────▶│ generate-    │─────▶│ code-review  │◀───────────┘
+│              │      │ tasks        │      │              │
+└──────────────┘      └──────────────┘      └──────────────┘
+                                                   │
+                                                   ▼
+                                            ┌──────────────┐
+                                            │ security-    │
+                                            │ audit        │
+                                            └──────────────┘
+                                                   │
+                                                   ▼
+                      ┌──────────────┐      ┌──────────────┐
+                      │ refactoring  │◀─────│ testing-     │
+                      │              │      │ strategy     │
+                      └──────────────┘      └──────────────┘
+                             │
+                             ▼
+                      ┌──────────────┐
+                      │ trouble-     │
+                      │ shooting     │ (any stage)
+                      └──────────────┘
+```
 
 ---
 

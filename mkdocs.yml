@@ -178,13 +178,69 @@ nav:
       - CUDA: languages/cuda.md
       - Solidity: languages/solidity.md
       - Zig: languages/zig.md
+  - Framework Guides:
+    - Overview: frameworks/index.md
+    - TypeScript/JavaScript:
+      - React: frameworks/react.md
+      - Next.js: frameworks/nextjs.md
+      - Express: frameworks/express.md
+    - Python:
+      - Django: frameworks/django.md
+      - FastAPI: frameworks/fastapi.md
+      - Flask: frameworks/flask.md
+    - Go:
+      - Gin: frameworks/gin.md
+      - Echo: frameworks/echo.md
+      - Fiber: frameworks/fiber.md
+    - Rust:
+      - Axum: frameworks/axum.md
+      - Actix-web: frameworks/actix-web.md
+      - Rocket: frameworks/rocket.md
+    - Kotlin:
+      - Spring Boot (Kotlin): frameworks/spring-boot-kotlin.md
+      - Ktor: frameworks/ktor.md
+      - Android Compose: frameworks/android-compose.md
+    - Java:
+      - Spring Boot: frameworks/spring-boot-java.md
+      - Quarkus: frameworks/quarkus.md
+      - Micronaut: frameworks/micronaut.md
+    - C#:
+      - ASP.NET Core: frameworks/aspnet-core.md
+      - Blazor: frameworks/blazor.md
+      - Unity: frameworks/unity.md
+    - PHP:
+      - Laravel: frameworks/laravel.md
+      - Symfony: frameworks/symfony.md
+      - WordPress: frameworks/wordpress.md
+    - Swift:
+      - SwiftUI: frameworks/swiftui.md
+      - UIKit: frameworks/uikit.md
+      - Vapor: frameworks/vapor.md
+    - Ruby:
+      - Rails: frameworks/rails.md
+      - Sinatra: frameworks/sinatra.md
+      - Hanami: frameworks/hanami.md
+    - Dart:
+      - Flutter: frameworks/flutter.md
+      - Shelf: frameworks/shelf.md
+      - Dart Frog: frameworks/dart-frog.md
   - Workflows:
     - Overview: workflows/index.md
-    - Initialize Project: workflows/initialize-project.md
-    - Create PRD: workflows/create-prd.md
-    - Generate Tasks: workflows/generate-tasks.md
-    - Troubleshooting: workflows/troubleshooting.md
-    - Generate AGENTS.md: workflows/generate-agents-md.md
+    - Planning:
+      - Initialize Project: workflows/initialize-project.md
+      - Create PRD: workflows/create-prd.md
+      - Generate Tasks: workflows/generate-tasks.md
+    - Quality:
+      - Code Review: workflows/code-review.md
+      - Security Audit: workflows/security-audit.md
+      - Testing Strategy: workflows/testing-strategy.md
+    - Maintenance:
+      - Cleanup Project: workflows/cleanup-project.md
+      - Refactoring: workflows/refactoring.md
+      - Dependency Update: workflows/dependency-update.md
+    - Utility:
+      - Troubleshooting: workflows/troubleshooting.md
+      - Generate AGENTS.md: workflows/generate-agents-md.md
   - Reference:
     - Cross-Tool Compatibility: reference/cross-tool.md
     - FAQ: reference/faq.md

@@ -32,10 +32,24 @@ This system is compatible with the [AGENTS.md](https://agents.md) standard (v1.0
 ├── project.md             # Tech stack, architecture, key decisions
 ├── patterns.md            # Coding patterns and conventions
 ├── state.md              # Current work, tasks, blockers
+├── language-guides/      # Language-specific guardrails (21 languages)
+│   ├── README.md         # Index of all language guides
+│   ├── typescript.md     # TypeScript/JavaScript
+│   ├── python.md         # Python
+│   ├── go.md             # Go
+│   └── ... (18 more)     # Rust, Kotlin, Java, C#, PHP, Swift, C++, Ruby, SQL, Shell, R, Dart, HTML/CSS, Lua, Assembly, CUDA, Solidity, Zig
+├── framework-guides/     # Framework-specific patterns (33 frameworks)
+│   ├── README.md         # Index of all framework guides
+│   ├── react.md          # React
+│   ├── django.md         # Django
+│   ├── rails.md          # Rails
+│   └── ... (30 more)     # Next.js, Express, FastAPI, Flask, Gin, Echo, Fiber, Axum, Actix-web, Rocket, Spring Boot (Kotlin), Ktor, Android Compose, Spring Boot (Java), Quarkus, Micronaut, ASP.NET Core, Blazor, Unity, Laravel, Symfony, WordPress, SwiftUI, UIKit, Vapor, Sinatra, Hanami, Flutter, Shelf, Dart Frog
 ├── workflows/            # Structured workflows for complex features
 │   ├── README.md         # Workflow documentation
 │   ├── create-prd.md     # Product Requirements Document workflow
 │   ├── generate-tasks.md # Task breakdown workflow
+│   ├── initialize-project.md # Project initialization workflow
+│   ├── troubleshooting.md # Debugging workflow
 │   └── generate-agents-md.md # AGENTS.md generator for cross-tool compatibility
 ├── tasks/                # PRDs and task lists for complex features
 │   ├── NNNN-prd-feature-name.md

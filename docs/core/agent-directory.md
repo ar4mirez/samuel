@@ -19,12 +19,19 @@ While CLAUDE.md provides universal guardrails, `.agent/` stores context specific
 ├── project.md             # Your tech stack (created when chosen)
 ├── patterns.md            # Coding patterns (created when emerge)
 ├── state.md               # Current work (for multi-session)
-├── language-guides/       # Auto-load based on file type
+├── language-guides/       # Auto-load based on file type (21 languages)
 │   ├── typescript.md
 │   ├── python.md
 │   ├── go.md
 │   ├── rust.md
-│   └── kotlin.md
+│   ├── kotlin.md
+│   └── ... (16 more)
+├── framework-guides/      # Framework-specific patterns (33 frameworks)
+│   ├── react.md
+│   ├── django.md
+│   ├── rails.md
+│   ├── spring-boot-java.md
+│   └── ... (29 more)
 ├── workflows/             # On-demand workflows
 │   ├── create-prd.md
 │   ├── generate-tasks.md
@@ -50,7 +57,8 @@ These files come with the template:
 | `README.md` | How to use .agent/ | On-demand |
 | `project.md.template` | Template for project.md | Reference |
 | `state.md.template` | Template for state.md | Reference |
-| `language-guides/*.md` | Language-specific rules | Auto-load |
+| `language-guides/*.md` | Language-specific rules (21) | Auto-load |
+| `framework-guides/*.md` | Framework-specific patterns (33) | On-demand |
 | `workflows/*.md` | Structured workflows | On-demand |
 
 ### Created Over Time
@@ -306,7 +314,7 @@ AI follows this protocol when starting a session:
 
 ## Language Guides
 
-Auto-loaded based on file extensions you're working with:
+Auto-loaded based on file extensions you're working with (21 languages):
 
 | Language | Extensions | Guide |
 |----------|------------|-------|
@@ -315,10 +323,41 @@ Auto-loaded based on file extensions you're working with:
 | Go | `.go` | `go.md` |
 | Rust | `.rs` | `rust.md` |
 | Kotlin | `.kt`, `.kts` | `kotlin.md` |
+| Java | `.java` | `java.md` |
+| C# | `.cs` | `csharp.md` |
+| PHP | `.php` | `php.md` |
+| Swift | `.swift` | `swift.md` |
+| C/C++ | `.c`, `.cpp`, `.h`, `.hpp` | `cpp.md` |
+| Ruby | `.rb` | `ruby.md` |
+| *+ 10 more* | SQL, Shell, R, Dart, HTML/CSS, Lua, Assembly, CUDA, Solidity, Zig | |
 
 **No manual selection needed** - AI detects automatically.
 
 [:octicons-arrow-right-24: Language Guides](../languages/index.md)
+
+---
+
+## Framework Guides
+
+On-demand framework-specific patterns (33 frameworks across 11 language families):
+
+| Language | Frameworks |
+|----------|------------|
+| TypeScript/JS | React, Next.js, Express |
+| Python | Django, FastAPI, Flask |
+| Go | Gin, Echo, Fiber |
+| Rust | Axum, Actix-web, Rocket |
+| Kotlin | Spring Boot (Kotlin), Ktor, Android Compose |
+| Java | Spring Boot, Quarkus, Micronaut |
+| C# | ASP.NET Core, Blazor, Unity |
+| PHP | Laravel, Symfony, WordPress |
+| Swift | SwiftUI, UIKit, Vapor |
+| Ruby | Rails, Sinatra, Hanami |
+| Dart | Flutter, Shelf, Dart Frog |
+
+**How to load**: Reference the framework or work in a project that uses it.
+
+[:octicons-arrow-right-24: Framework Guides](../frameworks/index.md)
 
 ---
 
@@ -411,9 +450,17 @@ On-demand workflows for structured tasks:
 
     ---
 
-    Auto-loaded language rules.
+    Auto-loaded language rules (21 languages).
 
     [:octicons-arrow-right-24: Languages](../languages/index.md)
+
+-   :material-layers:{ .lg .middle } **Framework Guides**
+
+    ---
+
+    Framework-specific patterns (33 frameworks).
+
+    [:octicons-arrow-right-24: Frameworks](../frameworks/index.md)
 
 -   :material-cog:{ .lg .middle } **Workflows**
 

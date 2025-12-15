@@ -9,6 +9,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Add unreleased changes here -->
 
+## [1.5.0] - 2025-12-15
+
+### Added
+
+#### Framework Guides
+- **33 framework-specific guides** across 11 language families:
+  - **TypeScript/JavaScript**: React, Next.js, Express
+  - **Python**: Django, FastAPI, Flask
+  - **Go**: Gin, Echo, Fiber
+  - **Rust**: Axum, Actix-web, Rocket
+  - **Kotlin**: Spring Boot (Kotlin), Ktor, Android Compose
+  - **Java**: Spring Boot, Quarkus, Micronaut
+  - **C#**: ASP.NET Core, Blazor, Unity
+  - **PHP**: Laravel, Symfony, WordPress
+  - **Swift**: SwiftUI, UIKit, Vapor
+  - **Ruby**: Rails, Sinatra, Hanami
+  - **Dart**: Flutter, Shelf, Dart Frog
+
+### Changed
+
+- **CLAUDE.md**: Added "Load Framework Guide" section to Quick Reference
+- **Total guides**: Now 54 (21 language guides + 33 framework guides)
+- **README.md**: Added Framework Guides section with full table
+- **Documentation site**: Added frameworks section with all 33 guides
+
 ## [1.4.0] - 2025-12-13
 
 ### Added
@@ -257,6 +282,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.5.0 | 2025-12-15 | 33 framework guides across 11 language families |
 | 1.4.0 | 2025-12-13 | 10 specialized language guides (SQL, Shell, R, Dart, HTML/CSS, Lua, Assembly, CUDA, Solidity, Zig) |
 | 1.3.0 | 2025-12-13 | 6 enterprise language guides (Java, C#, PHP, Swift, C++, Ruby) |
 | 1.2.0 | 2025-12-13 | AGENTS.md compatibility, MkDocs documentation site, Kotlin guide |
@@ -302,7 +328,8 @@ No breaking changes. New language guides and workflows are additive.
 - [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md) - Quick start guide
 - [AGENTS.md Standard](https://agents.md) - Cross-tool compatibility standard
 
-[Unreleased]: https://github.com/ar4mirez/ai-claude-code/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/ar4mirez/ai-claude-code/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.1.0...v1.2.0

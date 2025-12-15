@@ -3,18 +3,18 @@
 > **Production-ready AI-assisted development framework**
 > Cross-tool compatible • Opinionated guardrails • Tech-stack agnostic • Token-optimized
 
-[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](CLAUDE.md)
+[![Version](https://img.shields.io/badge/version-1.5.0-blue.svg)](CLAUDE.md)
 [![AGENTS.md](https://img.shields.io/badge/AGENTS.md-compatible-brightgreen.svg)](https://agents.md)
 [![Status](https://img.shields.io/badge/status-production%20ready-brightgreen.svg)](CLAUDE.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
 
-## What's New in v1.4.0
+## What's New in v1.5.0
 
-- **21 Language Guides** - Comprehensive coverage for all major programming languages
-- **New in v1.4.0**: SQL, Shell/Bash, R, Dart/Flutter, HTML/CSS, Lua, Assembly, CUDA, Solidity, Zig
-- **New in v1.3.0**: Java, C#, PHP, Swift, C/C++, Ruby
+- **33 Framework Guides** - Comprehensive framework-specific guidance across 11 language families
+- **New in v1.5.0**: React, Next.js, Express, Django, FastAPI, Flask, Gin, Echo, Fiber, Axum, Actix-web, Rocket, Spring Boot, Quarkus, Micronaut, ASP.NET Core, Blazor, Unity, Laravel, Symfony, WordPress, SwiftUI, UIKit, Vapor, Rails, Sinatra, Hanami, Flutter, and more
+- **21 Language Guides** - All major programming languages covered
 - **AGENTS.md Compatible** - Works with Claude Code, Cursor, Codex, Copilot, and 20+ other AI tools
 
 ---
@@ -83,6 +83,7 @@ An **opinionated AI development framework** designed for professional software t
 |---------|-------------|
 | **35+ Guardrails** | Testable rules, not vague suggestions |
 | **21 Language Guides** | All major languages with auto-loading support |
+| **33 Framework Guides** | Framework-specific patterns and best practices |
 | **5 Workflows** | PRD, tasks, init, troubleshooting, AGENTS.md generator |
 | **3 Modes** | ATOMIC/FEATURE/COMPLEX (scales from bugs to architecture) |
 | **4D Methodology** | Deconstruct → Diagnose → Develop → Deliver |
@@ -418,6 +419,22 @@ AI will:
 | Solidity | `.sol` | [solidity.md](.agent/language-guides/solidity.md) |
 | Zig | `.zig` | [zig.md](.agent/language-guides/zig.md) |
 
+### Framework Guides (On-Demand)
+
+| Language | Frameworks |
+|----------|------------|
+| TypeScript/JS | [React](.agent/framework-guides/react.md), [Next.js](.agent/framework-guides/nextjs.md), [Express](.agent/framework-guides/express.md) |
+| Python | [Django](.agent/framework-guides/django.md), [FastAPI](.agent/framework-guides/fastapi.md), [Flask](.agent/framework-guides/flask.md) |
+| Go | [Gin](.agent/framework-guides/gin.md), [Echo](.agent/framework-guides/echo.md), [Fiber](.agent/framework-guides/fiber.md) |
+| Rust | [Axum](.agent/framework-guides/axum.md), [Actix-web](.agent/framework-guides/actix-web.md), [Rocket](.agent/framework-guides/rocket.md) |
+| Kotlin | [Spring Boot](.agent/framework-guides/spring-boot-kotlin.md), [Ktor](.agent/framework-guides/ktor.md), [Android Compose](.agent/framework-guides/android-compose.md) |
+| Java | [Spring Boot](.agent/framework-guides/spring-boot-java.md), [Quarkus](.agent/framework-guides/quarkus.md), [Micronaut](.agent/framework-guides/micronaut.md) |
+| C# | [ASP.NET Core](.agent/framework-guides/aspnet-core.md), [Blazor](.agent/framework-guides/blazor.md), [Unity](.agent/framework-guides/unity.md) |
+| PHP | [Laravel](.agent/framework-guides/laravel.md), [Symfony](.agent/framework-guides/symfony.md), [WordPress](.agent/framework-guides/wordpress.md) |
+| Swift | [SwiftUI](.agent/framework-guides/swiftui.md), [UIKit](.agent/framework-guides/uikit.md), [Vapor](.agent/framework-guides/vapor.md) |
+| Ruby | [Rails](.agent/framework-guides/rails.md), [Sinatra](.agent/framework-guides/sinatra.md), [Hanami](.agent/framework-guides/hanami.md) |
+| Dart | [Flutter](.agent/framework-guides/flutter.md), [Shelf](.agent/framework-guides/shelf.md), [Dart Frog](.agent/framework-guides/dart-frog.md) |
+
 ### Workflows (On-Demand)
 
 | Workflow | Purpose |
@@ -434,12 +451,13 @@ AI will:
 
 | Metric | Value |
 |--------|-------|
-| **Version** | 1.4.0 |
+| **Version** | 1.5.0 |
 | **Status** | Production Ready |
 | **AGENTS.md** | Compatible |
-| **Total Files** | 34 markdown files |
+| **Total Files** | 67 markdown files |
 | **CLAUDE.md** | ~500 lines |
 | **Language Guides** | 21 (all major programming languages) |
+| **Framework Guides** | 33 (across 11 language families) |
 | **Workflows** | 5 (PRD, tasks, init, troubleshoot, AGENTS.md) |
 | **Guardrails** | 35+ testable rules |
 
@@ -492,8 +510,8 @@ AI will:
 ## Contributing
 
 Contributions welcome! Ideas:
-- Additional language guides (Scala, Elixir, Haskell, OCaml)
-- Framework-specific templates (Next.js, Django, Rails, Spring Boot)
+- Additional language guides (Scala, Elixir, Haskell, OCaml, Julia)
+- Additional framework guides for existing languages
 - Integration examples with other AI tools
 - Real-world case studies
 

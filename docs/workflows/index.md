@@ -1,11 +1,11 @@
 ---
 title: Workflows
-description: Structured workflows for complex tasks
+description: Structured workflows for AI-assisted development (11 workflows)
 ---
 
 # Workflows
 
-On-demand workflows for structured task handling.
+On-demand workflows covering the entire software development lifecycle.
 
 ---
 
@@ -13,11 +13,30 @@ On-demand workflows for structured task handling.
 
 Workflows are structured processes for handling specific types of tasks. They're loaded on-demand when you need them.
 
+## Workflow Categories
+
+| Category | Workflows | Purpose |
+|----------|-----------|---------|
+| **Planning** | initialize-project, create-prd, generate-tasks | Define and break down work |
+| **Quality** | code-review, security-audit, testing-strategy | Validate and improve code |
+| **Maintenance** | cleanup-project, refactoring, dependency-update | Keep codebase healthy |
+| **Utility** | troubleshooting, generate-agents-md | Support and compatibility |
+
+---
+
+## All Workflows
+
 | Workflow | Purpose | When to Use |
 |----------|---------|-------------|
 | [Initialize Project](initialize-project.md) | Set up new or existing projects | Starting a project |
 | [Create PRD](create-prd.md) | Plan complex features | COMPLEX mode (>10 files) |
 | [Generate Tasks](generate-tasks.md) | Break PRD into actionable tasks | After PRD created |
+| [Code Review](code-review.md) | Validate against guardrails | Before commits, PR reviews |
+| [Security Audit](security-audit.md) | OWASP Top 10, vulnerability scan | Pre-production, monthly |
+| [Testing Strategy](testing-strategy.md) | Plan test coverage | After features, debt sprints |
+| [Cleanup Project](cleanup-project.md) | Prune unused guides | Post-init, quarterly |
+| [Refactoring](refactoring.md) | Technical debt remediation | Guardrail violations |
+| [Dependency Update](dependency-update.md) | Safe dependency updates | Monthly, vulnerabilities |
 | [Troubleshooting](troubleshooting.md) | Debug systematically | Stuck >30 minutes |
 | [Generate AGENTS.md](generate-agents-md.md) | Cross-tool compatibility | Multi-tool teams |
 
@@ -158,7 +177,7 @@ Workflows can be chained for complex tasks:
 
 ---
 
-## Available Workflows
+## Planning Workflows
 
 <div class="grid cards" markdown>
 
@@ -185,6 +204,78 @@ Workflows can be chained for complex tasks:
     Break PRDs into actionable task lists.
 
     [:octicons-arrow-right-24: Generate Tasks](generate-tasks.md)
+
+</div>
+
+---
+
+## Quality Workflows
+
+<div class="grid cards" markdown>
+
+-   :material-check-circle:{ .lg .middle } **Code Review**
+
+    ---
+
+    Systematic validation against guardrails before committing.
+
+    [:octicons-arrow-right-24: Code Review](code-review.md)
+
+-   :material-shield-check:{ .lg .middle } **Security Audit**
+
+    ---
+
+    OWASP Top 10, vulnerability scanning, secrets detection.
+
+    [:octicons-arrow-right-24: Security Audit](security-audit.md)
+
+-   :material-test-tube:{ .lg .middle } **Testing Strategy**
+
+    ---
+
+    Plan and achieve test coverage targets.
+
+    [:octicons-arrow-right-24: Testing Strategy](testing-strategy.md)
+
+</div>
+
+---
+
+## Maintenance Workflows
+
+<div class="grid cards" markdown>
+
+-   :material-broom:{ .lg .middle } **Cleanup Project**
+
+    ---
+
+    Prune unused guides and reduce .agent/ bloat.
+
+    [:octicons-arrow-right-24: Cleanup Project](cleanup-project.md)
+
+-   :material-wrench:{ .lg .middle } **Refactoring**
+
+    ---
+
+    Structured approach to technical debt remediation.
+
+    [:octicons-arrow-right-24: Refactoring](refactoring.md)
+
+-   :material-package-up:{ .lg .middle } **Dependency Update**
+
+    ---
+
+    Safe and systematic dependency updates.
+
+    [:octicons-arrow-right-24: Dependency Update](dependency-update.md)
+
+</div>
+
+---
+
+## Utility Workflows
+
+<div class="grid cards" markdown>
 
 -   :material-bug:{ .lg .middle } **Troubleshooting**
 

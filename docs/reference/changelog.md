@@ -9,6 +9,41 @@ All notable changes to AI Code Template.
 
 ---
 
+## [1.5.0] - 2025-12-15
+
+### Framework Guides Release
+
+Major expansion adding 33 framework-specific guides across 11 language families.
+
+### Added
+
+- **Framework Guides** (33 total):
+  - **TypeScript/JavaScript**: React, Next.js, Express
+  - **Python**: Django, FastAPI, Flask
+  - **Go**: Gin, Echo, Fiber
+  - **Rust**: Axum, Actix-web, Rocket
+  - **Kotlin**: Spring Boot (Kotlin), Ktor, Android Compose
+  - **Java**: Spring Boot, Quarkus, Micronaut
+  - **C#**: ASP.NET Core, Blazor, Unity
+  - **PHP**: Laravel, Symfony, WordPress
+  - **Swift**: SwiftUI, UIKit, Vapor
+  - **Ruby**: Rails, Sinatra, Hanami
+  - **Dart**: Flutter, Shelf, Dart Frog
+
+### Changed
+
+- Added "Load Framework Guide" section to CLAUDE.md Quick Reference
+- Added Framework Guides section to README.md
+- Added frameworks section to documentation site
+- Updated documentation site navigation
+
+### Technical
+
+- Total guides now 54 (21 language + 33 framework)
+- Each framework guide includes: Setup, Project Structure, Patterns, Testing, Common Pitfalls, Security
+
+---
+
 ## [1.4.0] - 2025-12-13
 
 ### Comprehensive Language Coverage Release
@@ -190,6 +225,13 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ## Upgrade Guide
 
+### From 1.4.x to 1.5.x
+
+1. Copy new framework guides to `.agent/framework-guides/`:
+   - All 33 framework guides (react.md, nextjs.md, express.md, django.md, etc.)
+2. Update CLAUDE.md (includes "Load Framework Guide" section)
+3. Copy new `docs/frameworks/` directory for documentation site
+
 ### From 1.3.x to 1.4.x
 
 1. Copy new specialized language guides to `.agent/language-guides/`:
@@ -225,7 +267,7 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 - [x] ~~Additional language guides (Java, C#, PHP, Swift)~~ - Completed in v1.3.0
 - [x] ~~Specialized language guides (SQL, Shell, Lua, etc.)~~ - Completed in v1.4.0
-- [ ] Framework-specific templates (Next.js, Django, Rails)
+- [x] ~~Framework-specific templates (Next.js, Django, Rails)~~ - Completed in v1.5.0
 - [ ] IDE integrations (VS Code extension)
 - [ ] Automated guardrail checking
 - [ ] Interactive documentation tutorials

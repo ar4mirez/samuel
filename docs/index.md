@@ -26,13 +26,21 @@ An **opinionated AI development framework** designed for professional software t
 
     [:octicons-arrow-right-24: View Guardrails](core/guardrails.md)
 
--   :material-code-braces:{ .lg .middle } **5 Language Guides**
+-   :material-code-braces:{ .lg .middle } **21 Language Guides**
 
     ---
 
-    TypeScript, Python, Go, Rust, and Kotlin. Auto-loading based on file extensions - no manual configuration needed.
+    All major languages from TypeScript to Zig. Auto-loading based on file extensions - no manual configuration needed.
 
     [:octicons-arrow-right-24: Language Guides](languages/index.md)
+
+-   :material-layers:{ .lg .middle } **33 Framework Guides**
+
+    ---
+
+    Framework-specific patterns for React, Django, Rails, Spring Boot, and 29 more. Deep integration guidance.
+
+    [:octicons-arrow-right-24: Framework Guides](frameworks/index.md)
 
 -   :material-cog:{ .lg .middle } **5 Workflows**
 
@@ -165,12 +173,12 @@ graph LR
 
 ---
 
-## What's New in v1.2.0
+## What's New in v1.5.0
 
+- **33 Framework Guides** - React, Django, Rails, Spring Boot, and 29 more frameworks
+- **21 Language Guides** - All major programming languages covered
 - **AGENTS.md Compatible** - Works with Claude Code, Cursor, Codex, Copilot, and 20+ other AI tools
-- **Operations Section** - Commands first, context second (industry standard)
-- **Cross-Tool Workflow** - Generate standalone AGENTS.md for multi-tool teams
-- **Kotlin Guide** - New language guide for Kotlin development
+- **54 Total Guides** - Comprehensive coverage for languages and frameworks
 
 [:octicons-arrow-right-24: Full Changelog](reference/changelog.md)
 
@@ -180,12 +188,13 @@ graph LR
 
 | Metric | Value |
 |--------|-------|
-| **Version** | 1.2.0 |
+| **Version** | 1.5.0 |
 | **Status** | Production Ready |
 | **AGENTS.md** | Compatible |
-| **Total Files** | 18 markdown files |
+| **Total Files** | 67 markdown files |
 | **CLAUDE.md** | ~500 lines |
-| **Language Guides** | 5 (TypeScript, Python, Go, Rust, Kotlin) |
+| **Language Guides** | 21 (all major programming languages) |
+| **Framework Guides** | 33 (across 11 language families) |
 | **Workflows** | 5 (PRD, tasks, init, troubleshoot, AGENTS.md) |
 | **Guardrails** | 35+ testable rules |
 
