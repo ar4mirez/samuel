@@ -21,9 +21,28 @@
 
 ## Quick Start (60 Seconds)
 
+### Option 1: Using the CLI (Recommended)
+
 ```bash
-# 1. Copy to your project
-cp -r /path/to/aicof/{CLAUDE.md,.agent} ./
+# Install CLI
+brew tap ar4mirez/tap
+brew install aicof
+
+# Or via curl
+curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
+
+# Initialize your project
+aicof init my-project
+cd my-project
+
+# Start coding with AI - guardrails apply automatically!
+```
+
+### Option 2: Manual Copy
+
+```bash
+# 1. Copy template files to your project
+cp -r /path/to/aicof/template/{CLAUDE.md,AI_INSTRUCTIONS.md,.agent} ./
 
 # 2. (Optional) For cross-tool compatibility
 ln -s CLAUDE.md AGENTS.md
@@ -32,12 +51,13 @@ ln -s CLAUDE.md AGENTS.md
 ```
 
 **The system works immediately:**
-- AI loads [CLAUDE.md](CLAUDE.md) automatically (500 lines of guardrails + operations)
+
+- AI loads [CLAUDE.md](template/CLAUDE.md) automatically (500 lines of guardrails + operations)
 - Language guides auto-load based on file extensions
 - Workflows available when you need them
 - Progressive - starts minimal, grows with your project
 
-**[Read the full Quick Start Guide](AI_INSTRUCTIONS.md)**
+**[Read the full Quick Start Guide](template/AI_INSTRUCTIONS.md)**
 
 ---
 
@@ -389,61 +409,87 @@ AI will:
 
 | Document | Purpose | When to Read |
 |----------|---------|--------------|
-| [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md) | **Quick Start Guide** | Read this first |
-| [CLAUDE.md](CLAUDE.md) | Core guardrails & methodology | AI loads automatically |
-| [.agent/README.md](.agent/README.md) | .agent/ folder structure | When customizing |
+| [AI_INSTRUCTIONS.md](template/AI_INSTRUCTIONS.md) | **Quick Start Guide** | Read this first |
+| [CLAUDE.md](template/CLAUDE.md) | Core guardrails & methodology | AI loads automatically |
+| [.agent/README.md](template/.agent/README.md) | .agent/ folder structure | When customizing |
 
 ### Language Guides (Auto-Load)
 
 | Language | Files | Guide |
 |----------|-------|-------|
-| TypeScript/JavaScript | `.ts`, `.tsx`, `.js`, `.jsx` | [typescript.md](.agent/language-guides/typescript.md) |
-| Python | `.py` | [python.md](.agent/language-guides/python.md) |
-| Go | `.go` | [go.md](.agent/language-guides/go.md) |
-| Rust | `.rs` | [rust.md](.agent/language-guides/rust.md) |
-| Kotlin | `.kt`, `.kts` | [kotlin.md](.agent/language-guides/kotlin.md) |
-| Java | `.java` | [java.md](.agent/language-guides/java.md) |
-| C# | `.cs` | [csharp.md](.agent/language-guides/csharp.md) |
-| PHP | `.php` | [php.md](.agent/language-guides/php.md) |
-| Swift | `.swift` | [swift.md](.agent/language-guides/swift.md) |
-| C/C++ | `.c`, `.cpp`, `.h`, `.hpp` | [cpp.md](.agent/language-guides/cpp.md) |
-| Ruby | `.rb` | [ruby.md](.agent/language-guides/ruby.md) |
-| SQL | `.sql` | [sql.md](.agent/language-guides/sql.md) |
-| Shell/Bash | `.sh`, `.bash` | [shell.md](.agent/language-guides/shell.md) |
-| R | `.r`, `.R` | [r.md](.agent/language-guides/r.md) |
-| Dart/Flutter | `.dart` | [dart.md](.agent/language-guides/dart.md) |
-| HTML/CSS | `.html`, `.css`, `.scss` | [html-css.md](.agent/language-guides/html-css.md) |
-| Lua | `.lua` | [lua.md](.agent/language-guides/lua.md) |
-| Assembly | `.asm`, `.s` | [assembly.md](.agent/language-guides/assembly.md) |
-| CUDA | `.cu`, `.cuh` | [cuda.md](.agent/language-guides/cuda.md) |
-| Solidity | `.sol` | [solidity.md](.agent/language-guides/solidity.md) |
-| Zig | `.zig` | [zig.md](.agent/language-guides/zig.md) |
+| TypeScript/JavaScript | `.ts`, `.tsx`, `.js`, `.jsx` | [typescript.md](template/.agent/language-guides/typescript.md) |
+| Python | `.py` | [python.md](template/.agent/language-guides/python.md) |
+| Go | `.go` | [go.md](template/.agent/language-guides/go.md) |
+| Rust | `.rs` | [rust.md](template/.agent/language-guides/rust.md) |
+| Kotlin | `.kt`, `.kts` | [kotlin.md](template/.agent/language-guides/kotlin.md) |
+| Java | `.java` | [java.md](template/.agent/language-guides/java.md) |
+| C# | `.cs` | [csharp.md](template/.agent/language-guides/csharp.md) |
+| PHP | `.php` | [php.md](template/.agent/language-guides/php.md) |
+| Swift | `.swift` | [swift.md](template/.agent/language-guides/swift.md) |
+| C/C++ | `.c`, `.cpp`, `.h`, `.hpp` | [cpp.md](template/.agent/language-guides/cpp.md) |
+| Ruby | `.rb` | [ruby.md](template/.agent/language-guides/ruby.md) |
+| SQL | `.sql` | [sql.md](template/.agent/language-guides/sql.md) |
+| Shell/Bash | `.sh`, `.bash` | [shell.md](template/.agent/language-guides/shell.md) |
+| R | `.r`, `.R` | [r.md](template/.agent/language-guides/r.md) |
+| Dart/Flutter | `.dart` | [dart.md](template/.agent/language-guides/dart.md) |
+| HTML/CSS | `.html`, `.css`, `.scss` | [html-css.md](template/.agent/language-guides/html-css.md) |
+| Lua | `.lua` | [lua.md](template/.agent/language-guides/lua.md) |
+| Assembly | `.asm`, `.s` | [assembly.md](template/.agent/language-guides/assembly.md) |
+| CUDA | `.cu`, `.cuh` | [cuda.md](template/.agent/language-guides/cuda.md) |
+| Solidity | `.sol` | [solidity.md](template/.agent/language-guides/solidity.md) |
+| Zig | `.zig` | [zig.md](template/.agent/language-guides/zig.md) |
 
 ### Framework Guides (On-Demand)
 
 | Language | Frameworks |
 |----------|------------|
-| TypeScript/JS | [React](.agent/framework-guides/react.md), [Next.js](.agent/framework-guides/nextjs.md), [Express](.agent/framework-guides/express.md) |
-| Python | [Django](.agent/framework-guides/django.md), [FastAPI](.agent/framework-guides/fastapi.md), [Flask](.agent/framework-guides/flask.md) |
-| Go | [Gin](.agent/framework-guides/gin.md), [Echo](.agent/framework-guides/echo.md), [Fiber](.agent/framework-guides/fiber.md) |
-| Rust | [Axum](.agent/framework-guides/axum.md), [Actix-web](.agent/framework-guides/actix-web.md), [Rocket](.agent/framework-guides/rocket.md) |
-| Kotlin | [Spring Boot](.agent/framework-guides/spring-boot-kotlin.md), [Ktor](.agent/framework-guides/ktor.md), [Android Compose](.agent/framework-guides/android-compose.md) |
-| Java | [Spring Boot](.agent/framework-guides/spring-boot-java.md), [Quarkus](.agent/framework-guides/quarkus.md), [Micronaut](.agent/framework-guides/micronaut.md) |
-| C# | [ASP.NET Core](.agent/framework-guides/aspnet-core.md), [Blazor](.agent/framework-guides/blazor.md), [Unity](.agent/framework-guides/unity.md) |
-| PHP | [Laravel](.agent/framework-guides/laravel.md), [Symfony](.agent/framework-guides/symfony.md), [WordPress](.agent/framework-guides/wordpress.md) |
-| Swift | [SwiftUI](.agent/framework-guides/swiftui.md), [UIKit](.agent/framework-guides/uikit.md), [Vapor](.agent/framework-guides/vapor.md) |
-| Ruby | [Rails](.agent/framework-guides/rails.md), [Sinatra](.agent/framework-guides/sinatra.md), [Hanami](.agent/framework-guides/hanami.md) |
-| Dart | [Flutter](.agent/framework-guides/flutter.md), [Shelf](.agent/framework-guides/shelf.md), [Dart Frog](.agent/framework-guides/dart-frog.md) |
+| TypeScript/JS | [React](template/.agent/framework-guides/react.md), [Next.js](template/.agent/framework-guides/nextjs.md), [Express](template/.agent/framework-guides/express.md) |
+| Python | [Django](template/.agent/framework-guides/django.md), [FastAPI](template/.agent/framework-guides/fastapi.md), [Flask](template/.agent/framework-guides/flask.md) |
+| Go | [Gin](template/.agent/framework-guides/gin.md), [Echo](template/.agent/framework-guides/echo.md), [Fiber](template/.agent/framework-guides/fiber.md) |
+| Rust | [Axum](template/.agent/framework-guides/axum.md), [Actix-web](template/.agent/framework-guides/actix-web.md), [Rocket](template/.agent/framework-guides/rocket.md) |
+| Kotlin | [Spring Boot](template/.agent/framework-guides/spring-boot-kotlin.md), [Ktor](template/.agent/framework-guides/ktor.md), [Android Compose](template/.agent/framework-guides/android-compose.md) |
+| Java | [Spring Boot](template/.agent/framework-guides/spring-boot-java.md), [Quarkus](template/.agent/framework-guides/quarkus.md), [Micronaut](template/.agent/framework-guides/micronaut.md) |
+| C# | [ASP.NET Core](template/.agent/framework-guides/aspnet-core.md), [Blazor](template/.agent/framework-guides/blazor.md), [Unity](template/.agent/framework-guides/unity.md) |
+| PHP | [Laravel](template/.agent/framework-guides/laravel.md), [Symfony](template/.agent/framework-guides/symfony.md), [WordPress](template/.agent/framework-guides/wordpress.md) |
+| Swift | [SwiftUI](template/.agent/framework-guides/swiftui.md), [UIKit](template/.agent/framework-guides/uikit.md), [Vapor](template/.agent/framework-guides/vapor.md) |
+| Ruby | [Rails](template/.agent/framework-guides/rails.md), [Sinatra](template/.agent/framework-guides/sinatra.md), [Hanami](template/.agent/framework-guides/hanami.md) |
+| Dart | [Flutter](template/.agent/framework-guides/flutter.md), [Shelf](template/.agent/framework-guides/shelf.md), [Dart Frog](template/.agent/framework-guides/dart-frog.md) |
 
 ### Workflows (On-Demand)
 
 | Workflow | Purpose |
 |----------|---------|
-| [Initialize Project](.agent/workflows/initialize-project.md) | Setup new/existing projects |
-| [Create PRD](.agent/workflows/create-prd.md) | Plan complex features |
-| [Generate Tasks](.agent/workflows/generate-tasks.md) | Break PRDs into tasks |
-| [Troubleshooting](.agent/workflows/troubleshooting.md) | Debug systematically |
-| [Generate AGENTS.md](.agent/workflows/generate-agents-md.md) | Cross-tool compatibility |
+| [Initialize Project](template/.agent/workflows/initialize-project.md) | Setup new/existing projects |
+| [Create PRD](template/.agent/workflows/create-prd.md) | Plan complex features |
+| [Generate Tasks](template/.agent/workflows/generate-tasks.md) | Break PRDs into tasks |
+| [Troubleshooting](template/.agent/workflows/troubleshooting.md) | Debug systematically |
+| [Generate AGENTS.md](template/.agent/workflows/generate-agents-md.md) | Cross-tool compatibility |
+
+---
+
+## Repository Structure
+
+```text
+aicof/
+├── template/                    # Distributable template files
+│   ├── CLAUDE.md               # Main AI instructions (copy to your project)
+│   ├── AI_INSTRUCTIONS.md      # Quick start guide
+│   └── .agent/                 # AI context directory
+│       ├── language-guides/    # 21 language-specific guides
+│       ├── framework-guides/   # 33 framework-specific guides
+│       └── workflows/          # 13 structured workflows
+├── packages/cli/               # Go CLI tool source code
+├── docs/                       # Documentation website source
+└── .agent/                     # This project's own AI context
+    ├── tasks/                  # PRDs and task lists
+    └── memory/                 # Decision logs
+```
+
+**Why this structure?**
+
+- `template/` contains files distributed to users via the CLI
+- `packages/cli/` contains the CLI tool that manages installations
+- `.agent/` at root is for developing AICoF itself (dogfooding)
 
 ---
 
@@ -466,18 +512,21 @@ AI will:
 ## Learning Path
 
 ### Week 1: Learn the Basics
-- [ ] Copy CLAUDE.md + .agent/ to your project
+
+- [ ] Install AICoF via CLI or copy template files to your project
 - [ ] Write 5 features using ATOMIC mode
-- [ ] Review guardrails in [CLAUDE.md](CLAUDE.md)
+- [ ] Review guardrails in [CLAUDE.md](template/CLAUDE.md)
 - [ ] Check which language guide applies to you
 
 ### Week 2: Try Complex Features
+
 - [ ] Use PRD workflow for a medium feature
 - [ ] Generate task breakdown
 - [ ] Implement step-by-step
 - [ ] Notice how `.agent/project.md` grows
 
 ### Week 3: Customize & Extend
+
 - [ ] Add project-specific patterns to `.agent/patterns.md`
 - [ ] Create first decision log in `.agent/memory/`
 - [ ] (Multi-tool) Set up AGENTS.md for your team

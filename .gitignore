@@ -43,6 +43,7 @@ Cargo.lock
 # Build artifacts
 dist/
 build/
+packages/cli/bin/
 *.o
 *.a
 *.so

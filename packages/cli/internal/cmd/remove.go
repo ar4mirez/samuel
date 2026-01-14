@@ -1,0 +1,135 @@
+package cmd
+
+import (
+	"fmt"
+	"os"
+	"path/filepath"
+
+	"github.com/ar4mirez/aicof/internal/core"
+	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/spf13/cobra"
+)
+
+var removeCmd = &cobra.Command{
+	Use:   "remove <type> <name>",
+	Short: "Remove a component from your project",
+	Long: `Remove a language guide, framework guide, or workflow from your project.
+
+This removes the file and updates the config. Core files (CLAUDE.md, workflows)
+cannot be removed.
+
+Types:
+  language   Remove a language guide
+  framework  Remove a framework guide
+  workflow   Remove a workflow (only individual workflows, not 'all')
+
+Examples:
+  aicof remove language rust
+  aicof remove framework django`,
+	Args: cobra.ExactArgs(2),
+	RunE: runRemove,
+}
+
+func init() {
+	rootCmd.AddCommand(removeCmd)
+	removeCmd.Flags().BoolP("force", "f", false, "Force removal without confirmation")
+}
+
+func runRemove(cmd *cobra.Command, args []string) error {
+	componentType := args[0]
+	componentName := args[1]
+	force, _ := cmd.Flags().GetBool("force")
+
+	// Load config
+	config, err := core.LoadConfig()
+	if err != nil {
+		if os.IsNotExist(err) {
+			return fmt.Errorf("no AICoF installation found. Run 'aicof init' first")
+		}
+		return fmt.Errorf("failed to load config: %w", err)
+	}
+
+	// Validate component type and find component
+	var component *core.Component
+	var isInstalled bool
+
+	switch componentType {
+	case "language", "lang", "l":
+		component = core.FindLanguage(componentName)
+		if component == nil {
+			return fmt.Errorf("unknown language: %s", componentName)
+		}
+		isInstalled = config.HasLanguage(componentName)
+
+	case "framework", "fw", "f":
+		component = core.FindFramework(componentName)
+		if component == nil {
+			return fmt.Errorf("unknown framework: %s", componentName)
+		}
+		isInstalled = config.HasFramework(componentName)
+
+	case "workflow", "wf", "w":
+		// Don't allow removing all workflows
+		if componentName == "all" {
+			return fmt.Errorf("cannot remove 'all' workflows. Remove individual workflows instead")
+		}
+		component = core.FindWorkflow(componentName)
+		if component == nil {
+			return fmt.Errorf("unknown workflow: %s", componentName)
+		}
+		isInstalled = config.HasWorkflow(componentName)
+
+	default:
+		return fmt.Errorf("unknown component type: %s\nValid types: language, framework, workflow", componentType)
+	}
+
+	// Check if installed
+	if !isInstalled {
+		ui.Warn("%s '%s' is not installed", componentType, componentName)
+		return nil
+	}
+
+	// Confirm removal
+	if !force {
+		confirmed, err := ui.Confirm(fmt.Sprintf("Remove %s '%s'?", componentType, componentName), false)
+		if err != nil || !confirmed {
+			ui.Info("Removal cancelled")
+			return nil
+		}
+	}
+
+	// Get current directory
+	cwd, err := os.Getwd()
+	if err != nil {
+		return fmt.Errorf("failed to get working directory: %w", err)
+	}
+
+	// Remove the file
+	filePath := filepath.Join(cwd, component.Path)
+	if _, err := os.Stat(filePath); err == nil {
+		if err := os.Remove(filePath); err != nil {
+			return fmt.Errorf("failed to remove file: %w", err)
+		}
+		ui.Success("Removed %s", component.Path)
+	} else {
+		ui.Warn("File not found: %s (updating config anyway)", component.Path)
+	}
+
+	// Update config
+	switch componentType {
+	case "language", "lang", "l":
+		config.RemoveLanguage(componentName)
+	case "framework", "fw", "f":
+		config.RemoveFramework(componentName)
+	case "workflow", "wf", "w":
+		config.RemoveWorkflow(componentName)
+	}
+
+	if err := config.Save(cwd); err != nil {
+		return fmt.Errorf("failed to update config: %w", err)
+	}
+
+	ui.Success("Updated aicof.yaml")
+
+	return nil
+}

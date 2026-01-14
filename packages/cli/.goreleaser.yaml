@@ -1,0 +1,133 @@
+# GoReleaser configuration for AICoF CLI
+# Documentation: https://goreleaser.com
+
+version: 2
+
+project_name: aicof
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: aicof
+    main: ./cmd/aicof
+    binary: aicof
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w
+      - -X github.com/ar4mirez/aicof/internal/cmd.Version={{.Version}}
+      - -X github.com/ar4mirez/aicof/internal/cmd.Commit={{.Commit}}
+      - -X github.com/ar4mirez/aicof/internal/cmd.BuildDate={{.Date}}
+
+archives:
+  - id: default
+    format: tar.gz
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- .Os }}_
+      {{- .Arch }}
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - '^chore:'
+      - Merge pull request
+      - Merge branch
+  groups:
+    - title: 'Features'
+      regexp: '^feat'
+      order: 0
+    - title: 'Bug Fixes'
+      regexp: '^fix'
+      order: 1
+    - title: 'Performance'
+      regexp: '^perf'
+      order: 2
+    - title: 'Refactoring'
+      regexp: '^refactor'
+      order: 3
+    - title: 'Other'
+      order: 999
+
+release:
+  github:
+    owner: ar4mirez
+    name: aicof
+  draft: false
+  prerelease: auto
+  name_template: "AICoF CLI v{{.Version}}"
+  header: |
+    ## AICoF CLI v{{.Version}}
+
+    ### Installation
+
+    **macOS/Linux (Homebrew):**
+    ```bash
+    brew tap ar4mirez/tap
+    brew install aicof
+    ```
+
+    **macOS/Linux (curl):**
+    ```bash
+    curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
+    ```
+
+    **Direct download:**
+    Download the appropriate binary for your platform below.
+
+  footer: |
+
+    ---
+
+    **Full Changelog**: https://github.com/ar4mirez/aicof/compare/{{ .PreviousTag }}...{{ .Tag }}
+
+brews:
+  - name: aicof
+    repository:
+      owner: ar4mirez
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    directory: Formula
+    homepage: "https://github.com/ar4mirez/aicof"
+    description: "CLI for managing the AICoF (Artificial Intelligence Coding Framework)"
+    license: "MIT"
+    install: |
+      bin.install "aicof"
+    test: |
+      system "#{bin}/aicof", "version"
+
+# Announce via webhook (optional)
+# announce:
+#   slack:
+#     enabled: true
+#     channel: '#releases'
