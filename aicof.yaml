@@ -1,0 +1,10 @@
+# AICoF Configuration
+# This project uses its own framework (dogfooding)
+
+version: "1.7.0"
+installed:
+  languages:
+    - go
+  frameworks: []
+  workflows:
+    - all

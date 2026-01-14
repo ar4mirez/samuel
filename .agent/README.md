@@ -6,18 +6,46 @@ This directory contains project-specific context for the AICoF framework develop
 
 ```
 .agent/
-├── README.md           # This file
-├── tasks/              # PRDs and task lists for this project
-│   ├── 0001-prd-*.md   # PRD documents
-│   └── tasks-*.md      # Task breakdowns
-└── memory/             # Decision logs and learnings
-    └── YYYY-MM-DD-*.md # Dated memory entries
+├── README.md              # This file
+├── project.md             # Project architecture and tech stack
+├── patterns.md            # Coding patterns and conventions
+├── state.md               # Current work state
+├── language-guides/       # Language-specific guardrails
+│   └── go.md              # Go language guide (this is a Go project)
+├── framework-guides/      # Framework-specific templates (empty - no framework used)
+├── workflows/             # All 13 workflows
+│   ├── initialize-project.md
+│   ├── create-prd.md
+│   ├── generate-tasks.md
+│   ├── code-review.md
+│   ├── security-audit.md
+│   ├── testing-strategy.md
+│   ├── cleanup-project.md
+│   ├── refactoring.md
+│   ├── dependency-update.md
+│   ├── troubleshooting.md
+│   ├── generate-agents-md.md
+│   ├── document-work.md
+│   └── update-framework.md
+├── tasks/                 # PRDs and task lists
+│   ├── 0001-prd-*.md      # PRD documents
+│   └── tasks-*.md         # Task breakdowns
+└── memory/                # Decision logs and learnings
+    └── YYYY-MM-DD-*.md    # Dated memory entries
 ```
 
-## Note
+## Dogfooding
 
-The distributable template files (language guides, framework guides, workflows) are located in `template/.agent/`.
+This project uses the AICoF framework for its own development. The framework files are:
 
-This separation allows:
-1. This project to use AICoF for its own development
-2. The template files to be distributed separately to users via the CLI
+- Root `CLAUDE.md` - Main AI instructions
+- Root `AI_INSTRUCTIONS.md` - Quick start guide
+- `.agent/` directory - Project context
+
+The distributable template files are located in `template/.agent/` for distribution via the CLI.
+
+## Usage
+
+- Language guide (`go.md`) is automatically loaded when working on Go files
+- Workflows are available on-demand for planning, reviews, etc.
+- State and memory files track ongoing work and decisions

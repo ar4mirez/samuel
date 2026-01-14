@@ -5,9 +5,9 @@ VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev
 COMMIT ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo "none")
 BUILD_DATE ?= $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-LDFLAGS := -ldflags "-X github.com/ar4mirez/aicof/internal/cmd.Version=$(VERSION) \
-	-X github.com/ar4mirez/aicof/internal/cmd.Commit=$(COMMIT) \
-	-X github.com/ar4mirez/aicof/internal/cmd.BuildDate=$(BUILD_DATE)"
+LDFLAGS := -ldflags "-X github.com/ar4mirez/aicof/internal/commands.Version=$(VERSION) \
+	-X github.com/ar4mirez/aicof/internal/commands.Commit=$(COMMIT) \
+	-X github.com/ar4mirez/aicof/internal/commands.BuildDate=$(BUILD_DATE)"
 
 # Go parameters
 GOCMD := go

@@ -14,7 +14,8 @@
 - **Documentation**: Python 3.x (MkDocs)
 - **Template Content**: Markdown
 
-### CLI Tool (`packages/cli/`)
+### CLI Tool (Go)
+
 - **Framework**: Cobra (CLI framework)
 - **Configuration**: gopkg.in/yaml.v3
 - **HTTP Client**: net/http (standard library)
@@ -30,26 +31,34 @@
 ## Architecture
 
 ### Repository Structure
+
 ```
-ai-code-template/
-├── template/                  # Distributable template files
+aicof/
+├── cmd/aicof/                # CLI entry point (main.go)
+├── internal/                 # Go implementation
+│   ├── commands/             # Command implementations (8 commands)
+│   ├── core/                 # Core packages (config, registry, extractor)
+│   ├── github/               # GitHub API client
+│   └── ui/                   # User interface helpers (prompts, spinner)
+├── template/                 # Distributable template files
 │   ├── CLAUDE.md             # Main AI instructions
-│   ├── AI_INSTRUCTIONS.md    # Alternative format
+│   ├── AI_INSTRUCTIONS.md    # Quick start guide
 │   └── .agent/               # AI context directory
 │       ├── language-guides/  # 21 language-specific guides
 │       ├── framework-guides/ # 33 framework-specific guides
 │       └── workflows/        # 13 structured workflows
-├── .agent/                   # Project-specific AI context (this project)
-│   ├── tasks/               # PRDs and task lists
-│   └── memory/              # Decision logs
-├── packages/cli/             # Go CLI tool
-│   ├── cmd/aicof/           # Entry point
-│   └── internal/            # Implementation
-│       ├── cmd/             # Command implementations
-│       ├── core/            # Core packages
-│       ├── github/          # GitHub API client
-│       └── ui/              # User interface helpers
-└── docs/                     # MkDocs documentation source
+├── .agent/                   # Project-specific AI context (dogfooding)
+│   ├── language-guides/      # Go guide (this is a Go project)
+│   ├── workflows/            # All 13 workflows
+│   ├── tasks/                # PRDs and task lists
+│   └── memory/               # Decision logs
+├── docs/                     # MkDocs documentation source
+├── CLAUDE.md                 # Framework instructions (dogfooding)
+├── AI_INSTRUCTIONS.md        # Quick start guide (dogfooding)
+├── aicof.yaml                # Framework config (dogfooding)
+├── go.mod                    # Go module definition
+├── Makefile                  # Build targets
+└── .goreleaser.yaml          # Release automation
 ```
 
 ### CLI Architecture
@@ -74,10 +83,24 @@ ai-code-template/
 **Trade-offs**: CLI paths need `template/` prefix, slight increase in path complexity
 
 ### Decision: Go for CLI
+
 **Date**: 2026-01-14
 **Context**: Needed standalone binary without runtime dependencies
 **Decision**: Go with Cobra framework
 **Rationale**: Single binary distribution, cross-platform, excellent CLI ecosystem
+
+### Decision: Go Project Structure at Root
+
+**Date**: 2026-01-14
+**Context**: Initial structure had Go code in `packages/cli/` (Node.js monorepo pattern), not idiomatic Go
+**Options Considered**:
+
+1. Keep `packages/cli/` structure - Cons: Confusing for Go developers, non-standard
+2. Move Go code to root with standard layout - Pros: Idiomatic, cleaner imports
+
+**Decision**: Standard Go layout at repository root (`cmd/`, `internal/`)
+**Rationale**: Go projects typically have `go.mod` at root with `cmd/` and `internal/` directories
+**Implementation**: Renamed `internal/cmd` to `internal/commands` to avoid confusion with root `cmd/`
 
 ### Decision: GitHub Archive Downloads (no git)
 **Date**: 2026-01-14
@@ -98,9 +121,9 @@ ai-code-template/
 - Overall: 60%+
 
 ### Test Commands
+
 ```bash
-cd packages/cli
-make test           # Run all tests
+make test             # Run all tests
 go test -cover ./...  # With coverage
 ```
 
@@ -114,7 +137,6 @@ git clone https://github.com/ar4mirez/aicof.git
 cd aicof
 
 # Build CLI
-cd packages/cli
 make build
 ./bin/aicof version
 

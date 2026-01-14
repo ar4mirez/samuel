@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ar4mirez/aicof/internal/cmd"
+	"github.com/ar4mirez/aicof/internal/commands"
 	"github.com/fatih/color"
 )
 
 func main() {
-	if err := cmd.Execute(); err != nil {
+	if err := commands.Execute(); err != nil {
 		// Print error in red
 		red := color.New(color.FgRed).SprintFunc()
 		fmt.Fprintf(os.Stderr, "%s %s\n", red("Error:"), err.Error())
