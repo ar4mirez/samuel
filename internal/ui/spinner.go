@@ -37,7 +37,7 @@ func (s *Spinner) Start() {
 			if s.bar == nil {
 				return
 			}
-			s.bar.Add(1)
+			_ = s.bar.Add(1)
 			time.Sleep(100 * time.Millisecond)
 		}
 	}()
@@ -46,7 +46,7 @@ func (s *Spinner) Start() {
 // Stop halts the spinner
 func (s *Spinner) Stop() {
 	if s.bar != nil {
-		s.bar.Finish()
+		_ = s.bar.Finish()
 		s.bar = nil
 	}
 }
@@ -54,13 +54,13 @@ func (s *Spinner) Stop() {
 // Success stops the spinner and prints a success message
 func (s *Spinner) Success(message string) {
 	s.Stop()
-	Success(message)
+	Success("%s", message)
 }
 
 // Error stops the spinner and prints an error message
 func (s *Spinner) Error(message string) {
 	s.Stop()
-	Error(message)
+	Error("%s", message)
 }
 
 // ProgressBar creates a determinate progress bar
@@ -90,11 +90,11 @@ func NewProgressBar(max int, description string) *ProgressBar {
 
 // Add increments the progress bar
 func (p *ProgressBar) Add(n int) {
-	p.bar.Add(n)
+	_ = p.bar.Add(n)
 }
 
 // Finish completes the progress bar
 func (p *ProgressBar) Finish() {
-	p.bar.Finish()
+	_ = p.bar.Finish()
 	fmt.Println()
 }

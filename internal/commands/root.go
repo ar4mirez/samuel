@@ -1,9 +1,6 @@
 package commands
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/spf13/cobra"
 )
 
@@ -42,14 +39,4 @@ func init() {
 	// Global flags
 	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "Enable verbose output")
 	rootCmd.PersistentFlags().Bool("no-color", false, "Disable colored output")
-}
-
-// exitWithError prints an error message and exits
-func exitWithError(msg string, err error) {
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %s: %v\n", msg, err)
-	} else {
-		fmt.Fprintf(os.Stderr, "Error: %s\n", msg)
-	}
-	os.Exit(1)
 }
