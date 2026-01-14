@@ -1,6 +1,6 @@
 ---
 title: Workflows
-description: Structured workflows for AI-assisted development (11 workflows)
+description: Structured workflows for AI-assisted development (13 workflows)
 ---
 
 # Workflows
@@ -19,8 +19,8 @@ Workflows are structured processes for handling specific types of tasks. They're
 |----------|-----------|---------|
 | **Planning** | initialize-project, create-prd, generate-tasks | Define and break down work |
 | **Quality** | code-review, security-audit, testing-strategy | Validate and improve code |
-| **Maintenance** | cleanup-project, refactoring, dependency-update | Keep codebase healthy |
-| **Utility** | troubleshooting, generate-agents-md | Support and compatibility |
+| **Maintenance** | cleanup-project, refactoring, dependency-update, update-framework | Keep codebase healthy |
+| **Utility** | troubleshooting, generate-agents-md, document-work | Support and documentation |
 
 ---
 
@@ -37,8 +37,10 @@ Workflows are structured processes for handling specific types of tasks. They're
 | [Cleanup Project](cleanup-project.md) | Prune unused guides | Post-init, quarterly |
 | [Refactoring](refactoring.md) | Technical debt remediation | Guardrail violations |
 | [Dependency Update](dependency-update.md) | Safe dependency updates | Monthly, vulnerabilities |
+| [Update Framework](update-framework.md) | Update AICoF version | New releases, maintenance |
 | [Troubleshooting](troubleshooting.md) | Debug systematically | Stuck >30 minutes |
 | [Generate AGENTS.md](generate-agents-md.md) | Cross-tool compatibility | Multi-tool teams |
+| [Document Work](document-work.md) | Capture patterns and decisions | End of session, handoffs |
 
 ---
 
@@ -71,13 +73,15 @@ graph TD
     B -->|Complex Feature| D{>10 files?}
     B -->|Debugging| E{Stuck >30 min?}
     B -->|Cross-tool Setup| F[generate-agents-md.md]
+    B -->|Update AICoF| G[update-framework.md]
+    B -->|Document Session| H[document-work.md]
 
-    D -->|Yes| G[create-prd.md]
-    G --> H[generate-tasks.md]
-    D -->|No| I[Use FEATURE mode]
+    D -->|Yes| I[create-prd.md]
+    I --> J[generate-tasks.md]
+    D -->|No| K[Use FEATURE mode]
 
-    E -->|Yes| J[troubleshooting.md]
-    E -->|No| K[Continue debugging]
+    E -->|Yes| L[troubleshooting.md]
+    E -->|No| M[Continue debugging]
 ```
 
 ---
@@ -158,6 +162,21 @@ Each workflow produces specific outputs:
 
 - `AGENTS.md` - Cross-tool compatible instructions
 
+### Document Work
+
+**Creates/Updates**:
+
+- `.agent/patterns.md` - Coding patterns discovered
+- `.agent/memory/YYYY-MM-DD-topic.md` - Decision logs
+- `.agent/state.md` - Current work status
+
+### Update Framework
+
+**Updates**:
+
+- `CLAUDE.md` - Latest version
+- `.agent/` - New guides and workflows
+
 ---
 
 ## Chaining Workflows
@@ -173,6 +192,9 @@ Workflows can be chained for complex tasks:
 
 3. Implement tasks one by one
    → Each task uses ATOMIC or FEATURE mode
+
+4. @.agent/workflows/document-work.md
+   → Capture patterns and decisions from implementation
 ```
 
 ---
@@ -269,6 +291,14 @@ Workflows can be chained for complex tasks:
 
     [:octicons-arrow-right-24: Dependency Update](dependency-update.md)
 
+-   :material-update:{ .lg .middle } **Update Framework**
+
+    ---
+
+    Update AICoF to latest version while preserving customizations.
+
+    [:octicons-arrow-right-24: Update Framework](update-framework.md)
+
 </div>
 
 ---
@@ -292,5 +322,13 @@ Workflows can be chained for complex tasks:
     Create cross-tool compatible instructions.
 
     [:octicons-arrow-right-24: Generate AGENTS.md](generate-agents-md.md)
+
+-   :material-notebook:{ .lg .middle } **Document Work**
+
+    ---
+
+    Capture patterns, decisions, and learnings from development.
+
+    [:octicons-arrow-right-24: Document Work](document-work.md)
 
 </div>

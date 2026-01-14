@@ -238,9 +238,11 @@ nav:
       - Cleanup Project: workflows/cleanup-project.md
       - Refactoring: workflows/refactoring.md
       - Dependency Update: workflows/dependency-update.md
+      - Update Framework: workflows/update-framework.md
     - Utility:
       - Troubleshooting: workflows/troubleshooting.md
       - Generate AGENTS.md: workflows/generate-agents-md.md
+      - Document Work: workflows/document-work.md
   - Reference:
     - Cross-Tool Compatibility: reference/cross-tool.md
     - FAQ: reference/faq.md
