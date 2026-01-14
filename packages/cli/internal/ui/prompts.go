@@ -120,29 +120,30 @@ func MultiSelect(label string, options []SelectOption, defaults []string) ([]Sel
 // Confirm prompts for yes/no confirmation
 func Confirm(label string, defaultYes bool) (bool, error) {
 	suffix := " [y/N]"
+	defaultStr := "n"
 	if defaultYes {
 		suffix = " [Y/n]"
+		defaultStr = "y"
 	}
 
 	prompt := promptui.Prompt{
-		Label:     label + suffix,
-		IsConfirm: true,
-		Default:   "",
+		Label:   label + suffix,
+		Default: defaultStr,
 	}
 
 	result, err := prompt.Run()
 	if err != nil {
-		if err == promptui.ErrAbort {
-			return false, nil
-		}
-		// Empty response uses default
-		if result == "" {
-			return defaultYes, nil
+		// Ctrl+C or abort
+		if err == promptui.ErrAbort || err == promptui.ErrInterrupt {
+			return false, err
 		}
 		return false, err
 	}
 
 	result = strings.ToLower(strings.TrimSpace(result))
+	if result == "" {
+		return defaultYes, nil
+	}
 	return result == "y" || result == "yes", nil
 }
 

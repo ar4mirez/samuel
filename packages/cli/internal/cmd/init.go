@@ -42,9 +42,15 @@ func init() {
 func runInit(cmd *cobra.Command, args []string) error {
 	force, _ := cmd.Flags().GetBool("force")
 	nonInteractive, _ := cmd.Flags().GetBool("non-interactive")
-	templateName, _ := cmd.Flags().GetString("template")
+	templateFlag, _ := cmd.Flags().GetString("template")
 	languageFlags, _ := cmd.Flags().GetStringSlice("languages")
 	frameworkFlags, _ := cmd.Flags().GetStringSlice("frameworks")
+
+	// Track if user provided CLI flags (skip confirmation prompt if so)
+	cliProvided := templateFlag != "" || len(languageFlags) > 0 || len(frameworkFlags) > 0
+
+	// Working variable for template name (may be set interactively)
+	templateName := templateFlag
 
 	// Determine target directory
 	targetDir := "."
@@ -118,8 +124,8 @@ func runInit(cmd *cobra.Command, args []string) error {
 		selectedFrameworks = expandFrameworks(frameworkFlags)
 	}
 
-	// Interactive language selection if not full template and not specified
-	if !nonInteractive && selectedTemplate != nil && selectedTemplate.Name != "full" && len(languageFlags) == 0 {
+	// Interactive language selection if not full template, not specified via CLI, and template was selected interactively
+	if !nonInteractive && !cliProvided && selectedTemplate != nil && selectedTemplate.Name != "full" {
 		langOptions := make([]ui.SelectOption, len(core.Languages))
 		for i, l := range core.Languages {
 			langOptions[i] = ui.SelectOption{
@@ -143,8 +149,8 @@ func runInit(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	// Interactive framework selection if not full template and not specified
-	if !nonInteractive && selectedTemplate != nil && selectedTemplate.Name != "full" && len(frameworkFlags) == 0 && len(selectedLanguages) > 0 {
+	// Interactive framework selection if not full template, not specified via CLI, and template was selected interactively
+	if !nonInteractive && !cliProvided && selectedTemplate != nil && selectedTemplate.Name != "full" && len(selectedLanguages) > 0 {
 		// Filter frameworks based on selected languages
 		relevantFrameworks := getRelevantFrameworks(selectedLanguages)
 
@@ -185,8 +191,8 @@ func runInit(cmd *cobra.Command, args []string) error {
 	ui.TableRow("Frameworks", fmt.Sprintf("%d selected", len(selectedFrameworks)))
 	ui.TableRow("Workflows", "all (13)")
 
-	// Confirm in interactive mode
-	if !nonInteractive {
+	// Confirm in interactive mode (skip if user provided template or languages via CLI flags)
+	if !nonInteractive && !cliProvided {
 		confirmed, err := ui.Confirm("\nProceed with installation?", true)
 		if err != nil || !confirmed {
 			ui.Info("Installation cancelled")
