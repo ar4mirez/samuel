@@ -27,13 +27,14 @@ builds:
         goarch: arm64
     ldflags:
       - -s -w
-      - -X github.com/ar4mirez/aicof/internal/cmd.Version={{.Version}}
-      - -X github.com/ar4mirez/aicof/internal/cmd.Commit={{.Commit}}
-      - -X github.com/ar4mirez/aicof/internal/cmd.BuildDate={{.Date}}
+      - -X github.com/ar4mirez/aicof/internal/commands.Version={{.Version}}
+      - -X github.com/ar4mirez/aicof/internal/commands.Commit={{.Commit}}
+      - -X github.com/ar4mirez/aicof/internal/commands.BuildDate={{.Date}}
 
 archives:
   - id: default
-    format: tar.gz
+    formats:
+      - tar.gz
     name_template: >-
       {{ .ProjectName }}_
       {{- .Version }}_
@@ -41,7 +42,8 @@ archives:
       {{- .Arch }}
     format_overrides:
       - goos: windows
-        format: zip
+        formats:
+          - zip
     files:
       - README.md
       - LICENSE
@@ -111,20 +113,23 @@ release:
 
     **Full Changelog**: https://github.com/ar4mirez/aicof/compare/{{ .PreviousTag }}...{{ .Tag }}
 
-brews:
+homebrew_casks:
   - name: aicof
+    binaries:
+      - aicof
     repository:
       owner: ar4mirez
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    directory: Formula
+    directory: Casks
     homepage: "https://github.com/ar4mirez/aicof"
     description: "CLI for managing the AICoF (Artificial Intelligence Coding Framework)"
-    license: "MIT"
-    install: |
-      bin.install "aicof"
-    test: |
-      system "#{bin}/aicof", "version"
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/aicof"]
+          end
 
 # Announce via webhook (optional)
 # announce:
