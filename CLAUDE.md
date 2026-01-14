@@ -167,8 +167,8 @@ NODE_ENV=            # development | production | test
 **Workflows** (on-demand):
 - Planning: initialize-project, create-prd, generate-tasks
 - Quality: code-review, security-audit, testing-strategy
-- Maintenance: cleanup-project, refactoring, dependency-update
-- Utility: troubleshooting, generate-agents-md
+- Maintenance: cleanup-project, refactoring, dependency-update, update-framework
+- Utility: troubleshooting, generate-agents-md, document-work
 
 **Load Language Guide** (automatic based on file extensions):
 - TypeScript/JavaScript → .agent/language-guides/typescript.md
@@ -608,10 +608,25 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
 
 ## Version & Changelog
 
-**Current Version**: 1.5.0
-**Last Updated**: 2025-12-15
+**Current Version**: 1.7.0
+**Last Updated**: 2025-01-14
 
 ### Changelog
+
+**v1.7.0 (2025-01-14) - Rebrand to AICoF**
+- ✅ Rebranded from "AI Code Template" to "AICoF (Artificial Intelligence Coding Framework)"
+- ✅ Renamed GitHub repository from `ai-code-template` to `aicof`
+- ✅ Updated all documentation, configuration, and references
+- ✅ New brand positioning: "Build smarter, faster, and more scalable software"
+
+**v1.6.0 (2025-01-14) - Workflow Enhancements & Documentation**
+- ✅ Added 2 new workflows:
+  - document-work.md: Capture patterns, decisions, and learnings from recent work
+  - update-framework.md: Update AICoF while preserving customizations
+- ✅ Added comprehensive usage examples for all 13 workflows in README
+- ✅ Fixed repository name references
+- ✅ Updated workflow map and documentation
+- ✅ Now includes 13 workflows total (was 11)
 
 **v1.5.0 (2025-12-15) - Framework-Specific Templates**
 - ✅ Added 33 framework-specific guide templates across 11 languages:

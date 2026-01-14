@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the AI Claude Code system will be documented in this file.
+All notable changes to AICoF (Artificial Intelligence Coding Framework) will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -8,6 +8,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 <!-- Add unreleased changes here -->
+
+## [1.7.0] - 2025-01-14
+
+### Changed
+
+#### Rebrand to AICoF
+- **Repository renamed**: `ai-code-template` → `aicof`
+- **Brand name**: "AI Code Template" → "AICoF (Artificial Intelligence Coding Framework)"
+- **New tagline**: "Build smarter, faster, and more scalable software"
+
+#### Documentation
+- Updated all documentation to reflect new brand name
+- Updated all GitHub URLs and repository references
+- Updated installation/clone commands throughout
+- Updated MkDocs configuration for new site URL
+
+## [1.6.0] - 2025-01-14
+
+### Added
+
+#### Workflows
+- **document-work.md** - Capture patterns, decisions, and learnings from recent development work
+  - Analyzes git commits to identify documentation needs
+  - Creates/updates patterns.md, memory files, state.md, project.md
+  - Supports end-of-session, feature completion, and handoff scenarios
+- **update-framework.md** - Update AICoF while preserving customizations
+  - Detects current version and compares with latest
+  - Identifies customizations to preserve
+  - Supports full replace, selective merge, and new files only strategies
+  - Includes rollback procedures
+
+#### Documentation
+- **Comprehensive workflow examples** in .agent/workflows/README.md
+  - Real-world usage scenarios for all 13 workflows
+  - Example conversations showing AI responses
+  - Expected outputs for each workflow
+
+### Fixed
+- **Repository name references** - Changed `ai-claude-code` to `ai-code-template` across:
+  - README.md (3 occurrences)
+  - AI_INSTRUCTIONS.md (1 occurrence)
+  - CHANGELOG.md (7 version comparison links)
+
+### Changed
+- **Workflow count**: Now 13 workflows (was 11)
+- **Workflow categories**:
+  - Maintenance: Added update-framework
+  - Utility: Added document-work
+- **Workflow map**: Updated ASCII diagram to include new workflows
 
 ## [1.5.0] - 2025-12-15
 
@@ -282,6 +331,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.7.0 | 2025-01-14 | Rebrand to AICoF (Artificial Intelligence Coding Framework) |
+| 1.6.0 | 2025-01-14 | document-work and update-framework workflows, comprehensive examples |
 | 1.5.0 | 2025-12-15 | 33 framework guides across 11 language families |
 | 1.4.0 | 2025-12-13 | 10 specialized language guides (SQL, Shell, R, Dart, HTML/CSS, Lua, Assembly, CUDA, Solidity, Zig) |
 | 1.3.0 | 2025-12-13 | 6 enterprise language guides (Java, C#, PHP, Swift, C++, Ruby) |
@@ -328,10 +379,12 @@ No breaking changes. New language guides and workflows are additive.
 - [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md) - Quick start guide
 - [AGENTS.md Standard](https://agents.md) - Cross-tool compatibility standard
 
-[Unreleased]: https://github.com/ar4mirez/ai-claude-code/compare/v1.5.0...HEAD
-[1.5.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.4.0...v1.5.0
-[1.4.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.3.0...v1.4.0
-[1.3.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.2.0...v1.3.0
-[1.2.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.1.0...v1.2.0
-[1.1.0]: https://github.com/ar4mirez/ai-claude-code/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/ar4mirez/ai-claude-code/releases/tag/v1.0.0
+[Unreleased]: https://github.com/ar4mirez/aicof/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/ar4mirez/aicof/compare/v1.6.0...v1.7.0
+[1.6.0]: https://github.com/ar4mirez/aicof/compare/v1.5.0...v1.6.0
+[1.5.0]: https://github.com/ar4mirez/aicof/compare/v1.4.0...v1.5.0
+[1.4.0]: https://github.com/ar4mirez/aicof/compare/v1.3.0...v1.4.0
+[1.3.0]: https://github.com/ar4mirez/aicof/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/ar4mirez/aicof/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/ar4mirez/aicof/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/ar4mirez/aicof/releases/tag/v1.0.0

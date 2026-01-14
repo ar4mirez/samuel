@@ -411,7 +411,7 @@ mv .agent/.archive/framework-guides/django.md .agent/framework-guides/
 ```bash
 # Re-download from template
 curl -o .agent/language-guides/python.md \
-  https://raw.githubusercontent.com/ar4mirez/ai-code-template/main/.agent/language-guides/python.md
+  https://raw.githubusercontent.com/ar4mirez/aicof/main/.agent/language-guides/python.md
 ```
 
 ### Update Manifest

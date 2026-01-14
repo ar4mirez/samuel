@@ -1,14 +1,14 @@
-# MkDocs configuration for AI Code Template documentation
+# MkDocs configuration for AICoF documentation
 # https://squidfunk.github.io/mkdocs-material/
 
-site_name: AI Code Template
-site_description: Production-ready AI-assisted development framework with guardrails
+site_name: AICoF
+site_description: Artificial Intelligence Coding Framework - Build smarter, faster, and more scalable software
 site_author: ar4mirez
-site_url: https://ar4mirez.github.io/ai-code-template/
+site_url: https://ar4mirez.github.io/aicof/
 
 # Repository
-repo_name: ar4mirez/ai-code-template
-repo_url: https://github.com/ar4mirez/ai-code-template
+repo_name: ar4mirez/aicof
+repo_url: https://github.com/ar4mirez/aicof
 edit_uri: edit/main/docs/
 
 # Copyright
@@ -122,7 +122,7 @@ markdown_extensions:
   - pymdownx.magiclink:
       repo_url_shorthand: true
       user: ar4mirez
-      repo: ai-code-template
+      repo: aicof
   - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.snippets:
@@ -252,7 +252,7 @@ extra:
   # Social links
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/ar4mirez/ai-code-template
+      link: https://github.com/ar4mirez/aicof
       name: GitHub Repository
 
   # Version

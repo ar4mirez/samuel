@@ -1,11 +1,11 @@
 ---
 title: Quick Start
-description: Get started with AI Code Template in 60 seconds
+description: Get started with AICoF in 60 seconds
 ---
 
 # Quick Start Guide
 
-Get up and running with AI Code Template in under a minute.
+Get up and running with AICoF (Artificial Intelligence Coding Framework) in under a minute.
 
 ---
 
@@ -13,7 +13,7 @@ Get up and running with AI Code Template in under a minute.
 
 ```bash
 # 1. Copy to your project
-cp -r /path/to/ai-code-template/{CLAUDE.md,.agent} ./
+cp -r /path/to/aicof/{CLAUDE.md,.agent} ./
 
 # 2. (Optional) For cross-tool compatibility
 ln -s CLAUDE.md AGENTS.md

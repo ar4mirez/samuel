@@ -11,7 +11,7 @@ The main instruction file that AI assistants load automatically. Contains all gu
 
 ## What is CLAUDE.md?
 
-CLAUDE.md is the "brain" of the AI Code Template system. When an AI assistant starts working on your project, it loads this file to understand:
+CLAUDE.md is the "brain" of the AICoF system. When an AI assistant starts working on your project, it loads this file to understand:
 
 - **What commands to run** (Operations)
 - **What to avoid** (Boundaries)

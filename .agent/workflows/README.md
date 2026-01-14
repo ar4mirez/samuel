@@ -12,8 +12,8 @@ Workflows provide step-by-step guidance for AI to tackle complex tasks systemati
 |----------|-----------|---------|
 | **Planning** | create-prd, generate-tasks, initialize-project | Define and break down work |
 | **Quality** | code-review, security-audit, testing-strategy | Validate and improve code |
-| **Maintenance** | cleanup-project, refactoring, dependency-update | Keep codebase healthy |
-| **Utility** | troubleshooting, generate-agents-md | Support and compatibility |
+| **Maintenance** | cleanup-project, refactoring, dependency-update, update-framework | Keep codebase healthy |
+| **Utility** | troubleshooting, generate-agents-md, document-work | Support and compatibility |
 
 ---
 
@@ -200,6 +200,26 @@ Update project dependencies
 
 ---
 
+#### update-framework.md
+**Use for**: Updating AICoF to latest version while preserving customizations
+
+**When to use**:
+- New version released
+- Want new language/framework guides
+- Monthly maintenance check
+- Team version sync
+
+**How to use**:
+```
+@.agent/workflows/update-framework.md
+
+Update to the latest version of AICoF
+```
+
+**Output**: Updated CLAUDE.md and .agent/ files with customizations preserved
+
+---
+
 ### Utility Workflows
 
 #### troubleshooting.md
@@ -241,6 +261,27 @@ Debug: API returns 500 error
 
 ---
 
+#### document-work.md
+**Use for**: Capturing patterns, decisions, and learnings from recent development work
+
+**When to use**:
+- After completing significant features
+- End of work session
+- New pattern identified
+- Before vacation/handoff
+
+**How to use**:
+```
+@.agent/workflows/document-work.md
+
+Document the work from today's session on the authentication feature.
+We made decisions about JWT vs sessions and established a new error handling pattern.
+```
+
+**Output**: Updated patterns.md, new memory files, state.md updates
+
+---
+
 ## Workflow Map
 
 ```
@@ -255,8 +296,8 @@ Debug: API returns 500 error
 │ initialize-  │─────────────────────────────▶│ cleanup-     │    │ dependency-  │
 │ project      │                              │ project      │    │ update       │
 └──────────────┘                              └──────────────┘    └──────────────┘
-       │                                                                 │
-       ▼                                                                 │
+       │                                             │                   │
+       ▼                                             ▼                   │
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐            │
 │ create-prd   │─────▶│ generate-    │─────▶│ code-review  │◀───────────┘
 │              │      │ tasks        │      │              │
@@ -275,10 +316,11 @@ Debug: API returns 500 error
                       └──────────────┘      └──────────────┘
                              │
                              ▼
-                      ┌──────────────┐
-                      │ trouble-     │
-                      │ shooting     │ (any stage)
-                      └──────────────┘
+┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+│ update-      │      │ trouble-     │      │ document-    │
+│ framework    │      │ shooting     │      │ work         │
+└──────────────┘      └──────────────┘      └──────────────┘
+ (maintenance)         (any stage)           (any stage)
 ```
 
 ---
@@ -518,6 +560,647 @@ AI: Uses generate-tasks.md (can work without PRD for clear refactorings)
     Saves task list
 
 [Proceed with implementation]
+```
+
+---
+
+## Detailed Workflow Examples
+
+This section provides comprehensive examples for each workflow, showing real-world usage scenarios.
+
+### Planning Workflows
+
+#### initialize-project.md Example
+
+**Scenario**: Setting up a new TypeScript/React project
+
+**User Request:**
+```
+@.agent/workflows/initialize-project.md
+
+I'm starting a new e-commerce dashboard project
+```
+
+**AI Conversation:**
+```
+AI: "I'll help you set up this project. Let me ask some discovery questions:
+
+1. What tech stack?
+   - Language: TypeScript
+   - Framework: React with Next.js
+   - Styling: Tailwind CSS
+
+2. What architecture?
+   - Jamstack with API routes
+
+3. Testing approach?
+   - Jest + React Testing Library
+   - Playwright for E2E
+   - Coverage target: 80%
+
+4. Deployment target?
+   - Vercel
+
+5. Database?
+   - PostgreSQL with Prisma ORM
+
+6. Additional requirements?
+   - Authentication: NextAuth.js
+   - API: REST with tRPC
+   - State: Zustand
+
+Is this correct? Any modifications?"
+
+User: "Yes, that's right"
+
+AI: "Creating project structure..."
+```
+
+**Output:**
+- `.agent/project.md` with tech stack documentation
+- Recommended directory structure
+- Initial configuration files
+
+---
+
+#### create-prd.md Example
+
+**Scenario**: Defining a user authentication feature
+
+**User Request:**
+```
+@.agent/workflows/create-prd.md
+
+I want to build user authentication with email/password and social login
+```
+
+**AI Conversation:**
+```
+AI: "I'll create a PRD for the authentication feature. Let me ask some clarifying questions:
+
+1. Goals: What's the primary objective?
+   User: "Secure user access with multiple login options"
+
+2. User Stories: Who are the users?
+   User: "End users of the e-commerce platform"
+
+3. OAuth Providers: Which social logins?
+   User: "Google and GitHub"
+
+4. Session Management: JWT or sessions?
+   User: "JWT with refresh tokens"
+
+5. Password Requirements?
+   User: "Min 8 chars, 1 uppercase, 1 number"
+
+6. Additional Features?
+   User: "Password reset via email, remember me option"
+
+Creating PRD..."
+```
+
+**Output:**
+- `.agent/tasks/0001-prd-user-authentication.md`
+
+---
+
+#### generate-tasks.md Example
+
+**Scenario**: Breaking down the authentication PRD
+
+**User Request:**
+```
+@.agent/workflows/generate-tasks.md
+
+Generate tasks for @.agent/tasks/0001-prd-user-authentication.md
+```
+
+**AI Response:**
+```
+AI: "Analyzing PRD... Generating high-level tasks:
+
+Parent Tasks:
+1.0 Database Schema & Models
+2.0 Authentication API Endpoints
+3.0 JWT Token Management
+4.0 OAuth Integration (Google, GitHub)
+5.0 Password Reset Flow
+6.0 Frontend Auth Components
+7.0 Testing & Security Validation
+
+Review these parent tasks. Say 'Go' to generate detailed sub-tasks."
+
+User: "Go"
+
+AI: "Generating detailed sub-tasks...
+
+1.0 Database Schema & Models
+  1.1 Create User model with email, password hash, roles
+  1.2 Create Session/RefreshToken model
+  1.3 Create PasswordReset model
+  1.4 Write database migrations
+  1.5 Add model unit tests
+
+2.0 Authentication API Endpoints
+  2.1 POST /auth/register - user registration
+  2.2 POST /auth/login - email/password login
+  2.3 POST /auth/logout - session invalidation
+  2.4 POST /auth/refresh - token refresh
+  2.5 Add API integration tests
+
+[...continues for all 35 sub-tasks]"
+```
+
+**Output:**
+- `.agent/tasks/tasks-0001-prd-user-authentication.md`
+
+---
+
+### Quality Workflows
+
+#### code-review.md Example
+
+**Scenario**: Pre-commit review of API changes
+
+**User Request:**
+```
+@.agent/workflows/code-review.md
+
+Review the changes in src/api/auth/
+```
+
+**AI Response:**
+```
+AI: "Running code review...
+
+## Code Review Report
+
+### Files Reviewed:
+- src/api/auth/login.ts
+- src/api/auth/register.ts
+- src/api/auth/middleware.ts
+
+### Results:
+
+✅ PASS: Code Quality
+- All functions < 50 lines
+- No cyclomatic complexity issues
+- Types properly defined
+
+⚠️ WARNING: Security
+- Line 45 in login.ts: Consider rate limiting
+- Line 23 in register.ts: Add email validation
+
+✅ PASS: Testing
+- Unit tests present
+- Coverage: 85%
+
+❌ FAIL: Input Validation
+- Line 12 in register.ts: Missing Zod schema validation
+
+### Recommendations:
+1. Add rate limiting middleware to login endpoint
+2. Add Zod schema for registration input
+3. Consider adding brute-force protection
+
+Fix required items before committing."
+```
+
+---
+
+#### security-audit.md Example
+
+**Scenario**: Quick security scan before deployment
+
+**User Request:**
+```
+@.agent/workflows/security-audit.md
+
+Quick scan of the authentication module before we deploy
+```
+
+**AI Response:**
+```
+AI: "Running quick security scan (scope: authentication module)...
+
+## Security Audit Report
+
+### Scope: src/api/auth/, src/lib/auth/
+
+### OWASP Top 10 Check:
+
+✅ A01 Broken Access Control: PASS
+   - Role checks implemented correctly
+
+✅ A02 Cryptographic Failures: PASS
+   - bcrypt used for password hashing (cost factor 12)
+   - JWT signed with RS256
+
+⚠️ A03 Injection: WARNING
+   - SQL queries use Prisma (parameterized) ✅
+   - User input in error messages (line 67) - sanitize
+
+✅ A07 Auth Failures: PASS
+   - Account lockout after 5 attempts
+   - Secure session management
+
+### Dependencies:
+✅ No known vulnerabilities in auth-related packages
+
+### Secrets Check:
+✅ No hardcoded secrets found
+✅ Environment variables used correctly
+
+### Summary:
+- Critical: 0
+- High: 0
+- Medium: 1 (error message sanitization)
+- Low: 0
+
+Ready for deployment with minor fix."
+```
+
+---
+
+#### testing-strategy.md Example
+
+**Scenario**: Improving test coverage for payment module
+
+**User Request:**
+```
+@.agent/workflows/testing-strategy.md
+
+Plan testing for the payment module - we're at 45% coverage
+```
+
+**AI Response:**
+```
+AI: "Analyzing payment module test coverage...
+
+## Current State:
+- Coverage: 45% (target: 80%)
+- Files: 12 source files, 4 test files
+- Missing: Integration tests, edge cases
+
+## Test Pyramid Plan:
+
+### Unit Tests (Priority 1):
+- [ ] PaymentProcessor.processPayment() - 8 test cases
+- [ ] RefundHandler.initiateRefund() - 5 test cases
+- [ ] PriceCalculator.calculateTotal() - 10 test cases
+
+### Integration Tests (Priority 2):
+- [ ] Stripe API integration - 4 test cases
+- [ ] Database transaction rollback - 3 test cases
+- [ ] Webhook handling - 6 test cases
+
+### Edge Cases (Priority 3):
+- [ ] Currency conversion edge cases
+- [ ] Partial refund scenarios
+- [ ] Network timeout handling
+
+## Estimated Coverage After:
+- Unit tests: +25% → 70%
+- Integration tests: +10% → 80%
+- Edge cases: +5% → 85%
+
+Start with unit tests? Say 'Go' to begin implementation."
+```
+
+---
+
+### Maintenance Workflows
+
+#### cleanup-project.md Example
+
+**Scenario**: Quarterly cleanup of .agent/ directory
+
+**User Request:**
+```
+@.agent/workflows/cleanup-project.md
+
+Clean up this project's .agent/ directory - it's getting bloated
+```
+
+**AI Response:**
+```
+AI: "Analyzing .agent/ directory...
+
+## Cleanup Analysis:
+
+### Current Size: 2.4 MB
+
+### Active Languages Detected:
+- TypeScript ✅ (keep typescript.md)
+- Python ❌ (no .py files found)
+- Go ❌ (no .go files found)
+
+### Recommendations:
+
+#### Remove (unused guides):
+- .agent/language-guides/python.md (156 KB)
+- .agent/language-guides/go.md (142 KB)
+- .agent/language-guides/rust.md (178 KB)
+- .agent/framework-guides/django.md (98 KB)
+- .agent/framework-guides/flask.md (87 KB)
+
+#### Archive (stale tasks):
+- .agent/tasks/0001-prd-old-feature.md (6 months old)
+- .agent/tasks/tasks-0001-*.md
+
+#### Consolidate (old memory files):
+- 12 memory files from Q1 2025 → quarterly-summary-2025-q1.md
+
+### Projected Savings: 1.8 MB (75% reduction)
+
+Proceed with cleanup? (y/n)"
+```
+
+---
+
+#### refactoring.md Example
+
+**Scenario**: Breaking up a large function
+
+**User Request:**
+```
+@.agent/workflows/refactoring.md
+
+Refactor the processOrder function - it's 120 lines and hard to test
+```
+
+**AI Response:**
+```
+AI: "Analyzing processOrder function...
+
+## Refactoring Plan
+
+### Current State:
+- Location: src/services/orderService.ts:45-165
+- Lines: 120 (limit: 50)
+- Cyclomatic Complexity: 15 (limit: 10)
+- Test Coverage: 30%
+
+### Identified Responsibilities:
+1. Validate order items (lines 48-72)
+2. Calculate pricing (lines 73-95)
+3. Check inventory (lines 96-115)
+4. Create order record (lines 116-140)
+5. Send notifications (lines 141-160)
+
+### Refactoring Steps:
+
+Step 1: Extract validateOrderItems()
+- Create function with single responsibility
+- Add unit tests
+- Replace inline code
+
+Step 2: Extract calculateOrderTotal()
+- Pure function, easy to test
+- Add unit tests
+
+Step 3: Extract checkInventory()
+- Async function
+- Add integration tests
+
+Step 4: Extract createOrderRecord()
+- Database transaction
+- Add tests
+
+Step 5: Extract sendOrderNotifications()
+- Side effects isolated
+- Add tests with mocks
+
+### After Refactoring:
+- processOrder: ~20 lines (orchestration only)
+- 5 focused helper functions
+- Estimated coverage: 85%
+
+Start with Step 1?"
+```
+
+---
+
+#### dependency-update.md Example
+
+**Scenario**: Security vulnerability in a dependency
+
+**User Request:**
+```
+@.agent/workflows/dependency-update.md
+
+We got a security alert for lodash - need to update urgently
+```
+
+**AI Response:**
+```
+AI: "Analyzing dependency vulnerability...
+
+## Vulnerability Report
+
+### Affected Package:
+- lodash@4.17.19
+- Severity: HIGH
+- CVE: CVE-2021-23337
+- Issue: Prototype pollution
+
+### Update Plan:
+
+#### Phase 1: Assessment
+- Current version: 4.17.19
+- Fixed version: 4.17.21
+- Breaking changes: None
+
+#### Phase 2: Update
+```bash
+npm update lodash
+```
+
+#### Phase 3: Test
+- Run full test suite
+- Check lodash usage in codebase
+- Verify no runtime errors
+
+### Files Using lodash:
+- src/utils/helpers.ts (import { merge, cloneDeep })
+- src/services/dataTransform.ts (import { groupBy })
+
+### Risk Assessment:
+- LOW: Minor version update
+- No breaking changes expected
+- Well-tested functions used
+
+Proceed with update?"
+```
+
+---
+
+#### update-framework.md Example
+
+**Scenario**: Updating to latest AICoF version
+
+**User Request:**
+```
+@.agent/workflows/update-framework.md
+
+Update to the latest version of AICoF
+```
+
+**AI Response:**
+```
+AI: "Checking current installation...
+
+## Version Check:
+- Current: v1.5.0
+- Latest: v1.6.0
+
+## What's New in v1.6.0:
+- New workflow: document-work.md
+- New workflow: update-framework.md
+- Detailed usage examples in README
+- Repository name fixes
+
+## Your Customizations Detected:
+- CLAUDE.md: No modifications
+- .agent/project.md: Project-specific (will preserve)
+- .agent/patterns.md: Has custom patterns (will preserve)
+
+## Update Strategy: Full Replace (recommended)
+
+### Steps:
+1. Backup project-specific files
+2. Download v1.6.0
+3. Replace template files
+4. Restore your files
+
+Proceed with update? (y/n)"
+```
+
+---
+
+### Utility Workflows
+
+#### troubleshooting.md Example
+
+**Scenario**: API returning 500 errors
+
+**User Request:**
+```
+@.agent/workflows/troubleshooting.md
+
+Debug: API returns 500 error on /api/orders endpoint
+```
+
+**AI Response:**
+```
+AI: "Starting systematic debugging...
+
+## Problem: 500 Error on /api/orders
+
+### Phase 1: Reproduce
+- Endpoint: GET /api/orders
+- Error: 500 Internal Server Error
+- Frequency: Consistent
+
+### Phase 2: Isolate
+Checking logs...
+
+Found: TypeError: Cannot read property 'id' of undefined
+Location: src/api/orders/index.ts:34
+
+### Phase 3: Analyze
+
+Code at line 34:
+```typescript
+const userId = req.user.id; // req.user is undefined
+```
+
+Root Cause: Auth middleware not running before this route.
+
+### Phase 4: Fix Options
+
+Option A: Add auth middleware
+```typescript
+router.get('/orders', authMiddleware, getOrders);
+```
+
+Option B: Check for auth in handler
+```typescript
+if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
+```
+
+Recommendation: Option A (middleware approach)
+
+### Phase 5: Verify
+After fix, run:
+```bash
+npm test src/api/orders/
+curl -H "Authorization: Bearer $TOKEN" localhost:3000/api/orders
+```
+
+Apply Option A fix?"
+```
+
+---
+
+#### document-work.md Example
+
+**Scenario**: End of sprint documentation
+
+**User Request:**
+```
+@.agent/workflows/document-work.md
+
+Document the work from this sprint - we implemented the payment integration
+and made some architectural decisions
+```
+
+**AI Response:**
+```
+AI: "Analyzing recent commits (last 2 weeks)...
+
+## Work Summary
+
+### Commits Analyzed: 47
+### Files Changed: 32
+### Key Changes Identified:
+
+## Patterns Discovered:
+
+### 1. Payment Webhook Pattern
+Used for: Stripe webhook handling
+```typescript
+// Verify signature → Parse event → Route to handler → Acknowledge
+```
+Adding to patterns.md...
+
+### 2. Retry with Exponential Backoff
+Used for: External API calls
+```typescript
+// attempt → wait(2^n seconds) → retry until maxAttempts
+```
+Adding to patterns.md...
+
+## Decisions Made:
+
+### Decision 1: Stripe over PayPal
+Creating memory file: 2025-01-14-payment-provider-choice.md
+- Context: Needed payment integration
+- Options: Stripe, PayPal, Square
+- Decision: Stripe (better API, webhooks, documentation)
+
+### Decision 2: Webhook Queue Architecture
+Creating memory file: 2025-01-14-webhook-processing.md
+- Context: Handle high webhook volume
+- Decision: Queue-based processing with Redis
+
+## State Update:
+Updating state.md with:
+- Completed: Payment integration
+- In Progress: Subscription billing
+- Next: Invoice generation
+
+Documentation complete!"
 ```
 
 ---

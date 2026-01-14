@@ -1,20 +1,22 @@
 ---
-title: AI Code Template
-description: Production-ready AI-assisted development framework with guardrails
+title: AICoF
+description: Artificial Intelligence Coding Framework - Build smarter, faster, and more scalable software
 ---
 
-# AI Code Template
+# AICoF
 
-**Production-ready AI-assisted development framework**
+**Artificial Intelligence Coding Framework**
+
+Build smarter, faster, and more scalable software.
 
 [:material-rocket-launch: Get Started](getting-started/quick-start.md){ .md-button .md-button--primary }
-[:material-github: View on GitHub](https://github.com/ar4mirez/ai-code-template){ .md-button }
+[:material-github: View on GitHub](https://github.com/ar4mirez/aicof){ .md-button }
 
 ---
 
-## What is AI Code Template?
+## What is AICoF?
 
-An **opinionated AI development framework** designed for professional software teams. It provides guardrails, language guides, and workflows that help AI coding assistants produce consistent, high-quality code.
+AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI development framework** designed for professional software teams. It provides guardrails, language guides, and workflows that help AI coding assistants produce consistent, high-quality code.
 
 <div class="grid cards" markdown>
 
@@ -66,7 +68,7 @@ An **opinionated AI development framework** designed for professional software t
 
 ```bash
 # 1. Copy to your project
-cp -r /path/to/ai-code-template/{CLAUDE.md,.agent} ./
+cp -r /path/to/aicof/{CLAUDE.md,.agent} ./
 
 # 2. (Optional) For cross-tool compatibility
 ln -s CLAUDE.md AGENTS.md
@@ -173,12 +175,12 @@ graph LR
 
 ---
 
-## What's New in v1.5.0
+## What's New in v1.7.0
 
+- **Rebranded to AICoF** - Artificial Intelligence Coding Framework with clearer identity
 - **33 Framework Guides** - React, Django, Rails, Spring Boot, and 29 more frameworks
 - **21 Language Guides** - All major programming languages covered
 - **AGENTS.md Compatible** - Works with Claude Code, Cursor, Codex, Copilot, and 20+ other AI tools
-- **54 Total Guides** - Comprehensive coverage for languages and frameworks
 
 [:octicons-arrow-right-24: Full Changelog](reference/changelog.md)
 
@@ -188,7 +190,7 @@ graph LR
 
 | Metric | Value |
 |--------|-------|
-| **Version** | 1.5.0 |
+| **Version** | 1.7.0 |
 | **Status** | Production Ready |
 | **AGENTS.md** | Compatible |
 | **Total Files** | 67 markdown files |
@@ -229,7 +231,7 @@ This framework embraces:
 
     Star, fork, or contribute.
 
-    [:octicons-arrow-right-24: View Repository](https://github.com/ar4mirez/ai-code-template)
+    [:octicons-arrow-right-24: View Repository](https://github.com/ar4mirez/aicof)
 
 -   :material-bug:{ .lg .middle } **Issues**
 
@@ -237,7 +239,7 @@ This framework embraces:
 
     Report bugs or request features.
 
-    [:octicons-arrow-right-24: Open Issue](https://github.com/ar4mirez/ai-code-template/issues)
+    [:octicons-arrow-right-24: Open Issue](https://github.com/ar4mirez/aicof/issues)
 
 -   :material-chat:{ .lg .middle } **Discussions**
 
@@ -245,6 +247,6 @@ This framework embraces:
 
     Ask questions and share ideas.
 
-    [:octicons-arrow-right-24: Join Discussion](https://github.com/ar4mirez/ai-code-template/discussions)
+    [:octicons-arrow-right-24: Join Discussion](https://github.com/ar4mirez/aicof/discussions)
 
 </div>

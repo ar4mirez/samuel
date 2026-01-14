@@ -1,19 +1,19 @@
-# AI Claude Code - CLAUDE.md Development System
+# AICoF - Artificial Intelligence Coding Framework
 
-> **Production-ready AI-assisted development framework**
+> **Build smarter, faster, and more scalable software**
 > Cross-tool compatible • Opinionated guardrails • Tech-stack agnostic • Token-optimized
 
-[![Version](https://img.shields.io/badge/version-1.5.0-blue.svg)](CLAUDE.md)
+[![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)](CLAUDE.md)
 [![AGENTS.md](https://img.shields.io/badge/AGENTS.md-compatible-brightgreen.svg)](https://agents.md)
 [![Status](https://img.shields.io/badge/status-production%20ready-brightgreen.svg)](CLAUDE.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
 
-## What's New in v1.5.0
+## What's New in v1.7.0
 
+- **Rebranded to AICoF** - Artificial Intelligence Coding Framework with clearer identity
 - **33 Framework Guides** - Comprehensive framework-specific guidance across 11 language families
-- **New in v1.5.0**: React, Next.js, Express, Django, FastAPI, Flask, Gin, Echo, Fiber, Axum, Actix-web, Rocket, Spring Boot, Quarkus, Micronaut, ASP.NET Core, Blazor, Unity, Laravel, Symfony, WordPress, SwiftUI, UIKit, Vapor, Rails, Sinatra, Hanami, Flutter, and more
 - **21 Language Guides** - All major programming languages covered
 - **AGENTS.md Compatible** - Works with Claude Code, Cursor, Codex, Copilot, and 20+ other AI tools
 
@@ -23,7 +23,7 @@
 
 ```bash
 # 1. Copy to your project
-cp -r /path/to/ai-claude-code/{CLAUDE.md,.agent} ./
+cp -r /path/to/aicof/{CLAUDE.md,.agent} ./
 
 # 2. (Optional) For cross-tool compatibility
 ln -s CLAUDE.md AGENTS.md
@@ -73,9 +73,9 @@ ln -s CLAUDE.md AGENTS.md
 
 ---
 
-## What Is This?
+## What Is AICoF?
 
-An **opinionated AI development framework** designed for professional software teams.
+AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI development framework** designed for professional software teams.
 
 ### Key Features
 
@@ -451,7 +451,7 @@ AI will:
 
 | Metric | Value |
 |--------|-------|
-| **Version** | 1.5.0 |
+| **Version** | 1.7.0 |
 | **Status** | Production Ready |
 | **AGENTS.md** | Compatible |
 | **Total Files** | 67 markdown files |
@@ -542,8 +542,8 @@ Built with:
 ## Support
 
 - **Documentation**: [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md)
-- **Issues**: [GitHub Issues](https://github.com/ar4mirez/ai-claude-code/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/ar4mirez/ai-claude-code/discussions)
+- **Issues**: [GitHub Issues](https://github.com/ar4mirez/aicof/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/ar4mirez/aicof/discussions)
 
 ---
 

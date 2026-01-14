@@ -1,6 +1,6 @@
 ---
 title: Your First Task
-description: Try AI Code Template with a real coding task
+description: Try AICoF with a real coding task
 ---
 
 # Your First Task

@@ -5,7 +5,7 @@ description: Version history and updates
 
 # Changelog
 
-All notable changes to AI Code Template.
+All notable changes to AICoF (Artificial Intelligence Coding Framework).
 
 ---
 
@@ -180,7 +180,7 @@ Focus on reducing token usage while adding critical guardrails.
 
 ### Initial Release
 
-First public release of AI Code Template.
+First public release of AICoF (formerly AI Code Template).
 
 ### Added
 
@@ -284,6 +284,6 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ## Links
 
-- [GitHub Repository](https://github.com/ar4mirez/ai-code-template)
-- [Issues](https://github.com/ar4mirez/ai-code-template/issues)
-- [Discussions](https://github.com/ar4mirez/ai-code-template/discussions)
+- [GitHub Repository](https://github.com/ar4mirez/aicof)
+- [Issues](https://github.com/ar4mirez/aicof/issues)
+- [Discussions](https://github.com/ar4mirez/aicof/discussions)

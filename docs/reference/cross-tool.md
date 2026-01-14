@@ -1,11 +1,11 @@
 ---
 title: Cross-Tool Compatibility
-description: Using AI Code Template with multiple AI coding assistants
+description: Using AICoF with multiple AI coding assistants
 ---
 
 # Cross-Tool Compatibility
 
-AI Code Template works with any AI coding assistant through the AGENTS.md standard.
+AICoF works with any AI coding assistant through the AGENTS.md standard.
 
 ---
 

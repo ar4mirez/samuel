@@ -1,9 +1,9 @@
-# AI Instructions - Quick Start Guide
+# AICoF - Quick Start Guide
 
-> **Purpose**: Get started with the CLAUDE.md AI-assisted development system in 5 minutes
+> **Purpose**: Get started with the AICoF (Artificial Intelligence Coding Framework) in 5 minutes
 >
 > **Status**: Production ready, use immediately
-> **Version**: 1.2.0
+> **Version**: 1.7.0
 > **Cross-Tool**: AGENTS.md compatible (works with Cursor, Codex, Copilot, etc.)
 
 ---
@@ -12,7 +12,7 @@
 
 ```bash
 # 1. Copy to your project
-cp -r /path/to/ai-claude-code/{CLAUDE.md,.agent} ./
+cp -r /path/to/aicof/{CLAUDE.md,.agent} ./
 
 # 2. (Optional) For cross-tool compatibility
 ln -s CLAUDE.md AGENTS.md
@@ -30,9 +30,9 @@ ln -s CLAUDE.md AGENTS.md
 
 ---
 
-## 📖 What Is This?
+## 📖 What Is AICoF?
 
-An **opinionated AI development framework** with:
+AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI development framework** with:
 - **35+ specific guardrails** (not vague suggestions)
 - **5 language guides** (TypeScript, Python, Go, Rust, Kotlin)
 - **5 workflows** (PRD, tasks, init, troubleshooting, AGENTS.md generator)
@@ -544,8 +544,8 @@ ln -s CLAUDE.md AGENTS.md
 
 ---
 
-*Version: 1.2.0*
-*Last Updated: 2025-12-13*
+*Version: 1.7.0*
+*Last Updated: 2025-01-14*
 *Status: Production Ready*
 *Cross-Tool: AGENTS.md Compatible*
 

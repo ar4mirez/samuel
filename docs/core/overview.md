@@ -1,11 +1,11 @@
 ---
 title: Core System Overview
-description: Understanding the AI Code Template architecture
+description: Understanding the AICoF architecture
 ---
 
 # Core System Overview
 
-AI Code Template is built on a simple but powerful architecture designed for progressive adoption and cross-tool compatibility.
+AICoF (Artificial Intelligence Coding Framework) is built on a simple but powerful architecture designed for progressive adoption and cross-tool compatibility.
 
 ---
 

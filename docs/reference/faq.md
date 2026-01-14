@@ -1,11 +1,11 @@
 ---
 title: FAQ
-description: Frequently asked questions about AI Code Template
+description: Frequently asked questions about AICoF
 ---
 
 # Frequently Asked Questions
 
-Common questions about AI Code Template.
+Common questions about AICoF (Artificial Intelligence Coding Framework).
 
 ---
 
@@ -25,7 +25,7 @@ ln -s CLAUDE.md AGENTS.md
 
 ### Is this free to use?
 
-**Yes.** AI Code Template is open source under the MIT license. Use it for personal or commercial projects.
+**Yes.** AICoF is open source under the MIT license. Use it for personal or commercial projects.
 
 ---
 
@@ -246,18 +246,18 @@ Use conventional commits:
 
 Open an issue on GitHub:
 
-- [GitHub Issues](https://github.com/ar4mirez/ai-code-template/issues)
+- [GitHub Issues](https://github.com/ar4mirez/aicof/issues)
 
 ### How do I suggest improvements?
 
 Open a discussion:
 
-- [GitHub Discussions](https://github.com/ar4mirez/ai-code-template/discussions)
+- [GitHub Discussions](https://github.com/ar4mirez/aicof/discussions)
 
 ---
 
 ## Still Have Questions?
 
 - **Documentation**: Browse this site
-- **GitHub Issues**: [Report bugs](https://github.com/ar4mirez/ai-code-template/issues)
-- **Discussions**: [Ask questions](https://github.com/ar4mirez/ai-code-template/discussions)
+- **GitHub Issues**: [Report bugs](https://github.com/ar4mirez/aicof/issues)
+- **Discussions**: [Ask questions](https://github.com/ar4mirez/aicof/discussions)

@@ -1,4 +1,4 @@
-// AI Code Template - Custom JavaScript
+// AICoF - Custom JavaScript
 
 // Initialize when document is ready
 document.addEventListener('DOMContentLoaded', function() {

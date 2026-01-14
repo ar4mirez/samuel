@@ -1,11 +1,11 @@
 ---
 title: Installation
-description: Detailed installation instructions for AI Code Template
+description: Detailed installation instructions for AICoF
 ---
 
 # Installation
 
-Multiple ways to add AI Code Template to your project.
+Multiple ways to add AICoF to your project.
 
 ---
 
@@ -15,13 +15,13 @@ The simplest approach - copy the files directly:
 
 ```bash
 # Clone the repository
-git clone https://github.com/ar4mirez/ai-code-template.git
+git clone https://github.com/ar4mirez/aicof.git
 
 # Copy to your project
-cp -r ai-code-template/{CLAUDE.md,.agent} /path/to/your-project/
+cp -r aicof/{CLAUDE.md,.agent} /path/to/your-project/
 
 # Clean up
-rm -rf ai-code-template
+rm -rf aicof
 ```
 
 ### What Gets Copied
@@ -53,12 +53,12 @@ your-project/
 
 ## Option 2: Git Subtree
 
-Keep AI Code Template as a subtree for easier updates:
+Keep AICoF as a subtree for easier updates:
 
 ```bash
 # Add as subtree (first time)
 git subtree add --prefix=.ai-template \
-    https://github.com/ar4mirez/ai-code-template.git main --squash
+    https://github.com/ar4mirez/aicof.git main --squash
 
 # Copy files to root
 cp .ai-template/CLAUDE.md ./
@@ -66,7 +66,7 @@ cp -r .ai-template/.agent ./
 
 # Update later
 git subtree pull --prefix=.ai-template \
-    https://github.com/ar4mirez/ai-code-template.git main --squash
+    https://github.com/ar4mirez/aicof.git main --squash
 ```
 
 !!! note "Subtree Benefits"
@@ -81,7 +81,7 @@ git subtree pull --prefix=.ai-template \
 
 For projects without git or one-time use:
 
-1. Go to [GitHub Releases](https://github.com/ar4mirez/ai-code-template/releases)
+1. Go to [GitHub Releases](https://github.com/ar4mirez/aicof/releases)
 2. Download the latest release ZIP
 3. Extract `CLAUDE.md` and `.agent/` to your project
 
@@ -165,7 +165,7 @@ Expected output:
 You may want to ignore generated files:
 
 ```gitignore
-# AI Code Template - generated files
+# AICoF - generated files
 .agent/project.md
 .agent/patterns.md
 .agent/state.md
@@ -182,7 +182,7 @@ You may want to ignore generated files:
 git add CLAUDE.md .agent/
 
 # Commit
-git commit -m "chore: add AI Code Template for AI-assisted development"
+git commit -m "chore: add AICoF for AI-assisted development"
 ```
 
 ---
@@ -193,7 +193,7 @@ git commit -m "chore: add AI Code Template for AI-assisted development"
 
 ```bash
 # Clone latest version
-git clone https://github.com/ar4mirez/ai-code-template.git temp-update
+git clone https://github.com/ar4mirez/aicof.git temp-update
 
 # Backup your customizations
 cp CLAUDE.md CLAUDE.md.backup
@@ -216,7 +216,7 @@ rm -rf .agent.backup
 
 ```bash
 git subtree pull --prefix=.ai-template \
-    https://github.com/ar4mirez/ai-code-template.git main --squash
+    https://github.com/ar4mirez/aicof.git main --squash
 
 # Copy updated files
 cp .ai-template/CLAUDE.md ./

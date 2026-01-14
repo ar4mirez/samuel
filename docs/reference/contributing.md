@@ -1,11 +1,11 @@
 ---
 title: Contributing
-description: How to contribute to AI Code Template
+description: How to contribute to AICoF
 ---
 
 # Contributing
 
-Thank you for your interest in contributing to AI Code Template!
+Thank you for your interest in contributing to AICoF!
 
 ---
 
@@ -110,8 +110,8 @@ Have an idea?
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/ar4mirez/ai-code-template.git
-cd ai-code-template
+git clone https://github.com/ar4mirez/aicof.git
+cd aicof
 ```
 
 ### Install Documentation Dependencies
@@ -300,8 +300,8 @@ Be respectful and constructive:
 
 ## Questions?
 
-- Open a [Discussion](https://github.com/ar4mirez/ai-code-template/discussions)
-- Check existing [Issues](https://github.com/ar4mirez/ai-code-template/issues)
+- Open a [Discussion](https://github.com/ar4mirez/aicof/discussions)
+- Check existing [Issues](https://github.com/ar4mirez/aicof/issues)
 - Review this documentation
 
 Thank you for contributing!
