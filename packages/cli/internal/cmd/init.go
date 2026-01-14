@@ -66,6 +66,11 @@ func runInit(cmd *cobra.Command, args []string) error {
 		}
 	}
 
+	// Check if this is the AICoF repository itself (prevent self-init)
+	if isAICOFRepository(absTargetDir) {
+		return fmt.Errorf("cannot initialize inside the AICoF repository itself.\nUse 'aicof init <project-name>' to create a new project directory")
+	}
+
 	// Check for existing config
 	if core.ConfigExists(absTargetDir) && !force {
 		return fmt.Errorf("AICoF already initialized in %s. Use --force to reinitialize", absTargetDir)
@@ -325,6 +330,32 @@ func expandFrameworks(flags []string) []string {
 		}
 	}
 	return result
+}
+
+// isAICOFRepository checks if the target directory is the AICoF repository itself
+// This prevents users from accidentally initializing inside the framework source
+func isAICOFRepository(targetDir string) bool {
+	// Check for template/ directory (unique to the AICoF repo structure)
+	templateDir := filepath.Join(targetDir, "template")
+	if info, err := os.Stat(templateDir); err == nil && info.IsDir() {
+		// Also check for template/CLAUDE.md to be sure
+		claudeMD := filepath.Join(templateDir, "CLAUDE.md")
+		if _, err := os.Stat(claudeMD); err == nil {
+			return true
+		}
+	}
+
+	// Check for packages/cli directory (CLI source code)
+	cliDir := filepath.Join(targetDir, "packages", "cli")
+	if info, err := os.Stat(cliDir); err == nil && info.IsDir() {
+		// Check for go.mod with aicof module
+		goMod := filepath.Join(cliDir, "go.mod")
+		if _, err := os.Stat(goMod); err == nil {
+			return true
+		}
+	}
+
+	return false
 }
 
 // getRelevantFrameworks returns frameworks related to selected languages
