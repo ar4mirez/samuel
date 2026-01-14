@@ -9,6 +9,39 @@
 
 ## Go CLI Patterns
 
+### Standard Go Project Layout
+
+**When to use**: When structuring a Go CLI application repository
+
+**Example**:
+
+```text
+project-root/
+├── cmd/
+│   └── appname/
+│       └── main.go          # Entry point, minimal code
+├── internal/
+│   ├── commands/            # CLI command implementations (not cmd/)
+│   ├── core/                # Business logic
+│   └── ui/                  # User interface helpers
+├── go.mod                   # At repository root
+├── go.sum
+├── Makefile
+└── .goreleaser.yaml
+```
+
+**Why**: This is the idiomatic Go project layout. Key conventions:
+
+- `go.mod` at repository root
+- `cmd/` contains entry points (main packages)
+- `internal/` contains private packages (not importable by external code)
+- Avoid naming internal packages `cmd` to prevent confusion with root `cmd/`
+- Entry point should be minimal - just parse args and call into internal packages
+
+**See also**: [Go project layout](https://github.com/golang-standards/project-layout), [memory/2026-01-14-go-project-restructure.md](.agent/memory/2026-01-14-go-project-restructure.md)
+
+---
+
 ### CLI Flag Detection Pattern
 
 **When to use**: When CLI needs different behavior for interactive vs flag-provided inputs
@@ -33,7 +66,7 @@ func runCommand(cmd *cobra.Command, args []string) error {
 
 **Why**: Users expect explicit CLI flags to be honored without additional prompts. This pattern provides good UX for both interactive and scripted usage.
 
-**See also**: [init.go](packages/cli/internal/cmd/init.go#L49-L53)
+**See also**: [init.go](internal/commands/init.go#L49-L53)
 
 ---
 
@@ -72,7 +105,7 @@ func Confirm(label string, defaultYes bool) (bool, error) {
 
 **Why**: The `IsConfirm: true` option in promptui has quirky behavior where Enter on empty input returns `ErrAbort`. Using a standard prompt with default value gives predictable behavior.
 
-**See also**: [prompts.go](packages/cli/internal/ui/prompts.go#L120-L148)
+**See also**: [prompts.go](internal/ui/prompts.go#L120-L148)
 
 ---
 
@@ -85,7 +118,7 @@ func Confirm(label string, defaultYes bool) (bool, error) {
 ```go
 // isAICOFRepository checks if the target directory is the AICoF repository itself
 func isAICOFRepository(targetDir string) bool {
-    // Check for unique directory structure
+    // Check for unique directory structure (template/ with CLAUDE.md)
     templateDir := filepath.Join(targetDir, "template")
     if info, err := os.Stat(templateDir); err == nil && info.IsDir() {
         claudeMD := filepath.Join(templateDir, "CLAUDE.md")
@@ -94,11 +127,11 @@ func isAICOFRepository(targetDir string) bool {
         }
     }
 
-    // Check for source code directory
-    cliDir := filepath.Join(targetDir, "packages", "cli")
-    if info, err := os.Stat(cliDir); err == nil && info.IsDir() {
-        goMod := filepath.Join(cliDir, "go.mod")
-        if _, err := os.Stat(goMod); err == nil {
+    // Check for Go source code at root (cmd/aicof with main.go)
+    cmdDir := filepath.Join(targetDir, "cmd", "aicof")
+    if info, err := os.Stat(cmdDir); err == nil && info.IsDir() {
+        mainGo := filepath.Join(cmdDir, "main.go")
+        if _, err := os.Stat(mainGo); err == nil {
             return true
         }
     }
@@ -109,7 +142,7 @@ func isAICOFRepository(targetDir string) bool {
 
 **Why**: Prevents users from accidentally overwriting the framework source when running CLI commands from within the repository.
 
-**See also**: [init.go](packages/cli/internal/cmd/init.go#L349-L371)
+**See also**: [init.go](internal/commands/init.go#L349-L371)
 
 ---
 
@@ -135,7 +168,7 @@ dstPath := filepath.Join(e.destPath, path)
 
 **Why**: Allows clear separation between distributable template files and project-specific source code in the same repository.
 
-**See also**: [registry.go](packages/cli/internal/core/registry.go#L12-L14), [extractor.go](packages/cli/internal/core/extractor.go#L51-L52)
+**See also**: [registry.go](internal/core/registry.go#L12-L14), [extractor.go](internal/core/extractor.go#L51-L52)
 
 ---
 
@@ -164,7 +197,7 @@ func main() {
 
 **Why**: Cobra's default error handling can be noisy. This pattern gives clean, colored error output while maintaining proper exit codes.
 
-**See also**: [main.go](packages/cli/cmd/aicof/main.go#L11-L18), [root.go](packages/cli/internal/cmd/root.go)
+**See also**: [main.go](cmd/aicof/main.go#L11-L18), [root.go](internal/commands/root.go)
 
 ---
 

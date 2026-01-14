@@ -13,11 +13,16 @@
 
 ## Recently Completed
 
+- [x] Documentation for Go restructure (2026-01-14)
+  - Created memory file: .agent/memory/2026-01-14-go-project-restructure.md
+  - Updated patterns.md with new Go project layout pattern
+  - Fixed file paths in patterns.md (packages/cli/ → root paths)
 - [x] Go project restructure - moved from packages/cli/ to root (2026-01-14)
   - Standard Go layout: cmd/, internal/ at repository root
   - Renamed internal/cmd to internal/commands (avoids confusion with root cmd/)
   - Updated all import paths and Makefile
   - Deleted packages/ directory
+  - Committed: d7bd278
 - [x] Framework self-initialization (dogfooding) (2026-01-14)
   - Added CLAUDE.md and AI_INSTRUCTIONS.md at root
   - Added Go language guide to .agent/language-guides/
@@ -37,9 +42,9 @@ None currently.
 
 ## Next Steps
 
-1. **Commit restructure changes** - Go restructure and framework self-initialization
-2. **Begin CLI testing** - follow PRD in .agent/tasks/0001-prd-cli-testing.md
-3. **Create first release** - currently using `dev` version from main branch
+1. **Begin CLI testing** - follow PRD in .agent/tasks/0001-prd-cli-testing.md
+2. **Create first release** - currently using `dev` version from main branch
+3. **Set up Homebrew tap** - for easy installation on macOS/Linux
 
 ## Context for Next Session
 
