@@ -7,9 +7,13 @@ on:
     paths:
       - 'docs/**'
       - 'mkdocs.yml'
+      - 'README.md'
+      - 'CLAUDE.md'
       - '.github/workflows/docs.yml'
   release:
     types: [published]
+  repository_dispatch:
+    types: [release-published]
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages

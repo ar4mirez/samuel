@@ -5,13 +5,61 @@ description: Detailed installation instructions for AICoF
 
 # Installation
 
-Multiple ways to add AICoF to your project.
+Multiple ways to install AICoF. The CLI is recommended for the best experience.
 
 ---
 
-## Option 1: Direct Copy (Recommended)
+## Option 1: CLI Installation (Recommended)
 
-The simplest approach - copy the files directly:
+The AICoF CLI provides the easiest way to install and manage the framework.
+
+### macOS / Linux (Homebrew)
+
+```bash
+brew tap ar4mirez/tap && brew install aicof
+```
+
+### macOS / Linux (Curl)
+
+```bash
+curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
+```
+
+### Go Install
+
+```bash
+go install github.com/ar4mirez/aicof/cmd/aicof@latest
+```
+
+### Verify CLI Installation
+
+```bash
+# Check version
+aicof version
+
+# Run health check
+aicof doctor
+```
+
+### Initialize Your Project
+
+```bash
+cd your-project
+aicof init
+```
+
+The CLI will interactively guide you through setup:
+
+1. Create `CLAUDE.md` with all guardrails
+2. Create `.agent/` directory structure
+3. Select languages, frameworks, and workflows
+4. Set up cross-tool compatibility (AGENTS.md symlink)
+
+---
+
+## Option 2: Direct Copy (Manual)
+
+For environments where the CLI isn't available:
 
 ```bash
 # Clone the repository
@@ -31,27 +79,16 @@ your-project/
 ├── CLAUDE.md                    # Core guardrails (~500 lines)
 └── .agent/                      # Project context directory
     ├── README.md                # How to use .agent/
-    ├── project.md.template      # Template for project.md
-    ├── state.md.template        # Template for state.md
-    ├── language-guides/         # Auto-load based on file type
-    │   ├── typescript.md
-    │   ├── python.md
-    │   ├── go.md
-    │   ├── rust.md
-    │   └── kotlin.md
-    ├── workflows/               # On-demand workflows
-    │   ├── create-prd.md
-    │   ├── generate-tasks.md
-    │   ├── initialize-project.md
-    │   ├── troubleshooting.md
-    │   └── generate-agents-md.md
+    ├── language-guides/         # 21 language guides
+    ├── framework-guides/        # 33 framework guides
+    ├── workflows/               # 13 workflows
     ├── tasks/                   # PRDs and task lists (created on demand)
     └── memory/                  # Decision logs (created on demand)
 ```
 
 ---
 
-## Option 2: Git Subtree
+## Option 3: Git Subtree
 
 Keep AICoF as a subtree for easier updates:
 
@@ -77,7 +114,7 @@ git subtree pull --prefix=.ai-template \
 
 ---
 
-## Option 3: Download ZIP
+## Option 4: Download ZIP
 
 For projects without git or one-time use:
 
@@ -117,7 +154,36 @@ Creates a separate `AGENTS.md` with operations-only content.
 
 ## Verify Installation
 
-After installation, verify the files are in place:
+### With CLI (Recommended)
+
+```bash
+# Comprehensive health check
+aicof doctor
+
+# List installed components
+aicof list
+
+# Check for updates
+aicof version --check
+```
+
+**Expected output from `aicof doctor`:**
+
+```
+AICoF Health Check
+==================
+
+[OK] CLAUDE.md exists
+[OK] .agent/ directory exists
+[OK] Configuration valid
+[OK] 3 languages installed
+[OK] 2 frameworks installed
+[OK] All workflows available
+
+Status: Healthy
+```
+
+### Manual Verification
 
 ```bash
 # Check CLAUDE.md exists
@@ -133,27 +199,40 @@ ls .agent/language-guides/
 ls .agent/workflows/
 ```
 
-Expected output:
+---
 
+## Post-Installation: Add Components
+
+After installation, add the components you need:
+
+### Using CLI
+
+```bash
+# Search for what you need
+aicof search react
+
+# Preview before installing
+aicof info framework react --preview 20
+
+# Add components
+aicof add language typescript
+aicof add framework react
+aicof add workflow code-review
+
+# Use aliases for speed
+aicof add lang go
+aicof add fw nextjs
+aicof add wf security-audit
 ```
-.agent/
-├── README.md
-├── language-guides/
-│   ├── README.md
-│   ├── go.md
-│   ├── kotlin.md
-│   ├── python.md
-│   ├── rust.md
-│   └── typescript.md
-├── memory/
-├── tasks/
-└── workflows/
-    ├── README.md
-    ├── create-prd.md
-    ├── generate-agents-md.md
-    ├── generate-tasks.md
-    ├── initialize-project.md
-    └── troubleshooting.md
+
+### Check What's Available
+
+```bash
+# List all available components
+aicof list --available
+
+# Filter by type
+aicof list --available --type frameworks
 ```
 
 ---
@@ -189,7 +268,23 @@ git commit -m "chore: add AICoF for AI-assisted development"
 
 ## Update to Latest Version
 
-### If Using Direct Copy
+### Update with CLI
+
+```bash
+# Check what's changed
+aicof diff --installed
+
+# Preview changes before updating
+aicof update --check
+
+# Update to latest
+aicof update
+
+# Or update to specific version
+aicof update --version 1.7.0
+```
+
+### Manual Update
 
 ```bash
 # Clone latest version
@@ -212,20 +307,24 @@ rm CLAUDE.md.backup
 rm -rf .agent.backup
 ```
 
-### If Using Subtree
-
-```bash
-git subtree pull --prefix=.ai-template \
-    https://github.com/ar4mirez/aicof.git main --squash
-
-# Copy updated files
-cp .ai-template/CLAUDE.md ./
-cp -r .ai-template/.agent ./
-```
-
 ---
 
 ## Troubleshooting
+
+### CLI Not Found
+
+If `aicof` command is not found after installation:
+
+```bash
+# Check if it's in PATH
+which aicof
+
+# Add to PATH (bash/zsh)
+export PATH="$PATH:/usr/local/bin"
+
+# Or reinstall
+curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
+```
 
 ### Files Not Loading
 
@@ -234,6 +333,7 @@ If AI doesn't seem to follow guardrails:
 1. Verify `CLAUDE.md` is in project root
 2. Check file permissions: `chmod 644 CLAUDE.md`
 3. Explicitly remind AI: "Follow guardrails in CLAUDE.md"
+4. Run `aicof doctor` to check for issues
 
 ### Symlink Issues on Windows
 
@@ -266,6 +366,14 @@ CLAUDE.md linguist-documentation
     Get coding in 60 seconds.
 
     [:octicons-arrow-right-24: Quick Start](quick-start.md)
+
+-   :material-console:{ .lg .middle } **CLI Reference**
+
+    ---
+
+    Learn all 11 CLI commands.
+
+    [:octicons-arrow-right-24: CLI Commands](../reference/cli.md)
 
 -   :material-play:{ .lg .middle } **Your First Task**
 

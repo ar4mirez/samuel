@@ -244,6 +244,7 @@ nav:
       - Generate AGENTS.md: workflows/generate-agents-md.md
       - Document Work: workflows/document-work.md
   - Reference:
+    - CLI Commands: reference/cli.md
     - Cross-Tool Compatibility: reference/cross-tool.md
     - FAQ: reference/faq.md
     - Changelog: reference/changelog.md

@@ -44,13 +44,21 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 
     [:octicons-arrow-right-24: Framework Guides](frameworks/index.md)
 
--   :material-cog:{ .lg .middle } **5 Workflows**
+-   :material-cog:{ .lg .middle } **13 Workflows**
 
     ---
 
-    PRD creation, task generation, project initialization, troubleshooting, and AGENTS.md generation.
+    Planning, quality, maintenance, and utility workflows including PRD creation, code review, security audit, and more.
 
     [:octicons-arrow-right-24: Explore Workflows](workflows/index.md)
+
+-   :material-console:{ .lg .middle } **CLI-Powered**
+
+    ---
+
+    Full-featured CLI with 11 commands: search, info, add, remove, diff, config, and more. Discover components before installing.
+
+    [:octicons-arrow-right-24: CLI Reference](reference/cli.md)
 
 -   :material-tools:{ .lg .middle } **Cross-Tool Compatible**
 
@@ -66,21 +74,43 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 
 ## Quick Start
 
-```bash
-# 1. Copy to your project
-cp -r /path/to/aicof/{CLAUDE.md,.agent} ./
+=== "CLI (Recommended)"
 
-# 2. (Optional) For cross-tool compatibility
-ln -s CLAUDE.md AGENTS.md
+    ```bash
+    # 1. Install the CLI
+    brew tap ar4mirez/tap && brew install aicof
+    # Or: curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
 
-# 3. Start coding with AI - guardrails apply automatically!
-```
+    # 2. Initialize your project
+    cd your-project
+    aicof init
+
+    # 3. Discover and add components
+    aicof search react              # Find components
+    aicof info fw react --preview   # Preview before installing
+    aicof add framework react       # Install what you need
+
+    # 4. Verify installation
+    aicof doctor
+    ```
+
+=== "Manual Setup"
+
+    ```bash
+    # 1. Copy to your project
+    cp -r /path/to/aicof/{CLAUDE.md,.agent} ./
+
+    # 2. (Optional) For cross-tool compatibility
+    ln -s CLAUDE.md AGENTS.md
+
+    # 3. Start coding with AI - guardrails apply automatically!
+    ```
 
 **The system works immediately:**
 
 - [x] AI loads CLAUDE.md automatically (500 lines of guardrails + operations)
 - [x] Language guides auto-load based on file extensions
-- [x] Workflows available when you need them
+- [x] **11 CLI commands** for component discovery and management
 - [x] Progressive - starts minimal, grows with your project
 
 [:octicons-arrow-right-24: Full Quick Start Guide](getting-started/quick-start.md)
@@ -195,9 +225,10 @@ graph LR
 | **AGENTS.md** | Compatible |
 | **Total Files** | 67 markdown files |
 | **CLAUDE.md** | ~500 lines |
+| **CLI Commands** | 11 (init, search, info, add, remove, list, config, diff, update, doctor, version) |
 | **Language Guides** | 21 (all major programming languages) |
 | **Framework Guides** | 33 (across 11 language families) |
-| **Workflows** | 5 (PRD, tasks, init, troubleshoot, AGENTS.md) |
+| **Workflows** | 13 (planning, quality, maintenance, utility) |
 | **Guardrails** | 35+ testable rules |
 
 ---
