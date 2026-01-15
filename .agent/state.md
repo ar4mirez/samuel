@@ -5,16 +5,18 @@
 
 ## In Progress
 
-- [ ] CLI Command Enhancements (PRD: 0004-prd-cli-command-enhancements.md)
+None currently.
+
+## Recently Completed
+
+- [x] CLI Command Enhancements (PRD: 0004-prd-cli-command-enhancements.md) - Completed 2026-01-14
   - [x] Phase 1: `config` command - config list/get/set
   - [x] Phase 2: `search` command - fuzzy search with type filters
   - [x] Phase 3: `info` command - component details + preview
   - [x] Phase 4: `diff` command - version comparison
   - [x] Phase 5: Unit tests for new commands
-  - [ ] Phase 6: Documentation updates (README)
-  - [ ] Phase 7: Commit and PR
-
-## Recently Completed
+  - [x] Phase 6: Documentation updates (README)
+  - [x] Phase 7: Commits (4c3870a, 7063adf)
 
 - [x] Unit tests for new CLI commands (2026-01-14)
   - Created 7 test files with 77+ test functions
@@ -39,10 +41,9 @@ None currently.
 
 ## Next Steps
 
-1. **Update README** - Document new commands (search, info, config, diff)
-2. **Commit changes** - Stage and commit all new command files
-3. **Create first release** - Tag v1.0.0 for distribution
-4. **Set up Homebrew tap** - For easy installation on macOS/Linux
+1. **Push changes** - Push commits to remote (`git push`)
+2. **Create first release** - Tag v1.0.0 for distribution
+3. **Set up Homebrew tap** - For easy installation on macOS/Linux
 
 ## Context for Next Session
 
@@ -97,8 +98,7 @@ internal/core/
 ### Known Limitations
 
 1. Command runner functions not unit tested (need integration tests)
-2. README not updated with new commands yet
-3. Changes not committed yet
+2. All work committed and ready to push
 
 ## Notes
 
