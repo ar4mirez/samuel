@@ -9,6 +9,15 @@ None currently.
 
 ## Recently Completed
 
+- [x] Documentation Refresh - CLI-First Approach - Completed 2026-01-15
+  - [x] Updated docs/index.md (workflow count, CLI feature card)
+  - [x] Rewrote docs/getting-started/quick-start.md for CLI-first
+  - [x] Updated docs/getting-started/installation.md with all methods
+  - [x] Created docs/reference/cli.md (complete CLI reference)
+  - [x] Updated mkdocs.yml navigation
+  - [x] Fixed docs deployment workflow triggers
+  - [x] Documentation deployed to GitHub Pages
+
 - [x] CLI Command Enhancements (PRD: 0004-prd-cli-command-enhancements.md) - Completed 2026-01-14
   - [x] Phase 1: `config` command - config list/get/set
   - [x] Phase 2: `search` command - fuzzy search with type filters
@@ -41,9 +50,9 @@ None currently.
 
 ## Next Steps
 
-1. **Push changes** - Push commits to remote (`git push`)
-2. **Create first release** - Tag v1.0.0 for distribution
-3. **Set up Homebrew tap** - For easy installation on macOS/Linux
+1. **Set up Homebrew tap** - For easy installation on macOS/Linux
+2. **Windows installation** - Test and document Windows support
+3. **Integration tests** - Add integration tests for command runners
 
 ## Context for Next Session
 
