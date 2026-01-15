@@ -35,6 +35,11 @@ curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
 aicof init my-project
 cd my-project
 
+# Explore available components
+aicof search react           # Find components by keyword
+aicof info framework react   # View component details
+aicof list --available       # List all components
+
 # Start coding with AI - guardrails apply automatically!
 ```
 
@@ -104,7 +109,7 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 | **35+ Guardrails** | Testable rules, not vague suggestions |
 | **21 Language Guides** | All major languages with auto-loading support |
 | **33 Framework Guides** | Framework-specific patterns and best practices |
-| **5 Workflows** | PRD, tasks, init, troubleshooting, AGENTS.md generator |
+| **13 Workflows** | PRD, tasks, init, troubleshooting, code-review, and more |
 | **3 Modes** | ATOMIC/FEATURE/COMPLEX (scales from bugs to architecture) |
 | **4D Methodology** | Deconstruct → Diagnose → Develop → Deliver |
 | **Cross-Tool** | Works with any AI coding assistant |
@@ -112,6 +117,73 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 ### Philosophy
 
 > Small, validated changes. Quality enforced. Documentation grows organically.
+
+---
+
+## CLI Commands
+
+The `aicof` CLI manages framework installation, updates, and component discovery.
+
+### Core Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `init [project]` | Initialize AICoF in a project | `aicof init my-app` |
+| `update` | Update to latest framework version | `aicof update` |
+| `doctor` | Check installation health | `aicof doctor` |
+| `version` | Show CLI and framework versions | `aicof version` |
+
+### Component Management
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `add <type> <name>` | Add a component | `aicof add framework react` |
+| `remove <type> <name>` | Remove a component | `aicof remove language rust` |
+| `list [--available]` | List installed/available components | `aicof list --available` |
+
+**Type aliases**: `language` (lang, l), `framework` (fw, f), `workflow` (wf, w)
+
+### Discovery Commands
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `search <query>` | Search components by keyword | `aicof search api` |
+| `info <type> <name>` | Show component details | `aicof info fw nextjs` |
+| `diff [v1] [v2]` | Compare versions | `aicof diff v1.6.0 v1.7.0` |
+
+### Configuration
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `config list` | Show all config values | `aicof config list` |
+| `config get <key>` | Get a config value | `aicof config get version` |
+| `config set <key> <value>` | Set a config value | `aicof config set registry https://...` |
+
+**Valid keys**: `version`, `registry`, `installed.languages`, `installed.frameworks`, `installed.workflows`
+
+### Command Examples
+
+```bash
+# Initialize and customize
+aicof init my-project
+aicof add lang typescript
+aicof add fw react nextjs
+aicof add wf code-review security-audit
+
+# Discover components
+aicof search python           # Fuzzy search across all types
+aicof search --type fw api    # Search only frameworks
+aicof info lang go --preview 20  # Preview first 20 lines
+
+# Manage updates
+aicof diff                    # Compare installed vs latest
+aicof diff v1.6.0 v1.7.0      # Compare specific versions
+aicof update                  # Apply updates
+
+# Troubleshoot
+aicof doctor                  # Check installation health
+aicof config list             # View current configuration
+```
 
 ---
 
@@ -462,7 +534,15 @@ AI will:
 | [Initialize Project](template/.agent/workflows/initialize-project.md) | Setup new/existing projects |
 | [Create PRD](template/.agent/workflows/create-prd.md) | Plan complex features |
 | [Generate Tasks](template/.agent/workflows/generate-tasks.md) | Break PRDs into tasks |
+| [Code Review](template/.agent/workflows/code-review.md) | Pre-commit quality review |
+| [Security Audit](template/.agent/workflows/security-audit.md) | Security assessment |
+| [Testing Strategy](template/.agent/workflows/testing-strategy.md) | Test planning & coverage |
+| [Refactoring](template/.agent/workflows/refactoring.md) | Technical debt remediation |
+| [Dependency Update](template/.agent/workflows/dependency-update.md) | Safe dependency updates |
 | [Troubleshooting](template/.agent/workflows/troubleshooting.md) | Debug systematically |
+| [Cleanup Project](template/.agent/workflows/cleanup-project.md) | Prune unused guides |
+| [Document Work](template/.agent/workflows/document-work.md) | Capture patterns & decisions |
+| [Update Framework](template/.agent/workflows/update-framework.md) | Update AICoF safely |
 | [Generate AGENTS.md](template/.agent/workflows/generate-agents-md.md) | Cross-tool compatibility |
 
 ---
@@ -478,7 +558,8 @@ aicof/
 │       ├── language-guides/    # 21 language-specific guides
 │       ├── framework-guides/   # 33 framework-specific guides
 │       └── workflows/          # 13 structured workflows
-├── packages/cli/               # Go CLI tool source code
+├── cmd/aicof/                  # CLI entry point
+├── internal/                   # CLI implementation (commands, core, ui)
 ├── docs/                       # Documentation website source
 └── .agent/                     # This project's own AI context
     ├── tasks/                  # PRDs and task lists
@@ -504,7 +585,7 @@ aicof/
 | **CLAUDE.md** | ~500 lines |
 | **Language Guides** | 21 (all major programming languages) |
 | **Framework Guides** | 33 (across 11 language families) |
-| **Workflows** | 5 (PRD, tasks, init, troubleshoot, AGENTS.md) |
+| **Workflows** | 13 (PRD, tasks, init, troubleshoot, code-review, etc.) |
 | **Guardrails** | 35+ testable rules |
 
 ---
