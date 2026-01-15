@@ -228,6 +228,7 @@ nav:
     - Overview: workflows/index.md
     - Planning:
       - Initialize Project: workflows/initialize-project.md
+      - Create RFD: workflows/create-rfd.md
       - Create PRD: workflows/create-prd.md
       - Generate Tasks: workflows/generate-tasks.md
     - Quality:
@@ -243,6 +244,12 @@ nav:
       - Troubleshooting: workflows/troubleshooting.md
       - Generate AGENTS.md: workflows/generate-agents-md.md
       - Document Work: workflows/document-work.md
+  - RFDs:
+    - Overview: rfd/index.md
+    - "0001: Progressive Disclosure": rfd/0001.md
+    - "0002: Go Project Layout": rfd/0002.md
+    - "0003: Composable CLI Commands": rfd/0003.md
+    - "0004: Smart Interactive Mode": rfd/0004.md
   - Reference:
     - CLI Commands: reference/cli.md
     - Cross-Tool Compatibility: reference/cross-tool.md

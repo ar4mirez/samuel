@@ -1,6 +1,6 @@
 ---
 title: Workflows
-description: Structured workflows for AI-assisted development (13 workflows)
+description: Structured workflows for AI-assisted development (14 workflows)
 ---
 
 # Workflows
@@ -17,7 +17,7 @@ Workflows are structured processes for handling specific types of tasks. They're
 
 | Category | Workflows | Purpose |
 |----------|-----------|---------|
-| **Planning** | initialize-project, create-prd, generate-tasks | Define and break down work |
+| **Planning** | initialize-project, create-rfd, create-prd, generate-tasks | Define and break down work |
 | **Quality** | code-review, security-audit, testing-strategy | Validate and improve code |
 | **Maintenance** | cleanup-project, refactoring, dependency-update, update-framework | Keep codebase healthy |
 | **Utility** | troubleshooting, generate-agents-md, document-work | Support and documentation |
@@ -29,6 +29,7 @@ Workflows are structured processes for handling specific types of tasks. They're
 | Workflow | Purpose | When to Use |
 |----------|---------|-------------|
 | [Initialize Project](initialize-project.md) | Set up new or existing projects | Starting a project |
+| [Create RFD](create-rfd.md) | Explore options and document decisions | Evaluating approaches |
 | [Create PRD](create-prd.md) | Plan complex features | COMPLEX mode (>10 files) |
 | [Generate Tasks](generate-tasks.md) | Break PRD into actionable tasks | After PRD created |
 | [Code Review](code-review.md) | Validate against guardrails | Before commits, PR reviews |
@@ -70,18 +71,23 @@ graph TD
     A[New Task] --> B{Type?}
 
     B -->|New/Existing Project| C[initialize-project.md]
-    B -->|Complex Feature| D{>10 files?}
-    B -->|Debugging| E{Stuck >30 min?}
-    B -->|Cross-tool Setup| F[generate-agents-md.md]
-    B -->|Update AICoF| G[update-framework.md]
-    B -->|Document Session| H[document-work.md]
+    B -->|Exploring Options| D{Multiple approaches?}
+    B -->|Complex Feature| E{>10 files?}
+    B -->|Debugging| F{Stuck >30 min?}
+    B -->|Cross-tool Setup| G[generate-agents-md.md]
+    B -->|Update AICoF| H[update-framework.md]
+    B -->|Document Session| I[document-work.md]
 
-    D -->|Yes| I[create-prd.md]
-    I --> J[generate-tasks.md]
-    D -->|No| K[Use FEATURE mode]
+    D -->|Yes| J[create-rfd.md]
+    J -->|Decision Made| K[create-prd.md]
+    D -->|No| K
 
-    E -->|Yes| L[troubleshooting.md]
-    E -->|No| M[Continue debugging]
+    E -->|Yes| K
+    K --> L[generate-tasks.md]
+    E -->|No| M[Use FEATURE mode]
+
+    F -->|Yes| N[troubleshooting.md]
+    F -->|No| O[Continue debugging]
 ```
 
 ---
@@ -184,18 +190,23 @@ Each workflow produces specific outputs:
 Workflows can be chained for complex tasks:
 
 ```
-1. @.agent/workflows/create-prd.md
-   → Creates PRD document
+1. @.agent/workflows/create-rfd.md (optional)
+   → Explore options when approach is unclear
 
-2. @.agent/workflows/generate-tasks.md
+2. @.agent/workflows/create-prd.md
+   → Creates PRD document (after RFD decision, if used)
+
+3. @.agent/workflows/generate-tasks.md
    → Creates task breakdown from PRD
 
-3. Implement tasks one by one
+4. Implement tasks one by one
    → Each task uses ATOMIC or FEATURE mode
 
-4. @.agent/workflows/document-work.md
+5. @.agent/workflows/document-work.md
    → Capture patterns and decisions from implementation
 ```
+
+**RFD → PRD Flow**: When exploring options, use create-rfd first. Once a decision is made, use create-prd to plan the implementation.
 
 ---
 
@@ -210,6 +221,14 @@ Workflows can be chained for complex tasks:
     Set up new projects or analyze existing ones.
 
     [:octicons-arrow-right-24: Initialize Project](initialize-project.md)
+
+-   :material-head-question:{ .lg .middle } **Create RFD**
+
+    ---
+
+    Explore options and document decisions before implementation.
+
+    [:octicons-arrow-right-24: Create RFD](create-rfd.md)
 
 -   :material-file-document:{ .lg .middle } **Create PRD**
 

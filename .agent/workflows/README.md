@@ -10,7 +10,7 @@ Workflows provide step-by-step guidance for AI to tackle complex tasks systemati
 
 | Category | Workflows | Purpose |
 |----------|-----------|---------|
-| **Planning** | create-prd, generate-tasks, initialize-project | Define and break down work |
+| **Planning** | initialize-project, create-rfd, create-prd, generate-tasks | Define and break down work |
 | **Quality** | code-review, security-audit, testing-strategy | Validate and improve code |
 | **Maintenance** | cleanup-project, refactoring, dependency-update, update-framework | Keep codebase healthy |
 | **Utility** | troubleshooting, generate-agents-md, document-work | Support and compatibility |
@@ -35,6 +35,36 @@ Workflows provide step-by-step guidance for AI to tackle complex tasks systemati
 ```
 
 **Output**: `.agent/project.md`, analysis of project structure
+
+---
+
+#### create-rfd.md
+
+**Use for**: Exploring options and documenting decisions before implementation
+
+**When to use**:
+
+- Exploring multiple valid approaches
+- Need team input before deciding
+- Making architectural decisions
+- Proposing significant changes
+- Decision affects multiple team members
+
+**How to use**:
+
+```
+@.agent/workflows/create-rfd.md
+
+Explore options for caching strategy in our API
+```
+
+**Output**: `.agent/rfd/NNNN-rfd-topic.md` (private) or `docs/rfd/NNNN.md` (public)
+
+**RFD vs PRD**:
+
+- **RFD** = "Why" (explore options, build consensus)
+- **PRD** = "What" (define implementation after decision)
+- Flow: Idea → RFD → Decision → PRD → Tasks → Code
 
 ---
 
@@ -298,16 +328,16 @@ We made decisions about JWT vs sessions and established a new error handling pat
 └──────────────┘                              └──────────────┘    └──────────────┘
        │                                             │                   │
        ▼                                             ▼                   │
-┌──────────────┐      ┌──────────────┐      ┌──────────────┐            │
-│ create-prd   │─────▶│ generate-    │─────▶│ code-review  │◀───────────┘
-│              │      │ tasks        │      │              │
+┌──────────────┐                              ┌──────────────┐            │
+│ create-rfd   │─────┐ (decision made)        │ code-review  │◀───────────┘
+│ (explore)    │     │                        │              │
+└──────────────┘     │                        └──────────────┘
+       │             │                               │
+       ▼             ▼                               ▼
+┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+│ create-prd   │─────▶│ generate-    │─────▶│ security-    │
+│ (plan)       │      │ tasks        │      │ audit        │
 └──────────────┘      └──────────────┘      └──────────────┘
-                                                   │
-                                                   ▼
-                                            ┌──────────────┐
-                                            │ security-    │
-                                            │ audit        │
-                                            └──────────────┘
                                                    │
                                                    ▼
                       ┌──────────────┐      ┌──────────────┐
@@ -322,6 +352,8 @@ We made decisions about JWT vs sessions and established a new error handling pat
 └──────────────┘      └──────────────┘      └──────────────┘
  (maintenance)         (any stage)           (any stage)
 ```
+
+**RFD → PRD Flow**: When exploring options, use create-rfd first. Once a decision is made, use create-prd to plan the implementation.
 
 ---
 

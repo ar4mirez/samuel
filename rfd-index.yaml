@@ -1,0 +1,73 @@
+# RFD Index - Master list of all Requests for Discussion
+# This file is the source of truth for RFD metadata
+# Updated by create-rfd workflow or manually
+#
+# States: Prediscussion, Ideation, Discussion, Published, Committed, Abandoned
+# Locations:
+#   - Prediscussion/Ideation: .agent/rfd/
+#   - Discussion/Published/Committed/Abandoned: docs/rfd/
+
+version: 1
+next_number: 5
+
+# RFD entries
+rfds:
+  - number: "0001"
+    title: "Progressive Disclosure Architecture for AI System Instructions"
+    state: "Committed"
+    authors:
+      - "ar4mirez"
+    labels:
+      - "architecture"
+      - "documentation"
+      - "token-efficiency"
+    created: "2025-01-15"
+    updated: "2026-01-15"
+    path: "docs/rfd/0001.md"
+    discussion: null
+    related_prd: null
+
+  - number: "0002"
+    title: "Idiomatic Go Project Layout for CLI Tools"
+    state: "Committed"
+    authors:
+      - "ar4mirez"
+    labels:
+      - "go"
+      - "project-structure"
+      - "cli"
+    created: "2026-01-14"
+    updated: "2026-01-15"
+    path: "docs/rfd/0002.md"
+    discussion: null
+    related_prd: "0002-prd-go-project-restructure.md"
+
+  - number: "0003"
+    title: "Composable CLI Commands Over Overloaded Flags"
+    state: "Committed"
+    authors:
+      - "ar4mirez"
+    labels:
+      - "cli"
+      - "ux"
+      - "architecture"
+    created: "2026-01-14"
+    updated: "2026-01-15"
+    path: "docs/rfd/0003.md"
+    discussion: null
+    related_prd: "0004-prd-cli-command-enhancements.md"
+
+  - number: "0004"
+    title: "Smart Interactive Mode via Flag Detection"
+    state: "Committed"
+    authors:
+      - "ar4mirez"
+    labels:
+      - "cli"
+      - "ux"
+      - "pattern"
+    created: "2026-01-14"
+    updated: "2026-01-15"
+    path: "docs/rfd/0004.md"
+    discussion: null
+    related_prd: null

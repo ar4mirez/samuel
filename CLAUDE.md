@@ -165,10 +165,17 @@ NODE_ENV=            # development | production | test
 - Language-specific? → .agent/language-guides/
 
 **Workflows** (on-demand):
-- Planning: initialize-project, create-prd, generate-tasks
+
+- Planning: initialize-project, create-rfd, create-prd, generate-tasks
 - Quality: code-review, security-audit, testing-strategy
 - Maintenance: cleanup-project, refactoring, dependency-update, update-framework
 - Utility: troubleshooting, generate-agents-md, document-work
+
+**RFD vs PRD** (when exploring options):
+
+- **RFD** = "Why" (explore options, build consensus) → .agent/workflows/create-rfd.md
+- **PRD** = "What" (define implementation) → .agent/workflows/create-prd.md
+- Flow: Idea → RFD (explore) → Decision → PRD (plan) → Tasks → Code
 
 **Load Language Guide** (automatic based on file extensions):
 - TypeScript/JavaScript → .agent/language-guides/typescript.md
@@ -499,8 +506,9 @@ Refs: #issue-number"
 │   ├── flutter.md        # Flutter, Riverpod, go_router
 │   ├── shelf.md          # Shelf, middleware HTTP server
 │   └── dart-frog.md      # Dart Frog, file-based routing
-├── workflows/            # Structured workflows (pre-created, 11 workflows)
+├── workflows/            # Structured workflows (pre-created, 14 workflows)
 │   ├── initialize-project.md  # Project setup
+│   ├── create-rfd.md          # Request for Discussion (explore options)
 │   ├── create-prd.md          # Requirements documents
 │   ├── generate-tasks.md      # Task breakdown
 │   ├── code-review.md         # Pre-commit quality review
@@ -510,7 +518,10 @@ Refs: #issue-number"
 │   ├── refactoring.md         # Technical debt remediation
 │   ├── dependency-update.md   # Safe dependency updates
 │   ├── troubleshooting.md     # Debugging workflow
-│   └── generate-agents-md.md  # Cross-tool compatibility
+│   ├── generate-agents-md.md  # Cross-tool compatibility
+│   └── document-work.md       # Capture patterns and decisions
+├── rfd/                  # Private RFDs (Prediscussion, Ideation states)
+│   └── NNNN-rfd-topic.md
 ├── tasks/                # PRDs and task lists (created during COMPLEX mode)
 │   ├── NNNN-prd-feature-name.md
 │   └── tasks-NNNN-prd-feature-name.md
