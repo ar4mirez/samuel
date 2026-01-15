@@ -1,8 +1,10 @@
 package core
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -212,4 +214,84 @@ func EnsureCacheDir() (string, error) {
 	}
 
 	return cachePath, nil
+}
+
+// ValidConfigKeys lists all valid configuration keys
+var ValidConfigKeys = []string{
+	"version",
+	"registry",
+	"installed.languages",
+	"installed.frameworks",
+	"installed.workflows",
+}
+
+// GetValue retrieves a configuration value by key
+func (c *Config) GetValue(key string) (interface{}, error) {
+	switch key {
+	case "version":
+		return c.Version, nil
+	case "registry":
+		if c.Registry == "" {
+			return DefaultRegistry, nil
+		}
+		return c.Registry, nil
+	case "installed.languages":
+		return c.Installed.Languages, nil
+	case "installed.frameworks":
+		return c.Installed.Frameworks, nil
+	case "installed.workflows":
+		return c.Installed.Workflows, nil
+	default:
+		return nil, fmt.Errorf("unknown config key: %s", key)
+	}
+}
+
+// SetValue sets a configuration value by key
+func (c *Config) SetValue(key, value string) error {
+	switch key {
+	case "version":
+		c.Version = value
+	case "registry":
+		c.Registry = value
+	case "installed.languages":
+		c.Installed.Languages = splitAndTrim(value)
+	case "installed.frameworks":
+		c.Installed.Frameworks = splitAndTrim(value)
+	case "installed.workflows":
+		c.Installed.Workflows = splitAndTrim(value)
+	default:
+		return fmt.Errorf("unknown config key: %s", key)
+	}
+	return nil
+}
+
+// GetAllValues returns all config values as a map
+func (c *Config) GetAllValues() map[string]interface{} {
+	registry := c.Registry
+	if registry == "" {
+		registry = DefaultRegistry
+	}
+	return map[string]interface{}{
+		"version":              c.Version,
+		"registry":             registry,
+		"installed.languages":  c.Installed.Languages,
+		"installed.frameworks": c.Installed.Frameworks,
+		"installed.workflows":  c.Installed.Workflows,
+	}
+}
+
+// splitAndTrim splits a comma-separated string and trims whitespace
+func splitAndTrim(s string) []string {
+	if s == "" {
+		return []string{}
+	}
+	parts := strings.Split(s, ",")
+	result := make([]string, 0, len(parts))
+	for _, p := range parts {
+		trimmed := strings.TrimSpace(p)
+		if trimmed != "" {
+			result = append(result, trimmed)
+		}
+	}
+	return result
 }

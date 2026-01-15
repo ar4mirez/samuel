@@ -291,3 +291,159 @@ func TestInitCommand(t *testing.T) {
 **Why**: Temp directories are automatically cleaned up, and isolated tests prevent interference.
 
 **See also**: Testing PRD in [.agent/tasks/0001-prd-cli-testing.md](.agent/tasks/0001-prd-cli-testing.md)
+
+---
+
+### Table-Driven Unit Tests
+
+**When to use**: When testing functions with multiple input/output scenarios
+
+**Example**:
+
+```go
+func TestMatchScore(t *testing.T) {
+    tests := []struct {
+        name        string
+        query       string
+        compName    string
+        description string
+        wantScore   int
+    }{
+        {"exact match", "react", "react", "React framework", 100},
+        {"prefix match", "type", "typescript", "TypeScript", 80},
+        {"contains match", "script", "typescript", "TypeScript", 60},
+        {"no match", "xyz123", "react", "React framework", 0},
+    }
+
+    for _, tt := range tests {
+        t.Run(tt.name, func(t *testing.T) {
+            got := matchScore(tt.query, tt.compName, tt.description)
+            if got != tt.wantScore {
+                t.Errorf("matchScore(%q, %q, %q) = %d, want %d",
+                    tt.query, tt.compName, tt.description, got, tt.wantScore)
+            }
+        })
+    }
+}
+```
+
+**Why**: Table-driven tests provide:
+
+- Clear test case visibility
+- Easy to add new cases
+- Consistent error messages
+- Subtests with `t.Run()` for granular failure reporting
+
+**See also**: [search_test.go](internal/commands/search_test.go), [config_test.go](internal/core/config_test.go)
+
+---
+
+### Coverage-Focused Testing Strategy
+
+**When to use**: When implementing tests for existing code
+
+**Strategy**:
+
+1. **Test helper functions first** - Business logic in helper functions is most valuable to test
+2. **Skip command runners** - `run*` functions require integration tests
+3. **Skip display functions** - UI output functions have low testing value
+4. **Target 80%+ for business logic** - Even if overall coverage is lower
+
+**Example coverage breakdown**:
+
+```text
+Helper functions (test these):
+  matchScore          100.0%
+  levenshteinDistance 100.0%
+  computeDiff         100.0%
+  formatFileSize      100.0%
+
+Command runners (skip for unit tests):
+  runSearch           0.0%  (integration test)
+  runInfo             0.0%  (integration test)
+
+Display functions (low value):
+  displayResults      0.0%  (UI only)
+```
+
+**Why**: Focusing on business logic gives maximum value. Command runners need real CLI execution (integration tests), and display functions just format output.
+
+**See also**: Testing strategy in [.agent/tasks/0001-prd-cli-testing.md](.agent/tasks/0001-prd-cli-testing.md)
+
+---
+
+### Fuzzy Search Pattern
+
+**When to use**: When implementing search functionality with typo tolerance
+
+**Example**:
+
+```go
+func matchScore(query, name, description string) int {
+    queryLower := strings.ToLower(query)
+    nameLower := strings.ToLower(name)
+
+    // Priority order (highest to lowest score)
+    if nameLower == queryLower {
+        return 100  // Exact match
+    }
+    if strings.HasPrefix(nameLower, queryLower) {
+        return 80   // Prefix match
+    }
+    if strings.Contains(nameLower, queryLower) {
+        return 60   // Contains match
+    }
+    if strings.Contains(descLower, queryLower) {
+        return 40   // Description match
+    }
+
+    // Fuzzy match using Levenshtein distance
+    dist := levenshteinDistance(queryLower, nameLower)
+    if dist <= 2 && dist < len(nameLower)/2 {
+        return 30 - dist*5  // Penalize more edits
+    }
+    return 0
+}
+```
+
+**Why**: This scoring approach:
+
+- Exact matches always win
+- Prefix matches beat substring matches
+- Description matches are lower priority
+- Fuzzy matching catches typos but with penalty
+
+**See also**: [search.go](internal/commands/search.go#L169-L205)
+
+---
+
+### Related Components Pattern
+
+**When to use**: When showing relationships between components
+
+**Example**:
+
+```go
+// Language → Frameworks mapping
+var languageFrameworks = map[string][]string{
+    "typescript": {"react", "nextjs", "express"},
+    "python":     {"django", "fastapi", "flask"},
+    "go":         {"gin", "echo", "fiber"},
+}
+
+// Framework → Language mapping (reverse lookup)
+func getLanguageForFramework(framework string) []RelatedComponent {
+    for lang, frameworks := range languageFrameworks {
+        for _, fw := range frameworks {
+            if fw == framework {
+                return []RelatedComponent{{Name: lang, Type: "language"}}
+            }
+        }
+    }
+    return nil
+}
+```
+
+**Why**: Bidirectional mappings help users discover related components when browsing `info` output.
+
+**See also**: [info.go](internal/commands/info.go#L177-L240)
