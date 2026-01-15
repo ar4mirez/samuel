@@ -37,7 +37,18 @@
       "Bash(gh secret list:*)",
       "Bash(git tag:*)",
       "Bash(gh release view:*)",
-      "Bash(golangci-lint run:*)"
+      "Bash(golangci-lint run:*)",
+      "Bash(gh run watch:*)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Bash(for f in /Users/ar4mirez/Developer/Work/github.com/ar4mirez/ai-code-template/template/.agent/language-guides/*.md)",
+      "Bash(done)",
+      "Bash(sort:*)",
+      "Bash(for f in /Users/ar4mirez/Developer/Work/github.com/ar4mirez/ai-code-template/template/.agent/framework-guides/*.md)",
+      "Bash(find:*)",
+      "Bash(go tool cover:*)",
+      "Bash(gh release list:*)",
+      "Bash(gh release create:*)"
     ],
     "deny": [],
     "ask": []

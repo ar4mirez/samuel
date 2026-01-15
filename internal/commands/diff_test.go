@@ -168,7 +168,9 @@ func TestHashFile(t *testing.T) {
 
 	// Same content should produce same hash
 	testFile2 := filepath.Join(tmpDir, "test2.txt")
-	os.WriteFile(testFile2, []byte(content), 0644)
+	if err := os.WriteFile(testFile2, []byte(content), 0644); err != nil {
+		t.Fatalf("Failed to write test file: %v", err)
+	}
 	hash2, _ := hashFile(testFile2)
 	if hash != hash2 {
 		t.Error("Same content should produce same hash")
@@ -176,7 +178,9 @@ func TestHashFile(t *testing.T) {
 
 	// Different content should produce different hash
 	testFile3 := filepath.Join(tmpDir, "test3.txt")
-	os.WriteFile(testFile3, []byte("Different content"), 0644)
+	if err := os.WriteFile(testFile3, []byte("Different content"), 0644); err != nil {
+		t.Fatalf("Failed to write test file: %v", err)
+	}
 	hash3, _ := hashFile(testFile3)
 	if hash == hash3 {
 		t.Error("Different content should produce different hash")
@@ -225,11 +229,17 @@ func TestGetLocalFileHashes(t *testing.T) {
 
 	// Create .agent directory with some md files
 	agentDir := filepath.Join(tmpDir, ".agent", "workflows")
-	os.MkdirAll(agentDir, 0755)
-	os.WriteFile(filepath.Join(agentDir, "test.md"), []byte("content"), 0644)
+	if err := os.MkdirAll(agentDir, 0755); err != nil {
+		t.Fatalf("Failed to create agent dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(agentDir, "test.md"), []byte("content"), 0644); err != nil {
+		t.Fatalf("Failed to write test file: %v", err)
+	}
 
 	// Create CLAUDE.md
-	os.WriteFile(filepath.Join(tmpDir, "CLAUDE.md"), []byte("claude content"), 0644)
+	if err := os.WriteFile(filepath.Join(tmpDir, "CLAUDE.md"), []byte("claude content"), 0644); err != nil {
+		t.Fatalf("Failed to write CLAUDE.md: %v", err)
+	}
 
 	hashes := getLocalFileHashes(tmpDir)
 
@@ -260,11 +270,19 @@ func TestGetVersionFileHashes(t *testing.T) {
 
 	// Create template directory structure
 	templateDir := filepath.Join(tmpDir, "template")
-	os.MkdirAll(filepath.Join(templateDir, ".agent", "workflows"), 0755)
-	os.WriteFile(filepath.Join(templateDir, "CLAUDE.md"), []byte("content"), 0644)
-	os.WriteFile(filepath.Join(templateDir, ".agent", "workflows", "test.md"), []byte("workflow"), 0644)
+	if err := os.MkdirAll(filepath.Join(templateDir, ".agent", "workflows"), 0755); err != nil {
+		t.Fatalf("Failed to create template dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(templateDir, "CLAUDE.md"), []byte("content"), 0644); err != nil {
+		t.Fatalf("Failed to write CLAUDE.md: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(templateDir, ".agent", "workflows", "test.md"), []byte("workflow"), 0644); err != nil {
+		t.Fatalf("Failed to write workflow file: %v", err)
+	}
 	// Non-md file should be ignored
-	os.WriteFile(filepath.Join(templateDir, "test.txt"), []byte("ignored"), 0644)
+	if err := os.WriteFile(filepath.Join(templateDir, "test.txt"), []byte("ignored"), 0644); err != nil {
+		t.Fatalf("Failed to write test file: %v", err)
+	}
 
 	hashes := getVersionFileHashes(tmpDir)
 

@@ -237,7 +237,9 @@ Line 2
 Line 3
 Line 4
 Line 5`
-	os.WriteFile(testFile, []byte(content), 0644)
+	if err := os.WriteFile(testFile, []byte(content), 0644); err != nil {
+		t.Fatalf("Failed to write test file: %v", err)
+	}
 
 	tests := []struct {
 		lines     int

@@ -269,8 +269,10 @@ func TestLoadConfig_NotExist(t *testing.T) {
 	// Change to temp directory
 	tmpDir := t.TempDir()
 	oldDir, _ := os.Getwd()
-	os.Chdir(tmpDir)
-	defer os.Chdir(oldDir)
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatalf("Failed to change to temp dir: %v", err)
+	}
+	defer func() { _ = os.Chdir(oldDir) }()
 
 	_, err := LoadConfig()
 	if err == nil {
@@ -281,8 +283,10 @@ func TestLoadConfig_NotExist(t *testing.T) {
 func TestLoadConfig_Valid(t *testing.T) {
 	tmpDir := t.TempDir()
 	oldDir, _ := os.Getwd()
-	os.Chdir(tmpDir)
-	defer os.Chdir(oldDir)
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatalf("Failed to change to temp dir: %v", err)
+	}
+	defer func() { _ = os.Chdir(oldDir) }()
 
 	// Create a valid config file
 	configContent := `version: "1.0.0"
@@ -315,8 +319,10 @@ installed:
 func TestSaveConfig(t *testing.T) {
 	tmpDir := t.TempDir()
 	oldDir, _ := os.Getwd()
-	os.Chdir(tmpDir)
-	defer os.Chdir(oldDir)
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatalf("Failed to change to temp dir: %v", err)
+	}
+	defer func() { _ = os.Chdir(oldDir) }()
 
 	config := &Config{
 		Version:  "2.0.0",
@@ -383,14 +389,18 @@ func TestConfigExists(t *testing.T) {
 	}
 
 	// Create aicof.yaml
-	os.WriteFile(filepath.Join(tmpDir, "aicof.yaml"), []byte("version: 1.0.0"), 0644)
+	if err := os.WriteFile(filepath.Join(tmpDir, "aicof.yaml"), []byte("version: 1.0.0"), 0644); err != nil {
+		t.Fatalf("Failed to write config file: %v", err)
+	}
 	if !ConfigExists(tmpDir) {
 		t.Error("ConfigExists() = false with aicof.yaml, want true")
 	}
 
 	// Test with alternative config file
 	tmpDir2 := t.TempDir()
-	os.WriteFile(filepath.Join(tmpDir2, ".aicof.yaml"), []byte("version: 1.0.0"), 0644)
+	if err := os.WriteFile(filepath.Join(tmpDir2, ".aicof.yaml"), []byte("version: 1.0.0"), 0644); err != nil {
+		t.Fatalf("Failed to write alt config file: %v", err)
+	}
 	if !ConfigExists(tmpDir2) {
 		t.Error("ConfigExists() = false with .aicof.yaml, want true")
 	}
@@ -520,7 +530,9 @@ func TestSplitAndTrim(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
 			config := &Config{}
-			config.SetValue("installed.languages", tt.input)
+			if err := config.SetValue("installed.languages", tt.input); err != nil {
+				t.Fatalf("SetValue failed: %v", err)
+			}
 			if len(config.Installed.Languages) != len(tt.want) {
 				t.Errorf("splitAndTrim(%q) got %v, want %v", tt.input, config.Installed.Languages, tt.want)
 			}
