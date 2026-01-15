@@ -105,6 +105,7 @@ var Frameworks = []Component{
 // Workflows contains all available workflows
 var Workflows = []Component{
 	{Name: "initialize-project", Path: ".agent/workflows/initialize-project.md", Description: "Project setup"},
+	{Name: "create-rfd", Path: ".agent/workflows/create-rfd.md", Description: "Technical decision documents"},
 	{Name: "create-prd", Path: ".agent/workflows/create-prd.md", Description: "Requirements documents"},
 	{Name: "generate-tasks", Path: ".agent/workflows/generate-tasks.md", Description: "Task breakdown"},
 	{Name: "code-review", Path: ".agent/workflows/code-review.md", Description: "Pre-commit quality review"},
