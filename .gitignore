@@ -62,3 +62,6 @@ site/
 # Python virtual environments for docs
 .venv/
 docs_env/
+
+# Claude Code local settings (personal permissions)
+.claude/settings.local.json
