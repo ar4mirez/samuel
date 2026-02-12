@@ -152,7 +152,24 @@ Skills extend AI capabilities. Load a skill when task matches its description.
 
 | Skill | Description |
 |-------|-------------|
+| auto | Autonomous AI coding loop (Ralph Wiggum methodology). |
+| cleanup-project | Project cleanup and pruning workflow. |
+| code-review | Pre-commit code quality review workflow. |
 | commit-message | Generate descriptive commit messages by analyzing git diffs. |
+| create-prd | Product Requirements Document (PRD) creation workflow. |
+| create-rfd | Request for Discussion (RFD) creation workflow. |
+| create-skill | Agent Skill creation workflow. |
+| dependency-update | Safe dependency update workflow. |
+| document-work | Work documentation and pattern capture workflow. |
+| generate-agents-md | Cross-tool compatibility workflow (AGENTS.md). |
+| generate-tasks | Task generation and breakdown workflow from PRDs. |
+| go-guide | Go language guardrails, patterns, and best practices. |
+| initialize-project | Project initialization and setup workflow. |
+| refactoring | Technical debt remediation and code restructuring workflow. |
+| security-audit | Security assessment workflow (OWASP, auth, vulnerabilities). |
+| testing-strategy | Test planning and coverage strategy workflow. |
+| troubleshooting | Debugging and problem-solving workflow. |
+| update-framework | AICoF version update workflow. |
 
 **To use a skill**: Read `.claude/skills/<skill-name>/SKILL.md`
 <!-- SKILLS_END -->

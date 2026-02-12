@@ -4,3 +4,30 @@ installed:
         - go
     workflows:
         - all
+    skills:
+        - go-guide
+        - initialize-project
+        - create-rfd
+        - create-prd
+        - generate-tasks
+        - code-review
+        - security-audit
+        - testing-strategy
+        - cleanup-project
+        - refactoring
+        - dependency-update
+        - update-framework
+        - troubleshooting
+        - generate-agents-md
+        - document-work
+        - create-skill
+        - commit-message
+        - auto
+auto:
+    enabled: true
+    ai_tool: claude
+    max_iterations: 25
+    quality_checks:
+        - go build ./...
+        - go test ./...
+        - go vet ./...
