@@ -192,6 +192,10 @@ func TestValidConfigKeys(t *testing.T) {
 		"installed.frameworks",
 		"installed.workflows",
 		"installed.skills",
+		"auto.enabled",
+		"auto.ai_tool",
+		"auto.max_iterations",
+		"auto.quality_checks",
 	}
 
 	if len(ValidConfigKeys) != len(expectedKeys) {

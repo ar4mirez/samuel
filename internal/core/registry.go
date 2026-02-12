@@ -129,6 +129,8 @@ var Workflows = []Component{
 	{Name: "generate-agents-md", Path: ".claude/skills/generate-agents-md", Description: "Cross-tool compatibility", Category: "workflow", Tags: []string{"agents-md", "compatibility", "cross-tool"}},
 	{Name: "document-work", Path: ".claude/skills/document-work", Description: "Capture patterns", Category: "workflow", Tags: []string{"document", "patterns", "decisions", "learnings"}},
 	{Name: "create-skill", Path: ".claude/skills/create-skill", Description: "Create Agent Skills", Category: "workflow", Tags: []string{"skill", "create", "scaffold", "agent-skills"}},
+	// Autonomous
+	{Name: "auto", Path: ".claude/skills/auto", Description: "Autonomous AI coding loop", Category: "workflow", Tags: []string{"auto", "autonomous", "loop", "ralph", "afk"}},
 }
 
 // Skills contains bundled skills (community skills loaded dynamically).
@@ -207,6 +209,7 @@ var Skills = []Component{
 	{Name: "generate-agents-md", Path: ".claude/skills/generate-agents-md", Description: "Cross-tool compatibility workflow", Category: "workflow", Tags: []string{"agents-md", "compatibility"}},
 	{Name: "document-work", Path: ".claude/skills/document-work", Description: "Capture patterns workflow", Category: "workflow", Tags: []string{"document", "patterns", "decisions"}},
 	{Name: "create-skill", Path: ".claude/skills/create-skill", Description: "Create Agent Skills workflow", Category: "workflow", Tags: []string{"skill", "create", "scaffold"}},
+	{Name: "auto", Path: ".claude/skills/auto", Description: "Autonomous AI coding loop workflow", Category: "workflow", Tags: []string{"auto", "autonomous", "loop", "ralph"}},
 }
 
 // CoreFiles contains essential files always installed

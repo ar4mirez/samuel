@@ -21,6 +21,15 @@ type Config struct {
 	Version   string         `yaml:"version"`
 	Installed InstalledItems `yaml:"installed"`
 	Registry  string         `yaml:"registry,omitempty"`
+	Auto      *AutoYAML      `yaml:"auto,omitempty"`
+}
+
+// AutoYAML represents the auto loop configuration in aicof.yaml
+type AutoYAML struct {
+	Enabled       bool     `yaml:"enabled"`
+	AITool        string   `yaml:"ai_tool,omitempty"`
+	MaxIterations int      `yaml:"max_iterations,omitempty"`
+	QualityChecks []string `yaml:"quality_checks,omitempty"`
 }
 
 // InstalledItems tracks what components are installed
@@ -316,6 +325,10 @@ var ValidConfigKeys = []string{
 	"installed.frameworks",
 	"installed.workflows",
 	"installed.skills",
+	"auto.enabled",
+	"auto.ai_tool",
+	"auto.max_iterations",
+	"auto.quality_checks",
 }
 
 // GetValue retrieves a configuration value by key
@@ -336,6 +349,23 @@ func (c *Config) GetValue(key string) (any, error) {
 		return c.Installed.Workflows, nil
 	case "installed.skills":
 		return c.Installed.Skills, nil
+	case "auto.enabled":
+		return c.Auto != nil && c.Auto.Enabled, nil
+	case "auto.ai_tool":
+		if c.Auto != nil {
+			return c.Auto.AITool, nil
+		}
+		return "", nil
+	case "auto.max_iterations":
+		if c.Auto != nil {
+			return c.Auto.MaxIterations, nil
+		}
+		return 0, nil
+	case "auto.quality_checks":
+		if c.Auto != nil {
+			return c.Auto.QualityChecks, nil
+		}
+		return []string{}, nil
 	default:
 		return nil, fmt.Errorf("unknown config key: %s", key)
 	}

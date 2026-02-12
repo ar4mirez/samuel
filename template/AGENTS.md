@@ -139,6 +139,13 @@ NODE_ENV=            # development | production | test
 - Function ≤50 lines | File ≤300 lines | Input validation | Parameterized queries
 - Tests >80% (critical) | Conventional commits | No secrets in code
 
+**Autonomous Mode (Ralph Wiggum methodology):**
+- Initialize: `aicof auto init --prd .claude/tasks/NNNN-prd-feature.md`
+- Start loop: `aicof auto start`
+- Check status: `aicof auto status`
+- Manage tasks: `aicof auto task list|complete|skip|reset|add`
+- Methodology: .claude/skills/auto/SKILL.md
+
 **Emergency Quick Links:**
 - Security issue? → .claude/skills/security-audit/SKILL.md
 - Tests failing? → .claude/skills/troubleshooting/SKILL.md
@@ -288,6 +295,15 @@ For architecture changes, major refactors, new systems:
 1. Use `.claude/skills/create-prd/SKILL.md` to define requirements
 2. Use `.claude/skills/generate-tasks/SKILL.md` to break down implementation
 3. Implement tasks step-by-step with verification checkpoints
+
+**Autonomous Execution (Optional):**
+After task generation, convert to autonomous format for unattended execution:
+
+1. `aicof auto init --prd .claude/tasks/NNNN-prd-feature.md`
+2. Review generated `prd.json` and `prompt.md`
+3. `aicof auto start`
+
+See `.claude/skills/auto/SKILL.md` for the full methodology.
 
 **Escalation Triggers:**
 - Task affects >5 files → FEATURE mode

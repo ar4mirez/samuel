@@ -304,7 +304,13 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	// Check 9: Local modifications (informational)
+	// Check 9: Auto loop health (if present)
+	autoDir := core.GetAutoDir(cwd)
+	if _, err := os.Stat(autoDir); err == nil {
+		results = append(results, checkAutoHealth(cwd)...)
+	}
+
+	// Check 10: Local modifications (informational)
 	if config != nil {
 		claudeMdModified := checkModification(claudeMdPath, config.Version)
 		if claudeMdModified {
@@ -419,8 +425,42 @@ func extractVersion(content string) string {
 	return ""
 }
 
+// checkAutoHealth validates the auto loop directory and files
+func checkAutoHealth(cwd string) []checkResult {
+	var results []checkResult
+
+	prdPath := core.GetAutoPRDPath(cwd)
+	prd, err := core.LoadAutoPRD(prdPath)
+	if err != nil {
+		results = append(results, checkResult{
+			name:    "Auto loop",
+			passed:  false,
+			message: fmt.Sprintf("prd.json invalid: %v", err),
+		})
+		return results
+	}
+
+	errs := core.ValidateAutoPRD(prd)
+	if len(errs) > 0 {
+		results = append(results, checkResult{
+			name:    "Auto loop",
+			passed:  false,
+			message: fmt.Sprintf("prd.json validation: %s", strings.Join(errs, "; ")),
+		})
+	} else {
+		prd.RecalculateProgress()
+		results = append(results, checkResult{
+			name:    "Auto loop",
+			passed:  true,
+			message: fmt.Sprintf("prd.json valid (%d/%d tasks completed)", prd.Progress.CompletedTasks, prd.Progress.TotalTasks),
+		})
+	}
+
+	return results
+}
+
 // checkModification checks if a file has been modified from the original
-func checkModification(filePath string, version string) bool {
+func checkModification(filePath string, _ string) bool {
 	// Simple heuristic: if file exists and we can read it, assume it might be modified
 	// A more robust check would compare against the cached original
 	_, err := os.Stat(filePath)

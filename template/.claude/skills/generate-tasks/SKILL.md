@@ -382,3 +382,21 @@ See `references/process.md` for:
 - **Guarded**: Validates specific guardrails
 - **Estimated**: Complexity known upfront
 - **Dependent**: Dependencies clear (order matters)
+
+---
+
+## Autonomous Execution (Optional)
+
+If the project uses autonomous AI coding loops (Ralph Wiggum methodology),
+the generated task list can be converted to machine-readable format for
+unattended execution.
+
+After generating the markdown task list:
+
+```bash
+aicof auto init --prd .claude/tasks/NNNN-prd-feature.md
+```
+
+This converts the PRD and task list into `.claude/auto/prd.json` and
+generates the loop orchestration files. See `.claude/skills/auto/SKILL.md`
+for the full autonomous workflow.
