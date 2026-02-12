@@ -9,6 +9,60 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Add unreleased changes here -->
 
+## [2.0.0] - 2026-02-12
+
+### Renamed to Samuel
+
+Breaking change: project renamed from AICoF to **Samuel**. Binary, config files, cache paths, and Go module path all changed.
+
+### Added
+
+- **Autonomous AI Coding Loop** (Ralph Wiggum methodology):
+  - `samuel auto init` - Initialize autonomous loop from PRD
+  - `samuel auto convert` - Convert markdown PRD/tasks to prd.json
+  - `samuel auto status` - Show loop progress
+  - `samuel auto start` - Begin/resume autonomous execution
+  - `samuel auto task` - Manage tasks (list, complete, skip, reset, add)
+- **Auto workflow skill** at `.claude/skills/auto/SKILL.md`
+- **Per-folder CLAUDE.md** support for hierarchical instructions
+- **Homebrew formula** (was cask) — `brew install samuel`
+
+### Changed
+
+- **Project renamed**: `aicof` → `samuel` (binary, config, module path)
+- Config file: `aicof.yaml` → `samuel.yaml`
+- Cache/config dirs: `~/.config/aicof/` → `~/.config/samuel/`
+- Go module: `github.com/ar4mirez/aicof` → `github.com/ar4mirez/samuel`
+- Migrated from `.agent/` to `.claude/` (native Claude Code directory)
+- Skills now live in `.claude/skills/` (native skill discovery)
+- Homebrew distribution changed from cask to formula
+
+### Breaking
+
+- Binary renamed from `aicof` to `samuel`
+- Config file renamed from `aicof.yaml` to `samuel.yaml`
+- `.agent/` directory no longer used — migrate to `.claude/`
+
+## [1.8.0] - 2026-02-04
+
+### Added
+
+- **Agent Skills Management CLI**:
+  - `samuel skill create <name>` - Scaffold new skills
+  - `samuel skill validate [name]` - Validate against Agent Skills specification
+  - `samuel skill list` - List installed skills
+  - `samuel skill info <name>` - Show skill details
+- **Create Skill workflow** at `.claude/skills/create-skill/SKILL.md`
+- Skills compatible with 25+ agent products
+- `installed.skills` config key
+
+### Changed
+
+- All components now follow Agent Skills standard (SKILL.md with YAML frontmatter)
+- Language guides renamed to `<name>-guide/SKILL.md` format
+- Framework guides moved to `<name>/SKILL.md` format
+- Workflows moved to `<name>/SKILL.md` format
+
 ## [1.7.0] - 2025-01-14
 
 ### Changed
@@ -379,7 +433,9 @@ No breaking changes. New language guides and workflows are additive.
 - [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md) - Quick start guide
 - [AGENTS.md Standard](https://agents.md) - Cross-tool compatibility standard
 
-[Unreleased]: https://github.com/ar4mirez/samuel/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/ar4mirez/samuel/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/ar4mirez/samuel/compare/v1.8.0...v2.0.0
+[1.8.0]: https://github.com/ar4mirez/samuel/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/ar4mirez/samuel/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/ar4mirez/samuel/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/ar4mirez/samuel/compare/v1.4.0...v1.5.0

@@ -12,12 +12,13 @@
 
 ## What's New in v2.0.0
 
+- **Renamed to Samuel** - Cleaner, memorable name (formerly AICoF). Binary: `samuel`, config: `samuel.yaml`
+- **Autonomous AI Coding Loop** - Ralph Wiggum methodology for unattended task completion (`samuel auto`)
 - **Migrated to `.claude/` directory** - Skills and context now live under `.claude/skills/` instead of `.agent/skills/`
-- **AGENTS.md as real copy** - `samuel init` now creates both CLAUDE.md and AGENTS.md as real files (no symlink needed)
-- **15 Workflows** - Added `create-rfd` and `create-skill` workflows
+- **18 Workflows** - Including `auto`, `create-rfd`, `create-skill`, and more
 - **33 Framework Skills** - Comprehensive framework-specific guidance across 11 language families
 - **21 Language Guides** - All major programming languages covered
-- **AGENTS.md Compatible** - Works with Claude Code, Cursor, Codex, Copilot, and 20+ other AI tools
+- **Homebrew formula** - Install with `brew install samuel` (was a cask)
 
 ---
 

@@ -9,11 +9,11 @@ All notable changes to Samuel (Artificial Intelligence Coding Framework).
 
 ---
 
-## [2.0.0] - 2026-02-11
+## [2.0.0] - 2026-02-12
 
-### Native Claude Code Integration
+### Renamed to Samuel
 
-Breaking change: migrated from `.agent/` to `.claude/` native directory. Added autonomous AI coding loop.
+Breaking change: project renamed from AICoF to **Samuel**. Migrated from `.agent/` to `.claude/` native directory. Added autonomous AI coding loop.
 
 ### Added
 
@@ -27,18 +27,22 @@ Breaking change: migrated from `.agent/` to `.claude/` native directory. Added a
 - **Per-folder CLAUDE.md** support for hierarchical instructions
 - **Auto config keys**: `auto.enabled`, `auto.ai_tool`, `auto.max_iterations`, `auto.quality_checks`
 - **AGENTS.md** now a real file copy (not symlink) for cross-tool compatibility
+- **Homebrew formula** — `brew install samuel` (was cask)
 
 ### Changed
 
+- **Project renamed**: `aicof` → `samuel` (binary, config, module path, repository)
+- Config file: `aicof.yaml` → `samuel.yaml`
+- Cache/config dirs: `~/.config/aicof/` → `~/.config/samuel/`
 - Migrated from `.agent/` to `.claude/` (native Claude Code directory)
-- Merged AI_INSTRUCTIONS.md + CLAUDE.md + project.md into single CLAUDE.md
 - Skills now live in `.claude/skills/` (native skill discovery)
-- Dropped `.agent/memory/`, `.agent/tasks/`, `.agent/rfd/`, `.agent/state.md`
-- Uses Claude Code's built-in memory system instead
+- Homebrew distribution changed from cask to formula
 
 ### Breaking
 
-- `.agent/` directory no longer used - migrate to `.claude/`
+- Binary renamed from `aicof` to `samuel`
+- Config file renamed from `aicof.yaml` to `samuel.yaml`
+- `.agent/` directory no longer used — migrate to `.claude/`
 - Workflow files moved from `.claude/workflows/` to `.claude/skills/`
 - Language guides moved from `.claude/language-guides/` to `.claude/skills/<name>-guide/`
 
