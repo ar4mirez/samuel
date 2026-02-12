@@ -115,8 +115,6 @@ release:
 
 brews:
   - name: samuel
-    ids:
-      - samuel
     repository:
       owner: ar4mirez
       name: homebrew-tap
