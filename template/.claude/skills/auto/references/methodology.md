@@ -10,7 +10,7 @@ as a framework for running AI coding tools autonomously in loops.
 Ralph embodies a "split-brain" architecture:
 
 - **Transient**: Fresh AI context each iteration (stateless)
-- **Persistent**: Git commits, progress.txt, prd.json, AGENTS.md (stateful)
+- **Persistent**: Git commits, progress.md, prd.json, AGENTS.md (stateful)
 
 This enables:
 - Unlimited work scope (not limited by context window)
@@ -23,7 +23,7 @@ This enables:
 1. **Ralph Is A Loop**: Agent repeatedly processes tasks with consistent prompt
 2. **Start HITL, Then Go AFK**: Begin supervised, then enable unattended runs
 3. **Define The Scope**: Create explicit requirements with clear completion criteria
-4. **Track Progress**: Maintain progress.txt documenting completed tasks and decisions
+4. **Track Progress**: Maintain progress.md documenting completed tasks and decisions
 5. **Use Feedback Loops**: Tests, linting, type checking as quality guardrails
 6. **Take Small Steps**: Break work into focused commits for frequent feedback
 7. **Prioritize Risky Tasks**: Tackle architectural decisions first

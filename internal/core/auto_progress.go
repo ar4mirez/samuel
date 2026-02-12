@@ -18,7 +18,7 @@ const (
 	ProgressCommit       = "COMMIT"
 )
 
-// ProgressEntry represents a single line in progress.txt
+// ProgressEntry represents a single line in progress.md
 type ProgressEntry struct {
 	Iteration int
 	TaskID    string

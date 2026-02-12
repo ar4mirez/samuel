@@ -108,7 +108,7 @@ aicof/
 - **GitHub archive downloads**: Uses GitHub's tar.gz API — no git required on user machines.
 - **Standard Go layout**: `cmd/` + `internal/` at root. `internal/commands/` (not `cmd/`) to avoid confusion.
 - **Go for CLI**: Single binary, cross-platform, no runtime dependencies. Cobra for CLI framework.
-- **Auto (Ralph Wiggum)**: Autonomous AI coding loop. Tasks stored in `.claude/auto/prd.json`, progress in `progress.txt`, orchestrated by `auto.sh` or Go CLI.
+- **Auto (Ralph Wiggum)**: Autonomous AI coding loop. Tasks stored in `.claude/auto/prd.json`, progress in `progress.md`, orchestrated by `auto.sh` or Go CLI.
 
 ---
 

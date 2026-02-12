@@ -43,7 +43,7 @@ var autoInitCmd = &cobra.Command{
 
 Creates .claude/auto/ with:
   - prd.json      Machine-readable task state
-  - progress.txt  Append-only learnings journal
+  - progress.md  Append-only learnings journal
   - prompt.md     Iteration prompt template
   - auto.sh       Loop orchestration script
 

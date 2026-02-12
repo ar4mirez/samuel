@@ -83,7 +83,7 @@ func writeAutoFiles(autoDir string, config core.AutoConfig) error {
 	progressPath := filepath.Join(autoDir, core.AutoProgressFile)
 	if _, err := os.Stat(progressPath); os.IsNotExist(err) {
 		if err := os.WriteFile(progressPath, []byte(""), 0644); err != nil {
-			return fmt.Errorf("failed to create progress.txt: %w", err)
+			return fmt.Errorf("failed to create progress.md: %w", err)
 		}
 	}
 

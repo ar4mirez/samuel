@@ -77,7 +77,7 @@ func TestFormatProgressEntry(t *testing.T) {
 
 func TestAppendProgress(t *testing.T) {
 	dir := t.TempDir()
-	path := filepath.Join(dir, "progress.txt")
+	path := filepath.Join(dir, "progress.md")
 
 	entry1 := ProgressEntry{Iteration: 1, TaskID: "1.0", Type: ProgressStarted, Message: "Task 1"}
 	entry2 := ProgressEntry{Iteration: 1, TaskID: "1.0", Type: ProgressCompleted, Message: "Done"}
@@ -102,7 +102,7 @@ func TestAppendProgress(t *testing.T) {
 
 func TestAppendProgress_CreatesFile(t *testing.T) {
 	dir := t.TempDir()
-	path := filepath.Join(dir, "new-progress.txt")
+	path := filepath.Join(dir, "new-progress.md")
 
 	entry := ProgressEntry{Type: ProgressStarted, Message: "Begin"}
 	if err := AppendProgress(path, entry); err != nil {
@@ -116,7 +116,7 @@ func TestAppendProgress_CreatesFile(t *testing.T) {
 
 func TestReadProgressTail(t *testing.T) {
 	dir := t.TempDir()
-	path := filepath.Join(dir, "progress.txt")
+	path := filepath.Join(dir, "progress.md")
 
 	// Write 5 lines
 	content := "line1\nline2\nline3\nline4\nline5\n"
@@ -147,7 +147,7 @@ func TestReadProgressTail(t *testing.T) {
 }
 
 func TestReadProgressTail_MissingFile(t *testing.T) {
-	lines, err := ReadProgressTail("/nonexistent/progress.txt", 5)
+	lines, err := ReadProgressTail("/nonexistent/progress.md", 5)
 	if err != nil {
 		t.Errorf("expected nil error for missing file, got: %v", err)
 	}

@@ -13,7 +13,7 @@ import (
 const (
 	AutoDir          = ".claude/auto"
 	AutoPRDFile      = "prd.json"
-	AutoProgressFile = "progress.txt"
+	AutoProgressFile = "progress.md"
 	AutoPromptFile   = "prompt.md"
 	AutoScriptFile   = "auto.sh"
 	AutoSchemaVer    = "1.0"

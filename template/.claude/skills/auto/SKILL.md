@@ -24,7 +24,7 @@ Enable unattended AI-driven development using the Ralph Wiggum methodology.
 
 The autonomous loop runs AI agents in a cycle, where each iteration:
 1. Starts with fresh context (no conversation history dependency)
-2. Reads project state from files (prd.json, progress.txt, CLAUDE.md)
+2. Reads project state from files (prd.json, progress.md, CLAUDE.md)
 3. Selects and implements one task
 4. Commits changes and updates state
 5. Documents learnings for future iterations
@@ -37,7 +37,7 @@ Continuity is maintained through **persistent files**, not conversation history.
 
 ### 1. Fresh Context Per Iteration
 Each cycle begins with a clean AI context window. The AI agent reconstructs
-understanding from: git history, prd.json (task state), progress.txt (learnings),
+understanding from: git history, prd.json (task state), progress.md (learnings),
 and CLAUDE.md/AGENTS.md (project guardrails).
 
 ### 2. Right-Sized Decomposition
@@ -51,7 +51,7 @@ Automated checks (tests, linting, type checking) serve as guardrails:
 - Pre-commit hooks catch regressions
 
 ### 4. Knowledge Persistence
-Learnings accumulate in `progress.txt` across iterations:
+Learnings accumulate in `progress.md` across iterations:
 - Architectural decisions
 - Gotchas and edge cases
 - Patterns discovered
@@ -109,7 +109,7 @@ aicof auto start --dry-run
 aicof auto status
 
 # View recent learnings
-tail -20 .claude/auto/progress.txt
+tail -20 .claude/auto/progress.md
 
 # List all tasks
 aicof auto task list
@@ -140,7 +140,7 @@ When operating in autonomous mode, follow these steps exactly:
 ### Step 1: Read Context
 ```
 1. Read CLAUDE.md (or AGENTS.md) for project guardrails
-2. Read .claude/auto/progress.txt for learnings from prior iterations
+2. Read .claude/auto/progress.md for learnings from prior iterations
 3. Read .claude/auto/prd.json to find tasks and current state
 ```
 
@@ -187,7 +187,7 @@ When operating in autonomous mode, follow these steps exactly:
 
 ### Step 7: Document Learnings
 ```
-Append to .claude/auto/progress.txt:
+Append to .claude/auto/progress.md:
 [timestamp] [iteration:N] [task:ID] COMPLETED: what was done
 [timestamp] [iteration:N] [task:ID] LEARNING: any insights or gotchas
 ```
@@ -250,7 +250,7 @@ Append to .claude/auto/progress.txt:
 
 ---
 
-## progress.txt Format
+## progress.md Format
 
 Append-only log with structured entries:
 
@@ -284,7 +284,7 @@ Entry types: STARTED, COMPLETED, ERROR, LEARNING, QUALITY_CHECK, COMMIT
 5. **Use quality gates**: Tests, linting, and type checking catch regressions
    before they compound across iterations.
 
-6. **Review progress.txt**: The learnings journal accumulates valuable insights.
+6. **Review progress.md**: The learnings journal accumulates valuable insights.
    Read it periodically to catch issues early.
 
 ---
@@ -295,7 +295,7 @@ When the AI agent encounters errors:
 
 1. **Within iteration**: Try to fix within the current iteration
 2. **Mark as blocked**: If unfixable, set status to "blocked" with description
-3. **Document in progress.txt**: Append error details as LEARNING entry
+3. **Document in progress.md**: Append error details as LEARNING entry
 4. **Fresh context helps**: The next iteration starts clean and may succeed
    where the previous one got stuck
 
