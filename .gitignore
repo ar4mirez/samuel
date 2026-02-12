@@ -44,6 +44,7 @@ Cargo.lock
 dist/
 build/
 bin/
+/aicof
 *.o
 *.a
 *.so
