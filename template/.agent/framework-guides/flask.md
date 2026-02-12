@@ -1,7 +1,7 @@
 # Flask Framework Guide
 
 > **Applies to**: Flask 3.0+, REST APIs, Microservices, Web Applications
-> **Language Guide**: @.agent/language-guides/python.md
+> **Language Guide**: @.agent/skills/python-guide/SKILL.md
 
 ---
 

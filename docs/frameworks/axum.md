@@ -1,7 +1,7 @@
 # Axum Framework Guide
 
 > **Applies to**: Axum 0.7+, Rust Web APIs, Microservices
-> **Complements**: `.agent/language-guides/rust.md`
+> **Complements**: `.agent/skills/rust-guide/SKILL.md`
 
 ---
 

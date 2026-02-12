@@ -74,8 +74,8 @@ You can still use the system effectively. Consider contributing a language guide
 
 ### How do I add a new language guide?
 
-1. Copy an existing guide from `.agent/language-guides/`
-2. Rename it (e.g., `java.md`)
+1. Copy an existing guide from `.agent/skills/<language>-guide/`
+2. Create a new skill directory (e.g., `java-guide/SKILL.md`)
 3. Adapt the content for your language
 4. AI will auto-load based on file extensions
 
@@ -157,7 +157,7 @@ Project-specific context that grows over time:
 
 - `project.md` - Your tech stack
 - `patterns.md` - Your conventions
-- `language-guides/` - Language-specific rules
+- `skills/<lang>-guide/` - Language-specific rules
 - `workflows/` - Structured processes
 - `memory/` - Decision logs
 
@@ -212,7 +212,7 @@ AI usually indicates the mode:
 ### AI is ignoring my language guide
 
 1. Check file extension matches
-2. Explicitly load: "Load TypeScript guide from `.agent/language-guides/typescript.md`"
+2. Explicitly load: "Load TypeScript guide from `.agent/skills/typescript-guide/SKILL.md`"
 
 ### AI is not following commits convention
 

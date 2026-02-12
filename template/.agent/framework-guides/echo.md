@@ -1,7 +1,7 @@
 # Echo Framework Guide
 
 > **Applies to**: Echo v4+, REST APIs, Microservices, High-Performance Web Applications
-> **Language Guide**: @.agent/language-guides/go.md
+> **Language Guide**: @.agent/skills/go-guide/SKILL.md
 
 ---
 

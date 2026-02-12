@@ -182,23 +182,23 @@ AI automatically loads the right guide based on file extensions:
 
 **TypeScript/JavaScript** (`.ts`, `.tsx`, `.js`, `.jsx`)
 - Strict mode, Zod validation, React patterns, async/await
-- [@.agent/language-guides/typescript.md](.agent/language-guides/typescript.md)
+- [@.agent/skills/typescript-guide/SKILL.md](.agent/skills/typescript-guide/SKILL.md)
 
 **Python** (`.py`)
 - Type hints, Pydantic, Django/FastAPI patterns, pytest
-- [@.agent/language-guides/python.md](.agent/language-guides/python.md)
+- [@.agent/skills/python-guide/SKILL.md](.agent/skills/python-guide/SKILL.md)
 
 **Go** (`.go`)
 - Error handling, concurrency, interfaces, table tests
-- [@.agent/language-guides/go.md](.agent/language-guides/go.md)
+- [@.agent/skills/go-guide/SKILL.md](.agent/skills/go-guide/SKILL.md)
 
 **Rust** (`.rs`)
 - Ownership, Result<T,E>, async, zero-cost abstractions
-- [@.agent/language-guides/rust.md](.agent/language-guides/rust.md)
+- [@.agent/skills/rust-guide/SKILL.md](.agent/skills/rust-guide/SKILL.md)
 
 **Kotlin** (`.kt`, `.kts`)
 - Null safety, coroutines, data classes, extension functions
-- [@.agent/language-guides/kotlin.md](.agent/language-guides/kotlin.md)
+- [@.agent/skills/kotlin-guide/SKILL.md](.agent/skills/kotlin-guide/SKILL.md)
 
 **No manual selection needed** - it just works!
 
@@ -276,12 +276,13 @@ your-project/
     ├── patterns.md              # Your code patterns (created when emerge)
     ├── state.md                 # Current work (optional, multi-session)
     │
-    ├── language-guides/         # Auto-load based on file type
-    │   ├── typescript.md        # TypeScript/JS patterns
-    │   ├── python.md            # Python patterns
-    │   ├── go.md                # Go patterns
-    │   ├── rust.md              # Rust patterns
-    │   └── kotlin.md            # Kotlin patterns
+    ├── skills/                  # Agent Skills (auto-load based on file type)
+    │   ├── go-guide/            # Go language guide skill
+    │   │   ├── SKILL.md         # Core guardrails and patterns
+    │   │   └── references/      # Detailed patterns, pitfalls
+    │   ├── typescript-guide/    # TypeScript language guide skill
+    │   ├── python-guide/        # Python language guide skill
+    │   └── ...                  # 18 more language guide skills
     │
     ├── workflows/               # On-demand workflows
     │   ├── create-prd.md        # Product Requirements Doc
@@ -400,7 +401,7 @@ One logical change per commit. Tests must pass. Guardrails must validate.
 - Commit format (add your own types)
 
 ### Q: How do I add a new language?
-**A:** Copy an existing guide from `.agent/language-guides/`, rename it, customize content. See `.agent/language-guides/README.md` for template.
+**A:** Create a new skill directory at `.agent/skills/<lang>-guide/` with a `SKILL.md` file. See `.agent/skills/README.md` for the format and existing guides for examples.
 
 ### Q: What if AI doesn't follow guardrails?
 **A:** Explicitly remind: "Validate all guardrails from CLAUDE.md before committing." AI will check each ✓.
@@ -451,7 +452,7 @@ AI will check: dependencies, versions, config, environment variables, common iss
 - **Quick Reference**: CLAUDE.md lines 7-30
 - **Troubleshooting**: @.agent/workflows/troubleshooting.md
 - **Initialization**: @.agent/workflows/initialize-project.md
-- **Language-specific**: @.agent/language-guides/[your-language].md
+- **Language-specific**: @.agent/skills/[your-language]-guide/SKILL.md
 
 ### Documentation
 - **Core guardrails**: [CLAUDE.md](CLAUDE.md)
@@ -527,11 +528,11 @@ AI has full context of the system and can explain anything.
 @CLAUDE.md lines 33-80
 
 # Load language guide manually (usually auto-loads)
-@.agent/language-guides/typescript.md
-@.agent/language-guides/python.md
-@.agent/language-guides/go.md
-@.agent/language-guides/rust.md
-@.agent/language-guides/kotlin.md
+@.agent/skills/typescript-guide/SKILL.md
+@.agent/skills/python-guide/SKILL.md
+@.agent/skills/go-guide/SKILL.md
+@.agent/skills/rust-guide/SKILL.md
+@.agent/skills/kotlin-guide/SKILL.md
 
 # Check current state
 cat .agent/project.md

@@ -162,7 +162,7 @@ NODE_ENV=            # development | production | test
 - Stuck >30 min? → .agent/workflows/troubleshooting.md
 - Complex feature? → .agent/workflows/create-prd.md
 - Code review? → .agent/workflows/code-review.md
-- Language-specific? → .agent/language-guides/
+- Language-specific? → .agent/skills/{lang}-guide/
 
 **Workflows** (on-demand):
 
@@ -393,7 +393,7 @@ For architecture changes, major refactors, new systems:
 ### Stage 2: Implementation
 **Always:**
 - Write tests first (TDD) or alongside code
-- Load language-specific guide: .agent/language-guides/{language}.md
+- Load language-specific guide: .agent/skills/{language}-guide/SKILL.md
 - Follow language/framework idioms
 - Validate against guardrails continuously
 - Keep changes focused (resist scope creep)

@@ -19,12 +19,12 @@ While CLAUDE.md provides universal guardrails, `.agent/` stores context specific
 ├── project.md             # Your tech stack (created when chosen)
 ├── patterns.md            # Coding patterns (created when emerge)
 ├── state.md               # Current work (for multi-session)
-├── language-guides/       # Auto-load based on file type (21 languages)
-│   ├── typescript.md
-│   ├── python.md
-│   ├── go.md
-│   ├── rust.md
-│   ├── kotlin.md
+├── skills/                # Auto-load based on file type (21 language guide skills)
+│   ├── typescript-guide/SKILL.md
+│   ├── python-guide/SKILL.md
+│   ├── go-guide/SKILL.md
+│   ├── rust-guide/SKILL.md
+│   ├── kotlin-guide/SKILL.md
 │   └── ... (16 more)
 ├── framework-guides/      # Framework-specific patterns (33 frameworks)
 │   ├── react.md
@@ -57,7 +57,7 @@ These files come with the template:
 | `README.md` | How to use .agent/ | On-demand |
 | `project.md.template` | Template for project.md | Reference |
 | `state.md.template` | Template for state.md | Reference |
-| `language-guides/*.md` | Language-specific rules (21) | Auto-load |
+| `skills/<lang>-guide/SKILL.md` | Language-specific rules (21) | Auto-load |
 | `framework-guides/*.md` | Framework-specific patterns (33) | On-demand |
 | `workflows/*.md` | Structured workflows | On-demand |
 
@@ -83,21 +83,21 @@ The directory grows naturally:
 Day 1:
 .agent/
 ├── README.md
-├── language-guides/
+├── skills/
 ├── workflows/
 └── (templates)
 
 Week 1:
 .agent/
 ├── project.md          ← Created when tech stack chosen
-├── language-guides/
+├── skills/
 └── workflows/
 
 Month 1:
 .agent/
 ├── project.md
 ├── patterns.md         ← Created when patterns emerge
-├── language-guides/
+├── skills/
 ├── workflows/
 └── tasks/
     └── 0001-prd-auth.md  ← Created for complex feature
@@ -107,7 +107,7 @@ Ongoing:
 ├── project.md
 ├── patterns.md
 ├── state.md            ← Created for long-running work
-├── language-guides/
+├── skills/
 ├── workflows/
 ├── tasks/
 │   ├── 0001-prd-auth.md
@@ -312,23 +312,23 @@ AI follows this protocol when starting a session:
 
 ---
 
-## Language Guides
+## Language Guide Skills
 
 Auto-loaded based on file extensions you're working with (21 languages):
 
 | Language | Extensions | Guide |
 |----------|------------|-------|
-| TypeScript | `.ts`, `.tsx`, `.js`, `.jsx` | `typescript.md` |
-| Python | `.py` | `python.md` |
-| Go | `.go` | `go.md` |
-| Rust | `.rs` | `rust.md` |
-| Kotlin | `.kt`, `.kts` | `kotlin.md` |
-| Java | `.java` | `java.md` |
-| C# | `.cs` | `csharp.md` |
-| PHP | `.php` | `php.md` |
-| Swift | `.swift` | `swift.md` |
-| C/C++ | `.c`, `.cpp`, `.h`, `.hpp` | `cpp.md` |
-| Ruby | `.rb` | `ruby.md` |
+| TypeScript | `.ts`, `.tsx`, `.js`, `.jsx` | `skills/typescript-guide/SKILL.md` |
+| Python | `.py` | `skills/python-guide/SKILL.md` |
+| Go | `.go` | `skills/go-guide/SKILL.md` |
+| Rust | `.rs` | `skills/rust-guide/SKILL.md` |
+| Kotlin | `.kt`, `.kts` | `skills/kotlin-guide/SKILL.md` |
+| Java | `.java` | `skills/java-guide/SKILL.md` |
+| C# | `.cs` | `skills/csharp-guide/SKILL.md` |
+| PHP | `.php` | `skills/php-guide/SKILL.md` |
+| Swift | `.swift` | `skills/swift-guide/SKILL.md` |
+| C/C++ | `.c`, `.cpp`, `.h`, `.hpp` | `skills/cpp-guide/SKILL.md` |
+| Ruby | `.rb` | `skills/ruby-guide/SKILL.md` |
 | *+ 10 more* | SQL, Shell, R, Dart, HTML/CSS, Lua, Assembly, CUDA, Solidity, Zig | |
 
 **No manual selection needed** - AI detects automatically.
@@ -397,7 +397,7 @@ On-demand workflows for structured tasks:
 - [ ] Create project.md before making decisions
 - [ ] Document every small choice
 - [ ] Over-organize the directory
-- [ ] Manually edit language guides (they're templates)
+- [ ] Manually edit language guide skills (they're templates)
 
 ---
 
@@ -408,7 +408,7 @@ On-demand workflows for structured tasks:
 ```
 ✓ CLAUDE.md
 ✓ .agent/README.md
-✓ .agent/language-guides/
+✓ .agent/skills/
 ✓ .agent/workflows/
 ✓ .agent/tasks/EXAMPLE-*.md (examples)
 ✓ .agent/project.md.template

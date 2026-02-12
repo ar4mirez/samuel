@@ -19,7 +19,7 @@ AICoF (Artificial Intelligence Coding Framework) is built on a simple but powerf
 │  ┌─────────────┐    ┌──────────────────────────────────┐   │
 │  │  CLAUDE.md  │    │           .agent/                │   │
 │  │             │    │                                  │   │
-│  │  • Commands │    │  ├── language-guides/ (auto-load)│   │
+│  │  • Commands │    │  ├── skills/ (auto-load)│   │
 │  │  • Guards   │    │  ├── workflows/ (on-demand)      │   │
 │  │  • Methods  │    │  ├── tasks/ (generated)          │   │
 │  │             │    │  ├── memory/ (decisions)         │   │
@@ -66,7 +66,7 @@ Project-specific context that grows over time:
 ├── project.md             # Your tech stack (created when chosen)
 ├── patterns.md            # Coding patterns (created when emerge)
 ├── state.md               # Current work (for multi-session)
-├── language-guides/       # Auto-load based on file type
+├── skills/                # Auto-load based on file type
 ├── workflows/             # On-demand workflows
 ├── tasks/                 # PRDs and task lists
 └── memory/                # Decision logs

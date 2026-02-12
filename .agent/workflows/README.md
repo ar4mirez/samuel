@@ -930,9 +930,9 @@ AI: "Analyzing .agent/ directory...
 ### Recommendations:
 
 #### Remove (unused guides):
-- .agent/language-guides/python.md (156 KB)
-- .agent/language-guides/go.md (142 KB)
-- .agent/language-guides/rust.md (178 KB)
+- .agent/skills/python-guide/ (156 KB)
+- .agent/skills/go-guide/ (142 KB)
+- .agent/skills/rust-guide/ (178 KB)
 - .agent/framework-guides/django.md (98 KB)
 - .agent/framework-guides/flask.md (87 KB)
 

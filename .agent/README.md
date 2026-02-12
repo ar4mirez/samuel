@@ -10,8 +10,9 @@ This directory contains project-specific context for the AICoF framework develop
 ├── project.md             # Project architecture and tech stack
 ├── patterns.md            # Coding patterns and conventions
 ├── state.md               # Current work state
-├── language-guides/       # Language-specific guardrails
-│   └── go.md              # Go language guide (this is a Go project)
+├── skills/                # Language-specific guardrails
+│   └── go-guide/          # Go language guide (this is a Go project)
+│       └── SKILL.md
 ├── framework-guides/      # Framework-specific templates (empty - no framework used)
 ├── workflows/             # All 13 workflows
 │   ├── initialize-project.md
@@ -46,6 +47,6 @@ The distributable template files are located in `template/.agent/` for distribut
 
 ## Usage
 
-- Language guide (`go.md`) is automatically loaded when working on Go files
+- Language guide (`go-guide/SKILL.md`) is automatically loaded when working on Go files
 - Workflows are available on-demand for planning, reviews, etc.
 - State and memory files track ongoing work and decisions

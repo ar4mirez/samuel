@@ -113,13 +113,13 @@ Create `.agent/active-guides.json`:
     "nextjs"
   ],
   "guides_kept": [
-    "language-guides/typescript.md",
+    "skills/typescript-guide/SKILL.md",
     "framework-guides/react.md",
     "framework-guides/nextjs.md"
   ],
   "guides_archived": [
-    "language-guides/python.md",
-    "language-guides/go.md",
+    "skills/python-guide/SKILL.md",
+    "skills/go-guide/SKILL.md",
     "..."
   ]
 }
@@ -151,12 +151,12 @@ Move unused guides to `.agent/.archive/` for potential future use:
 
 ```bash
 # Create archive directories
-mkdir -p .agent/.archive/language-guides
+mkdir -p .agent/.archive/skills
 mkdir -p .agent/.archive/framework-guides
 
-# Move unused language guides
-mv .agent/language-guides/python.md .agent/.archive/language-guides/
-mv .agent/language-guides/go.md .agent/.archive/language-guides/
+# Move unused language guide skills
+mv .agent/skills/python-guide/ .agent/.archive/skills/
+mv .agent/skills/go-guide/ .agent/.archive/skills/
 # ... (all unused)
 
 # Move unused framework guides
@@ -170,9 +170,9 @@ mv .agent/framework-guides/fastapi.md .agent/.archive/framework-guides/
 For maximum reduction, delete unused guides entirely:
 
 ```bash
-# Delete unused language guides
-rm .agent/language-guides/python.md
-rm .agent/language-guides/go.md
+# Delete unused language guide skills
+rm -rf .agent/skills/python-guide/
+rm -rf .agent/skills/go-guide/
 # ... (all unused)
 
 # Delete unused framework guides
@@ -188,7 +188,7 @@ rm .agent/framework-guides/fastapi.md
 Never remove these files regardless of stack:
 
 - `.agent/README.md` - Directory documentation
-- `.agent/language-guides/README.md` - Language guide index
+- `.agent/skills/README.md` - Language guide skills index
 - `.agent/framework-guides/README.md` - Framework guide index
 - `.agent/workflows/*.md` - All workflows (stack-agnostic)
 
@@ -402,7 +402,7 @@ If you need a pruned guide later:
 
 ```bash
 # Restore from archive
-mv .agent/.archive/language-guides/python.md .agent/language-guides/
+mv .agent/.archive/skills/python-guide/ .agent/skills/
 mv .agent/.archive/framework-guides/django.md .agent/framework-guides/
 ```
 
@@ -410,8 +410,8 @@ mv .agent/.archive/framework-guides/django.md .agent/framework-guides/
 
 ```bash
 # Re-download from template
-curl -o .agent/language-guides/python.md \
-  https://raw.githubusercontent.com/ar4mirez/aicof/main/.agent/language-guides/python.md
+curl -o .agent/skills/python-guide/SKILL.md \
+  https://raw.githubusercontent.com/ar4mirez/aicof/main/.agent/skills/python-guide/SKILL.md
 ```
 
 ### Update Manifest

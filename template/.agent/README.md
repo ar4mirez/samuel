@@ -32,12 +32,14 @@ This system is compatible with the [AGENTS.md](https://agents.md) standard (v1.0
 ├── project.md             # Tech stack, architecture, key decisions
 ├── patterns.md            # Coding patterns and conventions
 ├── state.md              # Current work, tasks, blockers
-├── language-guides/      # Language-specific guardrails (21 languages)
-│   ├── README.md         # Index of all language guides
-│   ├── typescript.md     # TypeScript/JavaScript
-│   ├── python.md         # Python
-│   ├── go.md             # Go
-│   └── ... (18 more)     # Rust, Kotlin, Java, C#, PHP, Swift, C++, Ruby, SQL, Shell, R, Dart, HTML/CSS, Lua, Assembly, CUDA, Solidity, Zig
+├── skills/               # Agent Skills (language guides, utilities)
+│   ├── README.md         # Skills documentation
+│   ├── go-guide/         # Go language guide skill
+│   │   ├── SKILL.md      # Core guardrails and patterns
+│   │   └── references/   # Detailed patterns, pitfalls, security
+│   ├── typescript-guide/  # TypeScript language guide skill
+│   ├── python-guide/      # Python language guide skill
+│   └── ... (18 more)     # rust, kotlin, java, csharp, php, swift, cpp, ruby, sql, shell, r, dart, html-css, lua, assembly, cuda, solidity, zig
 ├── framework-guides/     # Framework-specific patterns (33 frameworks)
 │   ├── README.md         # Index of all framework guides
 │   ├── react.md          # React

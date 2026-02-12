@@ -44,11 +44,11 @@ aicof/
 │   ├── CLAUDE.md             # Main AI instructions
 │   ├── AI_INSTRUCTIONS.md    # Quick start guide
 │   └── .agent/               # AI context directory
-│       ├── language-guides/  # 21 language-specific guides
+│       ├── skills/           # 21 language-specific guides
 │       ├── framework-guides/ # 33 framework-specific guides
 │       └── workflows/        # 13 structured workflows
 ├── .agent/                   # Project-specific AI context (dogfooding)
-│   ├── language-guides/      # Go guide (this is a Go project)
+│   ├── skills/               # Go guide (this is a Go project)
 │   ├── workflows/            # All 13 workflows
 │   ├── tasks/                # PRDs and task lists
 │   └── memory/               # Decision logs

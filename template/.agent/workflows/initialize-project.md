@@ -482,7 +482,7 @@ rustup update stable
 [Add to top of project.md]
 ```
 
-Then tell AI: `"I've updated project.md with our tech stack. Please load @.agent/language-guides/typescript.md"`
+Then tell AI: `"I've updated project.md with our tech stack. Please load @.agent/skills/typescript-guide/SKILL.md"`
 
 ---
 

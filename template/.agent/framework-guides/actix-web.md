@@ -1,7 +1,7 @@
 # Actix-web Framework Guide
 
 > **Applies to**: Actix-web 4+, Rust Web APIs, High-Performance Services
-> **Complements**: `.agent/language-guides/rust.md`
+> **Complements**: `.agent/skills/rust-guide/SKILL.md`
 
 ---
 

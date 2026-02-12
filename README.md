@@ -489,27 +489,27 @@ AI will:
 
 | Language | Files | Guide |
 |----------|-------|-------|
-| TypeScript/JavaScript | `.ts`, `.tsx`, `.js`, `.jsx` | [typescript.md](template/.agent/language-guides/typescript.md) |
-| Python | `.py` | [python.md](template/.agent/language-guides/python.md) |
-| Go | `.go` | [go.md](template/.agent/language-guides/go.md) |
-| Rust | `.rs` | [rust.md](template/.agent/language-guides/rust.md) |
-| Kotlin | `.kt`, `.kts` | [kotlin.md](template/.agent/language-guides/kotlin.md) |
-| Java | `.java` | [java.md](template/.agent/language-guides/java.md) |
-| C# | `.cs` | [csharp.md](template/.agent/language-guides/csharp.md) |
-| PHP | `.php` | [php.md](template/.agent/language-guides/php.md) |
-| Swift | `.swift` | [swift.md](template/.agent/language-guides/swift.md) |
-| C/C++ | `.c`, `.cpp`, `.h`, `.hpp` | [cpp.md](template/.agent/language-guides/cpp.md) |
-| Ruby | `.rb` | [ruby.md](template/.agent/language-guides/ruby.md) |
-| SQL | `.sql` | [sql.md](template/.agent/language-guides/sql.md) |
-| Shell/Bash | `.sh`, `.bash` | [shell.md](template/.agent/language-guides/shell.md) |
-| R | `.r`, `.R` | [r.md](template/.agent/language-guides/r.md) |
-| Dart/Flutter | `.dart` | [dart.md](template/.agent/language-guides/dart.md) |
-| HTML/CSS | `.html`, `.css`, `.scss` | [html-css.md](template/.agent/language-guides/html-css.md) |
-| Lua | `.lua` | [lua.md](template/.agent/language-guides/lua.md) |
-| Assembly | `.asm`, `.s` | [assembly.md](template/.agent/language-guides/assembly.md) |
-| CUDA | `.cu`, `.cuh` | [cuda.md](template/.agent/language-guides/cuda.md) |
-| Solidity | `.sol` | [solidity.md](template/.agent/language-guides/solidity.md) |
-| Zig | `.zig` | [zig.md](template/.agent/language-guides/zig.md) |
+| TypeScript/JavaScript | `.ts`, `.tsx`, `.js`, `.jsx` | [SKILL.md](template/.agent/skills/typescript-guide/SKILL.md) |
+| Python | `.py` | [SKILL.md](template/.agent/skills/python-guide/SKILL.md) |
+| Go | `.go` | [SKILL.md](template/.agent/skills/go-guide/SKILL.md) |
+| Rust | `.rs` | [SKILL.md](template/.agent/skills/rust-guide/SKILL.md) |
+| Kotlin | `.kt`, `.kts` | [SKILL.md](template/.agent/skills/kotlin-guide/SKILL.md) |
+| Java | `.java` | [SKILL.md](template/.agent/skills/java-guide/SKILL.md) |
+| C# | `.cs` | [SKILL.md](template/.agent/skills/csharp-guide/SKILL.md) |
+| PHP | `.php` | [SKILL.md](template/.agent/skills/php-guide/SKILL.md) |
+| Swift | `.swift` | [SKILL.md](template/.agent/skills/swift-guide/SKILL.md) |
+| C/C++ | `.c`, `.cpp`, `.h`, `.hpp` | [SKILL.md](template/.agent/skills/cpp-guide/SKILL.md) |
+| Ruby | `.rb` | [SKILL.md](template/.agent/skills/ruby-guide/SKILL.md) |
+| SQL | `.sql` | [SKILL.md](template/.agent/skills/sql-guide/SKILL.md) |
+| Shell/Bash | `.sh`, `.bash` | [SKILL.md](template/.agent/skills/shell-guide/SKILL.md) |
+| R | `.r`, `.R` | [SKILL.md](template/.agent/skills/r-guide/SKILL.md) |
+| Dart/Flutter | `.dart` | [SKILL.md](template/.agent/skills/dart-guide/SKILL.md) |
+| HTML/CSS | `.html`, `.css`, `.scss` | [SKILL.md](template/.agent/skills/html-css-guide/SKILL.md) |
+| Lua | `.lua` | [SKILL.md](template/.agent/skills/lua-guide/SKILL.md) |
+| Assembly | `.asm`, `.s` | [SKILL.md](template/.agent/skills/assembly-guide/SKILL.md) |
+| CUDA | `.cu`, `.cuh` | [SKILL.md](template/.agent/skills/cuda-guide/SKILL.md) |
+| Solidity | `.sol` | [SKILL.md](template/.agent/skills/solidity-guide/SKILL.md) |
+| Zig | `.zig` | [SKILL.md](template/.agent/skills/zig-guide/SKILL.md) |
 
 ### Framework Guides (On-Demand)
 
@@ -555,7 +555,7 @@ aicof/
 │   ├── CLAUDE.md               # Main AI instructions (copy to your project)
 │   ├── AI_INSTRUCTIONS.md      # Quick start guide
 │   └── .agent/                 # AI context directory
-│       ├── language-guides/    # 21 language-specific guides
+│       ├── skills/             # 21 language-specific guides
 │       ├── framework-guides/   # 33 framework-specific guides
 │       └── workflows/          # 13 structured workflows
 ├── cmd/aicof/                  # CLI entry point

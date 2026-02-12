@@ -178,7 +178,7 @@ cp .env.example .env
 
 For detailed development guidelines, see:
 - **Full Methodology**: [CLAUDE.md](./CLAUDE.md)
-- **Language Guide**: [.agent/language-guides/](./agent/language-guides/)
+- **Language Guide**: [.agent/skills/](./agent/skills/)
 - **Workflows**: [.agent/workflows/](./agent/workflows/)
 
 *This file follows the [AGENTS.md](https://agents.md) standard.*

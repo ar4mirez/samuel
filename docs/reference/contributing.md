@@ -26,8 +26,8 @@ Add support for languages not yet covered:
 
 **How to contribute**:
 
-1. Copy an existing guide from `.agent/language-guides/`
-2. Rename to your language (e.g., `java.md`)
+1. Copy an existing guide from `.agent/skills/<language>-guide/`
+2. Create a new skill directory for your language (e.g., `java-guide/SKILL.md`)
 3. Adapt all sections for your language
 4. Test with real projects
 5. Submit PR
