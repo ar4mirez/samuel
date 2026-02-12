@@ -113,23 +113,22 @@ release:
 
     **Full Changelog**: https://github.com/ar4mirez/samuel/compare/{{ .PreviousTag }}...{{ .Tag }}
 
-homebrew_casks:
+brews:
   - name: samuel
-    binaries:
+    ids:
       - samuel
     repository:
       owner: ar4mirez
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    directory: Casks
+    directory: Formula
     homepage: "https://github.com/ar4mirez/samuel"
-    description: "CLI for managing the Samuel (Artificial Intelligence Coding Framework)"
-    hooks:
-      post:
-        install: |
-          if OS.mac?
-            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/samuel"]
-          end
+    description: "CLI for managing the Samuel AI Coding Framework"
+    license: "MIT"
+    install: |
+      bin.install "samuel"
+    test: |
+      system "#{bin}/samuel", "version"
 
 # Announce via webhook (optional)
 # announce:
