@@ -97,7 +97,9 @@ func TestLoadAutoPRD_InvalidJSON(t *testing.T) {
 	dir := t.TempDir()
 	prdPath := filepath.Join(dir, "prd.json")
 
-	os.WriteFile(prdPath, []byte("{invalid json"), 0644)
+	if err := os.WriteFile(prdPath, []byte("{invalid json"), 0644); err != nil {
+		t.Fatalf("failed to write PRD file: %v", err)
+	}
 
 	_, err := LoadAutoPRD(prdPath)
 	if err == nil {

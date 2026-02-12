@@ -259,24 +259,28 @@ func TestConvertMarkdownToPRD(t *testing.T) {
 	dir := t.TempDir()
 
 	prdPath := filepath.Join(dir, "0001-prd-auth.md")
-	os.WriteFile(prdPath, []byte(`# User Authentication
+	if err := os.WriteFile(prdPath, []byte(`# User Authentication
 
 ## Introduction
 This feature adds user authentication.
 
 ## Goals
 1. Allow users to create accounts
-`), 0644)
+`), 0644); err != nil {
+		t.Fatalf("failed to write PRD file: %v", err)
+	}
 
 	tasksPath := filepath.Join(dir, "tasks-0001-prd-auth.md")
-	os.WriteFile(tasksPath, []byte(`## Task List
+	if err := os.WriteFile(tasksPath, []byte(`## Task List
 
 - [ ] 1.0 Database Setup
   - [ ] 1.1 Create user schema [~2,000 tokens - Simple]
   - [ ] 1.2 Run migrations [~1,000 tokens - Simple]
 - [ ] 2.0 Auth Service
   - [ ] 2.1 Password hashing [~3,000 tokens - Medium]
-`), 0644)
+`), 0644); err != nil {
+		t.Fatalf("failed to write tasks file: %v", err)
+	}
 
 	prd, err := ConvertMarkdownToPRD(prdPath, tasksPath)
 	if err != nil {
@@ -304,7 +308,9 @@ func TestConvertMarkdownToPRD_PRDOnly(t *testing.T) {
 	dir := t.TempDir()
 
 	prdPath := filepath.Join(dir, "0001-prd-feature.md")
-	os.WriteFile(prdPath, []byte("# My Feature\n\nSome description."), 0644)
+	if err := os.WriteFile(prdPath, []byte("# My Feature\n\nSome description."), 0644); err != nil {
+		t.Fatalf("failed to write PRD file: %v", err)
+	}
 
 	prd, err := ConvertMarkdownToPRD(prdPath, "")
 	if err != nil {
@@ -329,7 +335,9 @@ func TestConvertMarkdownToPRD_MissingPRD(t *testing.T) {
 func TestConvertMarkdownToPRD_MissingTasks(t *testing.T) {
 	dir := t.TempDir()
 	prdPath := filepath.Join(dir, "prd.md")
-	os.WriteFile(prdPath, []byte("# Test"), 0644)
+	if err := os.WriteFile(prdPath, []byte("# Test"), 0644); err != nil {
+		t.Fatalf("failed to write PRD file: %v", err)
+	}
 
 	_, err := ConvertMarkdownToPRD(prdPath, "/nonexistent/tasks.md")
 	if err == nil {
@@ -404,7 +412,9 @@ func TestFindTasksFile(t *testing.T) {
 	dir := t.TempDir()
 
 	prdPath := filepath.Join(dir, "0001-prd-feature.md")
-	os.WriteFile(prdPath, []byte("# PRD"), 0644)
+	if err := os.WriteFile(prdPath, []byte("# PRD"), 0644); err != nil {
+		t.Fatalf("failed to write PRD file: %v", err)
+	}
 
 	// No tasks file yet
 	if got := FindTasksFile(prdPath); got != "" {
@@ -413,7 +423,9 @@ func TestFindTasksFile(t *testing.T) {
 
 	// Create the tasks file
 	tasksPath := filepath.Join(dir, "tasks-0001-prd-feature.md")
-	os.WriteFile(tasksPath, []byte("# Tasks"), 0644)
+	if err := os.WriteFile(tasksPath, []byte("# Tasks"), 0644); err != nil {
+		t.Fatalf("failed to write tasks file: %v", err)
+	}
 
 	if got := FindTasksFile(prdPath); got != tasksPath {
 		t.Errorf("expected %s, got %s", tasksPath, got)

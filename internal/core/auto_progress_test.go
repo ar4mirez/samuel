@@ -120,7 +120,9 @@ func TestReadProgressTail(t *testing.T) {
 
 	// Write 5 lines
 	content := "line1\nline2\nline3\nline4\nline5\n"
-	os.WriteFile(path, []byte(content), 0644)
+	if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+		t.Fatalf("failed to write progress file: %v", err)
+	}
 
 	tests := []struct {
 		name  string
