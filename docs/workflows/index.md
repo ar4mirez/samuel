@@ -39,7 +39,7 @@ Workflows are structured processes for handling specific types of tasks. They're
 | [Cleanup Project](cleanup-project.md) | Prune unused guides | Post-init, quarterly |
 | [Refactoring](refactoring.md) | Technical debt remediation | Guardrail violations |
 | [Dependency Update](dependency-update.md) | Safe dependency updates | Monthly, vulnerabilities |
-| [Update Framework](update-framework.md) | Update AICoF version | New releases, maintenance |
+| [Update Framework](update-framework.md) | Update Samuel version | New releases, maintenance |
 | [Troubleshooting](troubleshooting.md) | Debug systematically | Stuck >30 minutes |
 | [Generate AGENTS.md](generate-agents-md.md) | Cross-tool compatibility | Multi-tool teams |
 | [Document Work](document-work.md) | Capture patterns and decisions | End of session, handoffs |
@@ -78,7 +78,7 @@ graph TD
     B -->|Complex Feature| E{>10 files?}
     B -->|Debugging| F{Stuck >30 min?}
     B -->|Cross-tool Setup| G[generate-agents-md.md]
-    B -->|Update AICoF| H[update-framework.md]
+    B -->|Update Samuel| H[update-framework.md]
     B -->|Document Session| I[document-work.md]
     B -->|Autonomous Dev| P{PRD + Tasks ready?}
     B -->|New AI Skill| Q[create-skill.md]
@@ -322,7 +322,7 @@ Workflows can be chained for complex tasks:
 
     ---
 
-    Update AICoF to latest version while preserving customizations.
+    Update Samuel to latest version while preserving customizations.
 
     [:octicons-arrow-right-24: Update Framework](update-framework.md)
 

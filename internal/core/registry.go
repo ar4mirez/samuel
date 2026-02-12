@@ -1,13 +1,13 @@
 package core
 
-// DefaultRegistry is the default GitHub repository for AICoF
-const DefaultRegistry = "https://github.com/ar4mirez/aicof"
+// DefaultRegistry is the default GitHub repository for Samuel
+const DefaultRegistry = "https://github.com/ar4mirez/samuel"
 
 // DefaultOwner is the GitHub owner
 const DefaultOwner = "ar4mirez"
 
 // DefaultRepo is the GitHub repository name
-const DefaultRepo = "aicof"
+const DefaultRepo = "samuel"
 
 // TemplatePrefix is the path prefix in the repository where template files are stored
 // This allows the CLI to find source files in the downloaded archive
@@ -123,7 +123,7 @@ var Workflows = []Component{
 	{Name: "cleanup-project", Path: ".claude/skills/cleanup-project", Description: "Prune unused guides", Category: "workflow", Tags: []string{"cleanup", "prune", "unused", "maintenance"}},
 	{Name: "refactoring", Path: ".claude/skills/refactoring", Description: "Technical debt remediation", Category: "workflow", Tags: []string{"refactor", "debt", "improve", "restructure"}},
 	{Name: "dependency-update", Path: ".claude/skills/dependency-update", Description: "Safe dependency updates", Category: "workflow", Tags: []string{"dependencies", "update", "upgrade", "packages"}},
-	{Name: "update-framework", Path: ".claude/skills/update-framework", Description: "AICoF version updates", Category: "workflow", Tags: []string{"aicof", "update", "version", "migrate"}},
+	{Name: "update-framework", Path: ".claude/skills/update-framework", Description: "Samuel version updates", Category: "workflow", Tags: []string{"samuel", "update", "version", "migrate"}},
 	// Utility
 	{Name: "troubleshooting", Path: ".claude/skills/troubleshooting", Description: "Debugging workflow", Category: "workflow", Tags: []string{"debug", "stuck", "error", "fix"}},
 	{Name: "generate-agents-md", Path: ".claude/skills/generate-agents-md", Description: "Cross-tool compatibility", Category: "workflow", Tags: []string{"agents-md", "compatibility", "cross-tool"}},
@@ -204,7 +204,7 @@ var Skills = []Component{
 	{Name: "cleanup-project", Path: ".claude/skills/cleanup-project", Description: "Prune unused guides workflow", Category: "workflow", Tags: []string{"cleanup", "prune", "maintenance"}},
 	{Name: "refactoring", Path: ".claude/skills/refactoring", Description: "Technical debt remediation workflow", Category: "workflow", Tags: []string{"refactor", "debt", "improve"}},
 	{Name: "dependency-update", Path: ".claude/skills/dependency-update", Description: "Safe dependency updates workflow", Category: "workflow", Tags: []string{"dependencies", "update", "upgrade"}},
-	{Name: "update-framework", Path: ".claude/skills/update-framework", Description: "AICoF version updates workflow", Category: "workflow", Tags: []string{"aicof", "update", "version"}},
+	{Name: "update-framework", Path: ".claude/skills/update-framework", Description: "Samuel version updates workflow", Category: "workflow", Tags: []string{"samuel", "update", "version"}},
 	{Name: "troubleshooting", Path: ".claude/skills/troubleshooting", Description: "Debugging workflow", Category: "workflow", Tags: []string{"debug", "stuck", "error"}},
 	{Name: "generate-agents-md", Path: ".claude/skills/generate-agents-md", Description: "Cross-tool compatibility workflow", Category: "workflow", Tags: []string{"agents-md", "compatibility"}},
 	{Name: "document-work", Path: ".claude/skills/document-work", Description: "Capture patterns workflow", Category: "workflow", Tags: []string{"document", "patterns", "decisions"}},

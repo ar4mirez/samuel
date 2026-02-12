@@ -6,7 +6,7 @@ description: |
   Supports both automated checking and interactive review modes.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---

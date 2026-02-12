@@ -7,15 +7,15 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
 var doctorCmd = &cobra.Command{
 	Use:   "doctor",
-	Short: "Check AICoF installation health",
-	Long: `Verify the AICoF framework installation is complete and healthy.
+	Short: "Check Samuel installation health",
+	Long: `Verify the Samuel framework installation is complete and healthy.
 
 Checks performed:
 - Config file exists and is valid
@@ -25,8 +25,8 @@ Checks performed:
 - Directory structure is correct
 
 Examples:
-  aicof doctor           # Run health check
-  aicof doctor --fix     # Auto-fix issues where possible`,
+  samuel doctor           # Run health check
+  samuel doctor --fix     # Auto-fix issues where possible`,
 	RunE: runDoctor,
 }
 
@@ -45,7 +45,7 @@ type checkResult struct {
 func runDoctor(cmd *cobra.Command, args []string) error {
 	autoFix, _ := cmd.Flags().GetBool("fix")
 
-	ui.Header("AICoF Health Check")
+	ui.Header("Samuel Health Check")
 
 	// Get current directory
 	cwd, err := os.Getwd()
@@ -62,7 +62,7 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 			results = append(results, checkResult{
 				name:    "Config file",
 				passed:  false,
-				message: "aicof.yaml not found",
+				message: "samuel.yaml not found",
 				fixable: false,
 			})
 		} else {
@@ -77,7 +77,7 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		results = append(results, checkResult{
 			name:    "Config file",
 			passed:  true,
-			message: fmt.Sprintf("aicof.yaml found (v%s)", config.Version),
+			message: fmt.Sprintf("samuel.yaml found (v%s)", config.Version),
 		})
 	}
 
@@ -350,7 +350,7 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		ui.Error("%d checks failed, %d passed", failedCount, passedCount)
 
 		if fixableCount > 0 && !autoFix {
-			ui.Info("\n%d issues can be auto-fixed. Run 'aicof doctor --fix' to repair.", fixableCount)
+			ui.Info("\n%d issues can be auto-fixed. Run 'samuel doctor --fix' to repair.", fixableCount)
 		}
 	}
 
@@ -399,7 +399,7 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 				}
 			}
 
-			ui.Success("Fix complete. Run 'aicof doctor' again to verify.")
+			ui.Success("Fix complete. Run 'samuel doctor' again to verify.")
 		}
 	}
 

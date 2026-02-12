@@ -1,13 +1,13 @@
-# AICoF CLI Makefile
+# Samuel CLI Makefile
 
 # Build variables
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
 COMMIT ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo "none")
 BUILD_DATE ?= $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-LDFLAGS := -ldflags "-X github.com/ar4mirez/aicof/internal/commands.Version=$(VERSION) \
-	-X github.com/ar4mirez/aicof/internal/commands.Commit=$(COMMIT) \
-	-X github.com/ar4mirez/aicof/internal/commands.BuildDate=$(BUILD_DATE)"
+LDFLAGS := -ldflags "-X github.com/ar4mirez/samuel/internal/commands.Version=$(VERSION) \
+	-X github.com/ar4mirez/samuel/internal/commands.Commit=$(COMMIT) \
+	-X github.com/ar4mirez/samuel/internal/commands.BuildDate=$(BUILD_DATE)"
 
 # Go parameters
 GOCMD := go
@@ -19,11 +19,11 @@ GOFMT := gofmt
 GOLINT := golangci-lint
 
 # Binary name
-BINARY_NAME := aicof
+BINARY_NAME := samuel
 BINARY_PATH := ./bin/$(BINARY_NAME)
 
 # Main package
-MAIN_PACKAGE := ./cmd/aicof
+MAIN_PACKAGE := ./cmd/samuel
 
 .PHONY: all build clean test lint fmt deps help install uninstall docs docs-serve
 
@@ -52,7 +52,7 @@ build-all:
 install: build
 	@echo "Installing $(BINARY_NAME) to /usr/local/bin..."
 	@cp $(BINARY_PATH) /usr/local/bin/$(BINARY_NAME)
-	@echo "Installed. Run 'aicof version' to verify."
+	@echo "Installed. Run 'samuel version' to verify."
 
 ## Uninstall
 uninstall:
@@ -149,7 +149,7 @@ docs-serve:
 
 ## Help
 help:
-	@echo "AICoF CLI Makefile"
+	@echo "Samuel CLI Makefile"
 	@echo ""
 	@echo "Usage:"
 	@echo "  make [target]"

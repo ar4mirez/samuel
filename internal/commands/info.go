@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -21,10 +21,10 @@ Shows description, file path, size, installation status, and related components.
 Use --preview to see the first few lines of the guide.
 
 Examples:
-  aicof info framework react          # Info about React framework
-  aicof info lang typescript          # Info about TypeScript
-  aicof info wf create-prd            # Info about create-prd workflow
-  aicof info fw nextjs --preview 15   # Show first 15 lines
+  samuel info framework react          # Info about React framework
+  samuel info lang typescript          # Info about TypeScript
+  samuel info wf create-prd            # Info about create-prd workflow
+  samuel info fw nextjs --preview 15   # Show first 15 lines
 
 Types (with aliases):
   language   (lang, l)   Language guides
@@ -55,7 +55,7 @@ func runInfo(cmd *cobra.Command, args []string) error {
 	component := findComponent(componentType, componentName)
 	if component == nil {
 		ui.Error("Component not found: %s %s", componentType, componentName)
-		ui.Info("Use 'aicof search %s' to find available components", componentName)
+		ui.Info("Use 'samuel search %s' to find available components", componentName)
 		return fmt.Errorf("component not found")
 	}
 

@@ -3,7 +3,7 @@ package commands
 import (
 	"testing"
 
-	"github.com/ar4mirez/aicof/internal/core"
+	"github.com/ar4mirez/samuel/internal/core"
 )
 
 func TestMatchScore(t *testing.T) {

@@ -1,22 +1,22 @@
 ---
-title: AICoF
+title: Samuel
 description: Artificial Intelligence Coding Framework - Build smarter, faster, and more scalable software
 ---
 
-# AICoF
+# Samuel
 
 **Artificial Intelligence Coding Framework**
 
 Build smarter, faster, and more scalable software.
 
 [:material-rocket-launch: Get Started](getting-started/quick-start.md){ .md-button .md-button--primary }
-[:material-github: View on GitHub](https://github.com/ar4mirez/aicof){ .md-button }
+[:material-github: View on GitHub](https://github.com/ar4mirez/samuel){ .md-button }
 
 ---
 
-## What is AICoF?
+## What is Samuel?
 
-AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI development framework** designed for professional software teams. It provides guardrails, language guides, and workflows that help AI coding assistants produce consistent, high-quality code.
+Samuel (Artificial Intelligence Coding Framework) is an **opinionated AI development framework** designed for professional software teams. It provides guardrails, language guides, and workflows that help AI coding assistants produce consistent, high-quality code.
 
 <div class="grid cards" markdown>
 
@@ -78,27 +78,27 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 
     ```bash
     # 1. Install the CLI
-    brew tap ar4mirez/tap && brew install aicof
-    # Or: curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
+    brew tap ar4mirez/tap && brew install samuel
+    # Or: curl -sSL https://raw.githubusercontent.com/ar4mirez/samuel/main/install.sh | sh
 
     # 2. Initialize your project
     cd your-project
-    aicof init
+    samuel init
 
     # 3. Discover and add components
-    aicof search react              # Find components
-    aicof info fw react --preview   # Preview before installing
-    aicof add framework react       # Install what you need
+    samuel search react              # Find components
+    samuel info fw react --preview   # Preview before installing
+    samuel add framework react       # Install what you need
 
     # 4. Verify installation
-    aicof doctor
+    samuel doctor
     ```
 
 === "Manual Setup"
 
     ```bash
     # 1. Copy to your project
-    cp -r /path/to/aicof/{CLAUDE.md,.claude} ./
+    cp -r /path/to/samuel/{CLAUDE.md,.claude} ./
 
     # 2. (Optional) For cross-tool compatibility
     ln -s CLAUDE.md AGENTS.md
@@ -207,9 +207,9 @@ graph LR
 
 ## What's New in v2.0.0
 
-- **Autonomous AI Coding Loop** - Ralph Wiggum methodology for unattended AI-driven development (`aicof auto`)
+- **Autonomous AI Coding Loop** - Ralph Wiggum methodology for unattended AI-driven development (`samuel auto`)
 - **Native `.claude/` Integration** - Migrated from `.agent/` to `.claude/` native directory
-- **Agent Skills Standard** - Portable skill modules across 25+ AI tools (`aicof skill`)
+- **Agent Skills Standard** - Portable skill modules across 25+ AI tools (`samuel skill`)
 - **Per-folder CLAUDE.md** - Hierarchical instructions with folder-level overrides
 
 [:octicons-arrow-right-24: Full Changelog](reference/changelog.md)
@@ -262,7 +262,7 @@ This framework embraces:
 
     Star, fork, or contribute.
 
-    [:octicons-arrow-right-24: View Repository](https://github.com/ar4mirez/aicof)
+    [:octicons-arrow-right-24: View Repository](https://github.com/ar4mirez/samuel)
 
 -   :material-bug:{ .lg .middle } **Issues**
 
@@ -270,7 +270,7 @@ This framework embraces:
 
     Report bugs or request features.
 
-    [:octicons-arrow-right-24: Open Issue](https://github.com/ar4mirez/aicof/issues)
+    [:octicons-arrow-right-24: Open Issue](https://github.com/ar4mirez/samuel/issues)
 
 -   :material-chat:{ .lg .middle } **Discussions**
 
@@ -278,6 +278,6 @@ This framework embraces:
 
     Ask questions and share ideas.
 
-    [:octicons-arrow-right-24: Join Discussion](https://github.com/ar4mirez/aicof/discussions)
+    [:octicons-arrow-right-24: Join Discussion](https://github.com/ar4mirez/samuel/discussions)
 
 </div>

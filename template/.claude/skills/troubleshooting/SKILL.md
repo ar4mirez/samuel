@@ -6,7 +6,7 @@ description: |
   to diagnose and fix problems.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---

@@ -4,22 +4,22 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List installed or available components",
-	Long: `List AICoF components (languages, frameworks, workflows).
+	Long: `List Samuel components (languages, frameworks, workflows).
 
 By default, shows installed components. Use --available to show all available components.
 
 Examples:
-  aicof list                    # List installed components
-  aicof list --available        # List all available components
-  aicof list --type languages   # Filter by type`,
+  samuel list                    # List installed components
+  samuel list --available        # List all available components
+  samuel list --type languages   # Filter by type`,
 	RunE: runList,
 }
 
@@ -44,14 +44,14 @@ func listInstalled(typeFilter string) error {
 	config, err := core.LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
-			ui.Warn("No AICoF installation found in current directory")
-			ui.Info("Run 'aicof init' to initialize or 'aicof list --available' to see available components")
+			ui.Warn("No Samuel installation found in current directory")
+			ui.Info("Run 'samuel init' to initialize or 'samuel list --available' to see available components")
 			return nil
 		}
 		return fmt.Errorf("failed to load config: %w", err)
 	}
 
-	ui.Bold("AICoF Framework v%s", config.Version)
+	ui.Bold("Samuel Framework v%s", config.Version)
 	fmt.Println()
 
 	// Languages
@@ -115,7 +115,7 @@ func listInstalled(typeFilter string) error {
 }
 
 func listAvailable(typeFilter string) error {
-	ui.Bold("Available AICoF Components")
+	ui.Bold("Available Samuel Components")
 	fmt.Println()
 
 	// Check if installed to mark installed items

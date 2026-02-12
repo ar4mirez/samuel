@@ -1,12 +1,12 @@
 ---
 name: update-framework
 description: |
-  AICoF version update workflow. Use when upgrading to a new AICoF version,
+  Samuel version update workflow. Use when upgrading to a new Samuel version,
   migrating framework configurations, or applying upstream template changes
   while preserving local customizations.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---
@@ -110,7 +110,7 @@ Files that are typically NOT customized:
 
 ```bash
 # Clone latest version to temporary directory
-git clone --depth 1 https://github.com/ar4mirez/aicof.git .ai-update-temp
+git clone --depth 1 https://github.com/ar4mirez/samuel.git .ai-update-temp
 
 # Check latest version
 grep "Current Version" .ai-update-temp/CLAUDE.md
@@ -121,12 +121,12 @@ grep "Current Version" .ai-update-temp/CLAUDE.md
 ```bash
 # Update subtree
 git subtree pull --prefix=.ai-template \
-    https://github.com/ar4mirez/aicof.git main --squash
+    https://github.com/ar4mirez/samuel.git main --squash
 ```
 
 ### Method C: Download ZIP
 
-1. Go to [GitHub Releases](https://github.com/ar4mirez/aicof/releases)
+1. Go to [GitHub Releases](https://github.com/ar4mirez/samuel/releases)
 2. Download latest release
 3. Extract to temporary directory
 
@@ -347,7 +347,7 @@ Start a new AI session and verify:
 ```
 @.claude/skills/update-framework/SKILL.md
 
-Update to the latest version of AICoF
+Update to the latest version of Samuel
 ```
 
 **AI Will:**

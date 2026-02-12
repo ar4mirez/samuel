@@ -40,7 +40,7 @@ Before creating the skill, clarify its purpose:
 ### Step 2: Scaffold the Skill
 
 ```bash
-aicof skill create <skill-name>
+samuel skill create <skill-name>
 ```
 
 **Name requirements:**
@@ -106,10 +106,10 @@ Keep the body **under 500 lines** — use reference files for detailed content.
 
 ```bash
 # Validate specific skill
-aicof skill validate <skill-name>
+samuel skill validate <skill-name>
 
 # Validate all skills
-aicof skill validate
+samuel skill validate
 ```
 
 **Validation checks:**
@@ -178,7 +178,7 @@ Before finalizing your skill:
 - [ ] SKILL.md body is under 500 lines
 - [ ] Instructions are clear and step-by-step
 - [ ] Examples show input/output pairs
-- [ ] Validation passes (`aicof skill validate`)
+- [ ] Validation passes (`samuel skill validate`)
 - [ ] Tested with real scenarios
 - [ ] Scripts handle errors gracefully (if applicable)
 

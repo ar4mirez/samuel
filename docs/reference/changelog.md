@@ -5,7 +5,7 @@ description: Version history and updates
 
 # Changelog
 
-All notable changes to AICoF (Artificial Intelligence Coding Framework).
+All notable changes to Samuel (Artificial Intelligence Coding Framework).
 
 ---
 
@@ -18,11 +18,11 @@ Breaking change: migrated from `.agent/` to `.claude/` native directory. Added a
 ### Added
 
 - **Autonomous AI Coding Loop** (Ralph Wiggum methodology):
-  - `aicof auto init` - Initialize autonomous loop from PRD
-  - `aicof auto convert` - Convert markdown PRD/tasks to prd.json
-  - `aicof auto status` - Show loop progress
-  - `aicof auto start` - Begin/resume autonomous execution
-  - `aicof auto task` - Manage tasks (list, complete, skip, reset, add)
+  - `samuel auto init` - Initialize autonomous loop from PRD
+  - `samuel auto convert` - Convert markdown PRD/tasks to prd.json
+  - `samuel auto status` - Show loop progress
+  - `samuel auto start` - Begin/resume autonomous execution
+  - `samuel auto task` - Manage tasks (list, complete, skip, reset, add)
 - **Auto workflow skill** at `.claude/skills/auto/SKILL.md`
 - **Per-folder CLAUDE.md** support for hierarchical instructions
 - **Auto config keys**: `auto.enabled`, `auto.ai_tool`, `auto.max_iterations`, `auto.quality_checks`
@@ -53,10 +53,10 @@ Added Agent Skills support following the open standard for AI agent capabilities
 ### Added
 
 - **Agent Skills Management CLI**:
-  - `aicof skill create <name>` - Scaffold new skills
-  - `aicof skill validate [name]` - Validate against Agent Skills specification
-  - `aicof skill list` - List installed skills
-  - `aicof skill info <name>` - Show skill details
+  - `samuel skill create <name>` - Scaffold new skills
+  - `samuel skill validate [name]` - Validate against Agent Skills specification
+  - `samuel skill list` - List installed skills
+  - `samuel skill info <name>` - Show skill details
 - **Create Skill workflow** at `.claude/skills/create-skill/SKILL.md`
 - Skills compatible with 25+ agent products
 - `installed.skills` config key
@@ -74,11 +74,11 @@ Added Agent Skills support following the open standard for AI agent capabilities
 
 ### Rebrand and CLI Enhancements
 
-Rebranded to AICoF (Artificial Intelligence Coding Framework) with expanded CLI capabilities.
+Rebranded to Samuel (Artificial Intelligence Coding Framework) with expanded CLI capabilities.
 
 ### Added
 
-- **Rebranded to AICoF** - clearer identity for the framework
+- **Rebranded to Samuel** - clearer identity for the framework
 - **AGENTS.md Compatible** - cross-tool support for 20+ AI coding tools
 
 ### Changed
@@ -274,7 +274,7 @@ Focus on reducing token usage while adding critical guardrails.
 
 ### Initial Release
 
-First public release of AICoF (formerly AI Code Template).
+First public release of Samuel (formerly AI Code Template).
 
 ### Added
 
@@ -323,7 +323,7 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 **Breaking change**: Full migration from `.agent/` to `.claude/`.
 
-1. Run `aicof update --version 2.0.0` (handles migration automatically)
+1. Run `samuel update --version 2.0.0` (handles migration automatically)
 2. Or manually:
    - Move `.agent/` contents to `.claude/skills/`
    - Delete `.agent/` directory
@@ -333,9 +333,9 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ### From 1.7.x to 1.8.x
 
-1. New CLI commands available: `aicof skill create|validate|list|info`
+1. New CLI commands available: `samuel skill create|validate|list|info`
 2. Skills directory `.claude/skills/` now follows Agent Skills standard
-3. Optional: Create custom skills with `aicof skill create <name>`
+3. Optional: Create custom skills with `samuel skill create <name>`
 
 ### From 1.4.x to 1.5.x
 
@@ -398,6 +398,6 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ## Links
 
-- [GitHub Repository](https://github.com/ar4mirez/aicof)
-- [Issues](https://github.com/ar4mirez/aicof/issues)
-- [Discussions](https://github.com/ar4mirez/aicof/discussions)
+- [GitHub Repository](https://github.com/ar4mirez/samuel)
+- [Issues](https://github.com/ar4mirez/samuel/issues)
+- [Discussions](https://github.com/ar4mirez/samuel/discussions)

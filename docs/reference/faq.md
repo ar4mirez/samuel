@@ -1,11 +1,11 @@
 ---
 title: FAQ
-description: Frequently asked questions about AICoF
+description: Frequently asked questions about Samuel
 ---
 
 # Frequently Asked Questions
 
-Common questions about AICoF (Artificial Intelligence Coding Framework).
+Common questions about Samuel (Artificial Intelligence Coding Framework).
 
 ---
 
@@ -25,7 +25,7 @@ ln -s CLAUDE.md AGENTS.md
 
 ### Is this free to use?
 
-**Yes.** AICoF is open source under the MIT license. Use it for personal or commercial projects.
+**Yes.** Samuel is open source under the MIT license. Use it for personal or commercial projects.
 
 ---
 
@@ -246,18 +246,18 @@ Use conventional commits:
 
 Open an issue on GitHub:
 
-- [GitHub Issues](https://github.com/ar4mirez/aicof/issues)
+- [GitHub Issues](https://github.com/ar4mirez/samuel/issues)
 
 ### How do I suggest improvements?
 
 Open a discussion:
 
-- [GitHub Discussions](https://github.com/ar4mirez/aicof/discussions)
+- [GitHub Discussions](https://github.com/ar4mirez/samuel/discussions)
 
 ---
 
 ## Still Have Questions?
 
 - **Documentation**: Browse this site
-- **GitHub Issues**: [Report bugs](https://github.com/ar4mirez/aicof/issues)
-- **Discussions**: [Ask questions](https://github.com/ar4mirez/aicof/discussions)
+- **GitHub Issues**: [Report bugs](https://github.com/ar4mirez/samuel/issues)
+- **Discussions**: [Ask questions](https://github.com/ar4mirez/samuel/discussions)

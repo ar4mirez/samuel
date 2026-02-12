@@ -1,6 +1,6 @@
 #!/bin/sh
-# AICoF CLI Installer
-# Usage: curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
+# Samuel CLI Installer
+# Usage: curl -sSL https://raw.githubusercontent.com/ar4mirez/samuel/main/install.sh | sh
 #
 # This script detects your OS and architecture, downloads the appropriate
 # binary from GitHub releases, and installs it to /usr/local/bin (or a
@@ -9,8 +9,8 @@
 set -e
 
 # Configuration
-GITHUB_REPO="ar4mirez/aicof"
-BINARY_NAME="aicof"
+GITHUB_REPO="ar4mirez/samuel"
+BINARY_NAME="samuel"
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
 
 # Colors for output
@@ -107,14 +107,14 @@ verify_checksum() {
 # Main installation
 main() {
     echo ""
-    echo "  █████╗ ██╗ ██████╗ ██████╗ ███████╗"
-    echo " ██╔══██╗██║██╔════╝██╔═══██╗██╔════╝"
-    echo " ███████║██║██║     ██║   ██║█████╗  "
-    echo " ██╔══██║██║██║     ██║   ██║██╔══╝  "
-    echo " ██║  ██║██║╚██████╗╚██████╔╝██║     "
-    echo " ╚═╝  ╚═╝╚═╝ ╚═════╝ ╚═════╝ ╚═╝     "
+    echo " ███████╗ █████╗ ███╗   ███╗██╗   ██╗███████╗██╗     "
+    echo " ██╔════╝██╔══██╗████╗ ████║██║   ██║██╔════╝██║     "
+    echo " ███████╗███████║██╔████╔██║██║   ██║█████╗  ██║     "
+    echo " ╚════██║██╔══██║██║╚██╔╝██║██║   ██║██╔══╝  ██║     "
+    echo " ███████║██║  ██║██║ ╚═╝ ██║╚██████╔╝███████╗███████╗"
+    echo " ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚══════╝"
     echo ""
-    echo " Artificial Intelligence Coding Framework"
+    echo " Samuel - AI Coding Framework"
     echo ""
 
     # Detect platform
@@ -191,7 +191,7 @@ main() {
         echo ""
         "$BINARY_NAME" version
         echo ""
-        echo "Run 'aicof init' to get started!"
+        echo "Run 'samuel init' to get started!"
     else
         success "Binary installed to ${INSTALL_DIR}/${BINARY_NAME}${BINARY_EXT}"
         warn "Make sure ${INSTALL_DIR} is in your PATH"

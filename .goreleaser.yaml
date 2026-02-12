@@ -1,18 +1,18 @@
-# GoReleaser configuration for AICoF CLI
+# GoReleaser configuration for Samuel
 # Documentation: https://goreleaser.com
 
 version: 2
 
-project_name: aicof
+project_name: samuel
 
 before:
   hooks:
     - go mod tidy
 
 builds:
-  - id: aicof
-    main: ./cmd/aicof
-    binary: aicof
+  - id: samuel
+    main: ./cmd/samuel
+    binary: samuel
     env:
       - CGO_ENABLED=0
     goos:
@@ -27,9 +27,9 @@ builds:
         goarch: arm64
     ldflags:
       - -s -w
-      - -X github.com/ar4mirez/aicof/internal/commands.Version={{.Version}}
-      - -X github.com/ar4mirez/aicof/internal/commands.Commit={{.Commit}}
-      - -X github.com/ar4mirez/aicof/internal/commands.BuildDate={{.Date}}
+      - -X github.com/ar4mirez/samuel/internal/commands.Version={{.Version}}
+      - -X github.com/ar4mirez/samuel/internal/commands.Commit={{.Commit}}
+      - -X github.com/ar4mirez/samuel/internal/commands.BuildDate={{.Date}}
 
 archives:
   - id: default
@@ -84,24 +84,24 @@ changelog:
 release:
   github:
     owner: ar4mirez
-    name: aicof
+    name: samuel
   draft: false
   prerelease: auto
-  name_template: "AICoF CLI v{{.Version}}"
+  name_template: "Samuel v{{.Version}}"
   header: |
-    ## AICoF CLI v{{.Version}}
+    ## Samuel v{{.Version}}
 
     ### Installation
 
     **macOS/Linux (Homebrew):**
     ```bash
     brew tap ar4mirez/tap
-    brew install aicof
+    brew install samuel
     ```
 
     **macOS/Linux (curl):**
     ```bash
-    curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
+    curl -sSL https://raw.githubusercontent.com/ar4mirez/samuel/main/install.sh | sh
     ```
 
     **Direct download:**
@@ -111,24 +111,24 @@ release:
 
     ---
 
-    **Full Changelog**: https://github.com/ar4mirez/aicof/compare/{{ .PreviousTag }}...{{ .Tag }}
+    **Full Changelog**: https://github.com/ar4mirez/samuel/compare/{{ .PreviousTag }}...{{ .Tag }}
 
 homebrew_casks:
-  - name: aicof
+  - name: samuel
     binaries:
-      - aicof
+      - samuel
     repository:
       owner: ar4mirez
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     directory: Casks
-    homepage: "https://github.com/ar4mirez/aicof"
-    description: "CLI for managing the AICoF (Artificial Intelligence Coding Framework)"
+    homepage: "https://github.com/ar4mirez/samuel"
+    description: "CLI for managing the Samuel (Artificial Intelligence Coding Framework)"
     hooks:
       post:
         install: |
           if OS.mac?
-            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/aicof"]
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/samuel"]
           end
 
 # Announce via webhook (optional)

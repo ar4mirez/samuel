@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to AICoF (Artificial Intelligence Coding Framework) will be documented in this file.
+All notable changes to Samuel (AI Coding Framework) will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -379,12 +379,12 @@ No breaking changes. New language guides and workflows are additive.
 - [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md) - Quick start guide
 - [AGENTS.md Standard](https://agents.md) - Cross-tool compatibility standard
 
-[Unreleased]: https://github.com/ar4mirez/aicof/compare/v1.7.0...HEAD
-[1.7.0]: https://github.com/ar4mirez/aicof/compare/v1.6.0...v1.7.0
-[1.6.0]: https://github.com/ar4mirez/aicof/compare/v1.5.0...v1.6.0
-[1.5.0]: https://github.com/ar4mirez/aicof/compare/v1.4.0...v1.5.0
-[1.4.0]: https://github.com/ar4mirez/aicof/compare/v1.3.0...v1.4.0
-[1.3.0]: https://github.com/ar4mirez/aicof/compare/v1.2.0...v1.3.0
-[1.2.0]: https://github.com/ar4mirez/aicof/compare/v1.1.0...v1.2.0
-[1.1.0]: https://github.com/ar4mirez/aicof/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/ar4mirez/aicof/releases/tag/v1.0.0
+[Unreleased]: https://github.com/ar4mirez/samuel/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/ar4mirez/samuel/compare/v1.6.0...v1.7.0
+[1.6.0]: https://github.com/ar4mirez/samuel/compare/v1.5.0...v1.6.0
+[1.5.0]: https://github.com/ar4mirez/samuel/compare/v1.4.0...v1.5.0
+[1.4.0]: https://github.com/ar4mirez/samuel/compare/v1.3.0...v1.4.0
+[1.3.0]: https://github.com/ar4mirez/samuel/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/ar4mirez/samuel/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/ar4mirez/samuel/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/ar4mirez/samuel/releases/tag/v1.0.0

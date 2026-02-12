@@ -382,7 +382,7 @@ where I left off on the payment integration.
 | [Create PRD](create-prd.md) | For planning new work (before implementation) |
 | [Cleanup Project](cleanup-project.md) | For archiving old documentation |
 | [Generate Tasks](generate-tasks.md) | For breaking down documented requirements |
-| [Update Framework](update-framework.md) | For updating AICoF itself |
+| [Update Framework](update-framework.md) | For updating Samuel itself |
 
 ---
 

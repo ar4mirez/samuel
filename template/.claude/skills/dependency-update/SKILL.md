@@ -3,7 +3,7 @@ name: dependency-update
 description: Safe dependency update workflow. Use when upgrading packages, resolving vulnerability alerts, updating major versions, or auditing dependency health across project ecosystems.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---

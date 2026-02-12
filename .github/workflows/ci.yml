@@ -90,4 +90,4 @@ jobs:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
         run: |
-          go build -v -o /dev/null ./cmd/aicof
+          go build -v -o /dev/null ./cmd/samuel

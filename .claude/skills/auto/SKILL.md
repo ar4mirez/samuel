@@ -6,7 +6,7 @@ description: |
   structured task list (prd.json). Enables AFK development across multiple context windows.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---
@@ -70,12 +70,12 @@ The AI agent chooses which task to work on based on:
 ### Setup (One-Time)
 
 ```bash
-# 1. Create PRD and task breakdown (existing AICoF workflow)
+# 1. Create PRD and task breakdown (existing Samuel workflow)
 # Use .claude/skills/create-prd/SKILL.md
 # Use .claude/skills/generate-tasks/SKILL.md
 
 # 2. Initialize autonomous loop
-aicof auto init --prd .claude/tasks/0001-prd-feature.md
+samuel auto init --prd .claude/tasks/0001-prd-feature.md
 
 # 3. Review generated files
 cat .claude/auto/prd.json      # Task list in JSON
@@ -87,16 +87,16 @@ cat .claude/auto/auto.sh       # Loop script
 
 ```bash
 # Start the loop (will prompt for confirmation)
-aicof auto start
+samuel auto start
 
 # Start with custom iteration count
-aicof auto start --iterations 20
+samuel auto start --iterations 20
 
 # Skip confirmation
-aicof auto start --yes
+samuel auto start --yes
 
 # Dry run (see what would happen)
-aicof auto start --dry-run
+samuel auto start --dry-run
 
 # Or run the script directly
 ./.claude/auto/auto.sh 50
@@ -106,29 +106,29 @@ aicof auto start --dry-run
 
 ```bash
 # Check progress
-aicof auto status
+samuel auto status
 
 # View recent learnings
 tail -20 .claude/auto/progress.md
 
 # List all tasks
-aicof auto task list
+samuel auto task list
 ```
 
 ### Manual Intervention
 
 ```bash
 # Mark a task as completed manually
-aicof auto task complete 1.1
+samuel auto task complete 1.1
 
 # Skip a task
-aicof auto task skip 2.3
+samuel auto task skip 2.3
 
 # Reset a task to pending
-aicof auto task reset 1.1
+samuel auto task reset 1.1
 
 # Add a new task
-aicof auto task add "3.0" "New parent task"
+samuel auto task add "3.0" "New parent task"
 ```
 
 ---
@@ -301,10 +301,10 @@ When the AI agent encounters errors:
 
 When the loop itself fails:
 ```bash
-aicof auto status              # Check what happened
-aicof auto task list           # See task states
-aicof auto task reset 1.1      # Reset a stuck task
-aicof auto start               # Resume the loop
+samuel auto status              # Check what happened
+samuel auto task list           # See task states
+samuel auto task reset 1.1      # Reset a stuck task
+samuel auto start               # Resume the loop
 ```
 
 ---
@@ -318,7 +318,7 @@ Standard COMPLEX Mode:
   create-prd → generate-tasks → manual implementation (HITL)
 
 With Auto Loop:
-  create-prd → generate-tasks → aicof auto init → aicof auto start (autonomous)
+  create-prd → generate-tasks → samuel auto init → samuel auto start (autonomous)
 ```
 
 The human can re-enter the loop at any point by stopping auto.sh and returning

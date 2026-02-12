@@ -6,8 +6,8 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +18,7 @@ func runAutoInit(cmd *cobra.Command, args []string) error {
 	}
 
 	if !core.ConfigExists(cwd) {
-		return fmt.Errorf("no AICoF installation found. Run 'aicof init' first")
+		return fmt.Errorf("no Samuel installation found. Run 'samuel init' first")
 	}
 
 	aiTool, _ := cmd.Flags().GetString("ai-tool")
@@ -103,15 +103,15 @@ func printInitSummary(autoDir, prdPath string) {
 	if prdPath != "" {
 		ui.Info("PRD converted from: %s", prdPath)
 	} else {
-		ui.Info("No PRD provided. Add tasks with 'aicof auto task add'")
-		ui.Info("Or convert a PRD with 'aicof auto convert <prd-path>'")
+		ui.Info("No PRD provided. Add tasks with 'samuel auto task add'")
+		ui.Info("Or convert a PRD with 'samuel auto convert <prd-path>'")
 	}
 
 	ui.Print("")
 	ui.Info("Next steps:")
 	ui.Print("  1. Review %s", filepath.Join(core.AutoDir, core.AutoPRDFile))
 	ui.Print("  2. Review %s", filepath.Join(core.AutoDir, core.AutoPromptFile))
-	ui.Print("  3. Run 'aicof auto start' to begin the loop")
+	ui.Print("  3. Run 'samuel auto start' to begin the loop")
 }
 
 func detectQualityChecks(cwd string) []string {
@@ -180,7 +180,7 @@ func runAutoStatus(cmd *cobra.Command, args []string) error {
 	prdPath := core.GetAutoPRDPath(cwd)
 	prd, err := core.LoadAutoPRD(prdPath)
 	if err != nil {
-		return fmt.Errorf("no auto loop found. Run 'aicof auto init' first")
+		return fmt.Errorf("no auto loop found. Run 'samuel auto init' first")
 	}
 
 	prd.RecalculateProgress()
@@ -241,7 +241,7 @@ func runAutoStart(cmd *cobra.Command, args []string) error {
 
 	scriptPath := filepath.Join(core.GetAutoDir(cwd), core.AutoScriptFile)
 	if _, err := os.Stat(scriptPath); os.IsNotExist(err) {
-		return fmt.Errorf("auto.sh not found. Run 'aicof auto init' first")
+		return fmt.Errorf("auto.sh not found. Run 'samuel auto init' first")
 	}
 
 	prdPath := core.GetAutoPRDPath(cwd)
@@ -312,7 +312,7 @@ func runAutoTaskList(cmd *cobra.Command, args []string) error {
 
 	prd, err := core.LoadAutoPRD(core.GetAutoPRDPath(cwd))
 	if err != nil {
-		return fmt.Errorf("no auto loop found. Run 'aicof auto init' first")
+		return fmt.Errorf("no auto loop found. Run 'samuel auto init' first")
 	}
 
 	ui.Header("Tasks")
@@ -375,7 +375,7 @@ func updateTaskStatus(id string, fn func(*core.AutoPRD, string) error, label str
 	prdPath := core.GetAutoPRDPath(cwd)
 	prd, err := core.LoadAutoPRD(prdPath)
 	if err != nil {
-		return fmt.Errorf("no auto loop found. Run 'aicof auto init' first")
+		return fmt.Errorf("no auto loop found. Run 'samuel auto init' first")
 	}
 
 	if err := fn(prd, id); err != nil {
@@ -399,7 +399,7 @@ func runAutoTaskAdd(cmd *cobra.Command, args []string) error {
 	prdPath := core.GetAutoPRDPath(cwd)
 	prd, err := core.LoadAutoPRD(prdPath)
 	if err != nil {
-		return fmt.Errorf("no auto loop found. Run 'aicof auto init' first")
+		return fmt.Errorf("no auto loop found. Run 'samuel auto init' first")
 	}
 
 	task := core.AutoTask{

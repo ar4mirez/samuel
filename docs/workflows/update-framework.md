@@ -1,11 +1,11 @@
 ---
 title: Update Framework
-description: Update AICoF to the latest version while preserving customizations
+description: Update Samuel to the latest version while preserving customizations
 ---
 
 # Update Framework Workflow
 
-Update AICoF to the latest version while preserving your customizations.
+Update Samuel to the latest version while preserving your customizations.
 
 ---
 
@@ -110,7 +110,7 @@ Files that are typically NOT customized:
 
 ```bash
 # Clone latest version to temporary directory
-git clone --depth 1 https://github.com/ar4mirez/aicof.git .ai-update-temp
+git clone --depth 1 https://github.com/ar4mirez/samuel.git .ai-update-temp
 
 # Check latest version
 grep "Current Version" .ai-update-temp/CLAUDE.md
@@ -121,12 +121,12 @@ grep "Current Version" .ai-update-temp/CLAUDE.md
 ```bash
 # Update subtree
 git subtree pull --prefix=.ai-template \
-    https://github.com/ar4mirez/aicof.git main --squash
+    https://github.com/ar4mirez/samuel.git main --squash
 ```
 
 ### Method C: Download ZIP
 
-1. Go to [GitHub Releases](https://github.com/ar4mirez/aicof/releases)
+1. Go to [GitHub Releases](https://github.com/ar4mirez/samuel/releases)
 2. Download latest release
 3. Extract to temporary directory
 
@@ -322,7 +322,7 @@ ls .claude/memory/ 2>/dev/null | wc -l
 ```
 @.claude/skills/update-framework/SKILL.md
 
-Update to the latest version of AICoF
+Update to the latest version of Samuel
 ```
 
 **AI Will:**
@@ -435,7 +435,7 @@ rm CLAUDE.md
 rm -rf .claude/
 
 # Reinstall from scratch
-git clone --depth 1 https://github.com/ar4mirez/aicof.git temp
+git clone --depth 1 https://github.com/ar4mirez/samuel.git temp
 cp temp/CLAUDE.md ./
 cp -r temp/.claude ./
 rm -rf temp

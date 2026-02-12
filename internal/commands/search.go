@@ -5,8 +5,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -22,16 +22,16 @@ type SearchResult struct {
 var searchCmd = &cobra.Command{
 	Use:   "search <query>",
 	Short: "Search for components by keyword",
-	Long: `Search for AICoF components across languages, frameworks, workflows, and skills.
+	Long: `Search for Samuel components across languages, frameworks, workflows, and skills.
 
 Supports fuzzy matching for typos and partial matches. Results are sorted by relevance.
 
 Examples:
-  aicof search react              # Search all component types
-  aicof search --type fw django   # Search only frameworks
-  aicof search py                 # Fuzzy match finds "python"
-  aicof search "spring boot"      # Multi-word search
-  aicof search commit             # Finds commit-message skill
+  samuel search react              # Search all component types
+  samuel search --type fw django   # Search only frameworks
+  samuel search py                 # Fuzzy match finds "python"
+  samuel search "spring boot"      # Multi-word search
+  samuel search commit             # Finds commit-message skill
 
 Types (with aliases):
   language   (lang, l)   Language guides
@@ -59,7 +59,7 @@ func runSearch(cmd *cobra.Command, args []string) error {
 
 	if len(results) == 0 {
 		ui.Warn("No components found matching '%s'", query)
-		ui.Info("Try a different search term or use 'aicof list --available' to see all components")
+		ui.Info("Try a different search term or use 'samuel list --available' to see all components")
 		return nil
 	}
 

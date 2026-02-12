@@ -6,7 +6,7 @@ description: |
   for future reference.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---
@@ -395,7 +395,7 @@ where I left off on the payment integration.
 | **create-prd.md** | For planning new work (before implementation) |
 | **cleanup-project.md** | For archiving old documentation |
 | **generate-tasks.md** | For breaking down documented requirements |
-| **update-framework.md** | For updating AICoF itself |
+| **update-framework.md** | For updating Samuel itself |
 
 ---
 

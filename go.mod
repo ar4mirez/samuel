@@ -1,4 +1,4 @@
-module github.com/ar4mirez/aicof
+module github.com/ar4mirez/samuel
 
 go 1.21
 

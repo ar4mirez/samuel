@@ -4,19 +4,19 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Show CLI and framework version information",
-	Long: `Display version information for the AICoF CLI and installed framework.
+	Long: `Display version information for the Samuel CLI and installed framework.
 
 Examples:
-  aicof version              # Show version info
-  aicof version --check      # Check for updates`,
+  samuel version              # Show version info
+  samuel version --check      # Check for updates`,
 	RunE: runVersion,
 }
 
@@ -29,7 +29,7 @@ func runVersion(cmd *cobra.Command, args []string) error {
 	checkUpdate, _ := cmd.Flags().GetBool("check")
 
 	// Show CLI version
-	ui.Bold("AICoF CLI")
+	ui.Bold("Samuel CLI")
 	ui.TableRow("Version", Version)
 	ui.TableRow("Commit", Commit)
 	ui.TableRow("Built", BuildDate)
@@ -52,7 +52,7 @@ func runVersion(cmd *cobra.Command, args []string) error {
 		ui.Warn("Could not load framework config: %v", err)
 	} else {
 		fmt.Println()
-		ui.Dim("No AICoF framework installed in current directory")
+		ui.Dim("No Samuel framework installed in current directory")
 	}
 
 	// Check for updates if requested
@@ -72,7 +72,7 @@ func runVersion(cmd *cobra.Command, args []string) error {
 		} else {
 			if cliInfo.UpdateNeeded {
 				ui.Success("New CLI version available: %s → %s", Version, cliInfo.Latest)
-				ui.Info("Update with: aicof self-update")
+				ui.Info("Update with: samuel self-update")
 			} else {
 				ui.Success("CLI is up to date")
 			}
@@ -86,7 +86,7 @@ func runVersion(cmd *cobra.Command, args []string) error {
 			} else {
 				if fwInfo.UpdateNeeded {
 					ui.Success("New framework version available: %s → %s", config.Version, fwInfo.Latest)
-					ui.Info("Update with: aicof update")
+					ui.Info("Update with: samuel update")
 				} else {
 					ui.Success("Framework is up to date")
 				}

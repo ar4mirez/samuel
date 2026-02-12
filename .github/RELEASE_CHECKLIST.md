@@ -60,9 +60,9 @@ This checklist ensures all documentation and version references are updated befo
 - [ ] GitHub Release page shows all binaries
 - [ ] Checksums file is included
 - [ ] Release notes are formatted correctly
-- [ ] Documentation site updated (https://ar4mirez.github.io/aicof/)
+- [ ] Documentation site updated (https://ar4mirez.github.io/samuel/)
 - [ ] Homebrew formula updated (if applicable)
-- [ ] Install script works: `curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh`
+- [ ] Install script works: `curl -sSL https://raw.githubusercontent.com/ar4mirez/samuel/main/install.sh | sh`
 
 ## Versioning Guidelines
 

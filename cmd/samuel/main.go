@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ar4mirez/aicof/internal/commands"
+	"github.com/ar4mirez/samuel/internal/commands"
 	"github.com/fatih/color"
 )
 

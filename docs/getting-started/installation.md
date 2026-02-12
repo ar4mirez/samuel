@@ -1,51 +1,51 @@
 ---
 title: Installation
-description: Detailed installation instructions for AICoF
+description: Detailed installation instructions for Samuel
 ---
 
 # Installation
 
-Multiple ways to install AICoF. The CLI is recommended for the best experience.
+Multiple ways to install Samuel. The CLI is recommended for the best experience.
 
 ---
 
 ## Option 1: CLI Installation (Recommended)
 
-The AICoF CLI provides the easiest way to install and manage the framework.
+The Samuel CLI provides the easiest way to install and manage the framework.
 
 ### macOS / Linux (Homebrew)
 
 ```bash
-brew tap ar4mirez/tap && brew install aicof
+brew tap ar4mirez/tap && brew install samuel
 ```
 
 ### macOS / Linux (Curl)
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
+curl -sSL https://raw.githubusercontent.com/ar4mirez/samuel/main/install.sh | sh
 ```
 
 ### Go Install
 
 ```bash
-go install github.com/ar4mirez/aicof/cmd/aicof@latest
+go install github.com/ar4mirez/samuel/cmd/samuel@latest
 ```
 
 ### Verify CLI Installation
 
 ```bash
 # Check version
-aicof version
+samuel version
 
 # Run health check
-aicof doctor
+samuel doctor
 ```
 
 ### Initialize Your Project
 
 ```bash
 cd your-project
-aicof init
+samuel init
 ```
 
 The CLI will interactively guide you through setup:
@@ -63,13 +63,13 @@ For environments where the CLI isn't available:
 
 ```bash
 # Clone the repository
-git clone https://github.com/ar4mirez/aicof.git
+git clone https://github.com/ar4mirez/samuel.git
 
 # Copy to your project
-cp -r aicof/{CLAUDE.md,.claude} /path/to/your-project/
+cp -r samuel/{CLAUDE.md,.claude} /path/to/your-project/
 
 # Clean up
-rm -rf aicof
+rm -rf samuel
 ```
 
 ### What Gets Copied
@@ -97,12 +97,12 @@ your-project/
 
 ## Option 3: Git Subtree
 
-Keep AICoF as a subtree for easier updates:
+Keep Samuel as a subtree for easier updates:
 
 ```bash
 # Add as subtree (first time)
 git subtree add --prefix=.ai-template \
-    https://github.com/ar4mirez/aicof.git main --squash
+    https://github.com/ar4mirez/samuel.git main --squash
 
 # Copy files to root
 cp .ai-template/CLAUDE.md ./
@@ -110,7 +110,7 @@ cp -r .ai-template/.claude ./
 
 # Update later
 git subtree pull --prefix=.ai-template \
-    https://github.com/ar4mirez/aicof.git main --squash
+    https://github.com/ar4mirez/samuel.git main --squash
 ```
 
 !!! note "Subtree Benefits"
@@ -125,7 +125,7 @@ git subtree pull --prefix=.ai-template \
 
 For projects without git or one-time use:
 
-1. Go to [GitHub Releases](https://github.com/ar4mirez/aicof/releases)
+1. Go to [GitHub Releases](https://github.com/ar4mirez/samuel/releases)
 2. Download the latest release ZIP
 3. Extract `CLAUDE.md` and `.claude/` to your project
 
@@ -165,19 +165,19 @@ Creates a separate `AGENTS.md` with operations-only content.
 
 ```bash
 # Comprehensive health check
-aicof doctor
+samuel doctor
 
 # List installed components
-aicof list
+samuel list
 
 # Check for updates
-aicof version --check
+samuel version --check
 ```
 
-**Expected output from `aicof doctor`:**
+**Expected output from `samuel doctor`:**
 
 ```
-AICoF Health Check
+Samuel Health Check
 ==================
 
 [OK] CLAUDE.md exists
@@ -216,30 +216,30 @@ After installation, add the components you need:
 
 ```bash
 # Search for what you need
-aicof search react
+samuel search react
 
 # Preview before installing
-aicof info framework react --preview 20
+samuel info framework react --preview 20
 
 # Add components
-aicof add language typescript
-aicof add framework react
-aicof add workflow code-review
+samuel add language typescript
+samuel add framework react
+samuel add workflow code-review
 
 # Use aliases for speed
-aicof add lang go
-aicof add fw nextjs
-aicof add wf security-audit
+samuel add lang go
+samuel add fw nextjs
+samuel add wf security-audit
 ```
 
 ### Check What's Available
 
 ```bash
 # List all available components
-aicof list --available
+samuel list --available
 
 # Filter by type
-aicof list --available --type frameworks
+samuel list --available --type frameworks
 ```
 
 ---
@@ -251,7 +251,7 @@ aicof list --available --type frameworks
 You may want to ignore generated files:
 
 ```gitignore
-# AICoF - generated files
+# Samuel - generated files
 .claude/project.md
 .claude/patterns.md
 .claude/state.md
@@ -268,7 +268,7 @@ You may want to ignore generated files:
 git add CLAUDE.md .claude/
 
 # Commit
-git commit -m "chore: add AICoF for AI-assisted development"
+git commit -m "chore: add Samuel for AI-assisted development"
 ```
 
 ---
@@ -279,23 +279,23 @@ git commit -m "chore: add AICoF for AI-assisted development"
 
 ```bash
 # Check what's changed
-aicof diff --installed
+samuel diff --installed
 
 # Preview changes before updating
-aicof update --check
+samuel update --check
 
 # Update to latest
-aicof update
+samuel update
 
 # Or update to specific version
-aicof update --version 1.7.0
+samuel update --version 1.7.0
 ```
 
 ### Manual Update
 
 ```bash
 # Clone latest version
-git clone https://github.com/ar4mirez/aicof.git temp-update
+git clone https://github.com/ar4mirez/samuel.git temp-update
 
 # Backup your customizations
 cp CLAUDE.md CLAUDE.md.backup
@@ -320,17 +320,17 @@ rm -rf .claude.backup
 
 ### CLI Not Found
 
-If `aicof` command is not found after installation:
+If `samuel` command is not found after installation:
 
 ```bash
 # Check if it's in PATH
-which aicof
+which samuel
 
 # Add to PATH (bash/zsh)
 export PATH="$PATH:/usr/local/bin"
 
 # Or reinstall
-curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
+curl -sSL https://raw.githubusercontent.com/ar4mirez/samuel/main/install.sh | sh
 ```
 
 ### Files Not Loading
@@ -340,7 +340,7 @@ If AI doesn't seem to follow guardrails:
 1. Verify `CLAUDE.md` is in project root
 2. Check file permissions: `chmod 644 CLAUDE.md`
 3. Explicitly remind AI: "Follow guardrails in CLAUDE.md"
-4. Run `aicof doctor` to check for issues
+4. Run `samuel doctor` to check for issues
 
 ### Symlink Issues on Windows
 

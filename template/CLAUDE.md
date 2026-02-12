@@ -140,10 +140,10 @@ NODE_ENV=            # development | production | test
 - Tests >80% (critical) | Conventional commits | No secrets in code
 
 **Autonomous Mode (Ralph Wiggum methodology):**
-- Initialize: `aicof auto init --prd .claude/tasks/NNNN-prd-feature.md`
-- Start loop: `aicof auto start`
-- Check status: `aicof auto status`
-- Manage tasks: `aicof auto task list|complete|skip|reset|add`
+- Initialize: `samuel auto init --prd .claude/tasks/NNNN-prd-feature.md`
+- Start loop: `samuel auto start`
+- Check status: `samuel auto status`
+- Manage tasks: `samuel auto task list|complete|skip|reset|add`
 - Methodology: .claude/skills/auto/SKILL.md
 
 **Emergency Quick Links:**
@@ -155,9 +155,9 @@ NODE_ENV=            # development | production | test
 - Language-specific? → .claude/skills/{lang}-guide/SKILL.md
 
 **Skills** (capability modules - [Agent Skills](https://agentskills.io) standard):
-- Create: `aicof skill create <name>` or `.claude/skills/create-skill/SKILL.md`
-- Validate: `aicof skill validate`
-- List: `aicof skill list`
+- Create: `samuel skill create <name>` or `.claude/skills/create-skill/SKILL.md`
+- Validate: `samuel skill validate`
+- List: `samuel skill list`
 - Load: `.claude/skills/<skill-name>/SKILL.md` when task matches description
 
 <!-- SKILLS_START -->
@@ -183,7 +183,7 @@ Skills extend AI capabilities. Load a skill when task matches its description.
 | security-audit | Security assessment workflow (OWASP, auth, vulnerabilities). |
 | testing-strategy | Test planning and coverage strategy workflow. |
 | troubleshooting | Debugging and problem-solving workflow. |
-| update-framework | AICoF version update workflow. |
+| update-framework | Samuel version update workflow. |
 
 **To use a skill**: Read `.claude/skills/<skill-name>/SKILL.md`
 <!-- SKILLS_END -->
@@ -315,9 +315,9 @@ For architecture changes, major refactors, new systems:
 **Autonomous Execution (Optional):**
 After task generation, convert to autonomous format for unattended execution:
 
-1. `aicof auto init --prd .claude/tasks/NNNN-prd-feature.md`
+1. `samuel auto init --prd .claude/tasks/NNNN-prd-feature.md`
 2. Review generated `prd.json` and `prompt.md`
-3. `aicof auto start`
+3. `samuel auto start`
 
 See `.claude/skills/auto/SKILL.md` for the full methodology.
 
@@ -453,7 +453,7 @@ AI agents automatically discover and load these files when working in subdirecto
 
 **v1.8.0 (2025-02-04) - Agent Skills Integration**
 - Added Agent Skills support (open standard for AI agent capabilities)
-- New CLI commands: `aicof skill create`, `aicof skill validate`, `aicof skill list`, `aicof skill info`
+- New CLI commands: `samuel skill create`, `samuel skill validate`, `samuel skill list`, `samuel skill info`
 - Skills compatible with 25+ agent products
 
 ---

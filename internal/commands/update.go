@@ -6,15 +6,15 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
 var updateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Update AICoF framework to the latest version",
-	Long: `Update the installed AICoF framework to the latest version.
+	Short: "Update Samuel framework to the latest version",
+	Long: `Update the installed Samuel framework to the latest version.
 
 This command will:
 1. Check for available updates
@@ -23,10 +23,10 @@ This command will:
 4. Create backups of modified files
 
 Examples:
-  aicof update              # Update to latest version
-  aicof update --check      # Check for updates without applying
-  aicof update --diff       # Show what will change
-  aicof update --force      # Overwrite local modifications`,
+  samuel update              # Update to latest version
+  samuel update --check      # Check for updates without applying
+  samuel update --diff       # Show what will change
+  samuel update --force      # Overwrite local modifications`,
 	RunE: runUpdate,
 }
 
@@ -48,7 +48,7 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 	config, err := core.LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
-			return fmt.Errorf("no AICoF installation found. Run 'aicof init' first")
+			return fmt.Errorf("no Samuel installation found. Run 'samuel init' first")
 		}
 		return fmt.Errorf("failed to load config: %w", err)
 	}
@@ -75,7 +75,7 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 		targetVersion = latest
 	}
 
-	ui.Bold("AICoF Update")
+	ui.Bold("Samuel Update")
 	ui.TableRow("Current version", currentVersion)
 	ui.TableRow("Target version", targetVersion)
 
@@ -91,7 +91,7 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 		if currentVersion != targetVersion {
 			fmt.Println()
 			ui.Success("Update available: %s → %s", currentVersion, targetVersion)
-			ui.Info("Run 'aicof update' to apply")
+			ui.Info("Run 'samuel update' to apply")
 		}
 		return nil
 	}
@@ -194,7 +194,7 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 	// Create backup if there are modified files
 	var backupDir string
 	if len(modifiedFiles) > 0 && !force {
-		backupDir = filepath.Join(cwd, fmt.Sprintf(".aicof-backup-%s", time.Now().Format("20060102-150405")))
+		backupDir = filepath.Join(cwd, fmt.Sprintf(".samuel-backup-%s", time.Now().Format("20060102-150405")))
 		if err := os.MkdirAll(backupDir, 0755); err != nil {
 			return fmt.Errorf("failed to create backup directory: %w", err)
 		}
@@ -242,7 +242,7 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to update config: %w", err)
 	}
 
-	ui.Success("Updated aicof.yaml to v%s", targetVersion)
+	ui.Success("Updated samuel.yaml to v%s", targetVersion)
 
 	// Show modified files warning
 	if len(modifiedFiles) > 0 && !force {

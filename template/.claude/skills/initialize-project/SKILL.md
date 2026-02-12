@@ -3,10 +3,10 @@ name: initialize-project
 description: |
   Project initialization and setup workflow. Use when starting a new project,
   setting up AI-assisted development environment, or bootstrapping an existing codebase
-  with AICoF framework structure.
+  with Samuel framework structure.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---
@@ -21,7 +21,7 @@ Set up new projects or adopt CLAUDE.md system in existing projects.
 
 This skill handles two scenarios:
 1. **New Projects**: Bootstrap from scratch with tech stack selection and configuration
-2. **Existing Projects**: Analyze codebase and adopt AICoF framework
+2. **Existing Projects**: Analyze codebase and adopt Samuel framework
 
 Both paths result in a fully configured `.claude/` directory with project-specific context.
 

@@ -1,4 +1,4 @@
-# AICoF - Artificial Intelligence Coding Framework
+# Samuel - Artificial Intelligence Coding Framework
 
 > **Build smarter, faster, and more scalable software**
 > Cross-tool compatible • Opinionated guardrails • Tech-stack agnostic • Token-optimized
@@ -13,7 +13,7 @@
 ## What's New in v2.0.0
 
 - **Migrated to `.claude/` directory** - Skills and context now live under `.claude/skills/` instead of `.agent/skills/`
-- **AGENTS.md as real copy** - `aicof init` now creates both CLAUDE.md and AGENTS.md as real files (no symlink needed)
+- **AGENTS.md as real copy** - `samuel init` now creates both CLAUDE.md and AGENTS.md as real files (no symlink needed)
 - **15 Workflows** - Added `create-rfd` and `create-skill` workflows
 - **33 Framework Skills** - Comprehensive framework-specific guidance across 11 language families
 - **21 Language Guides** - All major programming languages covered
@@ -28,19 +28,19 @@
 ```bash
 # Install CLI
 brew tap ar4mirez/tap
-brew install aicof
+brew install samuel
 
 # Or via curl
-curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
+curl -sSL https://raw.githubusercontent.com/ar4mirez/samuel/main/install.sh | sh
 
 # Initialize your project
-aicof init my-project
+samuel init my-project
 cd my-project
 
 # Explore available components
-aicof search react           # Find components by keyword
-aicof info framework react   # View component details
-aicof list --available       # List all components
+samuel search react           # Find components by keyword
+samuel info framework react   # View component details
+samuel list --available       # List all components
 
 # Start coding with AI - guardrails apply automatically!
 ```
@@ -49,7 +49,7 @@ aicof list --available       # List all components
 
 ```bash
 # 1. Copy template files to your project
-cp -r /path/to/aicof/template/{CLAUDE.md,AGENTS.md,.claude} ./
+cp -r /path/to/samuel/template/{CLAUDE.md,AGENTS.md,.claude} ./
 
 # 2. Start coding with AI - guardrails apply automatically!
 ```
@@ -82,7 +82,7 @@ This system follows the [AGENTS.md](https://agents.md) standard - the universal 
 ### Setup for Cross-Tool Teams
 
 **Option 1: Real copy (recommended)**
-`aicof init` creates both `CLAUDE.md` and `AGENTS.md` as real files automatically.
+`samuel init` creates both `CLAUDE.md` and `AGENTS.md` as real files automatically.
 
 **Option 2: Symlink**
 ```bash
@@ -100,9 +100,9 @@ ln -s CLAUDE.md AGENTS.md
 
 ---
 
-## What Is AICoF?
+## What Is Samuel?
 
-AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI development framework** designed for professional software teams.
+Samuel (Artificial Intelligence Coding Framework) is an **opinionated AI development framework** designed for professional software teams.
 
 ### Key Features
 
@@ -124,24 +124,24 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 
 ## CLI Commands
 
-The `aicof` CLI manages framework installation, updates, and component discovery.
+The `samuel` CLI manages framework installation, updates, and component discovery.
 
 ### Core Commands
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `init [project]` | Initialize AICoF in a project | `aicof init my-app` |
-| `update` | Update to latest framework version | `aicof update` |
-| `doctor` | Check installation health | `aicof doctor` |
-| `version` | Show CLI and framework versions | `aicof version` |
+| `init [project]` | Initialize Samuel in a project | `samuel init my-app` |
+| `update` | Update to latest framework version | `samuel update` |
+| `doctor` | Check installation health | `samuel doctor` |
+| `version` | Show CLI and framework versions | `samuel version` |
 
 ### Component Management
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `add <type> <name>` | Add a component | `aicof add framework react` |
-| `remove <type> <name>` | Remove a component | `aicof remove language rust` |
-| `list [--available]` | List installed/available components | `aicof list --available` |
+| `add <type> <name>` | Add a component | `samuel add framework react` |
+| `remove <type> <name>` | Remove a component | `samuel remove language rust` |
+| `list [--available]` | List installed/available components | `samuel list --available` |
 
 **Type aliases**: `language` (lang, l), `framework` (fw, f), `workflow` (wf, w)
 
@@ -149,17 +149,17 @@ The `aicof` CLI manages framework installation, updates, and component discovery
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `search <query>` | Search components by keyword | `aicof search api` |
-| `info <type> <name>` | Show component details | `aicof info fw nextjs` |
-| `diff [v1] [v2]` | Compare versions | `aicof diff v1.6.0 v1.7.0` |
+| `search <query>` | Search components by keyword | `samuel search api` |
+| `info <type> <name>` | Show component details | `samuel info fw nextjs` |
+| `diff [v1] [v2]` | Compare versions | `samuel diff v1.6.0 v1.7.0` |
 
 ### Configuration
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `config list` | Show all config values | `aicof config list` |
-| `config get <key>` | Get a config value | `aicof config get version` |
-| `config set <key> <value>` | Set a config value | `aicof config set registry https://...` |
+| `config list` | Show all config values | `samuel config list` |
+| `config get <key>` | Get a config value | `samuel config get version` |
+| `config set <key> <value>` | Set a config value | `samuel config set registry https://...` |
 
 **Valid keys**: `version`, `registry`, `installed.languages`, `installed.frameworks`, `installed.workflows`
 
@@ -167,24 +167,24 @@ The `aicof` CLI manages framework installation, updates, and component discovery
 
 ```bash
 # Initialize and customize
-aicof init my-project
-aicof add lang typescript
-aicof add fw react nextjs
-aicof add wf code-review security-audit
+samuel init my-project
+samuel add lang typescript
+samuel add fw react nextjs
+samuel add wf code-review security-audit
 
 # Discover components
-aicof search python           # Fuzzy search across all types
-aicof search --type fw api    # Search only frameworks
-aicof info lang go --preview 20  # Preview first 20 lines
+samuel search python           # Fuzzy search across all types
+samuel search --type fw api    # Search only frameworks
+samuel info lang go --preview 20  # Preview first 20 lines
 
 # Manage updates
-aicof diff                    # Compare installed vs latest
-aicof diff v1.6.0 v1.7.0      # Compare specific versions
-aicof update                  # Apply updates
+samuel diff                    # Compare installed vs latest
+samuel diff v1.6.0 v1.7.0      # Compare specific versions
+samuel update                  # Apply updates
 
 # Troubleshoot
-aicof doctor                  # Check installation health
-aicof config list             # View current configuration
+samuel doctor                  # Check installation health
+samuel config list             # View current configuration
 ```
 
 ---
@@ -540,7 +540,7 @@ AI will:
 | [Troubleshooting](template/.claude/skills/troubleshooting/SKILL.md) | Debug systematically |
 | [Cleanup Project](template/.claude/skills/cleanup-project/SKILL.md) | Prune unused guides |
 | [Document Work](template/.claude/skills/document-work/SKILL.md) | Capture patterns & decisions |
-| [Update Framework](template/.claude/skills/update-framework/SKILL.md) | Update AICoF safely |
+| [Update Framework](template/.claude/skills/update-framework/SKILL.md) | Update Samuel safely |
 | [Generate AGENTS.md](template/.claude/skills/generate-agents-md/SKILL.md) | Cross-tool compatibility |
 
 ---
@@ -548,13 +548,13 @@ AI will:
 ## Repository Structure
 
 ```text
-aicof/
+samuel/
 ├── template/                    # Distributable template files
 │   ├── CLAUDE.md               # Main AI instructions (copy to your project)
 │   ├── AGENTS.md               # Cross-tool compatible version
 │   └── .claude/                # AI context directory
 │       └── skills/             # 21 language guides + 33 framework skills + 15 workflows
-├── cmd/aicof/                  # CLI entry point
+├── cmd/samuel/                  # CLI entry point
 ├── internal/                   # CLI implementation (commands, core, ui)
 └── docs/                       # Documentation website source
 ```
@@ -586,7 +586,7 @@ aicof/
 
 ### Week 1: Learn the Basics
 
-- [ ] Install AICoF via CLI or copy template files to your project
+- [ ] Install Samuel via CLI or copy template files to your project
 - [ ] Write 5 features using ATOMIC mode
 - [ ] Review guardrails in [CLAUDE.md](template/CLAUDE.md)
 - [ ] Check which language guide applies to you
@@ -661,8 +661,8 @@ Built with:
 ## Support
 
 - **Documentation**: [CLAUDE.md](CLAUDE.md)
-- **Issues**: [GitHub Issues](https://github.com/ar4mirez/aicof/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/ar4mirez/aicof/discussions)
+- **Issues**: [GitHub Issues](https://github.com/ar4mirez/samuel/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/ar4mirez/samuel/discussions)
 
 ---
 

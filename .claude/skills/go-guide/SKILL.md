@@ -7,7 +7,7 @@ description: |
   and concurrency guidelines specific to this project's coding standards.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: language
   language: go

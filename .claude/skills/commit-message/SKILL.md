@@ -6,7 +6,7 @@ description: |
   commit with a well-formatted message following conventional commits format.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---

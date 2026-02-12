@@ -5,7 +5,7 @@ description: Native Claude Code skills directory for AI-assisted development
 
 # The .claude Directory
 
-The `.claude/` directory is Claude Code's native project directory. AICoF uses it to store skills that extend AI capabilities.
+The `.claude/` directory is Claude Code's native project directory. Samuel uses it to store skills that extend AI capabilities.
 
 ---
 
@@ -52,7 +52,7 @@ Skills are capability modules following the [Agent Skills](https://agentskills.i
 
 ### Per-Folder CLAUDE.md Files
 
-AICoF creates stub `CLAUDE.md` files in existing project directories during `aicof init`. These are loaded automatically when AI works in that directory. Customize them with folder-specific instructions, conventions, and constraints.
+Samuel creates stub `CLAUDE.md` files in existing project directories during `samuel init`. These are loaded automatically when AI works in that directory. Customize them with folder-specific instructions, conventions, and constraints.
 
 ---
 
@@ -171,11 +171,11 @@ Per-folder CLAUDE.md files     # Folder-specific instructions
 
 - [x] Customize per-folder CLAUDE.md files with specific instructions
 - [x] Create custom skills for recurring project tasks
-- [x] Use `aicof skill create` to scaffold new skills
+- [x] Use `samuel skill create` to scaffold new skills
 
 ### Don't
 
-- [ ] Manually edit language guide skills (they're templates, use `aicof update`)
+- [ ] Manually edit language guide skills (they're templates, use `samuel update`)
 - [ ] Over-organize the directory
 - [ ] Put secrets or credentials in CLAUDE.md files
 

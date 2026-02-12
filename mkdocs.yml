@@ -1,14 +1,14 @@
-# MkDocs configuration for AICoF documentation
+# MkDocs configuration for Samuel documentation
 # https://squidfunk.github.io/mkdocs-material/
 
-site_name: AICoF
+site_name: Samuel
 site_description: Artificial Intelligence Coding Framework - Build smarter, faster, and more scalable software
 site_author: ar4mirez
-site_url: https://ar4mirez.github.io/aicof/
+site_url: https://ar4mirez.github.io/samuel/
 
 # Repository
-repo_name: ar4mirez/aicof
-repo_url: https://github.com/ar4mirez/aicof
+repo_name: ar4mirez/samuel
+repo_url: https://github.com/ar4mirez/samuel
 edit_uri: edit/main/docs/
 
 # Copyright
@@ -122,7 +122,7 @@ markdown_extensions:
   - pymdownx.magiclink:
       repo_url_shorthand: true
       user: ar4mirez
-      repo: aicof
+      repo: samuel
   - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.snippets:
@@ -265,7 +265,7 @@ extra:
   # Social links
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/ar4mirez/aicof
+      link: https://github.com/ar4mirez/samuel
       name: GitHub Repository
 
   # Version

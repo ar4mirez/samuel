@@ -5,7 +5,7 @@ description: |
   requirements for complex features, new subsystems, or any task affecting more than 10 files.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---

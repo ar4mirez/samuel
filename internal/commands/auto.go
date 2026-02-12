@@ -21,19 +21,19 @@ Subcommands:
   task      Manage individual tasks (list, complete, skip, reset, add)
 
 Workflow:
-  1. aicof auto init --prd .claude/tasks/0001-prd-feature.md
+  1. samuel auto init --prd .claude/tasks/0001-prd-feature.md
   2. Review .claude/auto/prd.json and prompt.md
-  3. aicof auto start
-  4. aicof auto status  (check progress periodically)
+  3. samuel auto start
+  4. samuel auto status  (check progress periodically)
 
 Examples:
-  aicof auto init --prd .claude/tasks/0001-prd-auth.md
-  aicof auto init --ai-tool amp --max-iterations 100
-  aicof auto convert .claude/tasks/0001-prd-auth.md
-  aicof auto status
-  aicof auto start --iterations 20
-  aicof auto task list
-  aicof auto task complete 1.1`,
+  samuel auto init --prd .claude/tasks/0001-prd-auth.md
+  samuel auto init --ai-tool amp --max-iterations 100
+  samuel auto convert .claude/tasks/0001-prd-auth.md
+  samuel auto status
+  samuel auto start --iterations 20
+  samuel auto task list
+  samuel auto task complete 1.1`,
 }
 
 var autoInitCmd = &cobra.Command{
@@ -50,9 +50,9 @@ Creates .claude/auto/ with:
 If --prd is provided, converts the PRD and associated task file to prd.json.
 
 Examples:
-  aicof auto init
-  aicof auto init --prd .claude/tasks/0001-prd-auth.md
-  aicof auto init --ai-tool amp --max-iterations 100`,
+  samuel auto init
+  samuel auto init --prd .claude/tasks/0001-prd-auth.md
+  samuel auto init --ai-tool amp --max-iterations 100`,
 	RunE: runAutoInit,
 }
 
@@ -66,7 +66,7 @@ Automatically looks for a matching tasks file using the convention:
   Tasks: .claude/tasks/tasks-0001-prd-feature.md
 
 Examples:
-  aicof auto convert .claude/tasks/0001-prd-auth.md`,
+  samuel auto convert .claude/tasks/0001-prd-auth.md`,
 	Args: cobra.ExactArgs(1),
 	RunE: runAutoConvert,
 }
@@ -78,7 +78,7 @@ var autoStatusCmd = &cobra.Command{
 task progress, iteration count, and recent activity.
 
 Examples:
-  aicof auto status`,
+  samuel auto status`,
 	RunE: runAutoStatus,
 }
 
@@ -91,10 +91,10 @@ The loop will iterate until all tasks are completed or the maximum
 iteration count is reached.
 
 Examples:
-  aicof auto start
-  aicof auto start --iterations 20
-  aicof auto start --dry-run
-  aicof auto start --yes`,
+  samuel auto start
+  samuel auto start --iterations 20
+  samuel auto start --dry-run
+  samuel auto start --yes`,
 	RunE: runAutoStart,
 }
 
@@ -111,11 +111,11 @@ Subcommands:
   add       Add a new task
 
 Examples:
-  aicof auto task list
-  aicof auto task complete 1.1
-  aicof auto task skip 2.3
-  aicof auto task reset 1.1
-  aicof auto task add "3.0" "New parent task"`,
+  samuel auto task list
+  samuel auto task complete 1.1
+  samuel auto task skip 2.3
+  samuel auto task reset 1.1
+  samuel auto task add "3.0" "New parent task"`,
 }
 
 var autoTaskListCmd = &cobra.Command{

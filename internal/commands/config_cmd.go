@@ -5,15 +5,15 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Manage AICoF configuration",
-	Long: `View and modify AICoF configuration settings.
+	Short: "Manage Samuel configuration",
+	Long: `View and modify Samuel configuration settings.
 
 Available subcommands:
   list   Show all configuration values
@@ -28,10 +28,10 @@ Valid configuration keys:
   installed.workflows  Comma-separated list of installed workflows
 
 Examples:
-  aicof config list                           # Show all config values
-  aicof config get version                    # Get framework version
-  aicof config set registry https://...       # Set custom registry
-  aicof config set installed.languages go,rust  # Set installed languages`,
+  samuel config list                           # Show all config values
+  samuel config get version                    # Get framework version
+  samuel config set registry https://...       # Set custom registry
+  samuel config set installed.languages go,rust  # Set installed languages`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return cmd.Help()
 	},
@@ -40,10 +40,10 @@ Examples:
 var configListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Show all configuration values",
-	Long: `Display all AICoF configuration values from aicof.yaml.
+	Long: `Display all Samuel configuration values from samuel.yaml.
 
 Example:
-  aicof config list`,
+  samuel config list`,
 	RunE: runConfigList,
 }
 
@@ -56,8 +56,8 @@ Valid keys:
   version, registry, installed.languages, installed.frameworks, installed.workflows
 
 Examples:
-  aicof config get version
-  aicof config get installed.languages`,
+  samuel config get version
+  samuel config get installed.languages`,
 	Args: cobra.ExactArgs(1),
 	RunE: runConfigGet,
 }
@@ -70,9 +70,9 @@ var configSetCmd = &cobra.Command{
 For list values (installed.*), use comma-separated format.
 
 Examples:
-  aicof config set registry https://github.com/myorg/myrepo
-  aicof config set installed.languages typescript,python,go
-  aicof config set installed.frameworks react,nextjs`,
+  samuel config set registry https://github.com/myorg/myrepo
+  samuel config set installed.languages typescript,python,go
+  samuel config set installed.frameworks react,nextjs`,
 	Args: cobra.ExactArgs(2),
 	RunE: runConfigSet,
 }
@@ -88,14 +88,14 @@ func runConfigList(cmd *cobra.Command, args []string) error {
 	config, err := core.LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
-			ui.Warn("No AICoF installation found in current directory")
-			ui.Info("Run 'aicof init' to initialize a project")
+			ui.Warn("No Samuel installation found in current directory")
+			ui.Info("Run 'samuel init' to initialize a project")
 			return nil
 		}
 		return fmt.Errorf("failed to load config: %w", err)
 	}
 
-	ui.Bold("AICoF Configuration")
+	ui.Bold("Samuel Configuration")
 	fmt.Println()
 
 	values := config.GetAllValues()
@@ -109,7 +109,7 @@ func runConfigList(cmd *cobra.Command, args []string) error {
 	}
 
 	fmt.Println()
-	ui.Dim("Config file: aicof.yaml")
+	ui.Dim("Config file: samuel.yaml")
 
 	return nil
 }
@@ -127,7 +127,7 @@ func runConfigGet(cmd *cobra.Command, args []string) error {
 	config, err := core.LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
-			ui.Warn("No AICoF installation found in current directory")
+			ui.Warn("No Samuel installation found in current directory")
 			return nil
 		}
 		return fmt.Errorf("failed to load config: %w", err)
@@ -157,8 +157,8 @@ func runConfigSet(cmd *cobra.Command, args []string) error {
 	config, err := core.LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
-			ui.Warn("No AICoF installation found in current directory")
-			ui.Info("Run 'aicof init' to initialize a project")
+			ui.Warn("No Samuel installation found in current directory")
+			ui.Info("Run 'samuel init' to initialize a project")
 			return nil
 		}
 		return fmt.Errorf("failed to load config: %w", err)

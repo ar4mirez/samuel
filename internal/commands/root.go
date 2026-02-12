@@ -12,20 +12,20 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "aicof",
-	Short: "AICoF - Artificial Intelligence Coding Framework CLI",
-	Long: `AICoF CLI manages the Artificial Intelligence Coding Framework.
+	Use:   "samuel",
+	Short: "Samuel - Artificial Intelligence Coding Framework CLI",
+	Long: `Samuel CLI manages the Artificial Intelligence Coding Framework.
 
 It helps you initialize projects with AI coding guardrails, update framework
 versions, and manage language/framework guides without cloning the repository.
 
 Examples:
-  aicof init my-project          # Initialize a new project
-  aicof init .                   # Initialize in current directory
-  aicof update                   # Update to latest framework version
-  aicof add language rust        # Add Rust language guide
-  aicof list --available         # List all available components
-  aicof doctor                   # Check installation health`,
+  samuel init my-project          # Initialize a new project
+  samuel init .                   # Initialize in current directory
+  samuel update                   # Update to latest framework version
+  samuel add language rust        # Add Rust language guide
+  samuel list --available         # List all available components
+  samuel doctor                   # Check installation health`,
 	SilenceUsage:  true,
 	SilenceErrors: true,
 }

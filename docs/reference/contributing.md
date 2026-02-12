@@ -1,11 +1,11 @@
 ---
 title: Contributing
-description: How to contribute to AICoF
+description: How to contribute to Samuel
 ---
 
 # Contributing
 
-Thank you for your interest in contributing to AICoF!
+Thank you for your interest in contributing to Samuel!
 
 ---
 
@@ -110,8 +110,8 @@ Have an idea?
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/ar4mirez/aicof.git
-cd aicof
+git clone https://github.com/ar4mirez/samuel.git
+cd samuel
 ```
 
 ### Install Documentation Dependencies
@@ -300,8 +300,8 @@ Be respectful and constructive:
 
 ## Questions?
 
-- Open a [Discussion](https://github.com/ar4mirez/aicof/discussions)
-- Check existing [Issues](https://github.com/ar4mirez/aicof/issues)
+- Open a [Discussion](https://github.com/ar4mirez/samuel/discussions)
+- Check existing [Issues](https://github.com/ar4mirez/samuel/issues)
 - Review this documentation
 
 Thank you for contributing!

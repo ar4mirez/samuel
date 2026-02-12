@@ -295,7 +295,7 @@ func TestLoadConfig_Valid(t *testing.T) {
 
 	// Create a valid config file
 	configContent := `version: "1.0.0"
-registry: "https://github.com/ar4mirez/aicof"
+registry: "https://github.com/ar4mirez/samuel"
 installed:
   languages:
     - go
@@ -304,7 +304,7 @@ installed:
   workflows:
     - all
 `
-	err := os.WriteFile(filepath.Join(tmpDir, "aicof.yaml"), []byte(configContent), 0644)
+	err := os.WriteFile(filepath.Join(tmpDir, "samuel.yaml"), []byte(configContent), 0644)
 	if err != nil {
 		t.Fatalf("Failed to create test config: %v", err)
 	}
@@ -345,8 +345,8 @@ func TestSaveConfig(t *testing.T) {
 	}
 
 	// Verify file exists
-	if _, err := os.Stat(filepath.Join(tmpDir, "aicof.yaml")); os.IsNotExist(err) {
-		t.Error("SaveConfig() did not create aicof.yaml")
+	if _, err := os.Stat(filepath.Join(tmpDir, "samuel.yaml")); os.IsNotExist(err) {
+		t.Error("SaveConfig() did not create samuel.yaml")
 	}
 
 	// Load and verify
@@ -393,21 +393,21 @@ func TestConfigExists(t *testing.T) {
 		t.Error("ConfigExists() = true for empty dir, want false")
 	}
 
-	// Create aicof.yaml
-	if err := os.WriteFile(filepath.Join(tmpDir, "aicof.yaml"), []byte("version: 1.0.0"), 0644); err != nil {
+	// Create samuel.yaml
+	if err := os.WriteFile(filepath.Join(tmpDir, "samuel.yaml"), []byte("version: 1.0.0"), 0644); err != nil {
 		t.Fatalf("Failed to write config file: %v", err)
 	}
 	if !ConfigExists(tmpDir) {
-		t.Error("ConfigExists() = false with aicof.yaml, want true")
+		t.Error("ConfigExists() = false with samuel.yaml, want true")
 	}
 
 	// Test with alternative config file
 	tmpDir2 := t.TempDir()
-	if err := os.WriteFile(filepath.Join(tmpDir2, ".aicof.yaml"), []byte("version: 1.0.0"), 0644); err != nil {
+	if err := os.WriteFile(filepath.Join(tmpDir2, ".samuel.yaml"), []byte("version: 1.0.0"), 0644); err != nil {
 		t.Fatalf("Failed to write alt config file: %v", err)
 	}
 	if !ConfigExists(tmpDir2) {
-		t.Error("ConfigExists() = false with .aicof.yaml, want true")
+		t.Error("ConfigExists() = false with .samuel.yaml, want true")
 	}
 }
 
@@ -721,7 +721,7 @@ func TestLoadConfigFrom_AltFile(t *testing.T) {
 	configContent := `version: "2.0.0"
 registry: "https://example.com"
 `
-	err := os.WriteFile(filepath.Join(tmpDir, ".aicof.yaml"), []byte(configContent), 0644)
+	err := os.WriteFile(filepath.Join(tmpDir, ".samuel.yaml"), []byte(configContent), 0644)
 	if err != nil {
 		t.Fatalf("Failed to create test config: %v", err)
 	}

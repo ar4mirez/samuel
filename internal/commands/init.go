@@ -6,15 +6,15 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
 var initCmd = &cobra.Command{
 	Use:   "init [project-name]",
-	Short: "Initialize AICoF framework in a project",
-	Long: `Initialize the AICoF (Artificial Intelligence Coding Framework) in a new or existing project.
+	Short: "Initialize Samuel framework in a project",
+	Long: `Initialize the Samuel (Artificial Intelligence Coding Framework) in a new or existing project.
 
 This command downloads and installs framework files including:
 - CLAUDE.md and AGENTS.md (core guardrails and methodology)
@@ -22,10 +22,10 @@ This command downloads and installs framework files including:
 - Per-folder CLAUDE.md stubs for existing directories
 
 Examples:
-  aicof init my-project              # Create new project
-  aicof init .                       # Initialize in current directory
-  aicof init --template minimal      # Use minimal template
-  aicof init --languages ts,py,go    # Select specific languages`,
+  samuel init my-project              # Create new project
+  samuel init .                       # Initialize in current directory
+  samuel init --template minimal      # Use minimal template
+  samuel init --languages ts,py,go    # Select specific languages`,
 	RunE: runInit,
 }
 
@@ -71,14 +71,14 @@ func runInit(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	// Check if this is the AICoF repository itself (prevent self-init)
-	if isAICOFRepository(absTargetDir) {
-		return fmt.Errorf("cannot initialize inside the AICoF repository itself.\nUse 'aicof init <project-name>' to create a new project directory")
+	// Check if this is the Samuel repository itself (prevent self-init)
+	if isSamuelRepository(absTargetDir) {
+		return fmt.Errorf("cannot initialize inside the Samuel repository itself.\nUse 'samuel init <project-name>' to create a new project directory")
 	}
 
 	// Check for existing config
 	if core.ConfigExists(absTargetDir) && !force {
-		return fmt.Errorf("AICoF already initialized in %s. Use --force to reinitialize", absTargetDir)
+		return fmt.Errorf("Samuel already initialized in %s. Use --force to reinitialize", absTargetDir)
 	}
 
 	// Variables to collect user choices
@@ -184,7 +184,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 	}
 
 	// Show what will be installed
-	ui.Header("AICoF Initialization")
+	ui.Header("Samuel Initialization")
 	ui.TableRow("Target", absTargetDir)
 	ui.TableRow("Languages", fmt.Sprintf("%d selected", len(selectedLanguages)))
 	ui.TableRow("Frameworks", fmt.Sprintf("%d selected", len(selectedFrameworks)))
@@ -223,7 +223,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 		spinner.Error("Download failed")
 		return fmt.Errorf("failed to download framework: %w", err)
 	}
-	spinner.Success(fmt.Sprintf("Downloaded AICoF v%s", version))
+	spinner.Success(fmt.Sprintf("Downloaded Samuel v%s", version))
 
 	// Create target directory if needed
 	if createDir {
@@ -297,7 +297,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 	if err := config.Save(absTargetDir); err != nil {
 		return fmt.Errorf("failed to save config: %w", err)
 	}
-	ui.Success("Created aicof.yaml")
+	ui.Success("Created samuel.yaml")
 
 	// Show next steps
 	fmt.Println()
@@ -306,7 +306,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 		ui.ListItem(1, "cd %s", filepath.Base(absTargetDir))
 	}
 	ui.ListItem(1, "Start coding with AI assistance!")
-	ui.ListItem(1, "Run 'aicof doctor' to verify installation")
+	ui.ListItem(1, "Run 'samuel doctor' to verify installation")
 
 	return nil
 }
@@ -365,10 +365,10 @@ func expandFrameworks(flags []string) []string {
 	return result
 }
 
-// isAICOFRepository checks if the target directory is the AICoF repository itself
+// isSamuelRepository checks if the target directory is the Samuel repository itself
 // This prevents users from accidentally initializing inside the framework source
-func isAICOFRepository(targetDir string) bool {
-	// Check for template/ directory (unique to the AICoF repo structure)
+func isSamuelRepository(targetDir string) bool {
+	// Check for template/ directory (unique to the Samuel repo structure)
 	templateDir := filepath.Join(targetDir, "template")
 	if info, err := os.Stat(templateDir); err == nil && info.IsDir() {
 		// Also check for template/CLAUDE.md to be sure
@@ -381,7 +381,7 @@ func isAICOFRepository(targetDir string) bool {
 	// Check for packages/cli directory (CLI source code)
 	cliDir := filepath.Join(targetDir, "packages", "cli")
 	if info, err := os.Stat(cliDir); err == nil && info.IsDir() {
-		// Check for go.mod with aicof module
+		// Check for go.mod with samuel module
 		goMod := filepath.Join(cliDir, "go.mod")
 		if _, err := os.Stat(goMod); err == nil {
 			return true
@@ -422,7 +422,7 @@ func scanAndCreateFolderCLAUDEMD(rootDir string) error {
 			continue // Already exists
 		}
 
-		stub := fmt.Sprintf("# %s\n\n<!-- Auto-generated by AICoF. Customize with folder-specific instructions. -->\n<!-- AI agents load this file when working in this directory. -->\n", name)
+		stub := fmt.Sprintf("# %s\n\n<!-- Auto-generated by Samuel. Customize with folder-specific instructions. -->\n<!-- AI agents load this file when working in this directory. -->\n", name)
 		if err := os.WriteFile(claudePath, []byte(stub), 0644); err != nil {
 			continue // Skip on error
 		}

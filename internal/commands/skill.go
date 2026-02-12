@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -26,9 +26,9 @@ Subcommands:
   info      Show detailed information about a skill
 
 Examples:
-  aicof skill create database-ops     # Create a new skill
-  aicof skill validate                # Validate all skills
-  aicof skill list                    # List installed skills`,
+  samuel skill create database-ops     # Create a new skill
+  samuel skill validate                # Validate all skills
+  samuel skill list                    # List installed skills`,
 }
 
 var skillCreateCmd = &cobra.Command{
@@ -43,8 +43,8 @@ The skill name must:
   - Be max 64 characters
 
 Examples:
-  aicof skill create database-ops
-  aicof skill create my-custom-skill`,
+  samuel skill create database-ops
+  samuel skill create my-custom-skill`,
 	Args: cobra.ExactArgs(1),
 	RunE: runSkillCreate,
 }
@@ -64,8 +64,8 @@ Checks:
   - Compatibility field (max 500 chars if present)
 
 Examples:
-  aicof skill validate                # Validate all skills
-  aicof skill validate database-ops   # Validate specific skill`,
+  samuel skill validate                # Validate all skills
+  samuel skill validate database-ops   # Validate specific skill`,
 	Args: cobra.MaximumNArgs(1),
 	RunE: runSkillValidate,
 }
@@ -78,7 +78,7 @@ var skillListCmd = &cobra.Command{
 Shows skill name, description, and validation status.
 
 Examples:
-  aicof skill list`,
+  samuel skill list`,
 	RunE: runSkillList,
 }
 
@@ -95,7 +95,7 @@ Displays:
   - Line count and estimated tokens
 
 Examples:
-  aicof skill info database-ops`,
+  samuel skill info database-ops`,
 	Args: cobra.ExactArgs(1),
 	RunE: runSkillInfo,
 }
@@ -125,9 +125,9 @@ func runSkillCreate(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to get working directory: %w", err)
 	}
 
-	// Check if AICoF is initialized
+	// Check if Samuel is initialized
 	if !core.ConfigExists(cwd) {
-		return fmt.Errorf("no AICoF installation found. Run 'aicof init' first")
+		return fmt.Errorf("no Samuel installation found. Run 'samuel init' first")
 	}
 
 	// Skills directory
@@ -238,7 +238,7 @@ func runSkillList(cmd *cobra.Command, args []string) error {
 	// Check if skills directory exists
 	if _, err := os.Stat(skillsDir); os.IsNotExist(err) {
 		ui.Info("No skills directory found at .claude/skills/")
-		ui.Print("Run 'aicof skill create <name>' to create your first skill")
+		ui.Print("Run 'samuel skill create <name>' to create your first skill")
 		return nil
 	}
 
@@ -249,7 +249,7 @@ func runSkillList(cmd *cobra.Command, args []string) error {
 
 	if len(skills) == 0 {
 		ui.Info("No skills found in .claude/skills/")
-		ui.Print("Run 'aicof skill create <name>' to create your first skill")
+		ui.Print("Run 'samuel skill create <name>' to create your first skill")
 		return nil
 	}
 
@@ -276,7 +276,7 @@ func runSkillList(cmd *cobra.Command, args []string) error {
 	ui.Print("")
 	ui.Print("Total: %d skill(s)", len(skills))
 	ui.Print("")
-	ui.Info("Run 'aicof skill info <name>' for details")
+	ui.Info("Run 'samuel skill info <name>' for details")
 
 	return nil
 }

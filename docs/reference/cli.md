@@ -1,11 +1,11 @@
 ---
 title: CLI Command Reference
-description: Complete reference for all AICoF CLI commands
+description: Complete reference for all Samuel CLI commands
 ---
 
 # CLI Command Reference
 
-The AICoF CLI provides 13 commands for managing and discovering components. This page documents all commands, flags, and usage examples.
+The Samuel CLI provides 13 commands for managing and discovering components. This page documents all commands, flags, and usage examples.
 
 ---
 
@@ -13,13 +13,13 @@ The AICoF CLI provides 13 commands for managing and discovering components. This
 
 ```bash
 # macOS/Linux (Homebrew)
-brew tap ar4mirez/tap && brew install aicof
+brew tap ar4mirez/tap && brew install samuel
 
 # macOS/Linux (Curl)
-curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
+curl -sSL https://raw.githubusercontent.com/ar4mirez/samuel/main/install.sh | sh
 
 # Go
-go install github.com/ar4mirez/aicof/cmd/aicof@latest
+go install github.com/ar4mirez/samuel/cmd/samuel@latest
 ```
 
 ---
@@ -37,8 +37,8 @@ These flags work with all commands:
 **Example:**
 
 ```bash
-aicof --verbose init
-aicof --no-color list
+samuel --verbose init
+samuel --no-color list
 ```
 
 ---
@@ -57,9 +57,9 @@ When specifying component types, you can use these aliases:
 
 ```bash
 # These are equivalent
-aicof add language typescript
-aicof add lang typescript
-aicof add l typescript
+samuel add language typescript
+samuel add lang typescript
+samuel add l typescript
 ```
 
 ---
@@ -68,12 +68,12 @@ aicof add l typescript
 
 ### init
 
-Initialize AICoF in a new or existing project.
+Initialize Samuel in a new or existing project.
 
 **Usage:**
 
 ```bash
-aicof init [project-name] [flags]
+samuel init [project-name] [flags]
 ```
 
 **Flags:**
@@ -91,16 +91,16 @@ aicof init [project-name] [flags]
 
 ```bash
 # Interactive setup in current directory
-aicof init
+samuel init
 
 # Create new project directory
-aicof init my-project
+samuel init my-project
 
 # Non-interactive with specific components
-aicof init --languages go,python --frameworks gin --non-interactive
+samuel init --languages go,python --frameworks gin --non-interactive
 
 # Force overwrite existing files
-aicof init --force
+samuel init --force
 ```
 
 ---
@@ -112,7 +112,7 @@ Search for components by keyword with fuzzy matching.
 **Usage:**
 
 ```bash
-aicof search <query> [flags]
+samuel search <query> [flags]
 ```
 
 **Flags:**
@@ -126,19 +126,19 @@ aicof search <query> [flags]
 
 ```bash
 # Search across all component types
-aicof search react
+samuel search react
 
 # Search only frameworks
-aicof search --type fw api
+samuel search --type fw api
 
 # Search only languages
-aicof search -t lang script
+samuel search -t lang script
 
 # Fuzzy matching - finds "python" even with typo
-aicof search pythn
+samuel search pythn
 
 # Limit results
-aicof search web --limit 5
+samuel search web --limit 5
 ```
 
 **Search Scoring:**
@@ -162,7 +162,7 @@ Show detailed information about a component.
 **Usage:**
 
 ```bash
-aicof info <type> <name> [flags]
+samuel info <type> <name> [flags]
 ```
 
 **Flags:**
@@ -176,17 +176,17 @@ aicof info <type> <name> [flags]
 
 ```bash
 # Show framework details
-aicof info framework react
+samuel info framework react
 
 # Show language with content preview
-aicof info lang typescript --preview 20
+samuel info lang typescript --preview 20
 
 # Using aliases
-aicof info fw nextjs
-aicof info l go --preview 30
+samuel info fw nextjs
+samuel info l go --preview 30
 
 # Hide related components
-aicof info fw react --no-related
+samuel info fw react --no-related
 ```
 
 **Output includes:**
@@ -207,26 +207,26 @@ Add a language guide, framework guide, or workflow.
 **Usage:**
 
 ```bash
-aicof add <type> <name> [flags]
+samuel add <type> <name> [flags]
 ```
 
 **Examples:**
 
 ```bash
 # Add a language guide
-aicof add language typescript
-aicof add lang python
-aicof add l go
+samuel add language typescript
+samuel add lang python
+samuel add l go
 
 # Add a framework guide
-aicof add framework react
-aicof add fw django
-aicof add f rails
+samuel add framework react
+samuel add fw django
+samuel add f rails
 
 # Add a workflow
-aicof add workflow code-review
-aicof add wf security-audit
-aicof add w testing-strategy
+samuel add workflow code-review
+samuel add wf security-audit
+samuel add w testing-strategy
 ```
 
 ---
@@ -238,7 +238,7 @@ Remove a language guide, framework guide, or workflow.
 **Usage:**
 
 ```bash
-aicof remove <type> <name> [flags]
+samuel remove <type> <name> [flags]
 ```
 
 **Flags:**
@@ -251,13 +251,13 @@ aicof remove <type> <name> [flags]
 
 ```bash
 # Remove with confirmation
-aicof remove framework react
+samuel remove framework react
 
 # Remove without confirmation
-aicof remove fw react --force
+samuel remove fw react --force
 
 # Remove a workflow
-aicof remove wf code-review
+samuel remove wf code-review
 ```
 
 ---
@@ -269,7 +269,7 @@ List installed or available components.
 **Usage:**
 
 ```bash
-aicof list [flags]
+samuel list [flags]
 ```
 
 **Flags:**
@@ -283,23 +283,23 @@ aicof list [flags]
 
 ```bash
 # List all installed components
-aicof list
+samuel list
 
 # List available (not installed) components
-aicof list --available
+samuel list --available
 
 # List only installed frameworks
-aicof list --type frameworks
+samuel list --type frameworks
 
 # List available languages
-aicof list --available --type languages
+samuel list --available --type languages
 ```
 
 ---
 
 ### config
 
-Manage AICoF configuration.
+Manage Samuel configuration.
 
 **Subcommands:**
 
@@ -328,15 +328,15 @@ Manage AICoF configuration.
 
 ```bash
 # Show all configuration
-aicof config list
+samuel config list
 
 # Get specific value
-aicof config get version
-aicof config get installed.languages
+samuel config get version
+samuel config get installed.languages
 
 # Set values
-aicof config set registry https://github.com/ar4mirez/aicof
-aicof config set installed.languages go,rust,python
+samuel config set registry https://github.com/ar4mirez/samuel
+samuel config set installed.languages go,rust,python
 ```
 
 ---
@@ -348,7 +348,7 @@ Compare versions to see what changed.
 **Usage:**
 
 ```bash
-aicof diff [version1] [version2] [flags]
+samuel diff [version1] [version2] [flags]
 ```
 
 **Flags:**
@@ -362,16 +362,16 @@ aicof diff [version1] [version2] [flags]
 
 ```bash
 # Compare installed vs latest
-aicof diff --installed
+samuel diff --installed
 
 # Compare two specific versions
-aicof diff 1.6.0 1.7.0
+samuel diff 1.6.0 1.7.0
 
 # Compare local vs specific version
-aicof diff 1.7.0
+samuel diff 1.7.0
 
 # Show only component changes
-aicof diff --installed --components
+samuel diff --installed --components
 ```
 
 **Output shows:**
@@ -385,12 +385,12 @@ aicof diff --installed --components
 
 ### update
 
-Update AICoF to the latest version.
+Update Samuel to the latest version.
 
 **Usage:**
 
 ```bash
-aicof update [flags]
+samuel update [flags]
 ```
 
 **Flags:**
@@ -406,19 +406,19 @@ aicof update [flags]
 
 ```bash
 # Check for updates
-aicof update --check
+samuel update --check
 
 # Preview changes before updating
-aicof update --diff
+samuel update --diff
 
 # Update to latest
-aicof update
+samuel update
 
 # Update to specific version
-aicof update --version 1.7.0
+samuel update --version 1.7.0
 
 # Force update without prompts
-aicof update --force
+samuel update --force
 ```
 
 ---
@@ -430,7 +430,7 @@ Check installation health and diagnose issues.
 **Usage:**
 
 ```bash
-aicof doctor [flags]
+samuel doctor [flags]
 ```
 
 **Flags:**
@@ -443,10 +443,10 @@ aicof doctor [flags]
 
 ```bash
 # Run health check
-aicof doctor
+samuel doctor
 
 # Auto-fix issues
-aicof doctor --fix
+samuel doctor --fix
 ```
 
 **Checks performed:**
@@ -466,7 +466,7 @@ Show version information.
 **Usage:**
 
 ```bash
-aicof version [flags]
+samuel version [flags]
 ```
 
 **Flags:**
@@ -479,10 +479,10 @@ aicof version [flags]
 
 ```bash
 # Show version
-aicof version
+samuel version
 
 # Check for updates
-aicof version --check
+samuel version --check
 ```
 
 ---
@@ -504,19 +504,19 @@ Manage Agent Skills — portable capability modules for AI agents.
 
 ```bash
 # Create a new skill
-aicof skill create database-ops
+samuel skill create database-ops
 
 # Validate all skills
-aicof skill validate
+samuel skill validate
 
 # Validate a specific skill
-aicof skill validate database-ops
+samuel skill validate database-ops
 
 # List installed skills
-aicof skill list
+samuel skill list
 
 # Show skill details
-aicof skill info database-ops
+samuel skill info database-ops
 ```
 
 **Skill name requirements:**
@@ -576,32 +576,32 @@ Autonomous AI coding loop using the Ralph Wiggum methodology.
 
 ```bash
 # Initialize from a PRD
-aicof auto init --prd .claude/tasks/0001-prd-auth.md
+samuel auto init --prd .claude/tasks/0001-prd-auth.md
 
 # Initialize with custom settings
-aicof auto init --ai-tool amp --max-iterations 100
+samuel auto init --ai-tool amp --max-iterations 100
 
 # Convert a PRD to prd.json
-aicof auto convert .claude/tasks/0001-prd-auth.md
+samuel auto convert .claude/tasks/0001-prd-auth.md
 
 # Check loop status
-aicof auto status
+samuel auto status
 
 # Start the loop
-aicof auto start
+samuel auto start
 
 # Start with custom iterations, skip confirmation
-aicof auto start --iterations 20 --yes
+samuel auto start --iterations 20 --yes
 
 # Dry run
-aicof auto start --dry-run
+samuel auto start --dry-run
 
 # Manage tasks
-aicof auto task list
-aicof auto task complete 1.1
-aicof auto task skip 2.3
-aicof auto task reset 1.1
-aicof auto task add "3.0" "New parent task"
+samuel auto task list
+samuel auto task complete 1.1
+samuel auto task skip 2.3
+samuel auto task reset 1.1
+samuel auto task add "3.0" "New parent task"
 ```
 
 **Generated files:**
@@ -627,49 +627,49 @@ aicof auto task add "3.0" "New parent task"
 mkdir my-project && cd my-project
 
 # Initialize with defaults
-aicof init
+samuel init
 
 # Or with specific components
-aicof init --languages typescript,python --frameworks react,fastapi
+samuel init --languages typescript,python --frameworks react,fastapi
 ```
 
 ### Discovering Components
 
 ```bash
 # Search for what you need
-aicof search api
+samuel search api
 
 # Get details
-aicof info fw fastapi --preview 20
+samuel info fw fastapi --preview 20
 
 # Add it
-aicof add fw fastapi
+samuel add fw fastapi
 ```
 
 ### Keeping Up to Date
 
 ```bash
 # Check what's new
-aicof diff --installed
+samuel diff --installed
 
 # Preview changes
-aicof update --check
+samuel update --check
 
 # Update
-aicof update
+samuel update
 ```
 
 ### Troubleshooting
 
 ```bash
 # Check health
-aicof doctor
+samuel doctor
 
 # Fix issues
-aicof doctor --fix
+samuel doctor --fix
 
 # Verbose output for debugging
-aicof --verbose doctor
+samuel --verbose doctor
 ```
 
 ---

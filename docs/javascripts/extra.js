@@ -1,4 +1,4 @@
-// AICoF - Custom JavaScript
+// Samuel - Custom JavaScript
 
 // Initialize when document is ready
 document.addEventListener('DOMContentLoaded', function() {

@@ -5,12 +5,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 )
 
 func displayFileDiff(diff *VersionDiff) {
-	ui.Bold("AICoF Version Diff")
+	ui.Bold("Samuel Version Diff")
 	fmt.Println()
 	ui.Print("Comparing: %s → %s", diff.FromVersion, diff.ToVersion)
 	fmt.Println()
@@ -47,12 +47,12 @@ func displayFileDiff(diff *VersionDiff) {
 
 	if len(diff.Added) > 0 || len(diff.Modified) > 0 {
 		fmt.Println()
-		ui.Info("Run 'aicof update' to apply these changes")
+		ui.Info("Run 'samuel update' to apply these changes")
 	}
 }
 
 func displayComponentDiff(diff *VersionDiff) {
-	ui.Bold("AICoF Component Changes")
+	ui.Bold("Samuel Component Changes")
 	fmt.Println()
 	ui.Print("Comparing: %s → %s", diff.FromVersion, diff.ToVersion)
 	fmt.Println()

@@ -76,7 +76,7 @@ func (c *Client) GetLatestRelease() (*Release, error) {
 	}
 
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
-	req.Header.Set("User-Agent", "aicof-cli")
+	req.Header.Set("User-Agent", "samuel-cli")
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
@@ -131,7 +131,7 @@ func (c *Client) GetTags() ([]Tag, error) {
 	}
 
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
-	req.Header.Set("User-Agent", "aicof-cli")
+	req.Header.Set("User-Agent", "samuel-cli")
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
@@ -170,7 +170,7 @@ func (c *Client) DownloadArchive(version string) (io.ReadCloser, int64, error) {
 		return nil, 0, err
 	}
 
-	req.Header.Set("User-Agent", "aicof-cli")
+	req.Header.Set("User-Agent", "samuel-cli")
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
@@ -199,7 +199,7 @@ func (c *Client) DownloadBranchArchive(branch string) (io.ReadCloser, int64, err
 		return nil, 0, err
 	}
 
-	req.Header.Set("User-Agent", "aicof-cli")
+	req.Header.Set("User-Agent", "samuel-cli")
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
@@ -230,7 +230,7 @@ func (c *Client) DownloadFile(version, path string) ([]byte, error) {
 		return nil, err
 	}
 
-	req.Header.Set("User-Agent", "aicof-cli")
+	req.Header.Set("User-Agent", "samuel-cli")
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {

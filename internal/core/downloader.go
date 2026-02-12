@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ar4mirez/aicof/internal/github"
+	"github.com/ar4mirez/samuel/internal/github"
 )
 
 // Downloader handles downloading and extracting framework files
@@ -35,7 +35,7 @@ func NewDownloader() (*Downloader, error) {
 // If version is "dev", downloads from main branch
 func (d *Downloader) DownloadVersion(version string) (string, error) {
 	// Check if already cached (skip cache for dev version)
-	cacheDest := filepath.Join(d.cachePath, fmt.Sprintf("aicof-%s", version))
+	cacheDest := filepath.Join(d.cachePath, fmt.Sprintf("samuel-%s", version))
 	if version != github.DevVersion {
 		if _, err := os.Stat(cacheDest); err == nil {
 			return cacheDest, nil
@@ -61,7 +61,7 @@ func (d *Downloader) DownloadVersion(version string) (string, error) {
 	defer reader.Close()
 
 	// Create temp directory for extraction
-	tempDir, err := os.MkdirTemp("", "aicof-download-*")
+	tempDir, err := os.MkdirTemp("", "samuel-download-*")
 	if err != nil {
 		return "", fmt.Errorf("failed to create temp directory: %w", err)
 	}

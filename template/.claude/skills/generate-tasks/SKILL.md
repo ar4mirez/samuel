@@ -5,7 +5,7 @@ description: |
   into implementable subtasks with clear acceptance criteria and dependencies.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---
@@ -394,7 +394,7 @@ unattended execution.
 After generating the markdown task list:
 
 ```bash
-aicof auto init --prd .claude/tasks/NNNN-prd-feature.md
+samuel auto init --prd .claude/tasks/NNNN-prd-feature.md
 ```
 
 This converts the PRD and task list into `.claude/auto/prd.json` and

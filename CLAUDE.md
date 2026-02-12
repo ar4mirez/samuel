@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-AI-assisted development instructions for the AICoF CLI project.
+AI-assisted development instructions for the Samuel CLI project.
 
 > **AGENTS.md Compatible**: A copy exists as `AGENTS.md` for cross-tool compatibility (Cursor, Codex, Copilot, etc.)
 
@@ -11,10 +11,10 @@ AI-assisted development instructions for the AICoF CLI project.
 ### Setup Commands
 
 ```bash
-git clone https://github.com/ar4mirez/aicof.git && cd aicof
+git clone https://github.com/ar4mirez/samuel.git && cd samuel
 go mod download
-make build            # → ./bin/aicof
-./bin/aicof version   # Verify installation
+make build            # → ./bin/samuel
+./bin/samuel version   # Verify installation
 ```
 
 ### Testing Commands
@@ -29,7 +29,7 @@ go test -race ./...   # Race detection only
 ### Build & Lint Commands
 
 ```bash
-make build            # Build binary to ./bin/aicof
+make build            # Build binary to ./bin/samuel
 go build ./...        # Build all packages
 go vet ./...          # Static analysis
 golangci-lint run     # Comprehensive lint
@@ -57,7 +57,7 @@ mkdocs build          # Build static site to ./site/
 ### Never Commit
 - Secrets, API keys, credentials, tokens
 - `.env` files
-- `bin/`, build artifacts, the root `aicof` binary
+- `bin/`, build artifacts, the root `samuel` binary
 - `.claude/settings.local.json` (personal settings)
 
 ### Ask Before Modifying
@@ -82,8 +82,8 @@ mkdocs build          # Build static site to ./site/
 ### Architecture
 
 ```
-aicof/
-├── cmd/aicof/              # Entry point (main.go) — minimal
+samuel/
+├── cmd/samuel/              # Entry point (main.go) — minimal
 ├── internal/
 │   ├── commands/            # 13 CLI commands (init, update, add, remove, list, doctor, version, search, info, config, diff, skill, auto)
 │   ├── core/                # Business logic (config, registry, extractor, skill, auto)
@@ -99,8 +99,8 @@ aicof/
 ```
 
 **Core Flow**: User command → GitHub download → Tar extraction → Local files
-**Caching**: Downloaded versions cached in `~/.cache/aicof/`
-**Config**: Project config in `aicof.yaml`
+**Caching**: Downloaded versions cached in `~/.cache/samuel/`
+**Config**: Project config in `samuel.yaml`
 
 ### Key Design Decisions
 
@@ -132,17 +132,17 @@ aicof/
 - Go-specific? → .claude/skills/go-guide/SKILL.md
 
 **Skills** (capability modules - [Agent Skills](https://agentskills.io) standard):
-- Create: `aicof skill create <name>` or `.claude/skills/create-skill/SKILL.md`
-- Validate: `aicof skill validate`
-- List: `aicof skill list`
+- Create: `samuel skill create <name>` or `.claude/skills/create-skill/SKILL.md`
+- Validate: `samuel skill validate`
+- List: `samuel skill list`
 - Load: `.claude/skills/<skill-name>/SKILL.md` when task matches description
 
 **Autonomous Mode (Ralph Wiggum methodology):**
 
-- Initialize: `aicof auto init --prd .claude/tasks/NNNN-prd-feature.md`
-- Start loop: `aicof auto start`
-- Check status: `aicof auto status`
-- Manage tasks: `aicof auto task list|complete|skip|reset|add`
+- Initialize: `samuel auto init --prd .claude/tasks/NNNN-prd-feature.md`
+- Start loop: `samuel auto start`
+- Check status: `samuel auto status`
+- Manage tasks: `samuel auto task list|complete|skip|reset|add`
 - Methodology: `.claude/skills/auto/SKILL.md`
 
 <!-- SKILLS_START -->
@@ -169,7 +169,7 @@ Skills extend AI capabilities. Load a skill when task matches its description.
 | security-audit | Security assessment workflow (OWASP, auth, vulnerabilities). |
 | testing-strategy | Test planning and coverage strategy workflow. |
 | troubleshooting | Debugging and problem-solving workflow. |
-| update-framework | AICoF version update workflow. |
+| update-framework | Samuel version update workflow. |
 
 **To use a skill**: Read `.claude/skills/<skill-name>/SKILL.md`
 <!-- SKILLS_END -->

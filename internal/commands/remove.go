@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -24,8 +24,8 @@ Types:
   workflow   Remove a workflow (only individual workflows, not 'all')
 
 Examples:
-  aicof remove language rust
-  aicof remove framework django`,
+  samuel remove language rust
+  samuel remove framework django`,
 	Args: cobra.ExactArgs(2),
 	RunE: runRemove,
 }
@@ -44,7 +44,7 @@ func runRemove(cmd *cobra.Command, args []string) error {
 	config, err := core.LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
-			return fmt.Errorf("no AICoF installation found. Run 'aicof init' first")
+			return fmt.Errorf("no Samuel installation found. Run 'samuel init' first")
 		}
 		return fmt.Errorf("failed to load config: %w", err)
 	}
@@ -129,7 +129,7 @@ func runRemove(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to update config: %w", err)
 	}
 
-	ui.Success("Updated aicof.yaml")
+	ui.Success("Updated samuel.yaml")
 
 	return nil
 }

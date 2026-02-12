@@ -6,7 +6,7 @@ description: |
   portable Agent Skills standard format.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---
@@ -47,10 +47,10 @@ Before creating the skill, clarify its purpose:
 
 ### Step 2: Scaffold the Skill
 
-Run the AICoF CLI command:
+Run the Samuel CLI command:
 
 ```bash
-aicof skill create <skill-name>
+samuel skill create <skill-name>
 ```
 
 **Name Requirements**:
@@ -157,7 +157,7 @@ assets/
 Run validation to check against Agent Skills spec:
 
 ```bash
-aicof skill validate <skill-name>
+samuel skill validate <skill-name>
 ```
 
 **Validation Checks**:
@@ -270,7 +270,7 @@ Before finalizing your skill:
 - [ ] SKILL.md body is under 500 lines
 - [ ] Instructions are clear and step-by-step
 - [ ] Examples show input/output pairs
-- [ ] Validation passes (`aicof skill validate`)
+- [ ] Validation passes (`samuel skill validate`)
 - [ ] Tested with real scenarios
 - [ ] Scripts handle errors gracefully (if applicable)
 

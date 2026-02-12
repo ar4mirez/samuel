@@ -6,7 +6,7 @@ description: |
   testing gaps in existing codebases.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---

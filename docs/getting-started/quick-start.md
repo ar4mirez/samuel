@@ -1,11 +1,11 @@
 ---
 title: Quick Start
-description: Get started with AICoF in 60 seconds
+description: Get started with Samuel in 60 seconds
 ---
 
 # Quick Start Guide
 
-Get up and running with AICoF (Artificial Intelligence Coding Framework) in under a minute.
+Get up and running with Samuel (Artificial Intelligence Coding Framework) in under a minute.
 
 ---
 
@@ -15,11 +15,11 @@ Get up and running with AICoF (Artificial Intelligence Coding Framework) in unde
 
     ```bash
     # 1. Install the CLI
-    brew tap ar4mirez/tap && brew install aicof
+    brew tap ar4mirez/tap && brew install samuel
 
     # 2. Initialize your project
     cd your-project
-    aicof init
+    samuel init
 
     # 3. Done! Start coding with AI guardrails
     ```
@@ -28,29 +28,29 @@ Get up and running with AICoF (Artificial Intelligence Coding Framework) in unde
 
     ```bash
     # 1. Install via curl
-    curl -sSL https://raw.githubusercontent.com/ar4mirez/aicof/main/install.sh | sh
+    curl -sSL https://raw.githubusercontent.com/ar4mirez/samuel/main/install.sh | sh
 
     # 2. Initialize your project
     cd your-project
-    aicof init
+    samuel init
     ```
 
 === "Go Install"
 
     ```bash
     # 1. Install via Go
-    go install github.com/ar4mirez/aicof/cmd/aicof@latest
+    go install github.com/ar4mirez/samuel/cmd/samuel@latest
 
     # 2. Initialize your project
     cd your-project
-    aicof init
+    samuel init
     ```
 
 === "Manual Setup"
 
     ```bash
     # 1. Copy to your project
-    cp -r /path/to/aicof/{CLAUDE.md,.claude} ./
+    cp -r /path/to/samuel/{CLAUDE.md,.claude} ./
 
     # 2. (Optional) For cross-tool compatibility
     ln -s CLAUDE.md AGENTS.md
@@ -68,63 +68,63 @@ Get up and running with AICoF (Artificial Intelligence Coding Framework) in unde
 
 ## Discover Components Before Installing
 
-One of AICoF's best features is **component discovery**. Before installing anything, explore what's available:
+One of Samuel's best features is **component discovery**. Before installing anything, explore what's available:
 
 ### Search for Components
 
 ```bash
 # Find anything matching "react"
-aicof search react
+samuel search react
 
 # Search only frameworks
-aicof search --type fw api
+samuel search --type fw api
 
 # Fuzzy matching - finds "python" even with typos
-aicof search pythn
+samuel search pythn
 ```
 
 ### Preview Before Installing
 
 ```bash
 # See component details
-aicof info framework react
+samuel info framework react
 
 # Preview the actual content (first 20 lines)
-aicof info lang typescript --preview 20
+samuel info lang typescript --preview 20
 
 # See what's related
-aicof info fw nextjs  # Shows: Related to typescript, react
+samuel info fw nextjs  # Shows: Related to typescript, react
 ```
 
 ### Add What You Need
 
 ```bash
 # Add a framework
-aicof add framework react
+samuel add framework react
 
 # Add a language guide
-aicof add language typescript
+samuel add language typescript
 
 # Add a workflow
-aicof add workflow code-review
+samuel add workflow code-review
 
 # Use short aliases
-aicof add fw react
-aicof add lang ts
-aicof add wf security-audit
+samuel add fw react
+samuel add lang ts
+samuel add wf security-audit
 ```
 
 ### Check What's Installed
 
 ```bash
 # List installed components
-aicof list
+samuel list
 
 # See what's available (not installed)
-aicof list --available
+samuel list --available
 
 # Filter by type
-aicof list --type frameworks
+samuel list --type frameworks
 ```
 
 ---
@@ -136,10 +136,10 @@ aicof list --type frameworks
 ```bash
 # Create and initialize a new project
 mkdir my-project && cd my-project
-aicof init
+samuel init
 
 # Or initialize with specific components
-aicof init --languages typescript,python --frameworks react
+samuel init --languages typescript,python --frameworks react
 ```
 
 **The CLI will:**
@@ -155,13 +155,13 @@ aicof init --languages typescript,python --frameworks react
 
 ```bash
 cd existing-project
-aicof init
+samuel init
 ```
 
 **AI will:**
 
 1. Detect existing files (won't overwrite without `--force`)
-2. Create AICoF structure
+2. Create Samuel structure
 3. Let you select relevant components
 
 **Or use the workflow for deep analysis:**
@@ -210,19 +210,19 @@ Here are the most useful commands to get started:
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `init` | Initialize AICoF in a project | `aicof init` |
-| `search` | Find components by keyword | `aicof search react` |
-| `info` | Show component details | `aicof info fw react --preview` |
-| `add` | Add a component | `aicof add lang typescript` |
-| `remove` | Remove a component | `aicof remove fw react` |
-| `list` | List components | `aicof list --available` |
-| `config` | Manage configuration | `aicof config list` |
-| `diff` | Compare versions | `aicof diff --installed` |
-| `update` | Update framework | `aicof update --check` |
-| `doctor` | Check installation health | `aicof doctor` |
-| `version` | Show version info | `aicof version` |
-| `skill` | Manage Agent Skills | `aicof skill list` |
-| `auto` | Autonomous AI coding loop | `aicof auto status` |
+| `init` | Initialize Samuel in a project | `samuel init` |
+| `search` | Find components by keyword | `samuel search react` |
+| `info` | Show component details | `samuel info fw react --preview` |
+| `add` | Add a component | `samuel add lang typescript` |
+| `remove` | Remove a component | `samuel remove fw react` |
+| `list` | List components | `samuel list --available` |
+| `config` | Manage configuration | `samuel config list` |
+| `diff` | Compare versions | `samuel diff --installed` |
+| `update` | Update framework | `samuel update --check` |
+| `doctor` | Check installation health | `samuel doctor` |
+| `version` | Show version info | `samuel version` |
+| `skill` | Manage Agent Skills | `samuel skill list` |
+| `auto` | Autonomous AI coding loop | `samuel auto status` |
 
 **Type aliases**: `language` (lang, l), `framework` (fw, f), `workflow` (wf, w)
 
@@ -236,19 +236,19 @@ After setup, verify everything is working:
 
 ```bash
 # Check installation health
-aicof doctor
+samuel doctor
 
 # See what's installed
-aicof list
+samuel list
 
 # Check for updates
-aicof version --check
+samuel version --check
 ```
 
-**Expected output from `aicof doctor`:**
+**Expected output from `samuel doctor`:**
 
 ```
-AICoF Health Check
+Samuel Health Check
 ==================
 
 [OK] CLAUDE.md exists

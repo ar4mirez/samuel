@@ -1,11 +1,11 @@
 ---
 title: Cross-Tool Compatibility
-description: Using AICoF with multiple AI coding assistants
+description: Using Samuel with multiple AI coding assistants
 ---
 
 # Cross-Tool Compatibility
 
-AICoF works with any AI coding assistant through the AGENTS.md standard.
+Samuel works with any AI coding assistant through the AGENTS.md standard.
 
 ---
 

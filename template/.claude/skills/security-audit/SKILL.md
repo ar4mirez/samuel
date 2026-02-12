@@ -3,7 +3,7 @@ name: security-audit
 description: Security assessment workflow. Use when reviewing code for vulnerabilities, performing OWASP checks, auditing authentication/authorization logic, or validating security controls before deployment.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---

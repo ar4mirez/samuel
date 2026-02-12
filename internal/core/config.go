@@ -11,12 +11,12 @@ import (
 
 const (
 	// ConfigFileName is the default config file name
-	ConfigFileName = "aicof.yaml"
+	ConfigFileName = "samuel.yaml"
 	// AltConfigFileName is the hidden config file name
-	AltConfigFileName = ".aicof.yaml"
+	AltConfigFileName = ".samuel.yaml"
 )
 
-// Config represents the project's AICoF configuration
+// Config represents the project's Samuel configuration
 type Config struct {
 	Version   string         `yaml:"version"`
 	Installed InstalledItems `yaml:"installed"`
@@ -24,7 +24,7 @@ type Config struct {
 	Auto      *AutoYAML      `yaml:"auto,omitempty"`
 }
 
-// AutoYAML represents the auto loop configuration in aicof.yaml
+// AutoYAML represents the auto loop configuration in samuel.yaml
 type AutoYAML struct {
 	Enabled       bool     `yaml:"enabled"`
 	AITool        string   `yaml:"ai_tool,omitempty"`
@@ -277,7 +277,7 @@ func (c *Config) MigrateWorkflowsToSkills() bool {
 	return migrated
 }
 
-// GlobalConfig represents global CLI settings stored in ~/.config/aicof/
+// GlobalConfig represents global CLI settings stored in ~/.config/samuel/
 type GlobalConfig struct {
 	DefaultTemplate   string   `yaml:"default_template,omitempty"`
 	DefaultLanguages  []string `yaml:"default_languages,omitempty"`
@@ -291,7 +291,7 @@ func GetGlobalConfigPath() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(homeDir, ".config", "aicof"), nil
+	return filepath.Join(homeDir, ".config", "samuel"), nil
 }
 
 // GetCachePath returns the path to the cache directory

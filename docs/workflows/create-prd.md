@@ -233,7 +233,7 @@ Use the PRD at .claude/tasks/0001-prd-user-auth.md
 
 ## Example PRD
 
-See a complete example: [Example PRD for API Rate Limiting](https://github.com/ar4mirez/aicof/blob/main/.claude/tasks/EXAMPLE-0001-prd-api-rate-limiting.md)
+See a complete example: [Example PRD for API Rate Limiting](https://github.com/ar4mirez/samuel/blob/main/.claude/tasks/EXAMPLE-0001-prd-api-rate-limiting.md)
 
 ---
 

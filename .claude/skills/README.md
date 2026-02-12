@@ -54,10 +54,10 @@ What capability this skill provides.
 
 ## Creating a Skill
 
-Use the AICoF CLI:
+Use the Samuel CLI:
 
 ```bash
-aicof skill create my-skill-name
+samuel skill create my-skill-name
 ```
 
 Or use the create-skill skill: `.claude/skills/create-skill/SKILL.md`
@@ -66,17 +66,17 @@ Or use the create-skill skill: `.claude/skills/create-skill/SKILL.md`
 
 ```bash
 # Create a new skill
-aicof skill create <name>
+samuel skill create <name>
 
 # Validate skills
-aicof skill validate
-aicof skill validate <name>
+samuel skill validate
+samuel skill validate <name>
 
 # List installed skills
-aicof skill list
+samuel skill list
 
 # Get skill details
-aicof skill info <name>
+samuel skill info <name>
 ```
 
 ## Best Practices
@@ -109,6 +109,6 @@ These skills are automatically loaded when working with files matching the langu
 |--------|--------|-----------|
 | Purpose | Add capabilities | Guide processes |
 | Focus | "What AI can do" | "How to approach tasks" |
-| Portability | Cross-tool (25+ products) | AICoF-specific |
+| Portability | Cross-tool (25+ products) | Samuel-specific |
 | Structure | SKILL.md + resources | Markdown steps |
 | Example | Language guides, commit messages | Code review, PRD creation |

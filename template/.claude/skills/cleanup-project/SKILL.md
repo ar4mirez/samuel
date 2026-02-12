@@ -2,11 +2,11 @@
 name: cleanup-project
 description: |
   Project cleanup and pruning workflow. Use when removing unused guides,
-  cleaning up stale components, or streamlining an AICoF installation
+  cleaning up stale components, or streamlining an Samuel installation
   to match actual project needs.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---
@@ -418,11 +418,11 @@ mv .claude/.archive/skills/django/ .claude/skills/
 ```bash
 # Re-download language guide skill from template
 curl -o .claude/skills/python-guide/SKILL.md --create-dirs \
-  https://raw.githubusercontent.com/ar4mirez/aicof/main/.claude/skills/python-guide/SKILL.md
+  https://raw.githubusercontent.com/ar4mirez/samuel/main/.claude/skills/python-guide/SKILL.md
 
 # Re-download framework skill from template
 curl -o .claude/skills/django/SKILL.md --create-dirs \
-  https://raw.githubusercontent.com/ar4mirez/aicof/main/.claude/skills/django/SKILL.md
+  https://raw.githubusercontent.com/ar4mirez/samuel/main/.claude/skills/django/SKILL.md
 ```
 
 ### Update Manifest

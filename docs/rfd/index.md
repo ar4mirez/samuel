@@ -1,6 +1,6 @@
 ---
 title: RFDs (Requests for Discussion)
-description: Technical decision documents for AICoF projects
+description: Technical decision documents for Samuel projects
 ---
 
 # RFDs

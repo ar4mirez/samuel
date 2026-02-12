@@ -6,7 +6,7 @@ description: |
   accumulated technical debt.
 license: MIT
 metadata:
-  author: aicof
+  author: samuel
   version: "1.0"
   category: workflow
 ---

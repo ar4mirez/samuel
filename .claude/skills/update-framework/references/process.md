@@ -1,6 +1,6 @@
 # Update Framework - Detailed Process Reference
 
-This document contains detailed migration steps, conflict resolution examples, and comprehensive troubleshooting procedures for updating AICoF.
+This document contains detailed migration steps, conflict resolution examples, and comprehensive troubleshooting procedures for updating Samuel.
 
 ---
 
@@ -71,7 +71,7 @@ ls -lah "$BACKUP_DIR"
 ```bash
 # 1. Clone to temporary directory
 TEMP_DIR=".ai-update-temp-$(date +%Y%m%d-%H%M%S)"
-git clone --depth 1 https://github.com/ar4mirez/aicof.git "$TEMP_DIR"
+git clone --depth 1 https://github.com/ar4mirez/samuel.git "$TEMP_DIR"
 
 # 2. Check what version we're getting
 echo "Latest version: $(grep 'Current Version' $TEMP_DIR/template/CLAUDE.md)"
@@ -285,17 +285,17 @@ diff .ai-backup/.claude/skills/code-review.md \
 # Breaking changes in: 1.5.0 (framework-guides → skills), 1.8.0 (skills standard)
 
 # Step 1: Update to 1.5.0
-git clone --branch v1.5.0 https://github.com/ar4mirez/aicof.git
+git clone --branch v1.5.0 https://github.com/ar4mirez/samuel.git
 # Apply 1.5.0 changes
 # Test
 
 # Step 2: Update to 1.7.0
-git clone --branch v1.7.0 https://github.com/ar4mirez/aicof.git
+git clone --branch v1.7.0 https://github.com/ar4mirez/samuel.git
 # Apply 1.7.0 changes
 # Test
 
 # Step 3: Update to 1.8.0
-git clone --branch v1.8.0 https://github.com/ar4mirez/aicof.git
+git clone --branch v1.8.0 https://github.com/ar4mirez/samuel.git
 # Apply 1.8.0 changes (skills standard)
 # Test
 ```
@@ -443,7 +443,7 @@ rm CLAUDE.md
 rm -rf .claude/skills/ .claude/skills/
 
 # 2. Clone specific version
-git clone --branch v1.6.0 https://github.com/ar4mirez/aicof.git temp
+git clone --branch v1.6.0 https://github.com/ar4mirez/samuel.git temp
 cp temp/template/CLAUDE.md ./
 cp -r temp/template/.claude/skills .claude/
 cp -r temp/template/.claude/workflows .claude/
@@ -598,7 +598,7 @@ chmod -R 755 .claude/
 # Exit and start new conversation
 
 # 4. Test loading
-# Ask AI: "What version of AICoF is installed?"
+# Ask AI: "What version of Samuel is installed?"
 # Ask AI: "List available skills"
 ```
 
@@ -648,7 +648,7 @@ rsync -av --exclude='*.tmp' --exclude='*.log' \
 
 ### Scenario 1: Multi-Repository Sync
 
-**Use Case**: Maintaining AICoF across multiple projects
+**Use Case**: Maintaining Samuel across multiple projects
 
 **Solution**:
 ```bash
@@ -657,7 +657,7 @@ cd project-1
 # Perform standard update
 
 # 2. Create update script
-cat > sync-aicof.sh <<'EOF'
+cat > sync-samuel.sh <<'EOF'
 #!/bin/bash
 PROJECTS=(
   "/path/to/project-1"
@@ -684,8 +684,8 @@ for project in "${PROJECTS[@]}"; do
 done
 EOF
 
-chmod +x sync-aicof.sh
-./sync-aicof.sh
+chmod +x sync-samuel.sh
+./sync-samuel.sh
 ```
 
 ### Scenario 2: Custom Skill Development
@@ -697,7 +697,7 @@ chmod +x sync-aicof.sh
 # 1. Namespace your custom skills
 .claude/
   skills/
-    # Template skills (updated from AICoF)
+    # Template skills (updated from Samuel)
     typescript-guide/
     react/
 
@@ -711,17 +711,17 @@ rsync -av --exclude='company-*' \
   .ai-update-temp/.claude/skills/ .claude/skills/
 
 # 3. Add your custom skills to .gitignore pattern
-echo ".claude/skills/company-*" >> .aicof-custom
+echo ".claude/skills/company-*" >> .samuel-custom
 ```
 
 ### Scenario 3: Forked Template
 
-**Use Case**: You've forked AICoF for company-wide customization
+**Use Case**: You've forked Samuel for company-wide customization
 
 **Solution**:
 ```bash
 # 1. Set up remotes
-git remote add upstream https://github.com/ar4mirez/aicof.git
+git remote add upstream https://github.com/ar4mirez/samuel.git
 git remote -v
 
 # 2. Fetch upstream changes
@@ -740,17 +740,17 @@ git push origin main
 # 6. Update projects from your fork
 cd ~/project
 git subtree pull --prefix=.ai-template \
-  https://github.com/yourcompany/aicof-custom.git main --squash
+  https://github.com/yourcompany/samuel-custom.git main --squash
 ```
 
 ### Scenario 4: Continuous Integration
 
-**Use Case**: Automate AICoF version checks in CI/CD
+**Use Case**: Automate Samuel version checks in CI/CD
 
 **Solution**:
 ```yaml
-# .github/workflows/check-aicof-version.yml
-name: Check AICoF Version
+# .github/workflows/check-samuel-version.yml
+name: Check Samuel Version
 
 on:
   schedule:
@@ -772,19 +772,19 @@ jobs:
       - name: Get latest version
         id: latest
         run: |
-          VERSION=$(curl -s https://raw.githubusercontent.com/ar4mirez/aicof/main/template/CLAUDE.md |
+          VERSION=$(curl -s https://raw.githubusercontent.com/ar4mirez/samuel/main/template/CLAUDE.md |
                     grep 'Current Version' | cut -d: -f2 | tr -d ' ')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Compare versions
         run: |
           if [ "${{ steps.current.outputs.version }}" != "${{ steps.latest.outputs.version }}" ]; then
-            echo "⚠️ AICoF update available!"
+            echo "⚠️ Samuel update available!"
             echo "Current: ${{ steps.current.outputs.version }}"
             echo "Latest: ${{ steps.latest.outputs.version }}"
             echo "Run: update-framework skill"
           else
-            echo "✓ AICoF is up to date (${{ steps.current.outputs.version }})"
+            echo "✓ Samuel is up to date (${{ steps.current.outputs.version }})"
           fi
 ```
 
@@ -807,9 +807,9 @@ git status
 
 # 4. Commit the update
 git add CLAUDE.md .claude/
-git commit -m "chore: update AICoF to v$(grep 'Current Version' CLAUDE.md | cut -d: -f2 | tr -d ' ')
+git commit -m "chore: update Samuel to v$(grep 'Current Version' CLAUDE.md | cut -d: -f2 | tr -d ' ')
 
-Updated AICoF framework to latest version:
+Updated Samuel framework to latest version:
 - New skills added
 - Workflows updated
 - Project customizations preserved
@@ -821,8 +821,8 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
 
 ```bash
 # 1. Document the update in memory
-cat > .claude/memory/$(date +%Y-%m-%d)-aicof-update.md <<EOF
-# AICoF Update: v$OLD_VERSION → v$NEW_VERSION
+cat > .claude/memory/$(date +%Y-%m-%d)-samuel-update.md <<EOF
+# Samuel Update: v$OLD_VERSION → v$NEW_VERSION
 
 ## Date
 $(date)
@@ -983,7 +983,7 @@ ls .claude/
 # Start AI session and verify it works
 
 # 5. Report issue
-# Create issue at: https://github.com/ar4mirez/aicof/issues
+# Create issue at: https://github.com/ar4mirez/samuel/issues
 # Include: version numbers, error messages, what you were trying to do
 ```
 
@@ -997,7 +997,7 @@ git add -A
 git commit -m "chore: pre-update checkpoint"
 
 # 2. External backup of critical files
-tar -czf ~/aicof-backup-$(date +%Y%m%d).tar.gz \
+tar -czf ~/samuel-backup-$(date +%Y%m%d).tar.gz \
   CLAUDE.md CLAUDE.md CLAUDE.md \
   .claude/memory/ .claude/tasks/
 
@@ -1006,7 +1006,7 @@ tar -czf ~/aicof-backup-$(date +%Y%m%d).tar.gz \
 git push origin main
 
 # 4. Verify backups
-tar -tzf ~/aicof-backup-$(date +%Y%m%d).tar.gz | head
+tar -tzf ~/samuel-backup-$(date +%Y%m%d).tar.gz | head
 ```
 
 ---

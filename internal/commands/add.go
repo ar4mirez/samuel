@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -20,9 +20,9 @@ Types:
   workflow   Add a workflow (e.g., security-audit)
 
 Examples:
-  aicof add language rust
-  aicof add framework django
-  aicof add workflow security-audit`,
+  samuel add language rust
+  samuel add framework django
+  samuel add workflow security-audit`,
 	Args: cobra.ExactArgs(2),
 	RunE: runAdd,
 }
@@ -39,7 +39,7 @@ func runAdd(cmd *cobra.Command, args []string) error {
 	config, err := core.LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
-			return fmt.Errorf("no AICoF installation found. Run 'aicof init' first")
+			return fmt.Errorf("no Samuel installation found. Run 'samuel init' first")
 		}
 		return fmt.Errorf("failed to load config: %w", err)
 	}
@@ -52,21 +52,21 @@ func runAdd(cmd *cobra.Command, args []string) error {
 	case "language", "lang", "l":
 		component = core.FindLanguage(componentName)
 		if component == nil {
-			return fmt.Errorf("unknown language: %s\nRun 'aicof list --available --type languages' to see available languages", componentName)
+			return fmt.Errorf("unknown language: %s\nRun 'samuel list --available --type languages' to see available languages", componentName)
 		}
 		alreadyInstalled = config.HasLanguage(componentName)
 
 	case "framework", "fw", "f":
 		component = core.FindFramework(componentName)
 		if component == nil {
-			return fmt.Errorf("unknown framework: %s\nRun 'aicof list --available --type frameworks' to see available frameworks", componentName)
+			return fmt.Errorf("unknown framework: %s\nRun 'samuel list --available --type frameworks' to see available frameworks", componentName)
 		}
 		alreadyInstalled = config.HasFramework(componentName)
 
 	case "workflow", "wf", "w":
 		component = core.FindWorkflow(componentName)
 		if component == nil {
-			return fmt.Errorf("unknown workflow: %s\nRun 'aicof list --available --type workflows' to see available workflows", componentName)
+			return fmt.Errorf("unknown workflow: %s\nRun 'samuel list --available --type workflows' to see available workflows", componentName)
 		}
 		alreadyInstalled = config.HasWorkflow(componentName)
 
@@ -124,7 +124,7 @@ func runAdd(cmd *cobra.Command, args []string) error {
 	}
 
 	ui.Success("Installed %s", component.Path)
-	ui.Success("Updated aicof.yaml")
+	ui.Success("Updated samuel.yaml")
 
 	return nil
 }

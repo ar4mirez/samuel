@@ -409,7 +409,7 @@ mv .claude/.archive/skills/django/ .claude/skills/
 ```bash
 # Re-download from template
 curl -o .claude/skills/python-guide/SKILL.md \
-  https://raw.githubusercontent.com/ar4mirez/aicof/main/.claude/skills/python-guide/SKILL.md
+  https://raw.githubusercontent.com/ar4mirez/samuel/main/.claude/skills/python-guide/SKILL.md
 ```
 
 ### Update Manifest

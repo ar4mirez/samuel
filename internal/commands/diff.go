@@ -10,8 +10,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/ar4mirez/aicof/internal/core"
-	"github.com/ar4mirez/aicof/internal/ui"
+	"github.com/ar4mirez/samuel/internal/core"
+	"github.com/ar4mirez/samuel/internal/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -28,15 +28,15 @@ type VersionDiff struct {
 var diffCmd = &cobra.Command{
 	Use:   "diff [version1] [version2]",
 	Short: "Compare versions to see what changed",
-	Long: `Compare AICoF versions to see what files have been added, removed, or modified.
+	Long: `Compare Samuel versions to see what files have been added, removed, or modified.
 
 Without arguments, compares installed files with the latest available version.
 With two version arguments, compares those specific versions.
 
 Examples:
-  aicof diff                    # Compare installed vs latest
-  aicof diff --installed        # Same as above (explicit)
-  aicof diff v1.6.0 v1.7.0      # Compare two specific versions
+  samuel diff                    # Compare installed vs latest
+  samuel diff --installed        # Same as above (explicit)
+  samuel diff v1.6.0 v1.7.0      # Compare two specific versions
 
 Note: This command downloads versions to cache if not already present.`,
 	Args: cobra.MaximumNArgs(2),
@@ -82,7 +82,7 @@ func compareInstalledWithLatest() (*VersionDiff, error) {
 	config, err := core.LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
-			ui.Warn("No AICoF installation found in current directory")
+			ui.Warn("No Samuel installation found in current directory")
 			return nil, fmt.Errorf("no installation found")
 		}
 		return nil, fmt.Errorf("failed to load config: %w", err)
@@ -179,7 +179,7 @@ func compareVersions(v1, v2 string) (*VersionDiff, error) {
 func getLocalFileHashes(basePath string) map[string]string {
 	hashes := make(map[string]string)
 
-	// Only check AICoF-related files
+	// Only check Samuel-related files
 	patterns := []string{
 		"CLAUDE.md",
 		"AGENTS.md",
