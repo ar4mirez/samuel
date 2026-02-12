@@ -30,14 +30,14 @@ type SkillMetadata struct {
 
 // SkillInfo contains parsed skill information
 type SkillInfo struct {
-	Path        string
-	DirName     string
-	Metadata    SkillMetadata
-	Body        string
-	HasScripts  bool
-	HasRefs     bool
-	HasAssets   bool
-	Errors      []string
+	Path       string
+	DirName    string
+	Metadata   SkillMetadata
+	Body       string
+	HasScripts bool
+	HasRefs    bool
+	HasAssets  bool
+	Errors     []string
 }
 
 // toTitleCase converts a kebab-case name to Title Case

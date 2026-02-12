@@ -85,14 +85,14 @@ mkdocs build          # Build static site to ./site/
 aicof/
 ├── cmd/aicof/              # Entry point (main.go) — minimal
 ├── internal/
-│   ├── commands/            # 12 CLI commands (init, update, add, remove, list, doctor, version, search, info, config, diff, auto)
+│   ├── commands/            # 13 CLI commands (init, update, add, remove, list, doctor, version, search, info, config, diff, skill, auto)
 │   ├── core/                # Business logic (config, registry, extractor, skill, auto)
 │   ├── github/              # GitHub API client (releases, archives)
 │   └── ui/                  # User interface helpers (prompts, spinner, colors)
 ├── template/                # Distributable template files
 │   ├── CLAUDE.md            # Template AI instructions
 │   ├── AGENTS.md            # Cross-tool copy
-│   └── .claude/skills/      # 21 language + 33 framework + 15 workflow skills
+│   └── .claude/skills/      # 21 language + 33 framework + 18 workflow skills
 ├── docs/                    # MkDocs documentation source
 ├── Makefile                 # Build targets (build, test, lint, install)
 └── .goreleaser.yaml         # Release automation

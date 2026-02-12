@@ -8,6 +8,7 @@ license: MIT
 metadata:
   author: aicof
   version: "1.0"
+  category: workflow
 ---
 
 # Commit Message Generator

@@ -24,10 +24,10 @@ func NewExtractor(sourcePath, destPath string) *Extractor {
 
 // ExtractResult contains the result of an extraction
 type ExtractResult struct {
-	FilesCreated  []string
-	DirsCreated   []string
-	FilesSkipped  []string
-	Errors        []error
+	FilesCreated []string
+	DirsCreated  []string
+	FilesSkipped []string
+	Errors       []error
 }
 
 // Extract copies specific files from source to destination

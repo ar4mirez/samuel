@@ -79,8 +79,8 @@ func MultiSelect(label string, options []SelectOption, defaults []string) ([]Sel
 		}
 
 		templates := &promptui.SelectTemplates{
-			Label: "{{ . }}",
-			Active: `▸ {{ if eq .Index -1 }}{{ .Name | green }}{{ else }}{{ if .Selected }}[✓]{{ else }}[ ]{{ end }} {{ .Name | cyan }}{{ end }} - {{ .Description | faint }}`,
+			Label:    "{{ . }}",
+			Active:   `▸ {{ if eq .Index -1 }}{{ .Name | green }}{{ else }}{{ if .Selected }}[✓]{{ else }}[ ]{{ end }} {{ .Name | cyan }}{{ end }} - {{ .Description | faint }}`,
 			Inactive: `  {{ if eq .Index -1 }}{{ .Name }}{{ else }}{{ if .Selected }}[✓]{{ else }}[ ]{{ end }} {{ .Name }}{{ end }} - {{ .Description | faint }}`,
 			Selected: "",
 		}

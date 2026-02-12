@@ -285,4 +285,3 @@ func formatFileSize(size int64) string {
 		return fmt.Sprintf("%d bytes", size)
 	}
 }
-

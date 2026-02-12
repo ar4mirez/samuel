@@ -114,10 +114,10 @@ func TestLoadAutoPRD_NotFound(t *testing.T) {
 
 func TestAutoPRD_GetNextTask(t *testing.T) {
 	tests := []struct {
-		name     string
-		tasks    []AutoTask
-		wantID   string
-		wantNil  bool
+		name    string
+		tasks   []AutoTask
+		wantID  string
+		wantNil bool
 	}{
 		{
 			name:    "empty tasks",
@@ -328,11 +328,11 @@ func TestAutoPRD_AddTask_EmptyID(t *testing.T) {
 
 func TestAutoPRD_RecalculateProgress(t *testing.T) {
 	tests := []struct {
-		name           string
-		tasks          []AutoTask
-		wantTotal      int
-		wantCompleted  int
-		wantStatus     string
+		name          string
+		tasks         []AutoTask
+		wantTotal     int
+		wantCompleted int
+		wantStatus    string
 	}{
 		{
 			name:          "no tasks",

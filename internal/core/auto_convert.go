@@ -93,8 +93,8 @@ func slugify(s string) string {
 // ParseTaskMarkdown parses task markdown content into AutoTask structs.
 // It handles the format from AICoF's generate-tasks skill:
 //
-//	- [ ] 1.0 Parent Task Title
-//	  - [ ] 1.1 Sub-task description [~2,000 tokens - Simple]
+//   - [ ] 1.0 Parent Task Title
+//   - [ ] 1.1 Sub-task description [~2,000 tokens - Simple]
 func ParseTaskMarkdown(content string) ([]AutoTask, error) {
 	lines := strings.Split(content, "\n")
 	var tasks []AutoTask
