@@ -1,7 +1,7 @@
 # Gin Framework Guide
 
 > **Applies to**: Gin 1.9+, REST APIs, Microservices, Web Applications
-> **Language Guide**: @.agent/skills/go-guide/SKILL.md
+> **Language Guide**: @.claude/skills/go-guide/SKILL.md
 
 ---
 

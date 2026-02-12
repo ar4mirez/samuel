@@ -24,7 +24,7 @@ Capture patterns, decisions, and learnings from recent development work.
 ## Prerequisites
 
 - [ ] Git repository with recent commits to analyze
-- [ ] `.agent/` directory exists in project
+- [ ] `.claude/` directory exists in project
 - [ ] Understanding of what work was done (or access to git history)
 
 ---
@@ -256,7 +256,7 @@ Update project.md when:
 
 **User Request:**
 ```
-@.agent/skills/document-work/SKILL.md
+@.claude/skills/document-work/SKILL.md
 
 Document the work from today's session on the authentication feature.
 We made some decisions about JWT vs sessions and established a new
@@ -272,9 +272,9 @@ error handling pattern.
 
 **Output:**
 
-- `.agent/memory/2025-01-14-auth-token-strategy.md`
-- Updated `.agent/patterns.md` with error handling section
-- Updated `.agent/state.md` with auth feature progress
+- `.claude/memory/2025-01-14-auth-token-strategy.md`
+- Updated `.claude/patterns.md` with error handling section
+- Updated `.claude/state.md` with auth feature progress
 
 ---
 
@@ -282,7 +282,7 @@ error handling pattern.
 
 **User Request:**
 ```
-@.agent/skills/document-work/SKILL.md
+@.claude/skills/document-work/SKILL.md
 
 I noticed we've been using the same API response format across
 multiple endpoints. Let's document this as a pattern.
@@ -296,7 +296,7 @@ multiple endpoints. Let's document this as a pattern.
 
 **Output:**
 
-- Updated `.agent/patterns.md` with API response format section
+- Updated `.claude/patterns.md` with API response format section
 
 ---
 
@@ -304,7 +304,7 @@ multiple endpoints. Let's document this as a pattern.
 
 **User Request:**
 ```
-@.agent/skills/document-work/SKILL.md
+@.claude/skills/document-work/SKILL.md
 
 I'm handing off this project next week. Please review all recent
 work (last 2 weeks) and ensure comprehensive documentation for
@@ -333,7 +333,7 @@ the next developer.
 
 **User Request:**
 ```
-@.agent/skills/document-work/SKILL.md
+@.claude/skills/document-work/SKILL.md
 
 Just update state.md - I'm stopping for today and want to capture
 where I left off on the payment integration.
@@ -346,7 +346,7 @@ where I left off on the payment integration.
 
 **Output:**
 
-- Updated `.agent/state.md`
+- Updated `.claude/state.md`
 
 ---
 

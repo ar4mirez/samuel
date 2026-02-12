@@ -37,7 +37,7 @@ Just copy two items to your project:
 
 ```bash
 cp CLAUDE.md /your-project/
-cp -r .agent/ /your-project/
+cp -r .claude/ /your-project/
 ```
 
 That's it. The system works immediately.
@@ -51,7 +51,7 @@ That's it. The system works immediately.
 **Yes.** Use the initialize workflow:
 
 ```
-@.agent/workflows/initialize-project.md
+@.claude/skills/initialize-project/SKILL.md
 
 This is an existing project - analyze the codebase
 ```
@@ -74,7 +74,7 @@ You can still use the system effectively. Consider contributing a language guide
 
 ### How do I add a new language guide?
 
-1. Copy an existing guide from `.agent/skills/<language>-guide/`
+1. Copy an existing guide from `.claude/skills/<language>-guide/`
 2. Create a new skill directory (e.g., `java-guide/SKILL.md`)
 3. Adapt the content for your language
 4. AI will auto-load based on file extensions
@@ -151,7 +151,7 @@ Use PRD when:
 
 **No.** The Quick Reference section (lines 7-30) covers 80% of daily use. Read specific sections when you need guidance.
 
-### What's the .agent/ directory for?
+### What's the .claude/ directory for?
 
 Project-specific context that grows over time:
 
@@ -161,7 +161,7 @@ Project-specific context that grows over time:
 - `workflows/` - Structured processes
 - `memory/` - Decision logs
 
-### Should I commit .agent/ files to git?
+### Should I commit .claude/ files to git?
 
 **Template files: Yes.** Language guides, workflows, README.
 
@@ -212,7 +212,7 @@ AI usually indicates the mode:
 ### AI is ignoring my language guide
 
 1. Check file extension matches
-2. Explicitly load: "Load TypeScript guide from `.agent/skills/typescript-guide/SKILL.md`"
+2. Explicitly load: "Load TypeScript guide from `.claude/skills/typescript-guide/SKILL.md`"
 
 ### AI is not following commits convention
 
@@ -226,7 +226,7 @@ Use conventional commits:
 
 ### I'm stuck and troubleshooting isn't helping
 
-1. Use the troubleshooting workflow: `@.agent/workflows/troubleshooting.md`
+1. Use the troubleshooting workflow: `@.claude/skills/troubleshooting/SKILL.md`
 2. Document what you've tried
 3. Ask with a clear problem statement
 4. Consider asking a human for fresh perspective

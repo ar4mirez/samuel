@@ -447,7 +447,7 @@ aicof doctor --fix
 **Checks performed:**
 
 - CLAUDE.md exists and is readable
-- .agent/ directory exists with correct structure
+- .claude/ directory exists with correct structure
 - Configuration file is valid
 - Installed components are accessible
 - No orphaned or corrupted files

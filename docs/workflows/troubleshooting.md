@@ -22,7 +22,7 @@ A structured approach to debugging when you've been stuck for more than 30 minut
 ## How to Invoke
 
 ```
-@.agent/workflows/troubleshooting.md
+@.claude/skills/troubleshooting/SKILL.md
 
 Been stuck on "Connection pool exhausted" error for 45 minutes
 ```
@@ -73,7 +73,7 @@ Common culprits:
 - Google the exact error message
 - Check GitHub issues for dependencies
 - Search Stack Overflow
-- Review `.agent/memory/` for similar problems
+- Review `.claude/memory/` for similar problems
 
 ### Step 6: Ask for Help
 
@@ -102,7 +102,7 @@ Error: "Connection pool exhausted" after 100 requests
 
 ### Step 7: Document Solution
 
-Once resolved, create `.agent/memory/YYYY-MM-DD-issue-name.md`:
+Once resolved, create `.claude/memory/YYYY-MM-DD-issue-name.md`:
 
 ```markdown
 # Issue: Connection Pool Exhausted
@@ -203,7 +203,7 @@ npm run build
 2. **Fix immediately** - Security takes priority
 3. **Add regression test** - Prevent reintroduction
 4. **Review similar code** - Same pattern elsewhere?
-5. **Document** in `.agent/memory/`
+5. **Document** in `.claude/memory/`
 
 **Common Security Fixes**:
 
@@ -306,7 +306,7 @@ After resolving any major issue:
 - [ ] Guardrails validated
 - [ ] Root cause understood (not just symptom fixed)
 - [ ] Similar code reviewed for same issue
-- [ ] Solution documented in `.agent/memory/`
+- [ ] Solution documented in `.claude/memory/`
 - [ ] Prevention added (test, linter rule, etc.)
 
 ---
@@ -318,7 +318,7 @@ After resolving any major issue:
 Provide clear context:
 
 ```
-@.agent/workflows/troubleshooting.md
+@.claude/skills/troubleshooting/SKILL.md
 
 Problem: API returns 500 on user creation
 Tried: Checking logs, validating input, restarting server

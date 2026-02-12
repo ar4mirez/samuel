@@ -246,7 +246,7 @@ func TestGetSourcePath(t *testing.T) {
 		want     string
 	}{
 		{"CLAUDE.md", "template/CLAUDE.md"},
-		{".agent/workflows/create-prd.md", "template/.agent/workflows/create-prd.md"},
+		{".claude/skills/create-prd/SKILL.md", "template/.claude/skills/create-prd/SKILL.md"},
 		{"", "template/"},
 	}
 
@@ -261,7 +261,7 @@ func TestGetSourcePath(t *testing.T) {
 }
 
 func TestGetSourcePaths(t *testing.T) {
-	destPaths := []string{"CLAUDE.md", ".agent/workflows/create-prd.md"}
+	destPaths := []string{"CLAUDE.md", ".claude/skills/create-prd/SKILL.md"}
 	srcPaths := GetSourcePaths(destPaths)
 
 	if len(srcPaths) != len(destPaths) {

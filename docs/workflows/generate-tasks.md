@@ -14,9 +14,9 @@ Convert a Product Requirements Document (PRD) into an actionable, numbered task 
 After creating a PRD with the create-prd workflow:
 
 ```
-@.agent/workflows/generate-tasks.md
+@.claude/skills/generate-tasks/SKILL.md
 
-Use the PRD at .agent/tasks/0001-prd-user-auth.md
+Use the PRD at .claude/tasks/0001-prd-user-auth.md
 ```
 
 ---
@@ -50,7 +50,7 @@ Each task includes:
 
 ### Step 4: Save Task List
 
-Saves to: `.agent/tasks/tasks-NNNN-prd-feature-name.md`
+Saves to: `.claude/tasks/tasks-NNNN-prd-feature-name.md`
 
 ---
 

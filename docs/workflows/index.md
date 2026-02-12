@@ -50,7 +50,7 @@ Workflows are structured processes for handling specific types of tasks. They're
 Invoke a workflow by referencing it:
 
 ```
-@.agent/workflows/create-prd.md
+@.claude/skills/create-prd.md
 
 Build a user authentication system with OAuth support
 ```
@@ -115,15 +115,15 @@ Each workflow produces specific outputs:
 
 **Creates**:
 
-- `.agent/project.md` - Tech stack documentation
-- `.agent/patterns.md` - Coding conventions (if patterns found)
+- `.claude/project.md` - Tech stack documentation
+- `.claude/patterns.md` - Coding conventions (if patterns found)
 - Directory structure recommendations
 
 ### Create PRD
 
 **Creates**:
 
-- `.agent/tasks/NNNN-prd-feature-name.md` - Product Requirements Document
+- `.claude/tasks/NNNN-prd-feature-name.md` - Product Requirements Document
 
 **Contains**:
 
@@ -140,7 +140,7 @@ Each workflow produces specific outputs:
 
 **Creates**:
 
-- `.agent/tasks/tasks-NNNN-prd-feature-name.md` - Task breakdown
+- `.claude/tasks/tasks-NNNN-prd-feature-name.md` - Task breakdown
 
 **Contains**:
 
@@ -153,7 +153,7 @@ Each workflow produces specific outputs:
 
 **Creates** (optional):
 
-- `.agent/memory/YYYY-MM-DD-issue-name.md` - Solution documentation
+- `.claude/memory/YYYY-MM-DD-issue-name.md` - Solution documentation
 
 **Contains**:
 
@@ -172,16 +172,16 @@ Each workflow produces specific outputs:
 
 **Creates/Updates**:
 
-- `.agent/patterns.md` - Coding patterns discovered
-- `.agent/memory/YYYY-MM-DD-topic.md` - Decision logs
-- `.agent/state.md` - Current work status
+- `.claude/patterns.md` - Coding patterns discovered
+- `.claude/memory/YYYY-MM-DD-topic.md` - Decision logs
+- `.claude/state.md` - Current work status
 
 ### Update Framework
 
 **Updates**:
 
 - `CLAUDE.md` - Latest version
-- `.agent/` - New guides and workflows
+- `.claude/` - New guides and workflows
 
 ---
 
@@ -190,19 +190,19 @@ Each workflow produces specific outputs:
 Workflows can be chained for complex tasks:
 
 ```
-1. @.agent/workflows/create-rfd.md (optional)
+1. @.claude/skills/create-rfd.md (optional)
    → Explore options when approach is unclear
 
-2. @.agent/workflows/create-prd.md
+2. @.claude/skills/create-prd.md
    → Creates PRD document (after RFD decision, if used)
 
-3. @.agent/workflows/generate-tasks.md
+3. @.claude/skills/generate-tasks.md
    → Creates task breakdown from PRD
 
 4. Implement tasks one by one
    → Each task uses ATOMIC or FEATURE mode
 
-5. @.agent/workflows/document-work.md
+5. @.claude/skills/document-work.md
    → Capture patterns and decisions from implementation
 ```
 
@@ -290,7 +290,7 @@ Workflows can be chained for complex tasks:
 
     ---
 
-    Prune unused guides and reduce .agent/ bloat.
+    Prune unused guides and reduce .claude/ bloat.
 
     [:octicons-arrow-right-24: Cleanup Project](cleanup-project.md)
 

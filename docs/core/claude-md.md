@@ -41,7 +41,7 @@ CLAUDE.md is the "brain" of the AICoF system. When an AI assistant starts workin
 
 ## Software Dev Lifecycle ← Planning → Implementation → Validation → Delivery
 
-## Context System       ← How .agent/ directory works
+## Context System       ← How .claude/ directory works
 
 ## Anti-Patterns        ← What to avoid
 
@@ -248,7 +248,7 @@ CLAUDE.md is optimized for token efficiency:
 
 **Target**: <600 lines for the main file.
 
-Language guides, workflows, and detailed documentation live in `.agent/` to avoid loading unnecessary context.
+Language guides, workflows, and detailed documentation live in `.claude/` to avoid loading unnecessary context.
 
 ---
 
@@ -289,13 +289,13 @@ The complete CLAUDE.md is in your project root. Key line numbers:
 
     [:octicons-arrow-right-24: Learn Methodology](methodology.md)
 
--   :material-folder:{ .lg .middle } **.agent Directory**
+-   :material-folder:{ .lg .middle } **.claude Directory**
 
     ---
 
     Project context structure.
 
-    [:octicons-arrow-right-24: .agent Structure](agent-directory.md)
+    [:octicons-arrow-right-24: .claude Structure](agent-directory.md)
 
 -   :material-tools:{ .lg .middle } **Cross-Tool**
 

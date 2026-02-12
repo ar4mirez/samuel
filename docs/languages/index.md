@@ -439,7 +439,7 @@ Want to contribute a guide for a language not yet covered?
 
 1. Copy an existing guide as a template
 2. Adapt the sections for your language
-3. Add to `.agent/skills/<language>-guide/` AND `docs/languages/`
+3. Add to `.claude/skills/<language>-guide/` AND `docs/languages/`
 4. Update `mkdocs.yml` navigation
 5. Update this index
 6. Submit a pull request

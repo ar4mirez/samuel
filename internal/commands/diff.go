@@ -182,8 +182,8 @@ func getLocalFileHashes(basePath string) map[string]string {
 	// Only check AICoF-related files
 	patterns := []string{
 		"CLAUDE.md",
-		"AI_INSTRUCTIONS.md",
-		".agent/**/*.md",
+		"AGENTS.md",
+		".claude/**/*.md",
 	}
 
 	for _, pattern := range patterns {

@@ -227,8 +227,8 @@ func TestVersionDiff_Struct(t *testing.T) {
 func TestGetLocalFileHashes(t *testing.T) {
 	tmpDir := t.TempDir()
 
-	// Create .agent directory with some md files
-	agentDir := filepath.Join(tmpDir, ".agent", "workflows")
+	// Create .claude directory with some md files
+	agentDir := filepath.Join(tmpDir, ".claude", "workflows")
 	if err := os.MkdirAll(agentDir, 0755); err != nil {
 		t.Fatalf("Failed to create agent dir: %v", err)
 	}
@@ -252,16 +252,16 @@ func TestGetLocalFileHashes(t *testing.T) {
 		t.Error("CLAUDE.md should be in hashes")
 	}
 
-	// Check that .agent files are included
+	// Check that .claude files are included
 	foundAgent := false
 	for path := range hashes {
-		if filepath.Dir(path) == ".agent/workflows" || filepath.Dir(path) == ".agent\\workflows" {
+		if filepath.Dir(path) == ".claude/workflows" || filepath.Dir(path) == ".claude\\workflows" {
 			foundAgent = true
 			break
 		}
 	}
 	if !foundAgent {
-		t.Log("Note: .agent workflow files not found in hashes (may be platform-specific)")
+		t.Log("Note: .claude workflow files not found in hashes (may be platform-specific)")
 	}
 }
 
@@ -270,13 +270,13 @@ func TestGetVersionFileHashes(t *testing.T) {
 
 	// Create template directory structure
 	templateDir := filepath.Join(tmpDir, "template")
-	if err := os.MkdirAll(filepath.Join(templateDir, ".agent", "workflows"), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Join(templateDir, ".claude", "workflows"), 0755); err != nil {
 		t.Fatalf("Failed to create template dir: %v", err)
 	}
 	if err := os.WriteFile(filepath.Join(templateDir, "CLAUDE.md"), []byte("content"), 0644); err != nil {
 		t.Fatalf("Failed to write CLAUDE.md: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(templateDir, ".agent", "workflows", "test.md"), []byte("workflow"), 0644); err != nil {
+	if err := os.WriteFile(filepath.Join(templateDir, ".claude", "workflows", "test.md"), []byte("workflow"), 0644); err != nil {
 		t.Fatalf("Failed to write workflow file: %v", err)
 	}
 	// Non-md file should be ignored

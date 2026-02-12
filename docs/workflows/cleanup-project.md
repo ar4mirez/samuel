@@ -1,6 +1,6 @@
 # Project Cleanup Workflow
 
-> **Purpose**: Prune unused guides, archive stale files, and reduce `.agent/` bloat after project initialization or during maintenance.
+> **Purpose**: Prune unused guides, archive stale files, and reduce `.claude/` bloat after project initialization or during maintenance.
 
 ---
 
@@ -11,7 +11,7 @@
 | **Post-Initialization** | After `initialize-project.md` completes |
 | **Quarterly Maintenance** | Every 3 months as part of project hygiene |
 | **Pre-Release** | Before major releases to reduce deployment footprint |
-| **Size Threshold** | When `.agent/` exceeds 1MB |
+| **Size Threshold** | When `.claude/` exceeds 1MB |
 | **Stack Change** | After removing a language/framework from the project |
 
 ---
@@ -20,7 +20,7 @@
 
 Before starting cleanup:
 
-- [ ] Project has been initialized (`.agent/project.md` exists or stack is clear)
+- [ ] Project has been initialized (`.claude/project.md` exists or stack is clear)
 - [ ] No active development in progress that might need guides being pruned
 - [ ] Git working directory is clean (commit or stash changes first)
 
@@ -41,7 +41,7 @@ Step 5: Clean Patterns
     ↓
 Step 6: Update Documentation
     ↓
-Output: Leaner .agent/ directory
+Output: Leaner .claude/ directory
 ```
 
 ---
@@ -100,7 +100,7 @@ Check dependency files for framework usage:
 
 ### 1.3 Generate Active Guides Manifest
 
-Create `.agent/active-guides.json`:
+Create `.claude/active-guides.json`:
 
 ```json
 {
@@ -147,20 +147,20 @@ Unused Skills: 31 (94% reduction possible)
 
 ### 2.2 Archive Strategy (Recommended)
 
-Move unused skills to `.agent/.archive/` for potential future use:
+Move unused skills to `.claude/.archive/` for potential future use:
 
 ```bash
 # Create archive directory
-mkdir -p .agent/.archive/skills
+mkdir -p .claude/.archive/skills
 
 # Move unused language guides
-mv .agent/skills/python-guide/ .agent/.archive/skills/
-mv .agent/skills/go-guide/ .agent/.archive/skills/
+mv .claude/skills/python-guide/ .claude/.archive/skills/
+mv .claude/skills/go-guide/ .claude/.archive/skills/
 # ... (all unused)
 
 # Move unused framework skills
-mv .agent/skills/django/ .agent/.archive/skills/
-mv .agent/skills/fastapi/ .agent/.archive/skills/
+mv .claude/skills/django/ .claude/.archive/skills/
+mv .claude/skills/fastapi/ .claude/.archive/skills/
 # ... (all unused)
 ```
 
@@ -170,13 +170,13 @@ For maximum reduction, delete unused skills entirely:
 
 ```bash
 # Delete unused language guides
-rm -rf .agent/skills/python-guide/
-rm -rf .agent/skills/go-guide/
+rm -rf .claude/skills/python-guide/
+rm -rf .claude/skills/go-guide/
 # ... (all unused)
 
 # Delete unused framework skills
-rm -rf .agent/skills/django/
-rm -rf .agent/skills/fastapi/
+rm -rf .claude/skills/django/
+rm -rf .claude/skills/fastapi/
 # ... (all unused)
 ```
 
@@ -186,9 +186,9 @@ rm -rf .agent/skills/fastapi/
 
 Never remove these files regardless of stack:
 
-- `.agent/README.md` - Directory documentation
-- `.agent/skills/README.md` - Skills index
-- `.agent/workflows/*.md` - All workflows (stack-agnostic)
+- `.claude/README.md` - Directory documentation
+- `.claude/skills/README.md` - Skills index
+- `.claude/skills/<workflow>/SKILL.md` - All workflows (stack-agnostic)
 
 **AI Action**: Execute chosen strategy (archive or delete). Report space saved.
 
@@ -202,7 +202,7 @@ Find PRDs and task files older than 6 months:
 
 ```bash
 # Find PRDs older than 180 days
-find .agent/tasks -name "*.md" -mtime +180 -type f
+find .claude/tasks -name "*.md" -mtime +180 -type f
 ```
 
 ### 3.2 Check Status
@@ -211,7 +211,7 @@ For each old PRD, determine status:
 
 | Status | Action |
 |--------|--------|
-| **Completed** | Archive to `.agent/tasks/ARCHIVE/` |
+| **Completed** | Archive to `.claude/tasks/ARCHIVE/` |
 | **Abandoned** | Archive with `ABANDONED-` prefix |
 | **Active** | Keep in place (update modified date) |
 
@@ -219,14 +219,14 @@ For each old PRD, determine status:
 
 ```bash
 # Create archive directory
-mkdir -p .agent/tasks/ARCHIVE
+mkdir -p .claude/tasks/ARCHIVE
 
 # Move completed/abandoned PRDs
-mv .agent/tasks/0001-prd-old-feature.md .agent/tasks/ARCHIVE/
-mv .agent/tasks/tasks-0001-prd-old-feature.md .agent/tasks/ARCHIVE/
+mv .claude/tasks/0001-prd-old-feature.md .claude/tasks/ARCHIVE/
+mv .claude/tasks/tasks-0001-prd-old-feature.md .claude/tasks/ARCHIVE/
 
 # For abandoned, rename with prefix
-mv .agent/tasks/0002-prd-never-built.md .agent/tasks/ARCHIVE/ABANDONED-0002-prd-never-built.md
+mv .claude/tasks/0002-prd-never-built.md .claude/tasks/ARCHIVE/ABANDONED-0002-prd-never-built.md
 ```
 
 **AI Action**: Identify stale tasks, confirm status with user, archive appropriately.
@@ -241,7 +241,7 @@ Find memory files older than 3 months:
 
 ```bash
 # Find memory files older than 90 days
-find .agent/memory -name "*.md" -mtime +90 -type f
+find .claude/memory -name "*.md" -mtime +90 -type f
 ```
 
 ### 4.2 Create Quarterly Summary
@@ -278,12 +278,12 @@ This file consolidates decisions from October-December 2024.
 
 ```bash
 # Create archive directory
-mkdir -p .agent/memory/archived
+mkdir -p .claude/memory/archived
 
 # Move old files
-mv .agent/memory/2024-10-*.md .agent/memory/archived/
-mv .agent/memory/2024-11-*.md .agent/memory/archived/
-mv .agent/memory/2024-12-*.md .agent/memory/archived/
+mv .claude/memory/2024-10-*.md .claude/memory/archived/
+mv .claude/memory/2024-11-*.md .claude/memory/archived/
+mv .claude/memory/2024-12-*.md .claude/memory/archived/
 ```
 
 **AI Action**: Create quarterly summary, archive old memory files.
@@ -294,7 +294,7 @@ mv .agent/memory/2024-12-*.md .agent/memory/archived/
 
 ### 5.1 Review patterns.md
 
-If `.agent/patterns.md` exists, review for:
+If `.claude/patterns.md` exists, review for:
 
 - Patterns referencing pruned languages/frameworks
 - Duplicate or similar patterns
@@ -322,12 +322,12 @@ Merge similar patterns across languages into generic versions where applicable.
 
 ## Step 6: Update Documentation
 
-### 6.1 Update .agent/README.md
+### 6.1 Update .claude/README.md
 
 Add project-specific information:
 
 ```markdown
-# .agent/ Directory
+# .claude/ Directory
 
 > **Project**: MyApp
 > **Stack**: TypeScript, React, Next.js
@@ -351,10 +351,10 @@ If not tracking generated content:
 
 ```gitignore
 # Optional: Don't track cleanup artifacts
-.agent/active-guides.json
-.agent/.archive/
-.agent/memory/archived/
-.agent/tasks/ARCHIVE/
+.claude/active-guides.json
+.claude/.archive/
+.claude/memory/archived/
+.claude/tasks/ARCHIVE/
 ```
 
 **AI Action**: Update documentation to reflect cleaned state.
@@ -386,8 +386,8 @@ After cleanup, report:
 - Archived to quarterly: 12
 
 ### Files Updated
-- .agent/README.md ✓
-- .agent/active-guides.json ✓
+- .claude/README.md ✓
+- .claude/active-guides.json ✓
 ```
 
 ---
@@ -400,16 +400,16 @@ If you need a pruned guide later:
 
 ```bash
 # Restore from archive
-mv .agent/.archive/skills/python-guide/ .agent/skills/
-mv .agent/.archive/skills/django/ .agent/skills/
+mv .claude/.archive/skills/python-guide/ .claude/skills/
+mv .claude/.archive/skills/django/ .claude/skills/
 ```
 
 ### From Template Repository
 
 ```bash
 # Re-download from template
-curl -o .agent/skills/python-guide/SKILL.md \
-  https://raw.githubusercontent.com/ar4mirez/aicof/main/.agent/skills/python-guide/SKILL.md
+curl -o .claude/skills/python-guide/SKILL.md \
+  https://raw.githubusercontent.com/ar4mirez/aicof/main/.claude/skills/python-guide/SKILL.md
 ```
 
 ### Update Manifest
@@ -424,7 +424,7 @@ This workflow can be automated with a script:
 
 ```bash
 #!/bin/bash
-# .agent/scripts/cleanup.sh
+# .claude/scripts/cleanup.sh
 
 # Run cleanup workflow
 # TODO: Implement automated detection and cleanup
@@ -451,6 +451,6 @@ Before completing cleanup:
 
 ## Related Workflows
 
-- [initialize-project.md](initialize-project.md) - Run cleanup after initialization
-- [troubleshooting.md](troubleshooting.md) - If cleanup causes issues
-- [generate-agents-md.md](generate-agents-md.md) - Regenerate AGENTS.md after cleanup
+- [initialize-project](initialize-project.md) - Run cleanup after initialization
+- [troubleshooting](troubleshooting.md) - If cleanup causes issues
+- [generate-agents-md](generate-agents-md.md) - Regenerate AGENTS.md after cleanup

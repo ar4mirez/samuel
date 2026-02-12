@@ -67,7 +67,7 @@ Major expansion adding 10 specialized domain language guides, bringing the total
 ### Changed
 
 - Updated Quick Reference with all 21 language guides
-- Updated `.agent/` directory structure documentation
+- Updated `.claude/` directory structure documentation
 - Updated documentation site with all language guides
 
 ### Technical
@@ -96,7 +96,7 @@ Major expansion adding 6 enterprise language guides covering top programming lan
 ### Changed
 
 - Updated Quick Reference with all language guides
-- Updated `.agent/` directory structure documentation
+- Updated `.claude/` directory structure documentation
 - Updated documentation site with enterprise language guides
 
 ### Technical
@@ -164,9 +164,9 @@ Focus on reducing token usage while adding critical guardrails.
 
 - Reduced CLAUDE.md from 490 → 400 lines (18% reduction)
 - Clarified workflow requirements (MANDATORY vs RECOMMENDED)
-- Extracted language-specific content to `.agent/language-guides/`
-- Extracted initialization to `.agent/skills/initialize-project/SKILL.md`
-- Extracted troubleshooting to `.agent/skills/troubleshooting/SKILL.md`
+- Extracted language-specific content to `.claude/language-guides/`
+- Extracted initialization to `.claude/skills/initialize-project/SKILL.md`
+- Extracted troubleshooting to `.claude/skills/troubleshooting/SKILL.md`
 
 ### Technical
 
@@ -190,7 +190,7 @@ First public release of AICoF (formerly AI Code Template).
   - 3 modes (ATOMIC, FEATURE, COMPLEX)
   - Software Development Lifecycle stages
 
-- **.agent/ Directory Structure**
+- **.claude/ Directory Structure**
   - README.md for directory documentation
   - project.md.template for tech stack
   - state.md.template for work tracking
@@ -227,21 +227,21 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ### From 1.4.x to 1.5.x
 
-1. Copy new framework guides to `.agent/framework-guides/`:
+1. Copy new framework guides to `.claude/framework-guides/`:
    - All 33 framework guides (react.md, nextjs.md, express.md, django.md, etc.)
 2. Update CLAUDE.md (includes "Load Framework Guide" section)
 3. Copy new `docs/frameworks/` directory for documentation site
 
 ### From 1.3.x to 1.4.x
 
-1. Copy new specialized language guides to `.agent/language-guides/`:
+1. Copy new specialized language guides to `.claude/language-guides/`:
    - sql.md, shell.md, r.md, dart.md, html-css.md
    - lua.md, assembly.md, cuda.md, solidity.md, zig.md
 2. Update CLAUDE.md (includes all 21 language guide references)
 
 ### From 1.2.x to 1.3.x
 
-1. Copy new enterprise language guides to `.agent/language-guides/`:
+1. Copy new enterprise language guides to `.claude/language-guides/`:
    - java.md, csharp.md, php.md, swift.md, cpp.md, ruby.md
 2. Update CLAUDE.md (includes all 11 language guide references)
 
@@ -249,14 +249,14 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 1. Copy new CLAUDE.md (includes Operations section)
 2. Add AGENTS.md symlink if needed: `ln -s CLAUDE.md AGENTS.md`
-3. Copy new `.agent/skills/generate-agents-md/SKILL.md`
-4. Copy new `.agent/language-guides/kotlin.md` (if using Kotlin)
+3. Copy new `.claude/skills/generate-agents-md/SKILL.md`
+4. Copy new `.claude/language-guides/kotlin.md` (if using Kotlin)
 
 ### From 1.0.x to 1.1.x
 
 1. Copy new CLAUDE.md
-2. Copy new `.agent/language-guides/` directory
-3. Copy new `.agent/skills/troubleshooting/SKILL.md`
+2. Copy new `.claude/language-guides/` directory
+3. Copy new `.claude/skills/troubleshooting/SKILL.md`
 4. Review Quick Reference section
 
 ---

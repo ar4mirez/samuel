@@ -50,7 +50,7 @@ Get up and running with AICoF (Artificial Intelligence Coding Framework) in unde
 
     ```bash
     # 1. Copy to your project
-    cp -r /path/to/aicof/{CLAUDE.md,.agent} ./
+    cp -r /path/to/aicof/{CLAUDE.md,.claude} ./
 
     # 2. (Optional) For cross-tool compatibility
     ln -s CLAUDE.md AGENTS.md
@@ -145,7 +145,7 @@ aicof init --languages typescript,python --frameworks react
 **The CLI will:**
 
 1. Create `CLAUDE.md` with all guardrails
-2. Create `.agent/` directory structure
+2. Create `.claude/` directory structure
 3. Let you select languages, frameworks, workflows interactively
 4. Set up cross-tool compatibility (AGENTS.md symlink)
 
@@ -167,7 +167,7 @@ aicof init
 **Or use the workflow for deep analysis:**
 
 ```
-@.agent/workflows/initialize-project.md
+@.claude/skills/initialize-project/SKILL.md
 
 "This is an existing project - analyze the codebase"
 ```
@@ -250,7 +250,7 @@ AICoF Health Check
 ==================
 
 [OK] CLAUDE.md exists
-[OK] .agent/ directory exists
+[OK] .claude/ directory exists
 [OK] Configuration valid
 [OK] 3 languages installed
 [OK] 2 frameworks installed
@@ -275,14 +275,14 @@ When you start working with an AI assistant:
 
 ### Progressive Growth
 
-The `.agent/` directory grows with your project:
+The `.claude/` directory grows with your project:
 
 | Timeline | What Gets Created |
 |----------|-------------------|
 | **Day 1** | Only CLAUDE.md + templates |
-| **Week 1** | `.agent/project.md` (tech stack) |
-| **Month 1** | `.agent/patterns.md` (conventions) |
-| **Ongoing** | `.agent/memory/` (decisions) |
+| **Week 1** | `.claude/project.md` (tech stack) |
+| **Month 1** | `.claude/patterns.md` (conventions) |
+| **Ongoing** | `.claude/memory/` (decisions) |
 
 !!! tip "Don't Over-Document"
 

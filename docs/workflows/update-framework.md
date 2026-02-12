@@ -69,37 +69,37 @@ grep "Current Version" CLAUDE.md
 ls -la CLAUDE.md
 
 # List installed guides
-ls .agent/skills/
+ls .claude/skills/
 
 # List installed workflows
-ls .agent/skills/
+ls .claude/skills/
 ```
 
 ### AI Will Check
 
 1. **Current CLAUDE.md version** (in "Version & Changelog" section)
-2. **Which .agent/ files exist** (guides, workflows)
+2. **Which .claude/ files exist** (guides, workflows)
 3. **Which files appear customized** (vs. template defaults)
 4. **Project-specific files** to preserve:
-   - `.agent/project.md`
-   - `.agent/patterns.md`
-   - `.agent/state.md`
-   - `.agent/memory/*`
-   - `.agent/tasks/*`
+   - `.claude/project.md`
+   - `.claude/patterns.md`
+   - `.claude/state.md`
+   - `.claude/memory/*`
+   - `.claude/tasks/*`
 
 ### Customization Detection
 
 Files that are typically customized:
 
 - CLAUDE.md (custom guardrails, company standards)
-- `.agent/project.md` (always project-specific)
-- `.agent/patterns.md` (project conventions)
+- `.claude/project.md` (always project-specific)
+- `.claude/patterns.md` (project conventions)
 - Any workflow with project-specific modifications
 
 Files that are typically NOT customized:
 
-- Language guide skills (`.agent/skills/<lang>-guide/SKILL.md`)
-- Framework skills (`.agent/skills/<framework>/SKILL.md`)
+- Language guide skills (`.claude/skills/<lang>-guide/SKILL.md`)
+- Framework skills (`.claude/skills/<framework>/SKILL.md`)
 - Standard workflows (unless modified for company process)
 
 ---
@@ -158,18 +158,18 @@ echo "Latest:  $(grep 'Current Version' .ai-update-temp/CLAUDE.md)"
 ## Update Summary: v1.5.0 → v1.7.0
 
 ### New Files (safe to add):
-- .agent/skills/document-work/SKILL.md
-- .agent/skills/update-framework/SKILL.md
+- .claude/skills/document-work/SKILL.md
+- .claude/skills/update-framework/SKILL.md
 
 ### Modified Files (review recommended):
 - CLAUDE.md (guardrails updated)
-- .agent/skills/code-review/SKILL.md (new checks)
+- .claude/skills/code-review/SKILL.md (new checks)
 
 ### Your Customizations (will preserve):
-- .agent/project.md (project-specific)
-- .agent/patterns.md (project-specific)
-- .agent/memory/* (decision logs)
-- .agent/tasks/* (PRDs and tasks)
+- .claude/project.md (project-specific)
+- .claude/patterns.md (project-specific)
+- .claude/memory/* (decision logs)
+- .claude/tasks/* (PRDs and tasks)
 
 ### Breaking Changes:
 - None (or list if any)
@@ -234,22 +234,22 @@ mkdir -p .ai-backup
 cp CLAUDE.md .ai-backup/
 
 # 3. Backup project-specific files
-cp .agent/project.md .ai-backup/ 2>/dev/null || true
-cp .agent/patterns.md .ai-backup/ 2>/dev/null || true
-cp .agent/state.md .ai-backup/ 2>/dev/null || true
-cp -r .agent/memory .ai-backup/ 2>/dev/null || true
-cp -r .agent/tasks .ai-backup/ 2>/dev/null || true
+cp .claude/project.md .ai-backup/ 2>/dev/null || true
+cp .claude/patterns.md .ai-backup/ 2>/dev/null || true
+cp .claude/state.md .ai-backup/ 2>/dev/null || true
+cp -r .claude/memory .ai-backup/ 2>/dev/null || true
+cp -r .claude/tasks .ai-backup/ 2>/dev/null || true
 
 # 4. Copy new template files
 cp .ai-update-temp/CLAUDE.md ./
-cp -r .ai-update-temp/.agent ./
+cp -r .ai-update-temp/.claude ./
 
 # 5. Restore project-specific files
-cp .ai-backup/project.md .agent/ 2>/dev/null || true
-cp .ai-backup/patterns.md .agent/ 2>/dev/null || true
-cp .ai-backup/state.md .agent/ 2>/dev/null || true
-cp -r .ai-backup/memory/* .agent/memory/ 2>/dev/null || true
-cp -r .ai-backup/tasks/* .agent/tasks/ 2>/dev/null || true
+cp .ai-backup/project.md .claude/ 2>/dev/null || true
+cp .ai-backup/patterns.md .claude/ 2>/dev/null || true
+cp .ai-backup/state.md .claude/ 2>/dev/null || true
+cp -r .ai-backup/memory/* .claude/memory/ 2>/dev/null || true
+cp -r .ai-backup/tasks/* .claude/tasks/ 2>/dev/null || true
 
 # 6. If you had CLAUDE.md customizations, merge them
 # (AI will help with this step)
@@ -263,13 +263,13 @@ rm -rf .ai-backup
 
 ```bash
 # Add only new language guides
-cp -r .ai-update-temp/.agent/skills/new-language-guide/ .agent/skills/
+cp -r .ai-update-temp/.claude/skills/new-language-guide/ .claude/skills/
 
 # Add only new framework skills
-cp -r .ai-update-temp/.agent/skills/new-framework/ .agent/skills/
+cp -r .ai-update-temp/.claude/skills/new-framework/ .claude/skills/
 
 # Add only new workflows
-cp -r .ai-update-temp/.agent/skills/new-skill/ .agent/skills/
+cp -r .ai-update-temp/.claude/skills/new-skill/ .claude/skills/
 ```
 
 ---
@@ -282,11 +282,11 @@ cp -r .ai-update-temp/.agent/skills/new-skill/ .agent/skills/
 - [ ] New language/framework guides present
 - [ ] New workflows present
 - [ ] Project-specific files preserved:
-  - [ ] `.agent/project.md`
-  - [ ] `.agent/patterns.md`
-  - [ ] `.agent/state.md`
-  - [ ] `.agent/memory/*`
-  - [ ] `.agent/tasks/*`
+  - [ ] `.claude/project.md`
+  - [ ] `.claude/patterns.md`
+  - [ ] `.claude/state.md`
+  - [ ] `.claude/memory/*`
+  - [ ] `.claude/tasks/*`
 - [ ] No merge conflicts in customized sections
 - [ ] AI assistant loads CLAUDE.md correctly
 
@@ -298,18 +298,18 @@ grep "Current Version" CLAUDE.md
 
 # List all guides
 echo "=== Skills (Language Guides + Frameworks) ==="
-ls .agent/skills/
+ls .claude/skills/
 
 echo "=== Workflows ==="
-ls .agent/skills/
+ls .claude/skills/
 
 # Verify project files exist
 echo "=== Project Files ==="
-ls -la .agent/project.md .agent/patterns.md .agent/state.md 2>/dev/null
+ls -la .claude/project.md .claude/patterns.md .claude/state.md 2>/dev/null
 
 # Count memory files
 echo "=== Memory Files ==="
-ls .agent/memory/ 2>/dev/null | wc -l
+ls .claude/memory/ 2>/dev/null | wc -l
 ```
 
 ---
@@ -320,7 +320,7 @@ ls .agent/memory/ 2>/dev/null | wc -l
 
 **User Request:**
 ```
-@.agent/skills/update-framework/SKILL.md
+@.claude/skills/update-framework/SKILL.md
 
 Update to the latest version of AICoF
 ```
@@ -340,7 +340,7 @@ Update to the latest version of AICoF
 
 **User Request:**
 ```
-@.agent/skills/update-framework/SKILL.md
+@.claude/skills/update-framework/SKILL.md
 
 Check what's new in the latest version (don't update yet)
 ```
@@ -359,7 +359,7 @@ Check what's new in the latest version (don't update yet)
 
 **User Request:**
 ```
-@.agent/skills/update-framework/SKILL.md
+@.claude/skills/update-framework/SKILL.md
 
 I only want to add the new React and Next.js framework guides.
 Keep everything else as-is.
@@ -378,7 +378,7 @@ Keep everything else as-is.
 
 **User Request:**
 ```
-@.agent/skills/update-framework/SKILL.md
+@.claude/skills/update-framework/SKILL.md
 
 Verify my installation matches version 1.7.0 that the team is using.
 ```
@@ -396,7 +396,7 @@ Verify my installation matches version 1.7.0 that the team is using.
 
 **User Request:**
 ```
-@.agent/skills/update-framework/SKILL.md
+@.claude/skills/update-framework/SKILL.md
 
 Update to latest. I have custom guardrails in CLAUDE.md that I need to keep.
 ```
@@ -419,25 +419,25 @@ Update to latest. I have custom guardrails in CLAUDE.md that I need to keep.
 
 **Option 1: Git Rollback (if committed before update)**
 ```bash
-git checkout HEAD~1 -- CLAUDE.md .agent/
+git checkout HEAD~1 -- CLAUDE.md .claude/
 ```
 
 **Option 2: From Backup (if backup still exists)**
 ```bash
 cp .ai-backup/CLAUDE.md ./
-cp -r .ai-backup/.agent ./
+cp -r .ai-backup/.claude ./
 ```
 
 **Option 3: Fresh Install**
 ```bash
 # Remove current installation
 rm CLAUDE.md
-rm -rf .agent/
+rm -rf .claude/
 
 # Reinstall from scratch
 git clone --depth 1 https://github.com/ar4mirez/aicof.git temp
 cp temp/CLAUDE.md ./
-cp -r temp/.agent ./
+cp -r temp/.claude ./
 rm -rf temp
 
 # Restore project-specific files from git or backup
@@ -496,7 +496,7 @@ rm -rf temp
 
 ### Missing Guides After Update
 
-1. Verify `.agent/` directory structure
+1. Verify `.claude/` directory structure
 2. Check if guides are in subdirectories
 3. Re-run selective copy for missing files
 

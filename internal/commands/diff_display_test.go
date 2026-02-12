@@ -6,13 +6,13 @@ import (
 
 func TestCategorizeFiles(t *testing.T) {
 	files := []string{
-		".agent/skills/go-guide/SKILL.md",
-		".agent/skills/python-guide/SKILL.md",
-		".agent/skills/python-guide/references/patterns.md",
-		".agent/skills/react/SKILL.md",
-		".agent/skills/nextjs/SKILL.md",
-		".agent/skills/django/SKILL.md",
-		".agent/skills/create-prd/SKILL.md",
+		".claude/skills/go-guide/SKILL.md",
+		".claude/skills/python-guide/SKILL.md",
+		".claude/skills/python-guide/references/patterns.md",
+		".claude/skills/react/SKILL.md",
+		".claude/skills/nextjs/SKILL.md",
+		".claude/skills/django/SKILL.md",
+		".claude/skills/create-prd/SKILL.md",
 		"CLAUDE.md",
 		"README.md",
 	}
@@ -88,8 +88,8 @@ func TestCategorizeFiles_NoComponents(t *testing.T) {
 func TestCategorizeFiles_FrameworkSkillDedup(t *testing.T) {
 	// Multiple files from same framework skill should be deduplicated
 	files := []string{
-		".agent/skills/react/SKILL.md",
-		".agent/skills/react/references/patterns.md",
+		".claude/skills/react/SKILL.md",
+		".claude/skills/react/references/patterns.md",
 	}
 
 	_, fws, _ := categorizeFiles(files)
@@ -101,16 +101,16 @@ func TestCategorizeFiles_FrameworkSkillDedup(t *testing.T) {
 
 func TestCategorizeOtherFiles(t *testing.T) {
 	added := []string{
-		".agent/skills/go-guide/SKILL.md",
+		".claude/skills/go-guide/SKILL.md",
 		"CLAUDE.md",
 		"new-file.md",
 	}
 	modified := []string{
-		".agent/skills/react/SKILL.md",
+		".claude/skills/react/SKILL.md",
 		"README.md",
 	}
 	removed := []string{
-		".agent/skills/code-review/SKILL.md",
+		".claude/skills/code-review/SKILL.md",
 		"deleted.md",
 	}
 
@@ -128,9 +128,9 @@ func TestCategorizeOtherFiles(t *testing.T) {
 }
 
 func TestCategorizeOtherFiles_AllComponents(t *testing.T) {
-	added := []string{".agent/skills/go-guide/SKILL.md"}
-	modified := []string{".agent/skills/react/SKILL.md"}
-	removed := []string{".agent/skills/troubleshooting/SKILL.md"}
+	added := []string{".claude/skills/go-guide/SKILL.md"}
+	modified := []string{".claude/skills/react/SKILL.md"}
+	removed := []string{".claude/skills/troubleshooting/SKILL.md"}
 
 	addedOther, modifiedOther, removedOther := categorizeOtherFiles(added, modified, removed)
 
@@ -144,7 +144,7 @@ func TestExtractComponentName(t *testing.T) {
 		path string
 		want string
 	}{
-		{".agent/skills/create-prd/SKILL.md", "SKILL"},
+		{".claude/skills/create-prd/SKILL.md", "SKILL"},
 		{"CLAUDE.md", "CLAUDE"},
 		{"path/to/file.md", "file"},
 		{"simple.md", "simple"},
@@ -194,11 +194,11 @@ func TestDisplayComponentDiff(t *testing.T) {
 		FromVersion: "1.0.0",
 		ToVersion:   "2.0.0",
 		Added: []string{
-			".agent/skills/rust-guide/SKILL.md",
-			".agent/skills/axum/SKILL.md",
+			".claude/skills/rust-guide/SKILL.md",
+			".claude/skills/axum/SKILL.md",
 		},
 		Removed: []string{
-			".agent/skills/cleanup-project/SKILL.md",
+			".claude/skills/cleanup-project/SKILL.md",
 		},
 		Modified: []string{
 			"CLAUDE.md",
@@ -215,11 +215,11 @@ func TestExtractSkillDirName(t *testing.T) {
 		path string
 		want string
 	}{
-		{".agent/skills/go-guide/SKILL.md", "go-guide"},
-		{".agent/skills/commit-message/SKILL.md", "commit-message"},
-		{".agent/skills/go-guide/references/patterns.md", "go-guide"},
-		{".agent/skills/react/SKILL.md", "react"},
-		{".agent/skills/spring-boot-kotlin/SKILL.md", "spring-boot-kotlin"},
+		{".claude/skills/go-guide/SKILL.md", "go-guide"},
+		{".claude/skills/commit-message/SKILL.md", "commit-message"},
+		{".claude/skills/go-guide/references/patterns.md", "go-guide"},
+		{".claude/skills/react/SKILL.md", "react"},
+		{".claude/skills/spring-boot-kotlin/SKILL.md", "spring-boot-kotlin"},
 		{"CLAUDE.md", ""},
 	}
 

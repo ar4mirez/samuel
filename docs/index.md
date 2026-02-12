@@ -98,7 +98,7 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 
     ```bash
     # 1. Copy to your project
-    cp -r /path/to/aicof/{CLAUDE.md,.agent} ./
+    cp -r /path/to/aicof/{CLAUDE.md,.claude} ./
 
     # 2. (Optional) For cross-tool compatibility
     ln -s CLAUDE.md AGENTS.md
@@ -150,7 +150,7 @@ AI auto-detects which mode to use based on your request:
     **For:** New subsystems, architecture changes (>10 files)
 
     ```
-    @.agent/workflows/create-prd.md
+    @.claude/skills/create-prd/SKILL.md
     "Build user authentication with OAuth"
     ```
 

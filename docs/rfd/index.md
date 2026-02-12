@@ -39,8 +39,8 @@ Idea → RFD (explore options) → Decision → PRD (plan implementation) → Ta
 
 | State | Description | Location |
 |-------|-------------|----------|
-| **Prediscussion** | Very early, author still forming idea | `.agent/rfd/` (private) |
-| **Ideation** | Ready for informal feedback | `.agent/rfd/` (private) |
+| **Prediscussion** | Very early, author still forming idea | `.claude/rfd/` (private) |
+| **Ideation** | Ready for informal feedback | `.claude/rfd/` (private) |
 | **Discussion** | Open for team discussion | `docs/rfd/` (public) |
 | **Published** | Decision made, documented | `docs/rfd/` (public) |
 | **Committed** | Implementation complete | `docs/rfd/` (public) |
@@ -57,7 +57,7 @@ Prediscussion → Ideation → Discussion → Published → Committed
 Use the workflow:
 
 ```
-@.agent/workflows/create-rfd.md
+@.claude/skills/create-rfd/SKILL.md
 
 Explore options for [topic]
 ```

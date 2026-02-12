@@ -355,6 +355,32 @@ func TestSearchLanguages_Tags(t *testing.T) {
 	}
 }
 
+func TestSearchWorkflows_Tags(t *testing.T) {
+	// Test that searching by tag (e.g., "debug") finds troubleshooting
+	results := searchWorkflows("debug", nil)
+	found := false
+	for _, r := range results {
+		if r.Name == "troubleshooting" {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("Expected to find 'troubleshooting' when searching for tag 'debug'")
+	}
+
+	// Test that searching by tag "owasp" finds security-audit
+	results = searchWorkflows("owasp", nil)
+	found = false
+	for _, r := range results {
+		if r.Name == "security-audit" {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("Expected to find 'security-audit' when searching for tag 'owasp'")
+	}
+}
+
 func TestSearchSkills(t *testing.T) {
 	results := searchSkills("commit", nil)
 	found := false

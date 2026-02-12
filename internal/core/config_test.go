@@ -470,6 +470,9 @@ func TestConfig_AddWorkflow(t *testing.T) {
 	if len(config.Installed.Workflows) != 1 || config.Installed.Workflows[0] != "create-prd" {
 		t.Errorf("AddWorkflow() = %v, want [create-prd]", config.Installed.Workflows)
 	}
+	if !config.HasSkill("create-prd") {
+		t.Error("AddWorkflow(create-prd) should also add create-prd skill")
+	}
 
 	// Adding duplicate should not add again
 	config.AddWorkflow("create-prd")
@@ -479,9 +482,13 @@ func TestConfig_AddWorkflow(t *testing.T) {
 
 	// Test with "all" - should not add since "all" matches everything
 	config.Installed.Workflows = []string{"all"}
+	config.Installed.Skills = []string{}
 	config.AddWorkflow("code-review")
 	if len(config.Installed.Workflows) != 1 {
 		t.Errorf("AddWorkflow() with 'all' should not add, got %v", config.Installed.Workflows)
+	}
+	if !config.HasSkill("code-review") {
+		t.Error("AddWorkflow(code-review) should add code-review skill even with 'all' workflows")
 	}
 }
 
@@ -535,12 +542,19 @@ func TestConfig_RemoveWorkflow(t *testing.T) {
 	config := &Config{
 		Installed: InstalledItems{
 			Workflows: []string{"create-prd", "code-review"},
+			Skills:    []string{"create-prd", "code-review"},
 		},
 	}
 
 	config.RemoveWorkflow("create-prd")
 	if len(config.Installed.Workflows) != 1 {
 		t.Errorf("RemoveWorkflow() should have 1 workflow, got %v", config.Installed.Workflows)
+	}
+	if config.HasSkill("create-prd") {
+		t.Error("RemoveWorkflow() should also remove create-prd skill")
+	}
+	if !config.HasSkill("code-review") {
+		t.Error("RemoveWorkflow() should preserve code-review skill")
 	}
 }
 
@@ -627,6 +641,58 @@ func TestConfig_MigrateFrameworksToSkills(t *testing.T) {
 	migrated = config.MigrateFrameworksToSkills()
 	if migrated {
 		t.Error("MigrateFrameworksToSkills() should return false when already migrated")
+	}
+}
+
+func TestConfig_MigrateWorkflowsToSkills(t *testing.T) {
+	// Simulate a legacy config with workflows but no corresponding skills
+	config := &Config{
+		Installed: InstalledItems{
+			Workflows: []string{"create-prd", "code-review"},
+			Skills:    []string{"commit-message"},
+		},
+	}
+
+	migrated := config.MigrateWorkflowsToSkills()
+	if !migrated {
+		t.Error("MigrateWorkflowsToSkills() should return true when migration is needed")
+	}
+	if !config.HasSkill("create-prd") {
+		t.Error("MigrateWorkflowsToSkills() should add create-prd skill")
+	}
+	if !config.HasSkill("code-review") {
+		t.Error("MigrateWorkflowsToSkills() should add code-review skill")
+	}
+	if !config.HasSkill("commit-message") {
+		t.Error("MigrateWorkflowsToSkills() should preserve existing skills")
+	}
+
+	// Running again should return false (no new migration)
+	migrated = config.MigrateWorkflowsToSkills()
+	if migrated {
+		t.Error("MigrateWorkflowsToSkills() should return false when already migrated")
+	}
+}
+
+func TestConfig_MigrateWorkflowsToSkills_All(t *testing.T) {
+	// Test migration with the special "all" value
+	config := &Config{
+		Installed: InstalledItems{
+			Workflows: []string{"all"},
+			Skills:    []string{},
+		},
+	}
+
+	migrated := config.MigrateWorkflowsToSkills()
+	if !migrated {
+		t.Error("MigrateWorkflowsToSkills() with 'all' should return true")
+	}
+	// Should have all workflow names as skills
+	if !config.HasSkill("create-prd") {
+		t.Error("MigrateWorkflowsToSkills() with 'all' should add create-prd skill")
+	}
+	if !config.HasSkill("troubleshooting") {
+		t.Error("MigrateWorkflowsToSkills() with 'all' should add troubleshooting skill")
 	}
 }
 

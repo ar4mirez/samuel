@@ -54,7 +54,7 @@ var skillValidateCmd = &cobra.Command{
 	Short: "Validate skill(s) against the Agent Skills specification",
 	Long: `Validate skill(s) against the Agent Skills specification.
 
-If no name is provided, validates all skills in .agent/skills/
+If no name is provided, validates all skills in .claude/skills/
 
 Checks:
   - SKILL.md exists with valid YAML frontmatter
@@ -73,7 +73,7 @@ Examples:
 var skillListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List installed skills",
-	Long: `List all skills installed in .agent/skills/
+	Long: `List all skills installed in .claude/skills/
 
 Shows skill name, description, and validation status.
 
@@ -131,7 +131,7 @@ func runSkillCreate(cmd *cobra.Command, args []string) error {
 	}
 
 	// Skills directory
-	skillsDir := filepath.Join(cwd, ".agent", "skills")
+	skillsDir := filepath.Join(cwd, ".claude", "skills")
 
 	// Create skills directory if it doesn't exist
 	if err := os.MkdirAll(skillsDir, 0755); err != nil {
@@ -154,7 +154,7 @@ func runSkillCreate(cmd *cobra.Command, args []string) error {
 	ui.Print("    %s/references/.gitkeep", name)
 	ui.Print("    %s/assets/.gitkeep", name)
 	ui.Print("")
-	ui.Info("Edit .agent/skills/%s/SKILL.md to define your skill", name)
+	ui.Info("Edit .claude/skills/%s/SKILL.md to define your skill", name)
 
 	return nil
 }
@@ -165,11 +165,11 @@ func runSkillValidate(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to get working directory: %w", err)
 	}
 
-	skillsDir := filepath.Join(cwd, ".agent", "skills")
+	skillsDir := filepath.Join(cwd, ".claude", "skills")
 
 	// Check if skills directory exists
 	if _, err := os.Stat(skillsDir); os.IsNotExist(err) {
-		ui.Info("No skills directory found at .agent/skills/")
+		ui.Info("No skills directory found at .claude/skills/")
 		return nil
 	}
 
@@ -197,7 +197,7 @@ func runSkillValidate(cmd *cobra.Command, args []string) error {
 	}
 
 	if len(skills) == 0 {
-		ui.Info("No skills found in .agent/skills/")
+		ui.Info("No skills found in .claude/skills/")
 		return nil
 	}
 
@@ -233,11 +233,11 @@ func runSkillList(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to get working directory: %w", err)
 	}
 
-	skillsDir := filepath.Join(cwd, ".agent", "skills")
+	skillsDir := filepath.Join(cwd, ".claude", "skills")
 
 	// Check if skills directory exists
 	if _, err := os.Stat(skillsDir); os.IsNotExist(err) {
-		ui.Info("No skills directory found at .agent/skills/")
+		ui.Info("No skills directory found at .claude/skills/")
 		ui.Print("Run 'aicof skill create <name>' to create your first skill")
 		return nil
 	}
@@ -248,7 +248,7 @@ func runSkillList(cmd *cobra.Command, args []string) error {
 	}
 
 	if len(skills) == 0 {
-		ui.Info("No skills found in .agent/skills/")
+		ui.Info("No skills found in .claude/skills/")
 		ui.Print("Run 'aicof skill create <name>' to create your first skill")
 		return nil
 	}
@@ -289,7 +289,7 @@ func runSkillInfo(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to get working directory: %w", err)
 	}
 
-	skillPath := filepath.Join(cwd, ".agent", "skills", name)
+	skillPath := filepath.Join(cwd, ".claude", "skills", name)
 
 	if _, err := os.Stat(skillPath); os.IsNotExist(err) {
 		return fmt.Errorf("skill '%s' not found", name)

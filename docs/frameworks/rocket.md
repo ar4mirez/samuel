@@ -1,7 +1,7 @@
 # Rocket Framework Guide
 
 > **Applies to**: Rocket 0.5+, Rust Web APIs, Type-Safe Web Applications
-> **Use with**: `.agent/skills/rust-guide/SKILL.md`
+> **Use with**: `.claude/skills/rust-guide/SKILL.md`
 
 ---
 

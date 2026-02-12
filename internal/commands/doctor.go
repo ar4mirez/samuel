@@ -109,18 +109,32 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	// Check 3: .agent directory structure
-	agentDirs := []string{
-		".agent",
-		".agent/workflows",
-		".agent/skills",
-		".agent/memory",
-		".agent/tasks",
+	// Check 3: AGENTS.md exists
+	agentsMdPath := filepath.Join(cwd, "AGENTS.md")
+	if _, err := os.Stat(agentsMdPath); os.IsNotExist(err) {
+		results = append(results, checkResult{
+			name:    "AGENTS.md",
+			passed:  false,
+			message: "AGENTS.md not found (cross-tool compatibility)",
+			fixable: true,
+		})
+	} else {
+		results = append(results, checkResult{
+			name:    "AGENTS.md",
+			passed:  true,
+			message: "Present",
+		})
+	}
+
+	// Check 4: .claude directory structure
+	claudeDirs := []string{
+		".claude",
+		".claude/skills",
 	}
 
 	allDirsExist := true
 	var missingDirs []string
-	for _, dir := range agentDirs {
+	for _, dir := range claudeDirs {
 		dirPath := filepath.Join(cwd, dir)
 		if _, err := os.Stat(dirPath); os.IsNotExist(err) {
 			allDirsExist = false
@@ -132,7 +146,7 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		results = append(results, checkResult{
 			name:    "Directory structure",
 			passed:  true,
-			message: ".agent/ directory structure valid",
+			message: ".claude/skills/ directory structure valid",
 		})
 	} else {
 		results = append(results, checkResult{
@@ -143,7 +157,7 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		})
 	}
 
-	// Check 4: Installed language guide skills exist
+	// Check 5: Installed language guide skills exist
 	if config != nil {
 		// Ensure legacy configs have skills populated
 		config.MigrateLanguagesToSkills()
@@ -176,7 +190,7 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	// Check 5: Installed framework skills exist
+	// Check 6: Installed framework skills exist
 	if config != nil {
 		// Ensure legacy configs have skills populated
 		config.MigrateFrameworksToSkills()
@@ -209,8 +223,11 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	// Check 6: Workflows exist
+	// Check 7: Workflow skills exist
 	if config != nil {
+		// Ensure legacy configs have skills populated
+		config.MigrateWorkflowsToSkills()
+
 		var missingWfs []string
 		workflowsToCheck := config.Installed.Workflows
 		if len(workflowsToCheck) == 1 && workflowsToCheck[0] == "all" {
@@ -220,8 +237,9 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		for _, wf := range workflowsToCheck {
 			component := core.FindWorkflow(wf)
 			if component != nil {
-				filePath := filepath.Join(cwd, component.Path)
-				if _, err := os.Stat(filePath); os.IsNotExist(err) {
+				// Workflows are now skill directories with SKILL.md
+				skillPath := filepath.Join(cwd, component.Path, "SKILL.md")
+				if _, err := os.Stat(skillPath); os.IsNotExist(err) {
 					missingWfs = append(missingWfs, wf)
 				}
 			}
@@ -243,8 +261,8 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	// Check 7: Skills validation
-	skillsDir := filepath.Join(cwd, ".agent", "skills")
+	// Check 8: Skills validation
+	skillsDir := filepath.Join(cwd, ".claude", "skills")
 	if _, err := os.Stat(skillsDir); err == nil {
 		skills, err := core.ScanSkillsDirectory(skillsDir)
 		if err != nil {
@@ -286,7 +304,7 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	// Check 8: Local modifications (informational)
+	// Check 9: Local modifications (informational)
 	if config != nil {
 		claudeMdModified := checkModification(claudeMdPath, config.Version)
 		if claudeMdModified {

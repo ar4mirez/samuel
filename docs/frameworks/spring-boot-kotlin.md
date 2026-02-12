@@ -1,7 +1,7 @@
 # Spring Boot (Kotlin) Framework Guide
 
 > **Applies to**: Spring Boot 3.x, Kotlin 1.9+, REST APIs, Microservices
-> **Use with**: `.agent/skills/kotlin-guide/SKILL.md`
+> **Use with**: `.claude/skills/kotlin-guide/SKILL.md`
 
 ---
 

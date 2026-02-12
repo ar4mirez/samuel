@@ -30,7 +30,7 @@ Skip PRD for:
 ## How to Invoke
 
 ```
-@.agent/workflows/create-prd.md
+@.claude/skills/create-prd/SKILL.md
 
 Build a user authentication system with email/password and OAuth
 ```
@@ -43,7 +43,7 @@ Build a user authentication system with email/password and OAuth
 
 AI reviews:
 
-- `.agent/project.md` for tech stack
+- `.claude/project.md` for tech stack
 - Existing code patterns
 - Related functionality
 
@@ -78,7 +78,7 @@ Creates a comprehensive document covering:
 
 ### Step 4: Save PRD
 
-Saves to: `.agent/tasks/NNNN-prd-feature-name.md`
+Saves to: `.claude/tasks/NNNN-prd-feature-name.md`
 
 ---
 
@@ -220,9 +220,9 @@ How success is measured.
 3. **Generate tasks** - Use generate-tasks workflow
 
 ```
-@.agent/workflows/generate-tasks.md
+@.claude/skills/generate-tasks/SKILL.md
 
-Use the PRD at .agent/tasks/0001-prd-user-auth.md
+Use the PRD at .claude/tasks/0001-prd-user-auth.md
 ```
 
 !!! warning "Don't Skip to Implementation"
@@ -233,7 +233,7 @@ Use the PRD at .agent/tasks/0001-prd-user-auth.md
 
 ## Example PRD
 
-See a complete example: [Example PRD for API Rate Limiting](https://github.com/ar4mirez/aicof/blob/main/.agent/tasks/EXAMPLE-0001-prd-api-rate-limiting.md)
+See a complete example: [Example PRD for API Rate Limiting](https://github.com/ar4mirez/aicof/blob/main/.claude/tasks/EXAMPLE-0001-prd-api-rate-limiting.md)
 
 ---
 

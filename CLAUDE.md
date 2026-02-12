@@ -3,7 +3,7 @@
 AI-assisted development instructions. Opinionated guardrails for writing quality software.
 
 > **AGENTS.md Compatible**: This file follows the [AGENTS.md](https://agents.md) standard structure.
-> Operations section first, then methodology. For other AI tools, symlink: `ln -s CLAUDE.md AGENTS.md`
+> Operations section first, then methodology. For other AI tools, copy: `cp CLAUDE.md AGENTS.md`
 
 ---
 
@@ -150,19 +150,19 @@ NODE_ENV=            # development | production | test
 **Task Classification:**
 - **ATOMIC** (<5 files, clear scope) → Implement directly
 - **FEATURE** (5-10 files) → Break into subtasks
-- **COMPLEX** (>10 files, new subsystem) → Use PRD workflow | .agent/skills/create-prd/SKILL.md
+- **COMPLEX** (>10 files, new subsystem) → Use PRD workflow | .claude/skills/create-prd/SKILL.md
 
 **Common Guardrails** (validate first):
 ✓ Function ≤50 lines | ✓ File ≤300 lines | ✓ Input validation | ✓ Parameterized queries
 ✓ Tests >80% (critical) | ✓ Conventional commits | ✓ No secrets in code
 
 **Emergency Quick Links:**
-- Security issue? → .agent/skills/security-audit/SKILL.md
-- Tests failing? → .agent/skills/troubleshooting/SKILL.md
-- Stuck >30 min? → .agent/skills/troubleshooting/SKILL.md
-- Complex feature? → .agent/skills/create-prd/SKILL.md
-- Code review? → .agent/skills/code-review/SKILL.md
-- Language-specific? → .agent/skills/{lang}-guide/SKILL.md
+- Security issue? → .claude/skills/security-audit/SKILL.md
+- Tests failing? → .claude/skills/troubleshooting/SKILL.md
+- Stuck >30 min? → .claude/skills/troubleshooting/SKILL.md
+- Complex feature? → .claude/skills/create-prd/SKILL.md
+- Code review? → .claude/skills/code-review/SKILL.md
+- Language-specific? → .claude/skills/{lang}-guide/SKILL.md
 
 **Workflows** (on-demand):
 
@@ -172,10 +172,10 @@ NODE_ENV=            # development | production | test
 - Utility: troubleshooting, generate-agents-md, document-work, create-skill
 
 **Skills** (capability modules - [Agent Skills](https://agentskills.io) standard):
-- Create: `aicof skill create <name>` or `.agent/skills/create-skill/SKILL.md`
+- Create: `aicof skill create <name>` or `.claude/skills/create-skill/SKILL.md`
 - Validate: `aicof skill validate`
 - List: `aicof skill list`
-- Load: `.agent/skills/<skill-name>/SKILL.md` when task matches description
+- Load: `.claude/skills/<skill-name>/SKILL.md` when task matches description
 - Spec: https://agentskills.io/specification
 
 <!-- SKILLS_START -->
@@ -187,83 +187,83 @@ Skills extend AI capabilities. Load a skill when task matches its description.
 |-------|-------------|
 | commit-message | Generate descriptive commit messages by analyzing git diffs. Use when the us... |
 
-**To use a skill**: Read `.agent/skills/<skill-name>/SKILL.md`
+**To use a skill**: Read `.claude/skills/<skill-name>/SKILL.md`
 <!-- SKILLS_END -->
 
 **RFD vs PRD** (when exploring options):
 
-- **RFD** = "Why" (explore options, build consensus) → .agent/skills/create-rfd/SKILL.md
-- **PRD** = "What" (define implementation) → .agent/skills/create-prd/SKILL.md
+- **RFD** = "Why" (explore options, build consensus) → .claude/skills/create-rfd/SKILL.md
+- **PRD** = "What" (define implementation) → .claude/skills/create-prd/SKILL.md
 - Flow: Idea → RFD (explore) → Decision → PRD (plan) → Tasks → Code
 
 **Load Language Guide** (automatic based on file extensions — language guides are Agent Skills):
-- TypeScript/JavaScript → .agent/skills/typescript-guide/SKILL.md
-- Python → .agent/skills/python-guide/SKILL.md
-- Go → .agent/skills/go-guide/SKILL.md
-- Rust → .agent/skills/rust-guide/SKILL.md
-- Kotlin → .agent/skills/kotlin-guide/SKILL.md
-- Java → .agent/skills/java-guide/SKILL.md
-- C# → .agent/skills/csharp-guide/SKILL.md
-- PHP → .agent/skills/php-guide/SKILL.md
-- Swift → .agent/skills/swift-guide/SKILL.md
-- C/C++ → .agent/skills/cpp-guide/SKILL.md
-- Ruby → .agent/skills/ruby-guide/SKILL.md
-- SQL → .agent/skills/sql-guide/SKILL.md
-- Shell/Bash → .agent/skills/shell-guide/SKILL.md
-- R → .agent/skills/r-guide/SKILL.md
-- Dart/Flutter → .agent/skills/dart-guide/SKILL.md
-- HTML/CSS → .agent/skills/html-css-guide/SKILL.md
-- Lua → .agent/skills/lua-guide/SKILL.md
-- Assembly → .agent/skills/assembly-guide/SKILL.md
-- CUDA → .agent/skills/cuda-guide/SKILL.md
-- Solidity → .agent/skills/solidity-guide/SKILL.md
-- Zig → .agent/skills/zig-guide/SKILL.md
+- TypeScript/JavaScript → .claude/skills/typescript-guide/SKILL.md
+- Python → .claude/skills/python-guide/SKILL.md
+- Go → .claude/skills/go-guide/SKILL.md
+- Rust → .claude/skills/rust-guide/SKILL.md
+- Kotlin → .claude/skills/kotlin-guide/SKILL.md
+- Java → .claude/skills/java-guide/SKILL.md
+- C# → .claude/skills/csharp-guide/SKILL.md
+- PHP → .claude/skills/php-guide/SKILL.md
+- Swift → .claude/skills/swift-guide/SKILL.md
+- C/C++ → .claude/skills/cpp-guide/SKILL.md
+- Ruby → .claude/skills/ruby-guide/SKILL.md
+- SQL → .claude/skills/sql-guide/SKILL.md
+- Shell/Bash → .claude/skills/shell-guide/SKILL.md
+- R → .claude/skills/r-guide/SKILL.md
+- Dart/Flutter → .claude/skills/dart-guide/SKILL.md
+- HTML/CSS → .claude/skills/html-css-guide/SKILL.md
+- Lua → .claude/skills/lua-guide/SKILL.md
+- Assembly → .claude/skills/assembly-guide/SKILL.md
+- CUDA → .claude/skills/cuda-guide/SKILL.md
+- Solidity → .claude/skills/solidity-guide/SKILL.md
+- Zig → .claude/skills/zig-guide/SKILL.md
 
 **Load Framework Skill** (when using specific framework — framework guides are Agent Skills):
 - TypeScript/JavaScript:
-  - React → .agent/skills/react/SKILL.md
-  - Next.js → .agent/skills/nextjs/SKILL.md
-  - Express → .agent/skills/express/SKILL.md
+  - React → .claude/skills/react/SKILL.md
+  - Next.js → .claude/skills/nextjs/SKILL.md
+  - Express → .claude/skills/express/SKILL.md
 - Python:
-  - Django → .agent/skills/django/SKILL.md
-  - FastAPI → .agent/skills/fastapi/SKILL.md
-  - Flask → .agent/skills/flask/SKILL.md
+  - Django → .claude/skills/django/SKILL.md
+  - FastAPI → .claude/skills/fastapi/SKILL.md
+  - Flask → .claude/skills/flask/SKILL.md
 - Go:
-  - Gin → .agent/skills/gin/SKILL.md
-  - Echo → .agent/skills/echo/SKILL.md
-  - Fiber → .agent/skills/fiber/SKILL.md
+  - Gin → .claude/skills/gin/SKILL.md
+  - Echo → .claude/skills/echo/SKILL.md
+  - Fiber → .claude/skills/fiber/SKILL.md
 - Rust:
-  - Axum → .agent/skills/axum/SKILL.md
-  - Actix-web → .agent/skills/actix-web/SKILL.md
-  - Rocket → .agent/skills/rocket/SKILL.md
+  - Axum → .claude/skills/axum/SKILL.md
+  - Actix-web → .claude/skills/actix-web/SKILL.md
+  - Rocket → .claude/skills/rocket/SKILL.md
 - Kotlin:
-  - Spring Boot (Kotlin) → .agent/skills/spring-boot-kotlin/SKILL.md
-  - Ktor → .agent/skills/ktor/SKILL.md
-  - Android Compose → .agent/skills/android-compose/SKILL.md
+  - Spring Boot (Kotlin) → .claude/skills/spring-boot-kotlin/SKILL.md
+  - Ktor → .claude/skills/ktor/SKILL.md
+  - Android Compose → .claude/skills/android-compose/SKILL.md
 - Java:
-  - Spring Boot → .agent/skills/spring-boot-java/SKILL.md
-  - Quarkus → .agent/skills/quarkus/SKILL.md
-  - Micronaut → .agent/skills/micronaut/SKILL.md
+  - Spring Boot → .claude/skills/spring-boot-java/SKILL.md
+  - Quarkus → .claude/skills/quarkus/SKILL.md
+  - Micronaut → .claude/skills/micronaut/SKILL.md
 - C#:
-  - ASP.NET Core → .agent/skills/aspnet-core/SKILL.md
-  - Blazor → .agent/skills/blazor/SKILL.md
-  - Unity → .agent/skills/unity/SKILL.md
+  - ASP.NET Core → .claude/skills/aspnet-core/SKILL.md
+  - Blazor → .claude/skills/blazor/SKILL.md
+  - Unity → .claude/skills/unity/SKILL.md
 - PHP:
-  - Laravel → .agent/skills/laravel/SKILL.md
-  - Symfony → .agent/skills/symfony/SKILL.md
-  - WordPress → .agent/skills/wordpress/SKILL.md
+  - Laravel → .claude/skills/laravel/SKILL.md
+  - Symfony → .claude/skills/symfony/SKILL.md
+  - WordPress → .claude/skills/wordpress/SKILL.md
 - Swift:
-  - SwiftUI → .agent/skills/swiftui/SKILL.md
-  - UIKit → .agent/skills/uikit/SKILL.md
-  - Vapor → .agent/skills/vapor/SKILL.md
+  - SwiftUI → .claude/skills/swiftui/SKILL.md
+  - UIKit → .claude/skills/uikit/SKILL.md
+  - Vapor → .claude/skills/vapor/SKILL.md
 - Ruby:
-  - Rails → .agent/skills/rails/SKILL.md
-  - Sinatra → .agent/skills/sinatra/SKILL.md
-  - Hanami → .agent/skills/hanami/SKILL.md
+  - Rails → .claude/skills/rails/SKILL.md
+  - Sinatra → .claude/skills/sinatra/SKILL.md
+  - Hanami → .claude/skills/hanami/SKILL.md
 - Dart:
-  - Flutter → .agent/skills/flutter/SKILL.md
-  - Shelf → .agent/skills/shelf/SKILL.md
-  - Dart Frog → .agent/skills/dart-frog/SKILL.md
+  - Flutter → .claude/skills/flutter/SKILL.md
+  - Shelf → .claude/skills/shelf/SKILL.md
+  - Dart Frog → .claude/skills/dart-frog/SKILL.md
 
 ---
 
@@ -343,7 +343,7 @@ For architecture changes, major refactors, new systems:
 
 1. **Deconstruct**: Full decomposition into phases/milestones.
 2. **Diagnose**: Analyze risks, dependencies, migration paths.
-3. **Develop**: Create `.agent/project.md` with plan → Implement incrementally.
+3. **Develop**: Define plan in CLAUDE.md or per-folder CLAUDE.md → Implement incrementally.
 4. **Deliver**: Staged rollout → Documentation → Retrospective.
 
 **Structured Workflow (for COMPLEX tasks):**
@@ -364,8 +364,8 @@ For architecture changes, major refactors, new systems:
 - Well-defined refactoring
 
 **Workflow:**
-1. Use `.agent/skills/create-prd/SKILL.md` to define requirements
-2. Use `.agent/skills/generate-tasks/SKILL.md` to break down implementation
+1. Use `.claude/skills/create-prd/SKILL.md` to define requirements
+2. Use `.claude/skills/generate-tasks/SKILL.md` to break down implementation
 3. Implement tasks step-by-step with verification checkpoints
 
 **Escalation Triggers:**
@@ -381,7 +381,7 @@ For architecture changes, major refactors, new systems:
 ### Stage 1: Planning
 **Atomic**: Read existing code → Identify change location
 **Feature**: Review related code → Sketch interfaces/contracts
-**Complex**: Create `.agent/project.md` OR use PRD workflow
+**Complex**: Use PRD workflow or document plan in CLAUDE.md
 
 **Checkpoints:**
 - [ ] Requirements clear and testable
@@ -392,7 +392,7 @@ For architecture changes, major refactors, new systems:
 ### Stage 2: Implementation
 **Always:**
 - Write tests first (TDD) or alongside code
-- Load language-specific guide: .agent/skills/{language}-guide/SKILL.md
+- Load language-specific guide: .claude/skills/{language}-guide/SKILL.md
 - Follow language/framework idioms
 - Validate against guardrails continuously
 - Keep changes focused (resist scope creep)
@@ -423,9 +423,8 @@ For architecture changes, major refactors, new systems:
 - API documentation updated
 
 **Project Level:**
-- Update `.agent/patterns.md` if new pattern emerged
-- Update `.agent/state.md` with progress
-- Add `.agent/memory/YYYY-MM-DD-topic.md` for key decisions
+- Update CLAUDE.md or per-folder CLAUDE.md if new patterns emerged
+- Key decisions are captured via Claude Code's built-in memory system
 
 ### Stage 5: Commit
 **Pre-Commit Checklist:**
@@ -454,22 +453,21 @@ Refs: #issue-number"
 ### CLAUDE.md (This File)
 **Loaded**: Always (every conversation)
 **Purpose**: Operations + Guardrails + Methodology + SDLC workflow
-**Compatibility**: AGENTS.md standard (symlink for other tools)
-**Current**: ~500 lines (target: <600, Operations section adds ~150 lines)
+**Compatibility**: AGENTS.md standard (copy for other tools: `cp CLAUDE.md AGENTS.md`)
 
-### .agent/ Directory
-**Loaded**: On-demand, when needed
-**Purpose**: Project-specific context that grows over time
+### Per-Folder CLAUDE.md Files
+**Loaded**: Automatically when working in that directory
+**Purpose**: Directory-specific instructions, overrides, or context
+**Example**: `src/api/CLAUDE.md` with API-specific conventions
+
+### .claude/skills/ Directory
+**Loaded**: On-demand, when task matches a skill description
+**Purpose**: Agent Skills - capability modules following the [Agent Skills](https://agentskills.io) standard
 
 **Structure:**
 ```
-.agent/
-├── README.md              # How to use .agent/
-├── project.md             # Tech stack, architecture (create when tech chosen)
-├── patterns.md            # Coding patterns (create when patterns emerge)
-├── state.md              # Current work (create for multi-session work)
-├── (language and framework guides are now Agent Skills — see skills/ below)
-├── skills/               # Agent Skills - capability modules (Agent Skills standard)
+.claude/
+├── skills/               # Agent Skills - capability modules
 │   ├── README.md              # How to create and use skills
 │   ├── commit-message/        # Generate commit messages
 │   │   └── SKILL.md
@@ -518,30 +516,15 @@ Refs: #issue-number"
 │   ├── django/
 │   │   └── SKILL.md
 │   └── ...                    # All 33 framework skills
-├── rfd/                  # Private RFDs (Prediscussion, Ideation states)
-│   └── NNNN-rfd-topic.md
-├── tasks/                # PRDs and task lists (created during COMPLEX mode)
-│   ├── NNNN-prd-feature-name.md
-│   └── tasks-NNNN-prd-feature-name.md
-└── memory/               # Decision logs (created as needed)
-    └── YYYY-MM-DD-topic.md
+└── settings.local.json   # Claude Code local settings
 ```
 
 **Loading Protocol:**
-- **Session Start**: AI loads CLAUDE.md → Checks for state.md → Reads if exists
-- **During Work**: Load language guide skill from `.agent/skills/<lang>-guide/SKILL.md` based on file extensions
-- **Complex Features**: Load workflows (PRD, task generation)
-- **Capability Needed**: Load skill from `.agent/skills/` when task matches skill description
-- **Reference Needed**: Load patterns.md, project.md, memory/ on-demand
-
-**Progressive Growth:**
-- Day 1: Only CLAUDE.md + templates ✓
-- First code: Language guide loaded automatically
-- Week 1: Create `.agent/project.md` when architecture decided
-- Month 1: `.agent/patterns.md` populated with conventions
-- Ongoing: `.agent/memory/` captures complex decisions
-
-**For details on any .agent/ file, see:** `.agent/README.md`
+- **Session Start**: Claude Code loads CLAUDE.md automatically, plus any per-folder CLAUDE.md files
+- **During Work**: Load language guide skill from `.claude/skills/<lang>-guide/SKILL.md` based on file extensions
+- **Complex Features**: Load workflow skills (PRD, task generation)
+- **Capability Needed**: Load skill from `.claude/skills/` when task matches skill description
+- **Memory & State**: Claude Code's built-in memory system handles session state, patterns, and decisions
 
 ---
 
@@ -576,17 +559,17 @@ Refs: #issue-number"
 
 ## Initialization
 
-**For new projects:** Use `.agent/skills/initialize-project/SKILL.md`
+**For new projects:** Use `.claude/skills/initialize-project/SKILL.md`
 
-**For existing projects:** Use `.agent/skills/initialize-project/SKILL.md`
+**For existing projects:** Use `.claude/skills/initialize-project/SKILL.md`
 
-AI will ask questions, analyze codebase, and create `.agent/project.md` with findings.
+AI will ask questions, analyze codebase, and configure CLAUDE.md with findings.
 
 ---
 
 ## When Stuck
 
-**See:** `.agent/skills/troubleshooting/SKILL.md`
+**See:** `.claude/skills/troubleshooting/SKILL.md`
 
 **Quick recovery:**
 1. STOP trying random solutions (>30 min = stuck)
@@ -594,7 +577,7 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
 3. Simplify & isolate (minimal reproduction)
 4. Check fundamentals (dependencies, config, versions)
 5. Ask user with clear problem statement
-6. Record solution in `.agent/memory/`
+6. Record solution for future reference
 
 ---
 
@@ -608,25 +591,36 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
 - [ ] Commit follows conventions
 
 ### Per Session
-- [ ] State documented in `.agent/state.md` (if multi-session)
-- [ ] New patterns added to `.agent/patterns.md` (if emerged)
-- [ ] Key decisions in `.agent/memory/` (if significant)
 - [ ] No broken tests left behind
 - [ ] Progress measurable
+- [ ] Key decisions captured for future reference
 
 ---
 
 ## Version & Changelog
 
-**Current Version**: 1.8.0
-**Last Updated**: 2025-02-04
+**Current Version**: 2.0.0
+**Last Updated**: 2026-02-11
 
 ### Changelog
+
+**v2.0.0 (2026-02-11) - Migration from .agent/ to .claude/**
+- BREAKING: Migrated all skills from `.agent/skills/` to `.claude/skills/`
+- BREAKING: Removed `.agent/` directory structure (memory/, tasks/, rfd/, state.md, patterns.md)
+- Replaced `.agent/` context system with Claude Code native conventions:
+  - CLAUDE.md (root) - always loaded
+  - Per-folder CLAUDE.md files - loaded when working in that directory
+  - `.claude/skills/` - Agent Skills directory (native Claude Code skills)
+- Session state, patterns, and decisions now use Claude Code's built-in memory system
+- Updated AGENTS.md compatibility from symlink to real copy (`cp CLAUDE.md AGENTS.md`)
+- Simplified Context System section
+- Simplified Success Criteria (removed .agent/-dependent per-session items)
+- Updated SDLC documentation stage to use CLAUDE.md instead of .agent/ files
 
 **v1.8.0 (2025-02-04) - Agent Skills Integration**
 - ✅ Added Agent Skills support (open standard for AI agent capabilities)
 - ✅ New CLI commands: `aicof skill create`, `aicof skill validate`, `aicof skill list`, `aicof skill info`
-- ✅ Added `.agent/skills/` directory for project skills
+- ✅ Added `.claude/skills/` directory for project skills
 - ✅ Added `commit-message` example skill demonstrating the pattern
 - ✅ Added `create-skill.md` workflow for creating new skills
 - ✅ Updated Quick Reference with Skills section
@@ -663,7 +657,7 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
   - Swift: SwiftUI, UIKit, Vapor
   - Ruby: Rails, Sinatra, Hanami
   - Dart: Flutter, Shelf, Dart Frog
-- ✅ Added framework skills under .agent/skills/ (migrated from framework-guides/)
+- ✅ Added framework skills under .claude/skills/ (migrated from framework-guides/)
 - ✅ Updated Quick Reference with "Load Framework Skill" section
 - ✅ Updated .agent/ directory structure documentation
 
@@ -719,8 +713,8 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
   - Smoke test validation
 - ✅ Clarified workflow requirements (MANDATORY vs RECOMMENDED)
 - ✅ Extracted language-specific guides to .agent/language-guides/
-- ✅ Extracted initialization to .agent/skills/initialize-project/SKILL.md
-- ✅ Extracted troubleshooting to .agent/skills/troubleshooting/SKILL.md
+- ✅ Extracted initialization to .claude/skills/initialize-project/SKILL.md
+- ✅ Extracted troubleshooting to .claude/skills/troubleshooting/SKILL.md
 - ✅ Created comprehensive language guides (TypeScript, Python, Go, Rust)
 
 **v1.0.0 (2025-01-14) - Initial Release**
@@ -738,6 +732,6 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
 
 ---
 
-**Remember**: This file is your guardrails. The `.agent/` directory is your memory. Small atomic changes. Validate continuously. Document progressively.
+**Remember**: This file is your guardrails. The `.claude/skills/` directory extends your capabilities. Small atomic changes. Validate continuously. Document progressively.
 
-**Cross-Tool Compatibility**: `ln -s CLAUDE.md AGENTS.md` for tools that read AGENTS.md
+**Cross-Tool Compatibility**: `cp CLAUDE.md AGENTS.md` for tools that read AGENTS.md

@@ -125,7 +125,7 @@ Deliver: Staged rollout → Documentation → Retrospective
     For COMPLEX mode, use the PRD workflow:
 
     ```
-    @.agent/workflows/create-prd.md
+    @.claude/skills/create-prd/SKILL.md
     ```
 
     This creates a structured requirements document before implementation.
@@ -377,7 +377,7 @@ Subtask 4: Connect to API
 **Deconstruct** (PRD workflow):
 
 ```
-@.agent/workflows/create-prd.md
+@.claude/skills/create-prd/SKILL.md
 ```
 
 AI asks clarifying questions, creates PRD with:

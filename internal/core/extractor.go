@@ -31,8 +31,8 @@ type ExtractResult struct {
 }
 
 // Extract copies specific files from source to destination
-// The paths parameter contains destination paths (e.g., ".agent/skills/go-guide")
-// Source paths are calculated by prepending TemplatePrefix (e.g., "template/.agent/skills/go-guide")
+// The paths parameter contains destination paths (e.g., ".claude/skills/go-guide")
+// Source paths are calculated by prepending TemplatePrefix (e.g., "template/.claude/skills/go-guide")
 func (e *Extractor) Extract(paths []string, force bool) (*ExtractResult, error) {
 	result := &ExtractResult{
 		FilesCreated: make([]string, 0),

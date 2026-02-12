@@ -17,7 +17,7 @@ AICoF (Artificial Intelligence Coding Framework) is built on a simple but powerf
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  ┌─────────────┐    ┌──────────────────────────────────┐   │
-│  │  CLAUDE.md  │    │           .agent/                │   │
+│  │  CLAUDE.md  │    │           .claude/                │   │
 │  │             │    │                                  │   │
 │  │  • Commands │    │  ├── skills/ (auto-load)│   │
 │  │  • Guards   │    │  ├── workflows/ (on-demand)      │   │
@@ -47,7 +47,7 @@ The main instruction file loaded by AI assistants. Contains:
 | **Guardrails** | 35+ testable rules |
 | **4D Methodology** | ATOMIC/FEATURE/COMPLEX modes |
 | **SDLC** | Software Development Lifecycle stages |
-| **Context System** | How `.agent/` directory works |
+| **Context System** | How `.claude/` directory works |
 | **Anti-Patterns** | What to avoid |
 
 **Size**: ~500 lines (optimized for token efficiency)
@@ -56,13 +56,13 @@ The main instruction file loaded by AI assistants. Contains:
 
 ---
 
-### .agent/ Directory - The Memory
+### .claude/ Directory - The Memory
 
 Project-specific context that grows over time:
 
 ```
-.agent/
-├── README.md              # How to use .agent/
+.claude/
+├── README.md              # How to use .claude/
 ├── project.md             # Your tech stack (created when chosen)
 ├── patterns.md            # Coding patterns (created when emerge)
 ├── state.md               # Current work (for multi-session)
@@ -79,7 +79,7 @@ Project-specific context that grows over time:
 3. **Complex Features**: Workflows loaded on-demand
 4. **Reference Needed**: patterns.md, project.md loaded as needed
 
-[:octicons-arrow-right-24: Learn about .agent directory](agent-directory.md)
+[:octicons-arrow-right-24: Learn about .claude directory](agent-directory.md)
 
 ---
 
@@ -247,13 +247,13 @@ On-demand workflows for complex tasks:
 The system grows with your project:
 
 ```
-Day 1:     CLAUDE.md + .agent/ templates only
+Day 1:     CLAUDE.md + .claude/ templates only
            ↓
-Week 1:    .agent/project.md created (tech stack)
+Week 1:    .claude/project.md created (tech stack)
            ↓
-Month 1:   .agent/patterns.md populated (conventions)
+Month 1:   .claude/patterns.md populated (conventions)
            ↓
-Ongoing:   .agent/memory/ captures decisions
+Ongoing:   .claude/memory/ captures decisions
 ```
 
 !!! tip "Don't Over-Document"

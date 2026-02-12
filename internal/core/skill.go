@@ -284,7 +284,7 @@ func GenerateSkillsSection(skills []*SkillInfo) string {
 		fmt.Fprintf(&sb, "| %s | %s |\n", skill.Metadata.Name, desc)
 	}
 
-	sb.WriteString("\n**To use a skill**: Read `.agent/skills/<skill-name>/SKILL.md`\n")
+	sb.WriteString("\n**To use a skill**: Read `.claude/skills/<skill-name>/SKILL.md`\n")
 
 	return sb.String()
 }

@@ -413,7 +413,7 @@ Want to add a framework skill?
 
 1. Copy an existing framework skill directory as a template
 2. Adapt `SKILL.md` and `references/` for your framework
-3. Add to `.agent/skills/<framework-name>/`
+3. Add to `.claude/skills/<framework-name>/`
 4. Add to `docs/frameworks/`
 5. Update navigation in `mkdocs.yml`
 6. Update this index

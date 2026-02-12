@@ -22,7 +22,7 @@ Set up a new project or analyze an existing codebase to create project documenta
 ### New Project
 
 ```
-@.agent/workflows/initialize-project.md
+@.claude/skills/initialize-project/SKILL.md
 
 Initialize a new TypeScript API with Express, PostgreSQL, and Jest
 ```
@@ -30,7 +30,7 @@ Initialize a new TypeScript API with Express, PostgreSQL, and Jest
 ### Existing Project
 
 ```
-@.agent/workflows/initialize-project.md
+@.claude/skills/initialize-project/SKILL.md
 
 This is an existing project - analyze the codebase and document patterns
 ```
@@ -54,8 +54,8 @@ This is an existing project - analyze the codebase and document patterns
    - `.gitignore`, `.env.example`
    - Basic README
 
-3. **Documents in .agent/**:
-   - Creates `.agent/project.md` with decisions
+3. **Documents in .claude/**:
+   - Creates `.claude/project.md` with decisions
    - Notes any patterns established
 
 ### For Existing Projects
@@ -78,8 +78,8 @@ This is an existing project - analyze the codebase and document patterns
    - Active contributors
 
 4. **Documents Findings**:
-   - Creates `.agent/project.md` with tech stack
-   - Creates `.agent/patterns.md` with conventions
+   - Creates `.claude/project.md` with tech stack
+   - Creates `.claude/patterns.md` with conventions
    - Identifies gaps and suggests improvements
 
 ---
@@ -237,7 +237,7 @@ Once the workflow completes:
 ### New TypeScript API
 
 ```
-User: @.agent/workflows/initialize-project.md
+User: @.claude/skills/initialize-project/SKILL.md
 
 Initialize a new REST API for a task management app
 
@@ -277,7 +277,7 @@ AI: Perfect. I'll create:
 - Prisma schema
 - .env.example
 - .gitignore
-- .agent/project.md
+- .claude/project.md
 
 [Creates files...]
 
@@ -285,13 +285,13 @@ Done! Your project is ready. Run:
 npm install
 npm run dev
 
-I've documented everything in .agent/project.md
+I've documented everything in .claude/project.md
 ```
 
 ### Existing Python Project
 
 ```
-User: @.agent/workflows/initialize-project.md
+User: @.claude/skills/initialize-project/SKILL.md
 
 This is an existing Django project - analyze it
 
@@ -325,7 +325,7 @@ AI: I'll analyze the codebase. Let me scan...
 - Missing tests in apps/orders/
 - No type hints in older code
 
-I'll create .agent/project.md and .agent/patterns.md with these findings.
+I'll create .claude/project.md and .claude/patterns.md with these findings.
 
 Would you like me to also create recommendations for improvements?
 ```

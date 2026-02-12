@@ -3,16 +3,18 @@
 > **Build smarter, faster, and more scalable software**
 > Cross-tool compatible • Opinionated guardrails • Tech-stack agnostic • Token-optimized
 
-[![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)](CLAUDE.md)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](CLAUDE.md)
 [![AGENTS.md](https://img.shields.io/badge/AGENTS.md-compatible-brightgreen.svg)](https://agents.md)
 [![Status](https://img.shields.io/badge/status-production%20ready-brightgreen.svg)](CLAUDE.md)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
 
-## What's New in v1.7.0
+## What's New in v2.0.0
 
-- **Rebranded to AICoF** - Artificial Intelligence Coding Framework with clearer identity
+- **Migrated to `.claude/` directory** - Skills and context now live under `.claude/skills/` instead of `.agent/skills/`
+- **AGENTS.md as real copy** - `aicof init` now creates both CLAUDE.md and AGENTS.md as real files (no symlink needed)
+- **15 Workflows** - Added `create-rfd` and `create-skill` workflows
 - **33 Framework Skills** - Comprehensive framework-specific guidance across 11 language families
 - **21 Language Guides** - All major programming languages covered
 - **AGENTS.md Compatible** - Works with Claude Code, Cursor, Codex, Copilot, and 20+ other AI tools
@@ -47,12 +49,9 @@ aicof list --available       # List all components
 
 ```bash
 # 1. Copy template files to your project
-cp -r /path/to/aicof/template/{CLAUDE.md,AI_INSTRUCTIONS.md,.agent} ./
+cp -r /path/to/aicof/template/{CLAUDE.md,AGENTS.md,.claude} ./
 
-# 2. (Optional) For cross-tool compatibility
-ln -s CLAUDE.md AGENTS.md
-
-# 3. Start coding with AI - guardrails apply automatically!
+# 2. Start coding with AI - guardrails apply automatically!
 ```
 
 **The system works immediately:**
@@ -62,7 +61,7 @@ ln -s CLAUDE.md AGENTS.md
 - Workflows available when you need them
 - Progressive - starts minimal, grows with your project
 
-**[Read the full Quick Start Guide](template/AI_INSTRUCTIONS.md)**
+**[Read the full Quick Start Guide](CLAUDE.md)**
 
 ---
 
@@ -82,14 +81,17 @@ This system follows the [AGENTS.md](https://agents.md) standard - the universal 
 
 ### Setup for Cross-Tool Teams
 
-**Option 1: Symlink (recommended)**
+**Option 1: Real copy (recommended)**
+`aicof init` creates both `CLAUDE.md` and `AGENTS.md` as real files automatically.
+
+**Option 2: Symlink**
 ```bash
 ln -s CLAUDE.md AGENTS.md
 ```
 
-**Option 2: Generate standalone AGENTS.md**
+**Option 3: Generate standalone AGENTS.md**
 ```
-@.agent/workflows/generate-agents-md.md
+@.claude/skills/generate-agents-md/SKILL.md
 ```
 
 **Why both files?**
@@ -220,19 +222,19 @@ Create a reusable DataTable component with sorting, filtering, and column resizi
 ### Complex Features (COMPLEX Mode)
 
 ```
-@.agent/workflows/create-prd.md
+@.claude/skills/create-prd/SKILL.md
 Build a real-time notification system with WebSocket support, push notifications,
 and user preference management
 ```
 
 ```
-@.agent/workflows/create-prd.md
+@.claude/skills/create-prd/SKILL.md
 Implement multi-tenant architecture: tenant isolation, data partitioning,
 tenant-specific configurations
 ```
 
 ```
-@.agent/workflows/create-prd.md
+@.claude/skills/create-prd/SKILL.md
 Add comprehensive audit logging: user actions, data changes, security events,
 with retention policies and export functionality
 ```
@@ -268,7 +270,7 @@ Migrate the codebase from callbacks to async/await while maintaining backward co
 ### Architecture & Planning
 
 ```
-@.agent/workflows/create-prd.md
+@.claude/skills/create-prd/SKILL.md
 Design a caching strategy for the product catalog: cache invalidation,
 distributed caching, cache warming
 ```
@@ -286,7 +288,7 @@ without downtime
 ### Debugging & Troubleshooting
 
 ```
-@.agent/workflows/troubleshooting.md
+@.claude/skills/troubleshooting/SKILL.md
 Production error: "Connection pool exhausted" appearing intermittently under load
 ```
 
@@ -367,7 +369,7 @@ on PR, deploy to production on merge
 
 **COMPLEX** (>10 files, new subsystem)
 ```
-@.agent/workflows/create-prd.md
+@.claude/skills/create-prd/SKILL.md
 "Build user authentication with OAuth"
 ```
 - Create PRD (Product Requirements Document)
@@ -424,7 +426,7 @@ on PR, deploy to production on merge
 ### Starting a New Project
 
 ```
-@.agent/workflows/initialize-project.md
+@.claude/skills/initialize-project/SKILL.md
 "Initialize a new TypeScript API with Express, PostgreSQL, and Jest"
 ```
 
@@ -432,13 +434,12 @@ AI will:
 1. Ask clarifying questions (architecture, deployment target)
 2. Create directory structure
 3. Generate config files (tsconfig, package.json, etc.)
-4. Create `.agent/project.md` documenting decisions
-5. Set up testing framework
+4. Set up testing framework
 
 ### Onboarding to Existing Project
 
 ```
-@.agent/workflows/initialize-project.md
+@.claude/skills/initialize-project/SKILL.md
 "This is an existing project - analyze the codebase and document patterns"
 ```
 
@@ -446,13 +447,12 @@ AI will:
 1. Scan tech stack (package.json, requirements.txt, etc.)
 2. Analyze code patterns and conventions
 3. Review recent commits
-4. Create `.agent/project.md` with findings
-5. Extract patterns to `.agent/patterns.md`
+4. Document findings and patterns
 
 ### Building Complex Features
 
 ```
-@.agent/workflows/create-prd.md
+@.claude/skills/create-prd/SKILL.md
 "Build a subscription billing system with Stripe integration"
 ```
 
@@ -466,7 +466,7 @@ AI will:
 ### Cross-Tool Team Workflow
 
 ```
-@.agent/workflows/generate-agents-md.md
+@.claude/skills/generate-agents-md/SKILL.md
 "Generate AGENTS.md for our team using Cursor and Claude Code"
 ```
 
@@ -481,69 +481,67 @@ AI will:
 
 | Document | Purpose | When to Read |
 |----------|---------|--------------|
-| [AI_INSTRUCTIONS.md](template/AI_INSTRUCTIONS.md) | **Quick Start Guide** | Read this first |
-| [CLAUDE.md](template/CLAUDE.md) | Core guardrails & methodology | AI loads automatically |
-| [.agent/README.md](template/.agent/README.md) | .agent/ folder structure | When customizing |
+| [CLAUDE.md](template/CLAUDE.md) | Core guardrails & methodology | Read this first / AI loads automatically |
 
 ### Language Guides (Auto-Load)
 
 | Language | Files | Guide |
 |----------|-------|-------|
-| TypeScript/JavaScript | `.ts`, `.tsx`, `.js`, `.jsx` | [SKILL.md](template/.agent/skills/typescript-guide/SKILL.md) |
-| Python | `.py` | [SKILL.md](template/.agent/skills/python-guide/SKILL.md) |
-| Go | `.go` | [SKILL.md](template/.agent/skills/go-guide/SKILL.md) |
-| Rust | `.rs` | [SKILL.md](template/.agent/skills/rust-guide/SKILL.md) |
-| Kotlin | `.kt`, `.kts` | [SKILL.md](template/.agent/skills/kotlin-guide/SKILL.md) |
-| Java | `.java` | [SKILL.md](template/.agent/skills/java-guide/SKILL.md) |
-| C# | `.cs` | [SKILL.md](template/.agent/skills/csharp-guide/SKILL.md) |
-| PHP | `.php` | [SKILL.md](template/.agent/skills/php-guide/SKILL.md) |
-| Swift | `.swift` | [SKILL.md](template/.agent/skills/swift-guide/SKILL.md) |
-| C/C++ | `.c`, `.cpp`, `.h`, `.hpp` | [SKILL.md](template/.agent/skills/cpp-guide/SKILL.md) |
-| Ruby | `.rb` | [SKILL.md](template/.agent/skills/ruby-guide/SKILL.md) |
-| SQL | `.sql` | [SKILL.md](template/.agent/skills/sql-guide/SKILL.md) |
-| Shell/Bash | `.sh`, `.bash` | [SKILL.md](template/.agent/skills/shell-guide/SKILL.md) |
-| R | `.r`, `.R` | [SKILL.md](template/.agent/skills/r-guide/SKILL.md) |
-| Dart/Flutter | `.dart` | [SKILL.md](template/.agent/skills/dart-guide/SKILL.md) |
-| HTML/CSS | `.html`, `.css`, `.scss` | [SKILL.md](template/.agent/skills/html-css-guide/SKILL.md) |
-| Lua | `.lua` | [SKILL.md](template/.agent/skills/lua-guide/SKILL.md) |
-| Assembly | `.asm`, `.s` | [SKILL.md](template/.agent/skills/assembly-guide/SKILL.md) |
-| CUDA | `.cu`, `.cuh` | [SKILL.md](template/.agent/skills/cuda-guide/SKILL.md) |
-| Solidity | `.sol` | [SKILL.md](template/.agent/skills/solidity-guide/SKILL.md) |
-| Zig | `.zig` | [SKILL.md](template/.agent/skills/zig-guide/SKILL.md) |
+| TypeScript/JavaScript | `.ts`, `.tsx`, `.js`, `.jsx` | [SKILL.md](template/.claude/skills/typescript-guide/SKILL.md) |
+| Python | `.py` | [SKILL.md](template/.claude/skills/python-guide/SKILL.md) |
+| Go | `.go` | [SKILL.md](template/.claude/skills/go-guide/SKILL.md) |
+| Rust | `.rs` | [SKILL.md](template/.claude/skills/rust-guide/SKILL.md) |
+| Kotlin | `.kt`, `.kts` | [SKILL.md](template/.claude/skills/kotlin-guide/SKILL.md) |
+| Java | `.java` | [SKILL.md](template/.claude/skills/java-guide/SKILL.md) |
+| C# | `.cs` | [SKILL.md](template/.claude/skills/csharp-guide/SKILL.md) |
+| PHP | `.php` | [SKILL.md](template/.claude/skills/php-guide/SKILL.md) |
+| Swift | `.swift` | [SKILL.md](template/.claude/skills/swift-guide/SKILL.md) |
+| C/C++ | `.c`, `.cpp`, `.h`, `.hpp` | [SKILL.md](template/.claude/skills/cpp-guide/SKILL.md) |
+| Ruby | `.rb` | [SKILL.md](template/.claude/skills/ruby-guide/SKILL.md) |
+| SQL | `.sql` | [SKILL.md](template/.claude/skills/sql-guide/SKILL.md) |
+| Shell/Bash | `.sh`, `.bash` | [SKILL.md](template/.claude/skills/shell-guide/SKILL.md) |
+| R | `.r`, `.R` | [SKILL.md](template/.claude/skills/r-guide/SKILL.md) |
+| Dart/Flutter | `.dart` | [SKILL.md](template/.claude/skills/dart-guide/SKILL.md) |
+| HTML/CSS | `.html`, `.css`, `.scss` | [SKILL.md](template/.claude/skills/html-css-guide/SKILL.md) |
+| Lua | `.lua` | [SKILL.md](template/.claude/skills/lua-guide/SKILL.md) |
+| Assembly | `.asm`, `.s` | [SKILL.md](template/.claude/skills/assembly-guide/SKILL.md) |
+| CUDA | `.cu`, `.cuh` | [SKILL.md](template/.claude/skills/cuda-guide/SKILL.md) |
+| Solidity | `.sol` | [SKILL.md](template/.claude/skills/solidity-guide/SKILL.md) |
+| Zig | `.zig` | [SKILL.md](template/.claude/skills/zig-guide/SKILL.md) |
 
 ### Framework Skills (On-Demand)
 
 | Language | Frameworks |
 |----------|------------|
-| TypeScript/JS | [React](template/.agent/skills/react/SKILL.md), [Next.js](template/.agent/skills/nextjs/SKILL.md), [Express](template/.agent/skills/express/SKILL.md) |
-| Python | [Django](template/.agent/skills/django/SKILL.md), [FastAPI](template/.agent/skills/fastapi/SKILL.md), [Flask](template/.agent/skills/flask/SKILL.md) |
-| Go | [Gin](template/.agent/skills/gin/SKILL.md), [Echo](template/.agent/skills/echo/SKILL.md), [Fiber](template/.agent/skills/fiber/SKILL.md) |
-| Rust | [Axum](template/.agent/skills/axum/SKILL.md), [Actix-web](template/.agent/skills/actix-web/SKILL.md), [Rocket](template/.agent/skills/rocket/SKILL.md) |
-| Kotlin | [Spring Boot](template/.agent/skills/spring-boot-kotlin/SKILL.md), [Ktor](template/.agent/skills/ktor/SKILL.md), [Android Compose](template/.agent/skills/android-compose/SKILL.md) |
-| Java | [Spring Boot](template/.agent/skills/spring-boot-java/SKILL.md), [Quarkus](template/.agent/skills/quarkus/SKILL.md), [Micronaut](template/.agent/skills/micronaut/SKILL.md) |
-| C# | [ASP.NET Core](template/.agent/skills/aspnet-core/SKILL.md), [Blazor](template/.agent/skills/blazor/SKILL.md), [Unity](template/.agent/skills/unity/SKILL.md) |
-| PHP | [Laravel](template/.agent/skills/laravel/SKILL.md), [Symfony](template/.agent/skills/symfony/SKILL.md), [WordPress](template/.agent/skills/wordpress/SKILL.md) |
-| Swift | [SwiftUI](template/.agent/skills/swiftui/SKILL.md), [UIKit](template/.agent/skills/uikit/SKILL.md), [Vapor](template/.agent/skills/vapor/SKILL.md) |
-| Ruby | [Rails](template/.agent/skills/rails/SKILL.md), [Sinatra](template/.agent/skills/sinatra/SKILL.md), [Hanami](template/.agent/skills/hanami/SKILL.md) |
-| Dart | [Flutter](template/.agent/skills/flutter/SKILL.md), [Shelf](template/.agent/skills/shelf/SKILL.md), [Dart Frog](template/.agent/skills/dart-frog/SKILL.md) |
+| TypeScript/JS | [React](template/.claude/skills/react/SKILL.md), [Next.js](template/.claude/skills/nextjs/SKILL.md), [Express](template/.claude/skills/express/SKILL.md) |
+| Python | [Django](template/.claude/skills/django/SKILL.md), [FastAPI](template/.claude/skills/fastapi/SKILL.md), [Flask](template/.claude/skills/flask/SKILL.md) |
+| Go | [Gin](template/.claude/skills/gin/SKILL.md), [Echo](template/.claude/skills/echo/SKILL.md), [Fiber](template/.claude/skills/fiber/SKILL.md) |
+| Rust | [Axum](template/.claude/skills/axum/SKILL.md), [Actix-web](template/.claude/skills/actix-web/SKILL.md), [Rocket](template/.claude/skills/rocket/SKILL.md) |
+| Kotlin | [Spring Boot](template/.claude/skills/spring-boot-kotlin/SKILL.md), [Ktor](template/.claude/skills/ktor/SKILL.md), [Android Compose](template/.claude/skills/android-compose/SKILL.md) |
+| Java | [Spring Boot](template/.claude/skills/spring-boot-java/SKILL.md), [Quarkus](template/.claude/skills/quarkus/SKILL.md), [Micronaut](template/.claude/skills/micronaut/SKILL.md) |
+| C# | [ASP.NET Core](template/.claude/skills/aspnet-core/SKILL.md), [Blazor](template/.claude/skills/blazor/SKILL.md), [Unity](template/.claude/skills/unity/SKILL.md) |
+| PHP | [Laravel](template/.claude/skills/laravel/SKILL.md), [Symfony](template/.claude/skills/symfony/SKILL.md), [WordPress](template/.claude/skills/wordpress/SKILL.md) |
+| Swift | [SwiftUI](template/.claude/skills/swiftui/SKILL.md), [UIKit](template/.claude/skills/uikit/SKILL.md), [Vapor](template/.claude/skills/vapor/SKILL.md) |
+| Ruby | [Rails](template/.claude/skills/rails/SKILL.md), [Sinatra](template/.claude/skills/sinatra/SKILL.md), [Hanami](template/.claude/skills/hanami/SKILL.md) |
+| Dart | [Flutter](template/.claude/skills/flutter/SKILL.md), [Shelf](template/.claude/skills/shelf/SKILL.md), [Dart Frog](template/.claude/skills/dart-frog/SKILL.md) |
 
 ### Workflows (On-Demand)
 
 | Workflow | Purpose |
 |----------|---------|
-| [Initialize Project](template/.agent/workflows/initialize-project.md) | Setup new/existing projects |
-| [Create PRD](template/.agent/workflows/create-prd.md) | Plan complex features |
-| [Generate Tasks](template/.agent/workflows/generate-tasks.md) | Break PRDs into tasks |
-| [Code Review](template/.agent/workflows/code-review.md) | Pre-commit quality review |
-| [Security Audit](template/.agent/workflows/security-audit.md) | Security assessment |
-| [Testing Strategy](template/.agent/workflows/testing-strategy.md) | Test planning & coverage |
-| [Refactoring](template/.agent/workflows/refactoring.md) | Technical debt remediation |
-| [Dependency Update](template/.agent/workflows/dependency-update.md) | Safe dependency updates |
-| [Troubleshooting](template/.agent/workflows/troubleshooting.md) | Debug systematically |
-| [Cleanup Project](template/.agent/workflows/cleanup-project.md) | Prune unused guides |
-| [Document Work](template/.agent/workflows/document-work.md) | Capture patterns & decisions |
-| [Update Framework](template/.agent/workflows/update-framework.md) | Update AICoF safely |
-| [Generate AGENTS.md](template/.agent/workflows/generate-agents-md.md) | Cross-tool compatibility |
+| [Initialize Project](template/.claude/skills/initialize-project/SKILL.md) | Setup new/existing projects |
+| [Create PRD](template/.claude/skills/create-prd/SKILL.md) | Plan complex features |
+| [Generate Tasks](template/.claude/skills/generate-tasks/SKILL.md) | Break PRDs into tasks |
+| [Code Review](template/.claude/skills/code-review/SKILL.md) | Pre-commit quality review |
+| [Security Audit](template/.claude/skills/security-audit/SKILL.md) | Security assessment |
+| [Testing Strategy](template/.claude/skills/testing-strategy/SKILL.md) | Test planning & coverage |
+| [Refactoring](template/.claude/skills/refactoring/SKILL.md) | Technical debt remediation |
+| [Dependency Update](template/.claude/skills/dependency-update/SKILL.md) | Safe dependency updates |
+| [Troubleshooting](template/.claude/skills/troubleshooting/SKILL.md) | Debug systematically |
+| [Cleanup Project](template/.claude/skills/cleanup-project/SKILL.md) | Prune unused guides |
+| [Document Work](template/.claude/skills/document-work/SKILL.md) | Capture patterns & decisions |
+| [Update Framework](template/.claude/skills/update-framework/SKILL.md) | Update AICoF safely |
+| [Generate AGENTS.md](template/.claude/skills/generate-agents-md/SKILL.md) | Cross-tool compatibility |
 
 ---
 
@@ -553,23 +551,18 @@ AI will:
 aicof/
 ├── template/                    # Distributable template files
 │   ├── CLAUDE.md               # Main AI instructions (copy to your project)
-│   ├── AI_INSTRUCTIONS.md      # Quick start guide
-│   └── .agent/                 # AI context directory
-│       ├── skills/             # 21 language guides + 33 framework skills
-│       └── workflows/          # 13 structured workflows
+│   ├── AGENTS.md               # Cross-tool compatible version
+│   └── .claude/                # AI context directory
+│       └── skills/             # 21 language guides + 33 framework skills + 15 workflows
 ├── cmd/aicof/                  # CLI entry point
 ├── internal/                   # CLI implementation (commands, core, ui)
-├── docs/                       # Documentation website source
-└── .agent/                     # This project's own AI context
-    ├── tasks/                  # PRDs and task lists
-    └── memory/                 # Decision logs
+└── docs/                       # Documentation website source
 ```
 
 **Why this structure?**
 
 - `template/` contains files distributed to users via the CLI
-- `packages/cli/` contains the CLI tool that manages installations
-- `.agent/` at root is for developing AICoF itself (dogfooding)
+- `internal/` contains the CLI tool that manages installations
 
 ---
 
@@ -577,14 +570,14 @@ aicof/
 
 | Metric | Value |
 |--------|-------|
-| **Version** | 1.7.0 |
+| **Version** | 2.0.0 |
 | **Status** | Production Ready |
 | **AGENTS.md** | Compatible |
 | **Total Files** | 67 markdown files |
 | **CLAUDE.md** | ~500 lines |
 | **Language Guides** | 21 (all major programming languages) |
 | **Framework Skills** | 33 (across 11 language families) |
-| **Workflows** | 13 (PRD, tasks, init, troubleshoot, code-review, etc.) |
+| **Workflows** | 15 (PRD, tasks, init, troubleshoot, code-review, etc.) |
 | **Guardrails** | 35+ testable rules |
 
 ---
@@ -603,12 +596,9 @@ aicof/
 - [ ] Use PRD workflow for a medium feature
 - [ ] Generate task breakdown
 - [ ] Implement step-by-step
-- [ ] Notice how `.agent/project.md` grows
 
 ### Week 3: Customize & Extend
 
-- [ ] Add project-specific patterns to `.agent/patterns.md`
-- [ ] Create first decision log in `.agent/memory/`
 - [ ] (Multi-tool) Set up AGENTS.md for your team
 - [ ] Experiment with different modes
 
@@ -670,7 +660,7 @@ Built with:
 
 ## Support
 
-- **Documentation**: [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md)
+- **Documentation**: [CLAUDE.md](CLAUDE.md)
 - **Issues**: [GitHub Issues](https://github.com/ar4mirez/aicof/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/ar4mirez/aicof/discussions)
 

@@ -111,7 +111,7 @@ AI should:
 ### Your Prompt
 
 ```
-@.agent/workflows/create-prd.md
+@.claude/skills/create-prd/SKILL.md
 Build a notification system with:
 - In-app notifications
 - Email notifications (optional)
@@ -121,7 +121,7 @@ Build a notification system with:
 ### What AI Does
 
 1. **Asks clarifying questions** (PRD workflow)
-2. **Creates PRD** in `.agent/tasks/`
+2. **Creates PRD** in `.claude/tasks/`
 3. **Generates task breakdown** (20-50 subtasks)
 4. **Implements step-by-step** with verification
 
@@ -133,7 +133,7 @@ AI should:
 - [x] Create PRD document with all sections
 - [x] Generate numbered task list
 - [x] Wait for approval before implementing
-- [x] Track progress in `.agent/state.md` (if multi-session)
+- [x] Track progress in `.claude/state.md` (if multi-session)
 
 ---
 
@@ -251,7 +251,7 @@ Try these prompts to get comfortable with the system:
 
 7. "Refactor the API service to use a base HTTP client class"
 8. "Add rate limiting to the public API endpoints"
-9. "@.agent/workflows/create-prd.md - Build a search feature with filters"
+9. "@.claude/skills/create-prd/SKILL.md - Build a search feature with filters"
 
 ---
 

@@ -182,7 +182,17 @@ func searchFrameworks(query string, config *core.Config) []SearchResult {
 func searchWorkflows(query string, config *core.Config) []SearchResult {
 	var results []SearchResult
 	for _, wf := range core.Workflows {
-		if score := matchScore(query, wf.Name, wf.Description); score > 0 {
+		score := matchScore(query, wf.Name, wf.Description)
+		// Also check tags for matches
+		if score == 0 {
+			for _, tag := range wf.Tags {
+				if tagScore := matchScore(query, tag, ""); tagScore > 0 {
+					score = tagScore
+					break
+				}
+			}
+		}
+		if score > 0 {
 			results = append(results, SearchResult{
 				Name:        wf.Name,
 				Type:        "workflow",

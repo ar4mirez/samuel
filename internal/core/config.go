@@ -164,11 +164,15 @@ func (c *Config) AddFramework(name string) {
 	c.AddSkill(skillName)
 }
 
-// AddWorkflow adds a workflow to the installed list
+// AddWorkflow adds a workflow to the installed list.
+// Also registers the corresponding workflow skill.
 func (c *Config) AddWorkflow(name string) {
 	if !c.HasWorkflow(name) {
 		c.Installed.Workflows = append(c.Installed.Workflows, name)
 	}
+	// Also track as a skill
+	skillName := WorkflowToSkillName(name)
+	c.AddSkill(skillName)
 }
 
 // AddSkill adds a skill to the installed list
@@ -194,9 +198,12 @@ func (c *Config) RemoveFramework(name string) {
 	c.RemoveSkill(skillName)
 }
 
-// RemoveWorkflow removes a workflow from the installed list
+// RemoveWorkflow removes a workflow from the installed list.
+// Also removes the corresponding workflow skill.
 func (c *Config) RemoveWorkflow(name string) {
 	c.Installed.Workflows = removeFromSlice(c.Installed.Workflows, name)
+	skillName := WorkflowToSkillName(name)
+	c.RemoveSkill(skillName)
 }
 
 // RemoveSkill removes a skill from the installed list
@@ -234,6 +241,25 @@ func (c *Config) MigrateFrameworksToSkills() bool {
 	migrated := false
 	for _, fw := range c.Installed.Frameworks {
 		skillName := FrameworkToSkillName(fw)
+		if !c.HasSkill(skillName) {
+			c.Installed.Skills = append(c.Installed.Skills, skillName)
+			migrated = true
+		}
+	}
+	return migrated
+}
+
+// MigrateWorkflowsToSkills ensures all installed workflows have corresponding skills.
+// This handles backward compatibility for configs created before workflow-as-skills migration.
+// Handles the special "all" value by expanding to all known workflow names.
+func (c *Config) MigrateWorkflowsToSkills() bool {
+	migrated := false
+	workflows := c.Installed.Workflows
+	if len(workflows) == 1 && workflows[0] == "all" {
+		workflows = GetAllWorkflowNames()
+	}
+	for _, wf := range workflows {
+		skillName := WorkflowToSkillName(wf)
 		if !c.HasSkill(skillName) {
 			c.Installed.Skills = append(c.Installed.Skills, skillName)
 			migrated = true

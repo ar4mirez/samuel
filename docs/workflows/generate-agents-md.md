@@ -57,7 +57,7 @@ ln -s CLAUDE.md AGENTS.md
 Use the workflow to generate a separate file:
 
 ```
-@.agent/workflows/generate-agents-md.md
+@.claude/skills/generate-agents-md/SKILL.md
 
 Generate AGENTS.md for cross-tool compatibility
 ```
@@ -146,7 +146,7 @@ If using standalone AGENTS.md:
 ### After CLAUDE.md Changes
 
 ```
-@.agent/workflows/generate-agents-md.md
+@.claude/skills/generate-agents-md/SKILL.md
 
 Regenerate AGENTS.md to match updated CLAUDE.md
 ```

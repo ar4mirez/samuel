@@ -38,7 +38,7 @@ project-root/
 - Avoid naming internal packages `cmd` to prevent confusion with root `cmd/`
 - Entry point should be minimal - just parse args and call into internal packages
 
-**See also**: [Go project layout](https://github.com/golang-standards/project-layout), [memory/2026-01-14-go-project-restructure.md](.agent/memory/2026-01-14-go-project-restructure.md)
+**See also**: [Go project layout](https://github.com/golang-standards/project-layout), [memory/2026-01-14-go-project-restructure.md](.claude/memory/2026-01-14-go-project-restructure.md)
 
 ---
 
@@ -205,7 +205,7 @@ func main() {
 
 ### Workflow Document Structure
 
-**When to use**: When creating new workflow documents in `.agent/workflows/`
+**When to use**: When creating new workflow skill documents in `.claude/skills/`
 
 **Example**:
 
@@ -258,7 +258,7 @@ Brief description.
 
 **Why**: Consistent structure makes workflows easier to follow and maintain.
 
-**See also**: [document-work.md](template/.agent/workflows/document-work.md)
+**See also**: [document-work/SKILL.md](../template/.claude/skills/document-work/SKILL.md)
 
 ---
 
@@ -290,7 +290,7 @@ func TestInitCommand(t *testing.T) {
 
 **Why**: Temp directories are automatically cleaned up, and isolated tests prevent interference.
 
-**See also**: Testing PRD in [.agent/tasks/0001-prd-cli-testing.md](.agent/tasks/0001-prd-cli-testing.md)
+**See also**: Testing PRD in [.claude/tasks/0001-prd-cli-testing.md](.claude/tasks/0001-prd-cli-testing.md)
 
 ---
 
@@ -368,7 +368,7 @@ Display functions (low value):
 
 **Why**: Focusing on business logic gives maximum value. Command runners need real CLI execution (integration tests), and display functions just format output.
 
-**See also**: Testing strategy in [.agent/tasks/0001-prd-cli-testing.md](.agent/tasks/0001-prd-cli-testing.md)
+**See also**: Testing strategy in [.claude/tasks/0001-prd-cli-testing.md](.claude/tasks/0001-prd-cli-testing.md)
 
 ---
 

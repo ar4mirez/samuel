@@ -63,8 +63,8 @@ stateDiagram-v2
 
 | State | Description | Location |
 |-------|-------------|----------|
-| **Prediscussion** | Very early, author still forming idea | `.agent/rfd/` |
-| **Ideation** | Ready for informal feedback, not finalized | `.agent/rfd/` |
+| **Prediscussion** | Very early, author still forming idea | `.claude/rfd/` |
+| **Ideation** | Ready for informal feedback, not finalized | `.claude/rfd/` |
 | **Discussion** | Open for team discussion, seeking consensus | `docs/rfd/` |
 | **Published** | Decision made, documented for reference | `docs/rfd/` |
 | **Committed** | Implemented, part of the codebase | `docs/rfd/` |
@@ -75,7 +75,7 @@ stateDiagram-v2
 ### Basic Usage
 
 ```
-@.agent/skills/create-rfd/SKILL.md
+@.claude/skills/create-rfd/SKILL.md
 
 Explore options for caching strategy in our API
 ```
@@ -83,7 +83,7 @@ Explore options for caching strategy in our API
 ### With Context
 
 ```
-@.agent/skills/create-rfd/SKILL.md
+@.claude/skills/create-rfd/SKILL.md
 
 I'm considering authentication approaches for our new service.
 We could use JWT tokens, session cookies, or OAuth. The service needs
@@ -161,7 +161,7 @@ During regular development, Claude will suggest creating an RFD when it detects:
 
 ```
 project/
-├── .agent/rfd/           # Private RFDs (Prediscussion, Ideation)
+├── .claude/rfd/           # Private RFDs (Prediscussion, Ideation)
 │   └── 0042-rfd-api-caching.md
 ├── docs/rfd/             # Public RFDs (Discussion, Published, Committed)
 │   ├── index.md          # RFD overview

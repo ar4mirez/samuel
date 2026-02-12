@@ -97,12 +97,11 @@ func categorizeFiles(files []string) (langs, fws, wfs []string) {
 					langs = append(langs, skillName)
 				} else if isFrameworkSkill(skillName) {
 					fws = append(fws, skillName)
+				} else if isWorkflowSkill(skillName) {
+					wfs = append(wfs, skillName)
 				}
 				seen[skillName] = true
 			}
-		} else if strings.Contains(f, "workflows/") {
-			name := extractComponentName(f)
-			wfs = append(wfs, name)
 		}
 	}
 	return
@@ -113,14 +112,19 @@ func isFrameworkSkill(skillName string) bool {
 	return core.FindFramework(skillName) != nil
 }
 
+// isWorkflowSkill checks if a skill name corresponds to a known workflow
+func isWorkflowSkill(skillName string) bool {
+	return core.FindWorkflow(skillName) != nil
+}
+
 func categorizeOtherFiles(added, modified, removed []string) (addedOther, modifiedOther, removedOther []string) {
 	isComponent := func(f string) bool {
 		if skillName := extractSkillDirName(f); skillName != "" {
-			if strings.HasSuffix(skillName, "-guide") || isFrameworkSkill(skillName) {
+			if strings.HasSuffix(skillName, "-guide") || isFrameworkSkill(skillName) || isWorkflowSkill(skillName) {
 				return true
 			}
 		}
-		return strings.Contains(f, "workflows/")
+		return false
 	}
 
 	for _, f := range added {
@@ -147,8 +151,8 @@ func extractComponentName(path string) string {
 }
 
 // extractSkillDirName extracts the skill directory name from a path like
-// ".agent/skills/go-guide/SKILL.md" -> "go-guide".
-// Returns empty string if the path is not inside .agent/skills/.
+// ".claude/skills/go-guide/SKILL.md" -> "go-guide".
+// Returns empty string if the path is not inside .claude/skills/.
 func extractSkillDirName(path string) string {
 	parts := strings.Split(filepath.ToSlash(path), "/")
 	for i, part := range parts {

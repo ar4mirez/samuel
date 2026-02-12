@@ -409,21 +409,21 @@ Interactive mode includes prompts:
 
 ```bash
 # Conceptual - AI performs these checks
-@.agent/workflows/code-review.md --mode=automated
+@.claude/skills/code-review/SKILL.md --mode=automated
 ```
 
 ### Run Interactive Review
 
 ```bash
 # Conceptual - AI guides through review
-@.agent/workflows/code-review.md --mode=interactive
+@.claude/skills/code-review/SKILL.md --mode=interactive
 ```
 
 ### Review Specific Files
 
 ```bash
 # Conceptual - Focus on specific files
-@.agent/workflows/code-review.md --files=src/api/*.ts
+@.claude/skills/code-review/SKILL.md --files=src/api/*.ts
 ```
 
 ---

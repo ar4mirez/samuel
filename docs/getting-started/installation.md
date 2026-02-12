@@ -51,7 +51,7 @@ aicof init
 The CLI will interactively guide you through setup:
 
 1. Create `CLAUDE.md` with all guardrails
-2. Create `.agent/` directory structure
+2. Create `.claude/` directory structure
 3. Select languages, frameworks, and workflows
 4. Set up cross-tool compatibility (AGENTS.md symlink)
 
@@ -66,7 +66,7 @@ For environments where the CLI isn't available:
 git clone https://github.com/ar4mirez/aicof.git
 
 # Copy to your project
-cp -r aicof/{CLAUDE.md,.agent} /path/to/your-project/
+cp -r aicof/{CLAUDE.md,.claude} /path/to/your-project/
 
 # Clean up
 rm -rf aicof
@@ -77,8 +77,8 @@ rm -rf aicof
 ```
 your-project/
 ├── CLAUDE.md                    # Core guardrails (~500 lines)
-└── .agent/                      # Project context directory
-    ├── README.md                # How to use .agent/
+└── .claude/                      # Project context directory
+    ├── README.md                # How to use .claude/
     ├── skills/                  # Language guides + framework skills (54 total)
     │   ├── <lang>-guide/        # 21 language guide skills
     │   │   ├── SKILL.md
@@ -106,7 +106,7 @@ git subtree add --prefix=.ai-template \
 
 # Copy files to root
 cp .ai-template/CLAUDE.md ./
-cp -r .ai-template/.agent ./
+cp -r .ai-template/.claude ./
 
 # Update later
 git subtree pull --prefix=.ai-template \
@@ -127,7 +127,7 @@ For projects without git or one-time use:
 
 1. Go to [GitHub Releases](https://github.com/ar4mirez/aicof/releases)
 2. Download the latest release ZIP
-3. Extract `CLAUDE.md` and `.agent/` to your project
+3. Extract `CLAUDE.md` and `.claude/` to your project
 
 ---
 
@@ -146,7 +146,7 @@ Both files stay in sync automatically.
 ### Option B: Generate Standalone
 
 ```
-@.agent/skills/generate-agents-md/SKILL.md
+@.claude/skills/generate-agents-md/SKILL.md
 ```
 
 Creates a separate `AGENTS.md` with operations-only content.
@@ -181,7 +181,7 @@ AICoF Health Check
 ==================
 
 [OK] CLAUDE.md exists
-[OK] .agent/ directory exists
+[OK] .claude/ directory exists
 [OK] Configuration valid
 [OK] 3 languages installed
 [OK] 2 frameworks installed
@@ -196,14 +196,14 @@ Status: Healthy
 # Check CLAUDE.md exists
 cat CLAUDE.md | head -20
 
-# Check .agent directory structure
-ls -la .agent/
+# Check .claude directory structure
+ls -la .claude/
 
 # Check language guides
-ls .agent/skills/
+ls .claude/skills/
 
 # Check skills (includes workflow skills)
-ls .agent/skills/
+ls .claude/skills/
 ```
 
 ---
@@ -252,20 +252,20 @@ You may want to ignore generated files:
 
 ```gitignore
 # AICoF - generated files
-.agent/project.md
-.agent/patterns.md
-.agent/state.md
-.agent/tasks/*.md
-!.agent/tasks/EXAMPLE-*.md
-.agent/memory/*.md
-!.agent/memory/.gitkeep
+.claude/project.md
+.claude/patterns.md
+.claude/state.md
+.claude/tasks/*.md
+!.claude/tasks/EXAMPLE-*.md
+.claude/memory/*.md
+!.claude/memory/.gitkeep
 ```
 
 ### Commit the Template Files
 
 ```bash
 # Add template files
-git add CLAUDE.md .agent/
+git add CLAUDE.md .claude/
 
 # Commit
 git commit -m "chore: add AICoF for AI-assisted development"
@@ -299,11 +299,11 @@ git clone https://github.com/ar4mirez/aicof.git temp-update
 
 # Backup your customizations
 cp CLAUDE.md CLAUDE.md.backup
-cp -r .agent .agent.backup
+cp -r .claude .claude.backup
 
 # Copy new files
 cp temp-update/CLAUDE.md ./
-cp -r temp-update/.agent ./
+cp -r temp-update/.claude ./
 
 # Review and merge your customizations
 # (manually compare .backup files with new ones)
@@ -311,7 +311,7 @@ cp -r temp-update/.agent ./
 # Clean up
 rm -rf temp-update
 rm CLAUDE.md.backup
-rm -rf .agent.backup
+rm -rf .claude.backup
 ```
 
 ---
@@ -347,7 +347,7 @@ If AI doesn't seem to follow guardrails:
 Windows requires administrator privileges for symlinks. Use Option B (Generate Standalone) instead:
 
 ```
-@.agent/skills/generate-agents-md/SKILL.md
+@.claude/skills/generate-agents-md/SKILL.md
 ```
 
 ### Large Repository
@@ -356,7 +356,7 @@ For large repos, you might want to exclude documentation from searches:
 
 ```gitattributes
 # .gitattributes
-.agent/** linguist-documentation
+.claude/** linguist-documentation
 CLAUDE.md linguist-documentation
 ```
 

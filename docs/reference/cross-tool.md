@@ -57,7 +57,7 @@ Creates a link so both files are always identical:
 Create a separate AGENTS.md with operations-only content:
 
 ```
-@.agent/workflows/generate-agents-md.md
+@.claude/skills/generate-agents-md/SKILL.md
 ```
 
 **Pros**:
@@ -100,7 +100,7 @@ Claude Code reads CLAUDE.md automatically. No additional setup needed.
 ```
 your-project/
 ├── CLAUDE.md       ← Loaded automatically
-└── .agent/         ← Language guides, workflows
+└── .claude/         ← Language guides, workflows
 ```
 
 ### Cursor
@@ -118,7 +118,7 @@ ln -s CLAUDE.md AGENTS.md
 **Option B**: Create .cursorrules
 
 ```
-@.agent/workflows/generate-agents-md.md
+@.claude/skills/generate-agents-md/SKILL.md
 
 Generate .cursorrules for Cursor
 ```
@@ -171,7 +171,7 @@ git commit -m "chore: add AI coding instructions"
 If symlinks don't work:
 
 ```
-@.agent/workflows/generate-agents-md.md
+@.claude/skills/generate-agents-md/SKILL.md
 
 Generate standalone AGENTS.md
 ```

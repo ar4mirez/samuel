@@ -26,7 +26,7 @@ Add support for languages not yet covered:
 
 **How to contribute**:
 
-1. Copy an existing guide from `.agent/skills/<language>-guide/`
+1. Copy an existing guide from `.claude/skills/<language>-guide/`
 2. Create a new skill directory for your language (e.g., `java-guide/SKILL.md`)
 3. Adapt all sections for your language
 4. Test with real projects
@@ -65,7 +65,7 @@ Create templates for specific frameworks:
 
 **How to contribute**:
 
-1. Create `.agent/templates/[framework]/`
+1. Create `.claude/templates/[framework]/`
 2. Include framework-specific patterns
 3. Include common configurations
 4. Document usage
