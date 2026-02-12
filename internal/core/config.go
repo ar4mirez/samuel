@@ -28,6 +28,7 @@ type InstalledItems struct {
 	Languages  []string `yaml:"languages,omitempty"`
 	Frameworks []string `yaml:"frameworks,omitempty"`
 	Workflows  []string `yaml:"workflows,omitempty"`
+	Skills     []string `yaml:"skills,omitempty"`
 }
 
 // NewConfig creates a new config with defaults
@@ -38,6 +39,7 @@ func NewConfig(version string) *Config {
 			Languages:  []string{},
 			Frameworks: []string{},
 			Workflows:  []string{"all"},
+			Skills:     []string{},
 		},
 		Registry: DefaultRegistry,
 	}
@@ -130,11 +132,25 @@ func (c *Config) HasWorkflow(name string) bool {
 	return false
 }
 
-// AddLanguage adds a language to the installed list
+// HasSkill checks if a skill is installed
+func (c *Config) HasSkill(name string) bool {
+	for _, s := range c.Installed.Skills {
+		if s == name {
+			return true
+		}
+	}
+	return false
+}
+
+// AddLanguage adds a language to the installed list.
+// Also registers the corresponding language guide skill.
 func (c *Config) AddLanguage(name string) {
 	if !c.HasLanguage(name) {
 		c.Installed.Languages = append(c.Installed.Languages, name)
 	}
+	// Also track as a skill
+	skillName := LanguageToSkillName(name)
+	c.AddSkill(skillName)
 }
 
 // AddFramework adds a framework to the installed list
@@ -151,9 +167,19 @@ func (c *Config) AddWorkflow(name string) {
 	}
 }
 
-// RemoveLanguage removes a language from the installed list
+// AddSkill adds a skill to the installed list
+func (c *Config) AddSkill(name string) {
+	if !c.HasSkill(name) {
+		c.Installed.Skills = append(c.Installed.Skills, name)
+	}
+}
+
+// RemoveLanguage removes a language from the installed list.
+// Also removes the corresponding language guide skill.
 func (c *Config) RemoveLanguage(name string) {
 	c.Installed.Languages = removeFromSlice(c.Installed.Languages, name)
+	skillName := LanguageToSkillName(name)
+	c.RemoveSkill(skillName)
 }
 
 // RemoveFramework removes a framework from the installed list
@@ -166,6 +192,11 @@ func (c *Config) RemoveWorkflow(name string) {
 	c.Installed.Workflows = removeFromSlice(c.Installed.Workflows, name)
 }
 
+// RemoveSkill removes a skill from the installed list
+func (c *Config) RemoveSkill(name string) {
+	c.Installed.Skills = removeFromSlice(c.Installed.Skills, name)
+}
+
 func removeFromSlice(slice []string, item string) []string {
 	result := make([]string, 0, len(slice))
 	for _, s := range slice {
@@ -174,6 +205,20 @@ func removeFromSlice(slice []string, item string) []string {
 		}
 	}
 	return result
+}
+
+// MigrateLanguagesToSkills ensures all installed languages have corresponding skills.
+// This handles backward compatibility for configs created before language-as-skills migration.
+func (c *Config) MigrateLanguagesToSkills() bool {
+	migrated := false
+	for _, lang := range c.Installed.Languages {
+		skillName := LanguageToSkillName(lang)
+		if !c.HasSkill(skillName) {
+			c.Installed.Skills = append(c.Installed.Skills, skillName)
+			migrated = true
+		}
+	}
+	return migrated
 }
 
 // GlobalConfig represents global CLI settings stored in ~/.config/aicof/
@@ -223,10 +268,11 @@ var ValidConfigKeys = []string{
 	"installed.languages",
 	"installed.frameworks",
 	"installed.workflows",
+	"installed.skills",
 }
 
 // GetValue retrieves a configuration value by key
-func (c *Config) GetValue(key string) (interface{}, error) {
+func (c *Config) GetValue(key string) (any, error) {
 	switch key {
 	case "version":
 		return c.Version, nil
@@ -241,6 +287,8 @@ func (c *Config) GetValue(key string) (interface{}, error) {
 		return c.Installed.Frameworks, nil
 	case "installed.workflows":
 		return c.Installed.Workflows, nil
+	case "installed.skills":
+		return c.Installed.Skills, nil
 	default:
 		return nil, fmt.Errorf("unknown config key: %s", key)
 	}
@@ -259,6 +307,8 @@ func (c *Config) SetValue(key, value string) error {
 		c.Installed.Frameworks = splitAndTrim(value)
 	case "installed.workflows":
 		c.Installed.Workflows = splitAndTrim(value)
+	case "installed.skills":
+		c.Installed.Skills = splitAndTrim(value)
 	default:
 		return fmt.Errorf("unknown config key: %s", key)
 	}
@@ -266,17 +316,18 @@ func (c *Config) SetValue(key, value string) error {
 }
 
 // GetAllValues returns all config values as a map
-func (c *Config) GetAllValues() map[string]interface{} {
+func (c *Config) GetAllValues() map[string]any {
 	registry := c.Registry
 	if registry == "" {
 		registry = DefaultRegistry
 	}
-	return map[string]interface{}{
+	return map[string]any{
 		"version":              c.Version,
 		"registry":             registry,
 		"installed.languages":  c.Installed.Languages,
 		"installed.frameworks": c.Installed.Frameworks,
 		"installed.workflows":  c.Installed.Workflows,
+		"installed.skills":     c.Installed.Skills,
 	}
 }
 

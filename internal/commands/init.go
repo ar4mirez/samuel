@@ -245,11 +245,25 @@ func runInit(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to extract files: %w", err)
 	}
 
+	// Update skills section in CLAUDE.md
+	skillsDir := filepath.Join(absTargetDir, ".agent", "skills")
+	installedSkills, _ := core.ScanSkillsDirectory(skillsDir)
+	if len(installedSkills) > 0 {
+		claudeMDPath := filepath.Join(absTargetDir, "CLAUDE.md")
+		if err := core.UpdateCLAUDEMDSkillsSection(claudeMDPath, installedSkills); err != nil {
+			// Non-fatal error, just log it
+			ui.Warn("Could not update skills section in CLAUDE.md: %v", err)
+		}
+	}
+
 	// Report results
 	ui.Success("Installed CLAUDE.md (v%s)", version)
 	ui.Success("Installed %d language guides", len(selectedLanguages))
 	ui.Success("Installed %d framework guides", len(selectedFrameworks))
 	ui.Success("Installed %d workflows", len(core.Workflows))
+	if len(installedSkills) > 0 {
+		ui.Success("Installed %d skills", len(installedSkills))
+	}
 
 	if len(result.FilesSkipped) > 0 {
 		ui.Warn("Skipped %d existing files (use --force to overwrite)", len(result.FilesSkipped))

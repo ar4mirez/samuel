@@ -169,7 +169,26 @@ NODE_ENV=            # development | production | test
 - Planning: initialize-project, create-rfd, create-prd, generate-tasks
 - Quality: code-review, security-audit, testing-strategy
 - Maintenance: cleanup-project, refactoring, dependency-update, update-framework
-- Utility: troubleshooting, generate-agents-md, document-work
+- Utility: troubleshooting, generate-agents-md, document-work, create-skill
+
+**Skills** (capability modules - [Agent Skills](https://agentskills.io) standard):
+- Create: `aicof skill create <name>` or `.agent/workflows/create-skill.md`
+- Validate: `aicof skill validate`
+- List: `aicof skill list`
+- Load: `.agent/skills/<skill-name>/SKILL.md` when task matches description
+- Spec: https://agentskills.io/specification
+
+<!-- SKILLS_START -->
+## Available Skills
+
+Skills extend AI capabilities. Load a skill when task matches its description.
+
+| Skill | Description |
+|-------|-------------|
+| commit-message | Generate descriptive commit messages by analyzing git diffs. Use when the us... |
+
+**To use a skill**: Read `.agent/skills/<skill-name>/SKILL.md`
+<!-- SKILLS_END -->
 
 **RFD vs PRD** (when exploring options):
 
@@ -177,28 +196,28 @@ NODE_ENV=            # development | production | test
 - **PRD** = "What" (define implementation) → .agent/workflows/create-prd.md
 - Flow: Idea → RFD (explore) → Decision → PRD (plan) → Tasks → Code
 
-**Load Language Guide** (automatic based on file extensions):
-- TypeScript/JavaScript → .agent/language-guides/typescript.md
-- Python → .agent/language-guides/python.md
-- Go → .agent/language-guides/go.md
-- Rust → .agent/language-guides/rust.md
-- Kotlin → .agent/language-guides/kotlin.md
-- Java → .agent/language-guides/java.md
-- C# → .agent/language-guides/csharp.md
-- PHP → .agent/language-guides/php.md
-- Swift → .agent/language-guides/swift.md
-- C/C++ → .agent/language-guides/cpp.md
-- Ruby → .agent/language-guides/ruby.md
-- SQL → .agent/language-guides/sql.md
-- Shell/Bash → .agent/language-guides/shell.md
-- R → .agent/language-guides/r.md
-- Dart/Flutter → .agent/language-guides/dart.md
-- HTML/CSS → .agent/language-guides/html-css.md
-- Lua → .agent/language-guides/lua.md
-- Assembly → .agent/language-guides/assembly.md
-- CUDA → .agent/language-guides/cuda.md
-- Solidity → .agent/language-guides/solidity.md
-- Zig → .agent/language-guides/zig.md
+**Load Language Guide** (automatic based on file extensions — language guides are Agent Skills):
+- TypeScript/JavaScript → .agent/skills/typescript-guide/SKILL.md
+- Python → .agent/skills/python-guide/SKILL.md
+- Go → .agent/skills/go-guide/SKILL.md
+- Rust → .agent/skills/rust-guide/SKILL.md
+- Kotlin → .agent/skills/kotlin-guide/SKILL.md
+- Java → .agent/skills/java-guide/SKILL.md
+- C# → .agent/skills/csharp-guide/SKILL.md
+- PHP → .agent/skills/php-guide/SKILL.md
+- Swift → .agent/skills/swift-guide/SKILL.md
+- C/C++ → .agent/skills/cpp-guide/SKILL.md
+- Ruby → .agent/skills/ruby-guide/SKILL.md
+- SQL → .agent/skills/sql-guide/SKILL.md
+- Shell/Bash → .agent/skills/shell-guide/SKILL.md
+- R → .agent/skills/r-guide/SKILL.md
+- Dart/Flutter → .agent/skills/dart-guide/SKILL.md
+- HTML/CSS → .agent/skills/html-css-guide/SKILL.md
+- Lua → .agent/skills/lua-guide/SKILL.md
+- Assembly → .agent/skills/assembly-guide/SKILL.md
+- CUDA → .agent/skills/cuda-guide/SKILL.md
+- Solidity → .agent/skills/solidity-guide/SKILL.md
+- Zig → .agent/skills/zig-guide/SKILL.md
 
 **Load Framework Guide** (when using specific framework):
 - TypeScript/JavaScript:
@@ -450,28 +469,7 @@ Refs: #issue-number"
 ├── project.md             # Tech stack, architecture (create when tech chosen)
 ├── patterns.md            # Coding patterns (create when patterns emerge)
 ├── state.md              # Current work (create for multi-session work)
-├── language-guides/      # Language-specific guardrails (pre-created, 21 languages)
-│   ├── typescript.md     # TypeScript/JavaScript, React, Node.js
-│   ├── python.md         # Python, Django, FastAPI
-│   ├── go.md             # Go, microservices
-│   ├── rust.md           # Rust, systems programming
-│   ├── kotlin.md         # Kotlin, Android, Spring Boot
-│   ├── java.md           # Java, Spring Boot, enterprise
-│   ├── csharp.md         # C#, .NET, ASP.NET Core
-│   ├── php.md            # PHP, Laravel, Symfony
-│   ├── swift.md          # Swift, iOS, macOS
-│   ├── cpp.md            # C/C++, systems, embedded
-│   ├── ruby.md           # Ruby, Rails
-│   ├── sql.md            # SQL, PostgreSQL, MySQL
-│   ├── shell.md          # Shell/Bash scripting
-│   ├── r.md              # R, statistical computing
-│   ├── dart.md           # Dart, Flutter
-│   ├── html-css.md       # HTML5, CSS3, accessibility
-│   ├── lua.md            # Lua, Love2D, Neovim
-│   ├── assembly.md       # x86-64, ARM64, RISC-V
-│   ├── cuda.md           # CUDA, GPU computing
-│   ├── solidity.md       # Solidity, Ethereum, smart contracts
-│   └── zig.md            # Zig, systems programming
+├── (language guides are now Agent Skills — see skills/ below)
 ├── framework-guides/     # Framework-specific templates (pre-created, 33 frameworks)
 │   ├── react.md          # React 18+, hooks, state management
 │   ├── nextjs.md         # Next.js 14+, App Router, RSC
@@ -506,7 +504,7 @@ Refs: #issue-number"
 │   ├── flutter.md        # Flutter, Riverpod, go_router
 │   ├── shelf.md          # Shelf, middleware HTTP server
 │   └── dart-frog.md      # Dart Frog, file-based routing
-├── workflows/            # Structured workflows (pre-created, 14 workflows)
+├── workflows/            # Structured workflows (pre-created, 15 workflows)
 │   ├── initialize-project.md  # Project setup
 │   ├── create-rfd.md          # Request for Discussion (explore options)
 │   ├── create-prd.md          # Requirements documents
@@ -519,7 +517,20 @@ Refs: #issue-number"
 │   ├── dependency-update.md   # Safe dependency updates
 │   ├── troubleshooting.md     # Debugging workflow
 │   ├── generate-agents-md.md  # Cross-tool compatibility
-│   └── document-work.md       # Capture patterns and decisions
+│   ├── document-work.md       # Capture patterns and decisions
+│   └── create-skill.md        # Create Agent Skills
+├── skills/               # Agent Skills - capability modules (Agent Skills standard)
+│   ├── README.md              # How to create and use skills
+│   ├── commit-message/        # Generate commit messages
+│   │   └── SKILL.md
+│   ├── go-guide/              # Language guide skills (21 languages)
+│   │   ├── SKILL.md           # Core guardrails and patterns
+│   │   └── references/        # Detailed patterns, pitfalls, security
+│   ├── python-guide/
+│   │   └── SKILL.md
+│   ├── typescript-guide/
+│   │   └── SKILL.md
+│   └── ...                    # All 21 language guide skills
 ├── rfd/                  # Private RFDs (Prediscussion, Ideation states)
 │   └── NNNN-rfd-topic.md
 ├── tasks/                # PRDs and task lists (created during COMPLEX mode)
@@ -531,8 +542,9 @@ Refs: #issue-number"
 
 **Loading Protocol:**
 - **Session Start**: AI loads CLAUDE.md → Checks for state.md → Reads if exists
-- **During Work**: Load language guide based on file extensions (automatic)
+- **During Work**: Load language guide skill from `.agent/skills/<lang>-guide/SKILL.md` based on file extensions
 - **Complex Features**: Load workflows (PRD, task generation)
+- **Capability Needed**: Load skill from `.agent/skills/` when task matches skill description
 - **Reference Needed**: Load patterns.md, project.md, memory/ on-demand
 
 **Progressive Growth:**
@@ -619,10 +631,22 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
 
 ## Version & Changelog
 
-**Current Version**: 1.7.0
-**Last Updated**: 2025-01-14
+**Current Version**: 1.8.0
+**Last Updated**: 2025-02-04
 
 ### Changelog
+
+**v1.8.0 (2025-02-04) - Agent Skills Integration**
+- ✅ Added Agent Skills support (open standard for AI agent capabilities)
+- ✅ New CLI commands: `aicof skill create`, `aicof skill validate`, `aicof skill list`, `aicof skill info`
+- ✅ Added `.agent/skills/` directory for project skills
+- ✅ Added `commit-message` example skill demonstrating the pattern
+- ✅ Added `create-skill.md` workflow for creating new skills
+- ✅ Updated Quick Reference with Skills section
+- ✅ Extended `aicof doctor` to validate skills
+- ✅ Extended `aicof search` to include skills
+- ✅ Now supports 15 workflows total (was 14)
+- ✅ Skills compatible with 25+ agent products (Claude Code, Cursor, VS Code, etc.)
 
 **v1.7.0 (2025-01-14) - Rebrand to AICoF**
 - ✅ Rebranded from "AI Code Template" to "AICoF (Artificial Intelligence Coding Framework)"

@@ -88,13 +88,18 @@ func displayComponentDiff(diff *VersionDiff) {
 }
 
 func categorizeFiles(files []string) (langs, fws, wfs []string) {
+	seen := make(map[string]bool) // Deduplicate skill directories
 	for _, f := range files {
-		name := extractComponentName(f)
-		if strings.Contains(f, "language-guides/") {
-			langs = append(langs, name)
+		if skillName := extractSkillDirName(f); skillName != "" && strings.HasSuffix(skillName, "-guide") {
+			if !seen[skillName] {
+				langs = append(langs, skillName)
+				seen[skillName] = true
+			}
 		} else if strings.Contains(f, "framework-guides/") {
+			name := extractComponentName(f)
 			fws = append(fws, name)
 		} else if strings.Contains(f, "workflows/") {
+			name := extractComponentName(f)
 			wfs = append(wfs, name)
 		}
 	}
@@ -103,8 +108,10 @@ func categorizeFiles(files []string) (langs, fws, wfs []string) {
 
 func categorizeOtherFiles(added, modified, removed []string) (addedOther, modifiedOther, removedOther []string) {
 	isComponent := func(f string) bool {
-		return strings.Contains(f, "language-guides/") ||
-			strings.Contains(f, "framework-guides/") ||
+		if skillName := extractSkillDirName(f); skillName != "" && strings.HasSuffix(skillName, "-guide") {
+			return true
+		}
+		return strings.Contains(f, "framework-guides/") ||
 			strings.Contains(f, "workflows/")
 	}
 
@@ -129,6 +136,19 @@ func categorizeOtherFiles(added, modified, removed []string) (addedOther, modifi
 func extractComponentName(path string) string {
 	base := filepath.Base(path)
 	return strings.TrimSuffix(base, ".md")
+}
+
+// extractSkillDirName extracts the skill directory name from a path like
+// ".agent/skills/go-guide/SKILL.md" -> "go-guide".
+// Returns empty string if the path is not inside .agent/skills/.
+func extractSkillDirName(path string) string {
+	parts := strings.Split(filepath.ToSlash(path), "/")
+	for i, part := range parts {
+		if part == "skills" && i+1 < len(parts) {
+			return parts[i+1]
+		}
+	}
+	return ""
 }
 
 func displayComponentChanges(added, modified, removed []string) {

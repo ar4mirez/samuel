@@ -191,6 +191,7 @@ func TestValidConfigKeys(t *testing.T) {
 		"installed.languages",
 		"installed.frameworks",
 		"installed.workflows",
+		"installed.skills",
 	}
 
 	if len(ValidConfigKeys) != len(expectedKeys) {
@@ -414,6 +415,11 @@ func TestConfig_AddLanguage(t *testing.T) {
 		t.Errorf("AddLanguage() = %v, want [go]", config.Installed.Languages)
 	}
 
+	// AddLanguage should also add the corresponding skill
+	if !config.HasSkill("go-guide") {
+		t.Error("AddLanguage(go) should also add go-guide skill")
+	}
+
 	// Adding duplicate should not add again
 	config.AddLanguage("go")
 	if len(config.Installed.Languages) != 1 {
@@ -423,6 +429,9 @@ func TestConfig_AddLanguage(t *testing.T) {
 	config.AddLanguage("python")
 	if len(config.Installed.Languages) != 2 {
 		t.Errorf("AddLanguage() should have 2 languages, got %v", config.Installed.Languages)
+	}
+	if !config.HasSkill("python-guide") {
+		t.Error("AddLanguage(python) should also add python-guide skill")
 	}
 }
 
@@ -467,6 +476,7 @@ func TestConfig_RemoveLanguage(t *testing.T) {
 	config := &Config{
 		Installed: InstalledItems{
 			Languages: []string{"go", "python", "rust"},
+			Skills:    []string{"go-guide", "python-guide", "rust-guide"},
 		},
 	}
 
@@ -476,6 +486,9 @@ func TestConfig_RemoveLanguage(t *testing.T) {
 	}
 	if config.HasLanguage("python") {
 		t.Error("RemoveLanguage() should have removed python")
+	}
+	if config.HasSkill("python-guide") {
+		t.Error("RemoveLanguage() should also remove python-guide skill")
 	}
 
 	// Removing non-existent should not error
@@ -537,6 +550,50 @@ func TestSplitAndTrim(t *testing.T) {
 				t.Errorf("splitAndTrim(%q) got %v, want %v", tt.input, config.Installed.Languages, tt.want)
 			}
 		})
+	}
+}
+
+func TestConfig_MigrateLanguagesToSkills(t *testing.T) {
+	// Simulate a legacy config with languages but no corresponding skills
+	config := &Config{
+		Installed: InstalledItems{
+			Languages: []string{"go", "python"},
+			Skills:    []string{"commit-message"},
+		},
+	}
+
+	migrated := config.MigrateLanguagesToSkills()
+	if !migrated {
+		t.Error("MigrateLanguagesToSkills() should return true when migration is needed")
+	}
+	if !config.HasSkill("go-guide") {
+		t.Error("MigrateLanguagesToSkills() should add go-guide skill")
+	}
+	if !config.HasSkill("python-guide") {
+		t.Error("MigrateLanguagesToSkills() should add python-guide skill")
+	}
+	if !config.HasSkill("commit-message") {
+		t.Error("MigrateLanguagesToSkills() should preserve existing skills")
+	}
+
+	// Running again should return false (no new migration)
+	migrated = config.MigrateLanguagesToSkills()
+	if migrated {
+		t.Error("MigrateLanguagesToSkills() should return false when already migrated")
+	}
+}
+
+func TestConfig_MigrateLanguagesToSkills_Empty(t *testing.T) {
+	config := &Config{
+		Installed: InstalledItems{
+			Languages: []string{},
+			Skills:    []string{},
+		},
+	}
+
+	migrated := config.MigrateLanguagesToSkills()
+	if migrated {
+		t.Error("MigrateLanguagesToSkills() should return false with no languages")
 	}
 }
 

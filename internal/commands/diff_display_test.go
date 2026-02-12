@@ -6,8 +6,9 @@ import (
 
 func TestCategorizeFiles(t *testing.T) {
 	files := []string{
-		".agent/language-guides/go.md",
-		".agent/language-guides/python.md",
+		".agent/skills/go-guide/SKILL.md",
+		".agent/skills/python-guide/SKILL.md",
+		".agent/skills/python-guide/references/patterns.md",
 		".agent/framework-guides/react.md",
 		".agent/framework-guides/nextjs.md",
 		".agent/framework-guides/django.md",
@@ -19,7 +20,7 @@ func TestCategorizeFiles(t *testing.T) {
 	langs, fws, wfs := categorizeFiles(files)
 
 	if len(langs) != 2 {
-		t.Errorf("categorizeFiles() langs = %d, want 2", len(langs))
+		t.Errorf("categorizeFiles() langs = %d, want 2; got %v", len(langs), langs)
 	}
 	if len(fws) != 3 {
 		t.Errorf("categorizeFiles() fws = %d, want 3", len(fws))
@@ -28,9 +29,15 @@ func TestCategorizeFiles(t *testing.T) {
 		t.Errorf("categorizeFiles() wfs = %d, want 1", len(wfs))
 	}
 
-	// Check extracted names
-	if langs[0] != "go" && langs[1] != "go" {
-		t.Error("categorizeFiles() should extract 'go' from path")
+	// Check extracted names use skill directory names
+	foundGo := false
+	for _, l := range langs {
+		if l == "go-guide" {
+			foundGo = true
+		}
+	}
+	if !foundGo {
+		t.Errorf("categorizeFiles() should extract 'go-guide' from skill path, got %v", langs)
 	}
 }
 
@@ -58,7 +65,7 @@ func TestCategorizeFiles_NoComponents(t *testing.T) {
 
 func TestCategorizeOtherFiles(t *testing.T) {
 	added := []string{
-		".agent/language-guides/go.md",
+		".agent/skills/go-guide/SKILL.md",
 		"CLAUDE.md",
 		"new-file.md",
 	}
@@ -74,7 +81,7 @@ func TestCategorizeOtherFiles(t *testing.T) {
 	addedOther, modifiedOther, removedOther := categorizeOtherFiles(added, modified, removed)
 
 	if len(addedOther) != 2 { // CLAUDE.md and new-file.md
-		t.Errorf("categorizeOtherFiles() addedOther = %d, want 2", len(addedOther))
+		t.Errorf("categorizeOtherFiles() addedOther = %d, want 2; got %v", len(addedOther), addedOther)
 	}
 	if len(modifiedOther) != 1 { // README.md
 		t.Errorf("categorizeOtherFiles() modifiedOther = %d, want 1", len(modifiedOther))
@@ -85,7 +92,7 @@ func TestCategorizeOtherFiles(t *testing.T) {
 }
 
 func TestCategorizeOtherFiles_AllComponents(t *testing.T) {
-	added := []string{".agent/language-guides/go.md"}
+	added := []string{".agent/skills/go-guide/SKILL.md"}
 	modified := []string{".agent/framework-guides/react.md"}
 	removed := []string{".agent/workflows/old.md"}
 
@@ -101,7 +108,6 @@ func TestExtractComponentName(t *testing.T) {
 		path string
 		want string
 	}{
-		{".agent/language-guides/go.md", "go"},
 		{".agent/framework-guides/react.md", "react"},
 		{".agent/workflows/create-prd.md", "create-prd"},
 		{"CLAUDE.md", "CLAUDE"},
@@ -153,7 +159,7 @@ func TestDisplayComponentDiff(t *testing.T) {
 		FromVersion: "1.0.0",
 		ToVersion:   "2.0.0",
 		Added: []string{
-			".agent/language-guides/rust.md",
+			".agent/skills/rust-guide/SKILL.md",
 			".agent/framework-guides/axum.md",
 		},
 		Removed: []string{
@@ -167,6 +173,28 @@ func TestDisplayComponentDiff(t *testing.T) {
 
 	// This test just verifies it doesn't panic
 	displayComponentDiff(diff)
+}
+
+func TestExtractSkillDirName(t *testing.T) {
+	tests := []struct {
+		path string
+		want string
+	}{
+		{".agent/skills/go-guide/SKILL.md", "go-guide"},
+		{".agent/skills/commit-message/SKILL.md", "commit-message"},
+		{".agent/skills/go-guide/references/patterns.md", "go-guide"},
+		{".agent/framework-guides/react.md", ""},
+		{"CLAUDE.md", ""},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.path, func(t *testing.T) {
+			got := extractSkillDirName(tt.path)
+			if got != tt.want {
+				t.Errorf("extractSkillDirName(%q) = %q, want %q", tt.path, got, tt.want)
+			}
+		})
+	}
 }
 
 func TestDisplayComponentChanges(t *testing.T) {

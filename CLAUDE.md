@@ -162,7 +162,7 @@ NODE_ENV=            # development | production | test
 - Stuck >30 min? → .agent/workflows/troubleshooting.md
 - Complex feature? → .agent/workflows/create-prd.md
 - Code review? → .agent/workflows/code-review.md
-- Language-specific? → .agent/language-guides/
+- Language-specific? → .agent/skills/{lang}-guide/SKILL.md
 
 **Workflows** (on-demand):
 
@@ -177,28 +177,28 @@ NODE_ENV=            # development | production | test
 - **PRD** = "What" (define implementation) → .agent/workflows/create-prd.md
 - Flow: Idea → RFD (explore) → Decision → PRD (plan) → Tasks → Code
 
-**Load Language Guide** (automatic based on file extensions):
-- TypeScript/JavaScript → .agent/language-guides/typescript.md
-- Python → .agent/language-guides/python.md
-- Go → .agent/language-guides/go.md
-- Rust → .agent/language-guides/rust.md
-- Kotlin → .agent/language-guides/kotlin.md
-- Java → .agent/language-guides/java.md
-- C# → .agent/language-guides/csharp.md
-- PHP → .agent/language-guides/php.md
-- Swift → .agent/language-guides/swift.md
-- C/C++ → .agent/language-guides/cpp.md
-- Ruby → .agent/language-guides/ruby.md
-- SQL → .agent/language-guides/sql.md
-- Shell/Bash → .agent/language-guides/shell.md
-- R → .agent/language-guides/r.md
-- Dart/Flutter → .agent/language-guides/dart.md
-- HTML/CSS → .agent/language-guides/html-css.md
-- Lua → .agent/language-guides/lua.md
-- Assembly → .agent/language-guides/assembly.md
-- CUDA → .agent/language-guides/cuda.md
-- Solidity → .agent/language-guides/solidity.md
-- Zig → .agent/language-guides/zig.md
+**Load Language Guide** (automatic based on file extensions — language guides are Agent Skills):
+- TypeScript/JavaScript → .agent/skills/typescript-guide/SKILL.md
+- Python → .agent/skills/python-guide/SKILL.md
+- Go → .agent/skills/go-guide/SKILL.md
+- Rust → .agent/skills/rust-guide/SKILL.md
+- Kotlin → .agent/skills/kotlin-guide/SKILL.md
+- Java → .agent/skills/java-guide/SKILL.md
+- C# → .agent/skills/csharp-guide/SKILL.md
+- PHP → .agent/skills/php-guide/SKILL.md
+- Swift → .agent/skills/swift-guide/SKILL.md
+- C/C++ → .agent/skills/cpp-guide/SKILL.md
+- Ruby → .agent/skills/ruby-guide/SKILL.md
+- SQL → .agent/skills/sql-guide/SKILL.md
+- Shell/Bash → .agent/skills/shell-guide/SKILL.md
+- R → .agent/skills/r-guide/SKILL.md
+- Dart/Flutter → .agent/skills/dart-guide/SKILL.md
+- HTML/CSS → .agent/skills/html-css-guide/SKILL.md
+- Lua → .agent/skills/lua-guide/SKILL.md
+- Assembly → .agent/skills/assembly-guide/SKILL.md
+- CUDA → .agent/skills/cuda-guide/SKILL.md
+- Solidity → .agent/skills/solidity-guide/SKILL.md
+- Zig → .agent/skills/zig-guide/SKILL.md
 
 **Load Framework Guide** (when using specific framework):
 - TypeScript/JavaScript:
@@ -374,7 +374,7 @@ For architecture changes, major refactors, new systems:
 ### Stage 2: Implementation
 **Always:**
 - Write tests first (TDD) or alongside code
-- Load language-specific guide: .agent/language-guides/{language}.md
+- Load language-specific guide: .agent/skills/{language}-guide/SKILL.md
 - Follow language/framework idioms
 - Validate against guardrails continuously
 - Keep changes focused (resist scope creep)
@@ -450,28 +450,7 @@ Refs: #issue-number"
 ├── project.md             # Tech stack, architecture (create when tech chosen)
 ├── patterns.md            # Coding patterns (create when patterns emerge)
 ├── state.md              # Current work (create for multi-session work)
-├── language-guides/      # Language-specific guardrails (pre-created, 21 languages)
-│   ├── typescript.md     # TypeScript/JavaScript, React, Node.js
-│   ├── python.md         # Python, Django, FastAPI
-│   ├── go.md             # Go, microservices
-│   ├── rust.md           # Rust, systems programming
-│   ├── kotlin.md         # Kotlin, Android, Spring Boot
-│   ├── java.md           # Java, Spring Boot, enterprise
-│   ├── csharp.md         # C#, .NET, ASP.NET Core
-│   ├── php.md            # PHP, Laravel, Symfony
-│   ├── swift.md          # Swift, iOS, macOS
-│   ├── cpp.md            # C/C++, systems, embedded
-│   ├── ruby.md           # Ruby, Rails
-│   ├── sql.md            # SQL, PostgreSQL, MySQL
-│   ├── shell.md          # Shell/Bash scripting
-│   ├── r.md              # R, statistical computing
-│   ├── dart.md           # Dart, Flutter
-│   ├── html-css.md       # HTML5, CSS3, accessibility
-│   ├── lua.md            # Lua, Love2D, Neovim
-│   ├── assembly.md       # x86-64, ARM64, RISC-V
-│   ├── cuda.md           # CUDA, GPU computing
-│   ├── solidity.md       # Solidity, Ethereum, smart contracts
-│   └── zig.md            # Zig, systems programming
+├── (language guides are now Agent Skills — see skills/ below)
 ├── framework-guides/     # Framework-specific templates (pre-created, 33 frameworks)
 │   ├── react.md          # React 18+, hooks, state management
 │   ├── nextjs.md         # Next.js 14+, App Router, RSC
@@ -531,7 +510,7 @@ Refs: #issue-number"
 
 **Loading Protocol:**
 - **Session Start**: AI loads CLAUDE.md → Checks for state.md → Reads if exists
-- **During Work**: Load language guide based on file extensions (automatic)
+- **During Work**: Load language guide skill from `.agent/skills/{lang}-guide/SKILL.md` based on file extensions
 - **Complex Features**: Load workflows (PRD, task generation)
 - **Reference Needed**: Load patterns.md, project.md, memory/ on-demand
 

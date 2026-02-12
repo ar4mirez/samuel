@@ -127,6 +127,9 @@ func TestNormalizeTypeFilter(t *testing.T) {
 		{"workflow", "workflow"},
 		{"wf", "workflow"},
 		{"w", "workflow"},
+		{"skill", "skill"},
+		{"sk", "skill"},
+		{"s", "skill"},
 		{"", ""},
 		{"invalid", ""},
 		{"xyz", ""},
@@ -268,6 +271,8 @@ func TestSearchComponents(t *testing.T) {
 		{"search all for go", "go", "", 1},
 		{"search languages only", "python", "language", 1},
 		{"search frameworks only", "react", "framework", 1},
+		{"search skills only", "commit", "skill", 1},
+		{"search all for commit-message", "commit-message", "", 1},
 		{"no results", "xyz123nonexistent", "", 0},
 	}
 
@@ -308,7 +313,7 @@ func TestSearchResult_Fields(t *testing.T) {
 	}
 }
 
-// Test that core.Languages, Frameworks, Workflows are accessible
+// Test that core.Languages, Frameworks, Workflows, Skills are accessible
 func TestRegistryAccess(t *testing.T) {
 	if len(core.Languages) == 0 {
 		t.Error("core.Languages is empty")
@@ -318,5 +323,50 @@ func TestRegistryAccess(t *testing.T) {
 	}
 	if len(core.Workflows) == 0 {
 		t.Error("core.Workflows is empty")
+	}
+	if len(core.Skills) == 0 {
+		t.Error("core.Skills is empty")
+	}
+}
+
+func TestSearchLanguages_Tags(t *testing.T) {
+	// Test that searching by tag (e.g., "golang") finds Go
+	results := searchLanguages("golang", nil)
+	found := false
+	for _, r := range results {
+		if r.Name == "go" {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("Expected to find 'go' when searching for tag 'golang'")
+	}
+
+	// Test that searching by tag "js" finds typescript
+	results = searchLanguages("js", nil)
+	found = false
+	for _, r := range results {
+		if r.Name == "typescript" {
+			found = true
+		}
+	}
+	if !found {
+		t.Error("Expected to find 'typescript' when searching for tag 'js'")
+	}
+}
+
+func TestSearchSkills(t *testing.T) {
+	results := searchSkills("commit", nil)
+	found := false
+	for _, r := range results {
+		if r.Name == "commit-message" {
+			found = true
+			if r.Type != "skill" {
+				t.Errorf("Expected type=skill, got %q", r.Type)
+			}
+		}
+	}
+	if !found {
+		t.Errorf("Expected to find 'commit-message' in results, got %d results: %+v", len(results), results)
 	}
 }

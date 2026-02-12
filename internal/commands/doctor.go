@@ -112,9 +112,9 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 	// Check 3: .agent directory structure
 	agentDirs := []string{
 		".agent",
-		".agent/language-guides",
 		".agent/framework-guides",
 		".agent/workflows",
+		".agent/skills",
 		".agent/memory",
 		".agent/tasks",
 	}
@@ -144,14 +144,18 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		})
 	}
 
-	// Check 4: Installed languages exist
+	// Check 4: Installed language guide skills exist
 	if config != nil {
+		// Ensure legacy configs have skills populated
+		config.MigrateLanguagesToSkills()
+
 		var missingLangs []string
 		for _, lang := range config.Installed.Languages {
 			component := core.FindLanguage(lang)
 			if component != nil {
-				filePath := filepath.Join(cwd, component.Path)
-				if _, err := os.Stat(filePath); os.IsNotExist(err) {
+				// Language guides are now skill directories with SKILL.md
+				skillPath := filepath.Join(cwd, component.Path, "SKILL.md")
+				if _, err := os.Stat(skillPath); os.IsNotExist(err) {
 					missingLangs = append(missingLangs, lang)
 				}
 			}
@@ -236,7 +240,50 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	// Check 7: Local modifications (informational)
+	// Check 7: Skills validation
+	skillsDir := filepath.Join(cwd, ".agent", "skills")
+	if _, err := os.Stat(skillsDir); err == nil {
+		skills, err := core.ScanSkillsDirectory(skillsDir)
+		if err != nil {
+			results = append(results, checkResult{
+				name:    "Skills",
+				passed:  false,
+				message: fmt.Sprintf("Failed to scan skills: %v", err),
+			})
+		} else if len(skills) == 0 {
+			results = append(results, checkResult{
+				name:    "Skills",
+				passed:  true,
+				message: "No skills installed",
+			})
+		} else {
+			validCount := 0
+			invalidCount := 0
+			for _, skill := range skills {
+				if len(skill.Errors) == 0 {
+					validCount++
+				} else {
+					invalidCount++
+				}
+			}
+
+			if invalidCount == 0 {
+				results = append(results, checkResult{
+					name:    "Skills",
+					passed:  true,
+					message: fmt.Sprintf("%d skill(s) installed, all valid", validCount),
+				})
+			} else {
+				results = append(results, checkResult{
+					name:    "Skills",
+					passed:  false,
+					message: fmt.Sprintf("%d skill(s) installed, %d invalid", len(skills), invalidCount),
+				})
+			}
+		}
+	}
+
+	// Check 8: Local modifications (informational)
 	if config != nil {
 		claudeMdModified := checkModification(claudeMdPath, config.Version)
 		if claudeMdModified {

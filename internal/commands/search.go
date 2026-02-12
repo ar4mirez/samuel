@@ -22,7 +22,7 @@ type SearchResult struct {
 var searchCmd = &cobra.Command{
 	Use:   "search <query>",
 	Short: "Search for components by keyword",
-	Long: `Search for AICoF components across languages, frameworks, and workflows.
+	Long: `Search for AICoF components across languages, frameworks, workflows, and skills.
 
 Supports fuzzy matching for typos and partial matches. Results are sorted by relevance.
 
@@ -31,19 +31,21 @@ Examples:
   aicof search --type fw django   # Search only frameworks
   aicof search py                 # Fuzzy match finds "python"
   aicof search "spring boot"      # Multi-word search
+  aicof search commit             # Finds commit-message skill
 
 Types (with aliases):
   language   (lang, l)   Language guides
   framework  (fw, f)     Framework guides
-  workflow   (wf, w)     Workflow templates`,
+  workflow   (wf, w)     Workflow templates
+  skill      (sk, s)     Agent Skills`,
 	Args: cobra.ExactArgs(1),
 	RunE: runSearch,
 }
 
 func init() {
 	rootCmd.AddCommand(searchCmd)
-	searchCmd.Flags().StringP("type", "t", "", "Filter by type: language/lang/l, framework/fw/f, workflow/wf/w")
-	searchCmd.Flags().IntP("limit", "l", 20, "Limit number of results")
+	searchCmd.Flags().StringP("type", "t", "", "Filter by type: language/lang/l, framework/fw/f, workflow/wf/w, skill/sk/s")
+	searchCmd.Flags().IntP("limit", "n", 20, "Limit number of results")
 }
 
 func runSearch(cmd *cobra.Command, args []string) error {
@@ -83,6 +85,7 @@ func displaySearchResults(query string, results []SearchResult) {
 	languages := filterByType(results, "language")
 	frameworks := filterByType(results, "framework")
 	workflows := filterByType(results, "workflow")
+	skills := filterByType(results, "skill")
 
 	if len(languages) > 0 {
 		ui.Section(fmt.Sprintf("Languages (%d)", len(languages)))
@@ -95,6 +98,10 @@ func displaySearchResults(query string, results []SearchResult) {
 	if len(workflows) > 0 {
 		ui.Section(fmt.Sprintf("Workflows (%d)", len(workflows)))
 		displayResults(workflows)
+	}
+	if len(skills) > 0 {
+		ui.Section(fmt.Sprintf("Skills (%d)", len(skills)))
+		displayResults(skills)
 	}
 
 	fmt.Println()
@@ -113,6 +120,9 @@ func searchComponents(query, typeFilter string, config *core.Config) []SearchRes
 	if typeFilter == "" || typeFilter == "workflow" {
 		results = append(results, searchWorkflows(query, config)...)
 	}
+	if typeFilter == "" || typeFilter == "skill" {
+		results = append(results, searchSkills(query, config)...)
+	}
 
 	return results
 }
@@ -120,7 +130,17 @@ func searchComponents(query, typeFilter string, config *core.Config) []SearchRes
 func searchLanguages(query string, config *core.Config) []SearchResult {
 	var results []SearchResult
 	for _, lang := range core.Languages {
-		if score := matchScore(query, lang.Name, lang.Description); score > 0 {
+		score := matchScore(query, lang.Name, lang.Description)
+		// Also check tags for matches
+		if score == 0 {
+			for _, tag := range lang.Tags {
+				if tagScore := matchScore(query, tag, ""); tagScore > 0 {
+					score = tagScore
+					break
+				}
+			}
+		}
+		if score > 0 {
 			results = append(results, SearchResult{
 				Name:        lang.Name,
 				Type:        "language",
@@ -159,6 +179,22 @@ func searchWorkflows(query string, config *core.Config) []SearchResult {
 				Description: wf.Description,
 				Score:       score,
 				Installed:   config != nil && config.HasWorkflow(wf.Name),
+			})
+		}
+	}
+	return results
+}
+
+func searchSkills(query string, config *core.Config) []SearchResult {
+	var results []SearchResult
+	for _, skill := range core.Skills {
+		if score := matchScore(query, skill.Name, skill.Description); score > 0 {
+			results = append(results, SearchResult{
+				Name:        skill.Name,
+				Type:        "skill",
+				Description: skill.Description,
+				Score:       score,
+				Installed:   config != nil && config.HasSkill(skill.Name),
 			})
 		}
 	}
@@ -249,6 +285,8 @@ func normalizeTypeFilter(filter string) string {
 		return "framework"
 	case "workflow", "wf", "w":
 		return "workflow"
+	case "skill", "sk", "s":
+		return "skill"
 	default:
 		return ""
 	}
