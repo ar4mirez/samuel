@@ -19,19 +19,17 @@ While CLAUDE.md provides universal guardrails, `.agent/` stores context specific
 ├── project.md             # Your tech stack (created when chosen)
 ├── patterns.md            # Coding patterns (created when emerge)
 ├── state.md               # Current work (for multi-session)
-├── skills/                # Auto-load based on file type (21 language guide skills)
-│   ├── typescript-guide/SKILL.md
-│   ├── python-guide/SKILL.md
-│   ├── go-guide/SKILL.md
-│   ├── rust-guide/SKILL.md
-│   ├── kotlin-guide/SKILL.md
-│   └── ... (16 more)
-├── framework-guides/      # Framework-specific patterns (33 frameworks)
-│   ├── react.md
-│   ├── django.md
-│   ├── rails.md
-│   ├── spring-boot-java.md
-│   └── ... (29 more)
+├── skills/                # Language guides + framework skills (54 total)
+│   ├── typescript-guide/  # 21 language guide skills
+│   │   ├── SKILL.md
+│   │   └── references/
+│   ├── react/             # 33 framework skills
+│   │   ├── SKILL.md
+│   │   └── references/
+│   ├── django/
+│   │   ├── SKILL.md
+│   │   └── references/
+│   └── ... (51 more)
 ├── workflows/             # On-demand workflows
 │   ├── create-prd.md
 │   ├── generate-tasks.md
@@ -58,7 +56,7 @@ These files come with the template:
 | `project.md.template` | Template for project.md | Reference |
 | `state.md.template` | Template for state.md | Reference |
 | `skills/<lang>-guide/SKILL.md` | Language-specific rules (21) | Auto-load |
-| `framework-guides/*.md` | Framework-specific patterns (33) | On-demand |
+| `skills/<framework>/SKILL.md` | Framework-specific patterns (33) | On-demand |
 | `workflows/*.md` | Structured workflows | On-demand |
 
 ### Created Over Time
@@ -337,9 +335,9 @@ Auto-loaded based on file extensions you're working with (21 languages):
 
 ---
 
-## Framework Guides
+## Framework Skills
 
-On-demand framework-specific patterns (33 frameworks across 11 language families):
+On-demand framework-specific patterns (33 framework skills across 11 language families):
 
 | Language | Frameworks |
 |----------|------------|

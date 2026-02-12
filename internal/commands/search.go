@@ -156,7 +156,17 @@ func searchLanguages(query string, config *core.Config) []SearchResult {
 func searchFrameworks(query string, config *core.Config) []SearchResult {
 	var results []SearchResult
 	for _, fw := range core.Frameworks {
-		if score := matchScore(query, fw.Name, fw.Description); score > 0 {
+		score := matchScore(query, fw.Name, fw.Description)
+		// Also check tags for matches
+		if score == 0 {
+			for _, tag := range fw.Tags {
+				if tagScore := matchScore(query, tag, ""); tagScore > 0 {
+					score = tagScore
+					break
+				}
+			}
+		}
+		if score > 0 {
 			results = append(results, SearchResult{
 				Name:        fw.Name,
 				Type:        "framework",

@@ -9,9 +9,9 @@ func TestCategorizeFiles(t *testing.T) {
 		".agent/skills/go-guide/SKILL.md",
 		".agent/skills/python-guide/SKILL.md",
 		".agent/skills/python-guide/references/patterns.md",
-		".agent/framework-guides/react.md",
-		".agent/framework-guides/nextjs.md",
-		".agent/framework-guides/django.md",
+		".agent/skills/react/SKILL.md",
+		".agent/skills/nextjs/SKILL.md",
+		".agent/skills/django/SKILL.md",
 		".agent/workflows/create-prd.md",
 		"CLAUDE.md",
 		"README.md",
@@ -23,7 +23,7 @@ func TestCategorizeFiles(t *testing.T) {
 		t.Errorf("categorizeFiles() langs = %d, want 2; got %v", len(langs), langs)
 	}
 	if len(fws) != 3 {
-		t.Errorf("categorizeFiles() fws = %d, want 3", len(fws))
+		t.Errorf("categorizeFiles() fws = %d, want 3; got %v", len(fws), fws)
 	}
 	if len(wfs) != 1 {
 		t.Errorf("categorizeFiles() wfs = %d, want 1", len(wfs))
@@ -38,6 +38,17 @@ func TestCategorizeFiles(t *testing.T) {
 	}
 	if !foundGo {
 		t.Errorf("categorizeFiles() should extract 'go-guide' from skill path, got %v", langs)
+	}
+
+	// Check framework names are extracted correctly
+	foundReact := false
+	for _, f := range fws {
+		if f == "react" {
+			foundReact = true
+		}
+	}
+	if !foundReact {
+		t.Errorf("categorizeFiles() should extract 'react' from framework skill path, got %v", fws)
 	}
 }
 
@@ -63,6 +74,20 @@ func TestCategorizeFiles_NoComponents(t *testing.T) {
 	}
 }
 
+func TestCategorizeFiles_FrameworkSkillDedup(t *testing.T) {
+	// Multiple files from same framework skill should be deduplicated
+	files := []string{
+		".agent/skills/react/SKILL.md",
+		".agent/skills/react/references/patterns.md",
+	}
+
+	_, fws, _ := categorizeFiles(files)
+
+	if len(fws) != 1 {
+		t.Errorf("categorizeFiles() should deduplicate framework skill files, got %d: %v", len(fws), fws)
+	}
+}
+
 func TestCategorizeOtherFiles(t *testing.T) {
 	added := []string{
 		".agent/skills/go-guide/SKILL.md",
@@ -70,7 +95,7 @@ func TestCategorizeOtherFiles(t *testing.T) {
 		"new-file.md",
 	}
 	modified := []string{
-		".agent/framework-guides/react.md",
+		".agent/skills/react/SKILL.md",
 		"README.md",
 	}
 	removed := []string{
@@ -93,7 +118,7 @@ func TestCategorizeOtherFiles(t *testing.T) {
 
 func TestCategorizeOtherFiles_AllComponents(t *testing.T) {
 	added := []string{".agent/skills/go-guide/SKILL.md"}
-	modified := []string{".agent/framework-guides/react.md"}
+	modified := []string{".agent/skills/react/SKILL.md"}
 	removed := []string{".agent/workflows/old.md"}
 
 	addedOther, modifiedOther, removedOther := categorizeOtherFiles(added, modified, removed)
@@ -108,7 +133,6 @@ func TestExtractComponentName(t *testing.T) {
 		path string
 		want string
 	}{
-		{".agent/framework-guides/react.md", "react"},
 		{".agent/workflows/create-prd.md", "create-prd"},
 		{"CLAUDE.md", "CLAUDE"},
 		{"path/to/file.md", "file"},
@@ -160,7 +184,7 @@ func TestDisplayComponentDiff(t *testing.T) {
 		ToVersion:   "2.0.0",
 		Added: []string{
 			".agent/skills/rust-guide/SKILL.md",
-			".agent/framework-guides/axum.md",
+			".agent/skills/axum/SKILL.md",
 		},
 		Removed: []string{
 			".agent/workflows/old.md",
@@ -183,7 +207,8 @@ func TestExtractSkillDirName(t *testing.T) {
 		{".agent/skills/go-guide/SKILL.md", "go-guide"},
 		{".agent/skills/commit-message/SKILL.md", "commit-message"},
 		{".agent/skills/go-guide/references/patterns.md", "go-guide"},
-		{".agent/framework-guides/react.md", ""},
+		{".agent/skills/react/SKILL.md", "react"},
+		{".agent/skills/spring-boot-kotlin/SKILL.md", "spring-boot-kotlin"},
 		{"CLAUDE.md", ""},
 	}
 
@@ -192,6 +217,29 @@ func TestExtractSkillDirName(t *testing.T) {
 			got := extractSkillDirName(tt.path)
 			if got != tt.want {
 				t.Errorf("extractSkillDirName(%q) = %q, want %q", tt.path, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIsFrameworkSkill(t *testing.T) {
+	tests := []struct {
+		name string
+		want bool
+	}{
+		{"react", true},
+		{"django", true},
+		{"gin", true},
+		{"go-guide", false},
+		{"commit-message", false},
+		{"nonexistent", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := isFrameworkSkill(tt.name)
+			if got != tt.want {
+				t.Errorf("isFrameworkSkill(%q) = %v, want %v", tt.name, got, tt.want)
 			}
 		})
 	}

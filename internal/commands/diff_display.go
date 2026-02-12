@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/ar4mirez/aicof/internal/core"
 	"github.com/ar4mirez/aicof/internal/ui"
 )
 
@@ -90,14 +91,15 @@ func displayComponentDiff(diff *VersionDiff) {
 func categorizeFiles(files []string) (langs, fws, wfs []string) {
 	seen := make(map[string]bool) // Deduplicate skill directories
 	for _, f := range files {
-		if skillName := extractSkillDirName(f); skillName != "" && strings.HasSuffix(skillName, "-guide") {
+		if skillName := extractSkillDirName(f); skillName != "" {
 			if !seen[skillName] {
-				langs = append(langs, skillName)
+				if strings.HasSuffix(skillName, "-guide") {
+					langs = append(langs, skillName)
+				} else if isFrameworkSkill(skillName) {
+					fws = append(fws, skillName)
+				}
 				seen[skillName] = true
 			}
-		} else if strings.Contains(f, "framework-guides/") {
-			name := extractComponentName(f)
-			fws = append(fws, name)
 		} else if strings.Contains(f, "workflows/") {
 			name := extractComponentName(f)
 			wfs = append(wfs, name)
@@ -106,13 +108,19 @@ func categorizeFiles(files []string) (langs, fws, wfs []string) {
 	return
 }
 
+// isFrameworkSkill checks if a skill name corresponds to a known framework
+func isFrameworkSkill(skillName string) bool {
+	return core.FindFramework(skillName) != nil
+}
+
 func categorizeOtherFiles(added, modified, removed []string) (addedOther, modifiedOther, removedOther []string) {
 	isComponent := func(f string) bool {
-		if skillName := extractSkillDirName(f); skillName != "" && strings.HasSuffix(skillName, "-guide") {
-			return true
+		if skillName := extractSkillDirName(f); skillName != "" {
+			if strings.HasSuffix(skillName, "-guide") || isFrameworkSkill(skillName) {
+				return true
+			}
 		}
-		return strings.Contains(f, "framework-guides/") ||
-			strings.Contains(f, "workflows/")
+		return strings.Contains(f, "workflows/")
 	}
 
 	for _, f := range added {

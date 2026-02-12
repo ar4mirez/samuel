@@ -11,7 +11,7 @@
 | Trigger | Action |
 |---------|--------|
 | New version announced | Full update |
-| Want new language/framework guides | Selective update |
+| Want new language/framework skills | Selective update |
 | Monthly maintenance | Check for updates |
 | New team member needs latest | Verify version parity |
 | Security advisory | Urgent update |
@@ -65,9 +65,8 @@ grep "Current Version" CLAUDE.md
 # Check when CLAUDE.md was last modified
 ls -la CLAUDE.md
 
-# List installed guides
+# List installed skills (language guides and framework skills)
 ls .agent/skills/
-ls .agent/framework-guides/
 
 # List installed workflows
 ls .agent/workflows/
@@ -94,8 +93,8 @@ Files that are typically customized:
 - Any workflow with project-specific modifications
 
 Files that are typically NOT customized:
-- Language guides (`.agent/skills/*/SKILL.md`)
-- Framework guides (`.agent/framework-guides/*.md`)
+- Language guide skills (`.agent/skills/*-guide/SKILL.md`)
+- Framework skills (`.agent/skills/<framework>/SKILL.md`)
 - Standard workflows (unless modified for company process)
 
 ---
@@ -154,7 +153,7 @@ echo "Latest:  $(grep 'Current Version' .ai-update-temp/CLAUDE.md)"
 ## Update Summary: v1.5.0 → v1.6.0
 
 ### New Files (safe to add):
-- .agent/framework-guides/new-framework.md
+- .agent/skills/new-framework/SKILL.md
 - .agent/workflows/new-workflow.md
 
 ### Modified Files (review recommended):
@@ -203,12 +202,12 @@ Process:
 
 Best when:
 - Significant CLAUDE.md customization
-- Only interested in new language/framework guides
+- Only interested in new language/framework skills
 - Don't want to risk breaking customizations
 
 Process:
 1. Keep all existing files
-2. Copy only files that don't exist yet
+2. Copy only skill directories that don't exist yet
 
 ### AI Will Recommend
 
@@ -263,8 +262,8 @@ rm -rf .ai-backup
 # Add only new language guides
 cp -r .ai-update-temp/.agent/skills/new-language-guide/ .agent/skills/
 
-# Add only new framework guides
-cp .ai-update-temp/.agent/framework-guides/new-framework.md .agent/framework-guides/
+# Add only new framework skills
+cp -r .ai-update-temp/.agent/skills/new-framework/ .agent/skills/
 
 # Add only new workflows
 cp .ai-update-temp/.agent/workflows/new-workflow.md .agent/workflows/
@@ -293,7 +292,7 @@ If you've customized CLAUDE.md:
 ### Verification Checklist
 
 - [ ] CLAUDE.md shows new version number
-- [ ] New language/framework guides present
+- [ ] New language/framework skills present
 - [ ] New workflows present
 - [ ] Project-specific files preserved:
   - [ ] `.agent/project.md`
@@ -314,8 +313,8 @@ grep "Current Version" CLAUDE.md
 echo "=== Language Guides (Skills) ==="
 ls .agent/skills/
 
-echo "=== Framework Guides ==="
-ls .agent/framework-guides/
+echo "=== Framework Skills ==="
+ls .agent/skills/
 
 echo "=== Workflows ==="
 ls .agent/workflows/
@@ -383,7 +382,7 @@ Check what's new in the latest version (don't update yet)
 ```
 @.agent/workflows/update-framework.md
 
-I only want to add the new React and Next.js framework guides.
+I only want to add the new React and Next.js framework skills.
 Keep everything else as-is.
 ```
 

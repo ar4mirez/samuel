@@ -443,10 +443,23 @@ func TestConfig_AddFramework(t *testing.T) {
 		t.Errorf("AddFramework() = %v, want [react]", config.Installed.Frameworks)
 	}
 
+	// AddFramework should also add the corresponding skill
+	if !config.HasSkill("react") {
+		t.Error("AddFramework(react) should also add react skill")
+	}
+
 	// Adding duplicate should not add again
 	config.AddFramework("react")
 	if len(config.Installed.Frameworks) != 1 {
 		t.Errorf("AddFramework() should not add duplicate, got %v", config.Installed.Frameworks)
+	}
+
+	config.AddFramework("django")
+	if len(config.Installed.Frameworks) != 2 {
+		t.Errorf("AddFramework() should have 2 frameworks, got %v", config.Installed.Frameworks)
+	}
+	if !config.HasSkill("django") {
+		t.Error("AddFramework(django) should also add django skill")
 	}
 }
 
@@ -502,6 +515,7 @@ func TestConfig_RemoveFramework(t *testing.T) {
 	config := &Config{
 		Installed: InstalledItems{
 			Frameworks: []string{"react", "nextjs"},
+			Skills:     []string{"react", "nextjs"},
 		},
 	}
 
@@ -511,6 +525,9 @@ func TestConfig_RemoveFramework(t *testing.T) {
 	}
 	if config.HasFramework("react") {
 		t.Error("RemoveFramework() should have removed react")
+	}
+	if config.HasSkill("react") {
+		t.Error("RemoveFramework() should also remove react skill")
 	}
 }
 
@@ -580,6 +597,36 @@ func TestConfig_MigrateLanguagesToSkills(t *testing.T) {
 	migrated = config.MigrateLanguagesToSkills()
 	if migrated {
 		t.Error("MigrateLanguagesToSkills() should return false when already migrated")
+	}
+}
+
+func TestConfig_MigrateFrameworksToSkills(t *testing.T) {
+	// Simulate a legacy config with frameworks but no corresponding skills
+	config := &Config{
+		Installed: InstalledItems{
+			Frameworks: []string{"react", "django"},
+			Skills:     []string{"commit-message"},
+		},
+	}
+
+	migrated := config.MigrateFrameworksToSkills()
+	if !migrated {
+		t.Error("MigrateFrameworksToSkills() should return true when migration is needed")
+	}
+	if !config.HasSkill("react") {
+		t.Error("MigrateFrameworksToSkills() should add react skill")
+	}
+	if !config.HasSkill("django") {
+		t.Error("MigrateFrameworksToSkills() should add django skill")
+	}
+	if !config.HasSkill("commit-message") {
+		t.Error("MigrateFrameworksToSkills() should preserve existing skills")
+	}
+
+	// Running again should return false (no new migration)
+	migrated = config.MigrateFrameworksToSkills()
+	if migrated {
+		t.Error("MigrateFrameworksToSkills() should return false when already migrated")
 	}
 }
 

@@ -13,7 +13,7 @@
 ## What's New in v1.7.0
 
 - **Rebranded to AICoF** - Artificial Intelligence Coding Framework with clearer identity
-- **33 Framework Guides** - Comprehensive framework-specific guidance across 11 language families
+- **33 Framework Skills** - Comprehensive framework-specific guidance across 11 language families
 - **21 Language Guides** - All major programming languages covered
 - **AGENTS.md Compatible** - Works with Claude Code, Cursor, Codex, Copilot, and 20+ other AI tools
 
@@ -108,7 +108,7 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 |---------|-------------|
 | **35+ Guardrails** | Testable rules, not vague suggestions |
 | **21 Language Guides** | All major languages with auto-loading support |
-| **33 Framework Guides** | Framework-specific patterns and best practices |
+| **33 Framework Skills** | Framework-specific patterns and best practices |
 | **13 Workflows** | PRD, tasks, init, troubleshooting, code-review, and more |
 | **3 Modes** | ATOMIC/FEATURE/COMPLEX (scales from bugs to architecture) |
 | **4D Methodology** | Deconstruct → Diagnose → Develop → Deliver |
@@ -511,21 +511,21 @@ AI will:
 | Solidity | `.sol` | [SKILL.md](template/.agent/skills/solidity-guide/SKILL.md) |
 | Zig | `.zig` | [SKILL.md](template/.agent/skills/zig-guide/SKILL.md) |
 
-### Framework Guides (On-Demand)
+### Framework Skills (On-Demand)
 
 | Language | Frameworks |
 |----------|------------|
-| TypeScript/JS | [React](template/.agent/framework-guides/react.md), [Next.js](template/.agent/framework-guides/nextjs.md), [Express](template/.agent/framework-guides/express.md) |
-| Python | [Django](template/.agent/framework-guides/django.md), [FastAPI](template/.agent/framework-guides/fastapi.md), [Flask](template/.agent/framework-guides/flask.md) |
-| Go | [Gin](template/.agent/framework-guides/gin.md), [Echo](template/.agent/framework-guides/echo.md), [Fiber](template/.agent/framework-guides/fiber.md) |
-| Rust | [Axum](template/.agent/framework-guides/axum.md), [Actix-web](template/.agent/framework-guides/actix-web.md), [Rocket](template/.agent/framework-guides/rocket.md) |
-| Kotlin | [Spring Boot](template/.agent/framework-guides/spring-boot-kotlin.md), [Ktor](template/.agent/framework-guides/ktor.md), [Android Compose](template/.agent/framework-guides/android-compose.md) |
-| Java | [Spring Boot](template/.agent/framework-guides/spring-boot-java.md), [Quarkus](template/.agent/framework-guides/quarkus.md), [Micronaut](template/.agent/framework-guides/micronaut.md) |
-| C# | [ASP.NET Core](template/.agent/framework-guides/aspnet-core.md), [Blazor](template/.agent/framework-guides/blazor.md), [Unity](template/.agent/framework-guides/unity.md) |
-| PHP | [Laravel](template/.agent/framework-guides/laravel.md), [Symfony](template/.agent/framework-guides/symfony.md), [WordPress](template/.agent/framework-guides/wordpress.md) |
-| Swift | [SwiftUI](template/.agent/framework-guides/swiftui.md), [UIKit](template/.agent/framework-guides/uikit.md), [Vapor](template/.agent/framework-guides/vapor.md) |
-| Ruby | [Rails](template/.agent/framework-guides/rails.md), [Sinatra](template/.agent/framework-guides/sinatra.md), [Hanami](template/.agent/framework-guides/hanami.md) |
-| Dart | [Flutter](template/.agent/framework-guides/flutter.md), [Shelf](template/.agent/framework-guides/shelf.md), [Dart Frog](template/.agent/framework-guides/dart-frog.md) |
+| TypeScript/JS | [React](template/.agent/skills/react/SKILL.md), [Next.js](template/.agent/skills/nextjs/SKILL.md), [Express](template/.agent/skills/express/SKILL.md) |
+| Python | [Django](template/.agent/skills/django/SKILL.md), [FastAPI](template/.agent/skills/fastapi/SKILL.md), [Flask](template/.agent/skills/flask/SKILL.md) |
+| Go | [Gin](template/.agent/skills/gin/SKILL.md), [Echo](template/.agent/skills/echo/SKILL.md), [Fiber](template/.agent/skills/fiber/SKILL.md) |
+| Rust | [Axum](template/.agent/skills/axum/SKILL.md), [Actix-web](template/.agent/skills/actix-web/SKILL.md), [Rocket](template/.agent/skills/rocket/SKILL.md) |
+| Kotlin | [Spring Boot](template/.agent/skills/spring-boot-kotlin/SKILL.md), [Ktor](template/.agent/skills/ktor/SKILL.md), [Android Compose](template/.agent/skills/android-compose/SKILL.md) |
+| Java | [Spring Boot](template/.agent/skills/spring-boot-java/SKILL.md), [Quarkus](template/.agent/skills/quarkus/SKILL.md), [Micronaut](template/.agent/skills/micronaut/SKILL.md) |
+| C# | [ASP.NET Core](template/.agent/skills/aspnet-core/SKILL.md), [Blazor](template/.agent/skills/blazor/SKILL.md), [Unity](template/.agent/skills/unity/SKILL.md) |
+| PHP | [Laravel](template/.agent/skills/laravel/SKILL.md), [Symfony](template/.agent/skills/symfony/SKILL.md), [WordPress](template/.agent/skills/wordpress/SKILL.md) |
+| Swift | [SwiftUI](template/.agent/skills/swiftui/SKILL.md), [UIKit](template/.agent/skills/uikit/SKILL.md), [Vapor](template/.agent/skills/vapor/SKILL.md) |
+| Ruby | [Rails](template/.agent/skills/rails/SKILL.md), [Sinatra](template/.agent/skills/sinatra/SKILL.md), [Hanami](template/.agent/skills/hanami/SKILL.md) |
+| Dart | [Flutter](template/.agent/skills/flutter/SKILL.md), [Shelf](template/.agent/skills/shelf/SKILL.md), [Dart Frog](template/.agent/skills/dart-frog/SKILL.md) |
 
 ### Workflows (On-Demand)
 
@@ -555,8 +555,7 @@ aicof/
 │   ├── CLAUDE.md               # Main AI instructions (copy to your project)
 │   ├── AI_INSTRUCTIONS.md      # Quick start guide
 │   └── .agent/                 # AI context directory
-│       ├── skills/             # 21 language-specific guides
-│       ├── framework-guides/   # 33 framework-specific guides
+│       ├── skills/             # 21 language guides + 33 framework skills
 │       └── workflows/          # 13 structured workflows
 ├── cmd/aicof/                  # CLI entry point
 ├── internal/                   # CLI implementation (commands, core, ui)
@@ -584,7 +583,7 @@ aicof/
 | **Total Files** | 67 markdown files |
 | **CLAUDE.md** | ~500 lines |
 | **Language Guides** | 21 (all major programming languages) |
-| **Framework Guides** | 33 (across 11 language families) |
+| **Framework Skills** | 33 (across 11 language families) |
 | **Workflows** | 13 (PRD, tasks, init, troubleshoot, code-review, etc.) |
 | **Guardrails** | 35+ testable rules |
 
@@ -641,7 +640,7 @@ aicof/
 
 Contributions welcome! Ideas:
 - Additional language guides (Scala, Elixir, Haskell, OCaml, Julia)
-- Additional framework guides for existing languages
+- Additional framework skills for existing languages
 - Integration examples with other AI tools
 - Real-world case studies
 

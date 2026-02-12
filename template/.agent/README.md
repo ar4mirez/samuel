@@ -40,12 +40,16 @@ This system is compatible with the [AGENTS.md](https://agents.md) standard (v1.0
 │   ├── typescript-guide/  # TypeScript language guide skill
 │   ├── python-guide/      # Python language guide skill
 │   └── ... (18 more)     # rust, kotlin, java, csharp, php, swift, cpp, ruby, sql, shell, r, dart, html-css, lua, assembly, cuda, solidity, zig
-├── framework-guides/     # Framework-specific patterns (33 frameworks)
-│   ├── README.md         # Index of all framework guides
-│   ├── react.md          # React
-│   ├── django.md         # Django
-│   ├── rails.md          # Rails
-│   └── ... (30 more)     # Next.js, Express, FastAPI, Flask, Gin, Echo, Fiber, Axum, Actix-web, Rocket, Spring Boot (Kotlin), Ktor, Android Compose, Spring Boot (Java), Quarkus, Micronaut, ASP.NET Core, Blazor, Unity, Laravel, Symfony, WordPress, SwiftUI, UIKit, Vapor, Sinatra, Hanami, Flutter, Shelf, Dart Frog
+│   ├── react/                 # Framework skills (33 frameworks)
+│   │   ├── SKILL.md           # Framework patterns and best practices
+│   │   └── references/        # Detailed patterns, pitfalls, security
+│   ├── django/
+│   │   ├── SKILL.md
+│   │   └── references/
+│   ├── rails/
+│   │   ├── SKILL.md
+│   │   └── references/
+│   └── ... (30 more)     # nextjs, express, fastapi, flask, gin, echo, fiber, axum, actix-web, rocket, spring-boot-kotlin, ktor, android-compose, spring-boot-java, quarkus, micronaut, aspnet-core, blazor, unity, laravel, symfony, wordpress, swiftui, uikit, vapor, sinatra, hanami, flutter, shelf, dart-frog
 ├── workflows/            # Structured workflows for complex features
 │   ├── README.md         # Workflow documentation
 │   ├── create-prd.md     # Product Requirements Document workflow

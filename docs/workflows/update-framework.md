@@ -70,7 +70,6 @@ ls -la CLAUDE.md
 
 # List installed guides
 ls .agent/skills/
-ls .agent/framework-guides/
 
 # List installed workflows
 ls .agent/workflows/
@@ -100,7 +99,7 @@ Files that are typically customized:
 Files that are typically NOT customized:
 
 - Language guide skills (`.agent/skills/<lang>-guide/SKILL.md`)
-- Framework guides (`.agent/framework-guides/*.md`)
+- Framework skills (`.agent/skills/<framework>/SKILL.md`)
 - Standard workflows (unless modified for company process)
 
 ---
@@ -266,8 +265,8 @@ rm -rf .ai-backup
 # Add only new language guides
 cp -r .ai-update-temp/.agent/skills/new-language-guide/ .agent/skills/
 
-# Add only new framework guides
-cp .ai-update-temp/.agent/framework-guides/new-framework.md .agent/framework-guides/
+# Add only new framework skills
+cp -r .ai-update-temp/.agent/skills/new-framework/ .agent/skills/
 
 # Add only new workflows
 cp .ai-update-temp/.agent/workflows/new-workflow.md .agent/workflows/
@@ -298,11 +297,8 @@ cp .ai-update-temp/.agent/workflows/new-workflow.md .agent/workflows/
 grep "Current Version" CLAUDE.md
 
 # List all guides
-echo "=== Language Guide Skills ==="
+echo "=== Skills (Language Guides + Frameworks) ==="
 ls .agent/skills/
-
-echo "=== Framework Guides ==="
-ls .agent/framework-guides/
 
 echo "=== Workflows ==="
 ls .agent/workflows/

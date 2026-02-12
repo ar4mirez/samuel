@@ -114,8 +114,8 @@ Create `.agent/active-guides.json`:
   ],
   "guides_kept": [
     "skills/typescript-guide/SKILL.md",
-    "framework-guides/react.md",
-    "framework-guides/nextjs.md"
+    "skills/react/SKILL.md",
+    "skills/nextjs/SKILL.md"
   ],
   "guides_archived": [
     "skills/python-guide/SKILL.md",
@@ -140,9 +140,9 @@ All Language Guides: 21
 Active Languages: 1 (TypeScript)
 Unused Guides: 20 (95% reduction possible)
 
-All Framework Guides: 33
+All Framework Skills: 33
 Active Frameworks: 2 (React, Next.js)
-Unused Guides: 31 (94% reduction possible)
+Unused Skills: 31 (94% reduction possible)
 ```
 
 ### 2.2 Archive Strategy (Recommended)
@@ -152,16 +152,15 @@ Move unused guides to `.agent/.archive/` for potential future use:
 ```bash
 # Create archive directories
 mkdir -p .agent/.archive/skills
-mkdir -p .agent/.archive/framework-guides
 
-# Move unused language guides
+# Move unused language guide skills
 mv .agent/skills/python-guide/ .agent/.archive/skills/
 mv .agent/skills/go-guide/ .agent/.archive/skills/
 # ... (all unused)
 
-# Move unused framework guides
-mv .agent/framework-guides/django.md .agent/.archive/framework-guides/
-mv .agent/framework-guides/fastapi.md .agent/.archive/framework-guides/
+# Move unused framework skills
+mv .agent/skills/django/ .agent/.archive/skills/
+mv .agent/skills/fastapi/ .agent/.archive/skills/
 # ... (all unused)
 ```
 
@@ -170,14 +169,14 @@ mv .agent/framework-guides/fastapi.md .agent/.archive/framework-guides/
 For maximum reduction, delete unused guides entirely:
 
 ```bash
-# Delete unused language guides
-rm -r .agent/skills/python-guide/
-rm -r .agent/skills/go-guide/
+# Delete unused language guide skills
+rm -rf .agent/skills/python-guide/
+rm -rf .agent/skills/go-guide/
 # ... (all unused)
 
-# Delete unused framework guides
-rm .agent/framework-guides/django.md
-rm .agent/framework-guides/fastapi.md
+# Delete unused framework skills
+rm -rf .agent/skills/django/
+rm -rf .agent/skills/fastapi/
 # ... (all unused)
 ```
 
@@ -188,8 +187,7 @@ rm .agent/framework-guides/fastapi.md
 Never remove these files regardless of stack:
 
 - `.agent/README.md` - Directory documentation
-- `.agent/skills/README.md` - Skills (language guide) index
-- `.agent/framework-guides/README.md` - Framework guide index
+- `.agent/skills/README.md` - Skills index (language guides, framework skills, custom skills)
 - `.agent/workflows/*.md` - All workflows (stack-agnostic)
 
 **AI Action**: Execute chosen strategy (archive or delete). Report space saved.
@@ -376,8 +374,8 @@ After cleanup, report:
 - Saved: 2.24 MB (93% reduction)
 
 ### Guides
-- Language guides: 21 → 1 (20 archived)
-- Framework guides: 33 → 2 (31 archived)
+- Language guide skills: 21 → 1 (20 archived)
+- Framework skills: 33 → 2 (31 archived)
 
 ### Tasks
 - Active PRDs: 3
@@ -403,15 +401,19 @@ If you need a pruned guide later:
 ```bash
 # Restore from archive
 mv .agent/.archive/skills/python-guide/ .agent/skills/
-mv .agent/.archive/framework-guides/django.md .agent/framework-guides/
+mv .agent/.archive/skills/django/ .agent/skills/
 ```
 
 ### From Template Repository
 
 ```bash
-# Re-download from template
+# Re-download language guide skill from template
 curl -o .agent/skills/python-guide/SKILL.md --create-dirs \
   https://raw.githubusercontent.com/ar4mirez/aicof/main/.agent/skills/python-guide/SKILL.md
+
+# Re-download framework skill from template
+curl -o .agent/skills/django/SKILL.md --create-dirs \
+  https://raw.githubusercontent.com/ar4mirez/aicof/main/.agent/skills/django/SKILL.md
 ```
 
 ### Update Manifest

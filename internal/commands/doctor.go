@@ -112,7 +112,6 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 	// Check 3: .agent directory structure
 	agentDirs := []string{
 		".agent",
-		".agent/framework-guides",
 		".agent/workflows",
 		".agent/skills",
 		".agent/memory",
@@ -177,14 +176,18 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	// Check 5: Installed frameworks exist
+	// Check 5: Installed framework skills exist
 	if config != nil {
+		// Ensure legacy configs have skills populated
+		config.MigrateFrameworksToSkills()
+
 		var missingFws []string
 		for _, fw := range config.Installed.Frameworks {
 			component := core.FindFramework(fw)
 			if component != nil {
-				filePath := filepath.Join(cwd, component.Path)
-				if _, err := os.Stat(filePath); os.IsNotExist(err) {
+				// Framework guides are now skill directories with SKILL.md
+				skillPath := filepath.Join(cwd, component.Path, "SKILL.md")
+				if _, err := os.Stat(skillPath); os.IsNotExist(err) {
 					missingFws = append(missingFws, fw)
 				}
 			}

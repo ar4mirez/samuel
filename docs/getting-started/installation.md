@@ -79,8 +79,13 @@ your-project/
 ├── CLAUDE.md                    # Core guardrails (~500 lines)
 └── .agent/                      # Project context directory
     ├── README.md                # How to use .agent/
-    ├── skills/                  # 21 language guide skills
-    ├── framework-guides/        # 33 framework guides
+    ├── skills/                  # Language guides + framework skills (54 total)
+    │   ├── <lang>-guide/        # 21 language guide skills
+    │   │   ├── SKILL.md
+    │   │   └── references/
+    │   └── <framework>/         # 33 framework skills
+    │       ├── SKILL.md
+    │       └── references/
     ├── workflows/               # 13 workflows
     ├── tasks/                   # PRDs and task lists (created on demand)
     └── memory/                  # Decision logs (created on demand)

@@ -58,52 +58,53 @@ var Languages = []Component{
 	{Name: "zig", Path: ".agent/skills/zig-guide", Description: "Zig", Category: "language", Tags: []string{"systems", "comptime"}},
 }
 
-// Frameworks contains all available framework guides
+// Frameworks contains all available framework guide skills.
+// Framework guides are now Agent Skills stored at .agent/skills/<name>/.
 var Frameworks = []Component{
 	// TypeScript/JavaScript
-	{Name: "react", Path: ".agent/framework-guides/react.md", Description: "React"},
-	{Name: "nextjs", Path: ".agent/framework-guides/nextjs.md", Description: "Next.js"},
-	{Name: "express", Path: ".agent/framework-guides/express.md", Description: "Express.js"},
+	{Name: "react", Path: ".agent/skills/react", Description: "React", Category: "framework", Tags: []string{"reactjs", "jsx", "tsx", "frontend"}},
+	{Name: "nextjs", Path: ".agent/skills/nextjs", Description: "Next.js", Category: "framework", Tags: []string{"next", "ssr", "react", "vercel"}},
+	{Name: "express", Path: ".agent/skills/express", Description: "Express.js", Category: "framework", Tags: []string{"node", "rest", "api", "middleware"}},
 	// Python
-	{Name: "django", Path: ".agent/framework-guides/django.md", Description: "Django"},
-	{Name: "fastapi", Path: ".agent/framework-guides/fastapi.md", Description: "FastAPI"},
-	{Name: "flask", Path: ".agent/framework-guides/flask.md", Description: "Flask"},
+	{Name: "django", Path: ".agent/skills/django", Description: "Django", Category: "framework", Tags: []string{"python", "orm", "drf", "admin"}},
+	{Name: "fastapi", Path: ".agent/skills/fastapi", Description: "FastAPI", Category: "framework", Tags: []string{"python", "async", "pydantic", "openapi"}},
+	{Name: "flask", Path: ".agent/skills/flask", Description: "Flask", Category: "framework", Tags: []string{"python", "wsgi", "jinja", "lightweight"}},
 	// Go
-	{Name: "gin", Path: ".agent/framework-guides/gin.md", Description: "Gin"},
-	{Name: "echo", Path: ".agent/framework-guides/echo.md", Description: "Echo"},
-	{Name: "fiber", Path: ".agent/framework-guides/fiber.md", Description: "Fiber"},
+	{Name: "gin", Path: ".agent/skills/gin", Description: "Gin", Category: "framework", Tags: []string{"go", "golang", "rest", "api"}},
+	{Name: "echo", Path: ".agent/skills/echo", Description: "Echo", Category: "framework", Tags: []string{"go", "golang", "rest", "labstack"}},
+	{Name: "fiber", Path: ".agent/skills/fiber", Description: "Fiber", Category: "framework", Tags: []string{"go", "golang", "express-like", "fasthttp"}},
 	// Rust
-	{Name: "axum", Path: ".agent/framework-guides/axum.md", Description: "Axum"},
-	{Name: "actix-web", Path: ".agent/framework-guides/actix-web.md", Description: "Actix-web"},
-	{Name: "rocket", Path: ".agent/framework-guides/rocket.md", Description: "Rocket"},
+	{Name: "axum", Path: ".agent/skills/axum", Description: "Axum", Category: "framework", Tags: []string{"rust", "tower", "async", "tokio"}},
+	{Name: "actix-web", Path: ".agent/skills/actix-web", Description: "Actix-web", Category: "framework", Tags: []string{"rust", "actor", "async", "http"}},
+	{Name: "rocket", Path: ".agent/skills/rocket", Description: "Rocket", Category: "framework", Tags: []string{"rust", "type-safe", "macros"}},
 	// Kotlin
-	{Name: "spring-boot-kotlin", Path: ".agent/framework-guides/spring-boot-kotlin.md", Description: "Spring Boot (Kotlin)"},
-	{Name: "ktor", Path: ".agent/framework-guides/ktor.md", Description: "Ktor"},
-	{Name: "android-compose", Path: ".agent/framework-guides/android-compose.md", Description: "Android Compose"},
+	{Name: "spring-boot-kotlin", Path: ".agent/skills/spring-boot-kotlin", Description: "Spring Boot (Kotlin)", Category: "framework", Tags: []string{"kotlin", "spring", "jvm", "coroutines"}},
+	{Name: "ktor", Path: ".agent/skills/ktor", Description: "Ktor", Category: "framework", Tags: []string{"kotlin", "coroutines", "dsl", "jvm"}},
+	{Name: "android-compose", Path: ".agent/skills/android-compose", Description: "Android Compose", Category: "framework", Tags: []string{"kotlin", "android", "material3", "jetpack"}},
 	// Java
-	{Name: "spring-boot-java", Path: ".agent/framework-guides/spring-boot-java.md", Description: "Spring Boot (Java)"},
-	{Name: "quarkus", Path: ".agent/framework-guides/quarkus.md", Description: "Quarkus"},
-	{Name: "micronaut", Path: ".agent/framework-guides/micronaut.md", Description: "Micronaut"},
+	{Name: "spring-boot-java", Path: ".agent/skills/spring-boot-java", Description: "Spring Boot (Java)", Category: "framework", Tags: []string{"java", "spring", "jvm", "jpa"}},
+	{Name: "quarkus", Path: ".agent/skills/quarkus", Description: "Quarkus", Category: "framework", Tags: []string{"java", "graalvm", "reactive", "cloud-native"}},
+	{Name: "micronaut", Path: ".agent/skills/micronaut", Description: "Micronaut", Category: "framework", Tags: []string{"java", "compile-time", "di", "cloud-native"}},
 	// C#
-	{Name: "aspnet-core", Path: ".agent/framework-guides/aspnet-core.md", Description: "ASP.NET Core"},
-	{Name: "blazor", Path: ".agent/framework-guides/blazor.md", Description: "Blazor"},
-	{Name: "unity", Path: ".agent/framework-guides/unity.md", Description: "Unity"},
+	{Name: "aspnet-core", Path: ".agent/skills/aspnet-core", Description: "ASP.NET Core", Category: "framework", Tags: []string{"csharp", "dotnet", "minimal-api", "efcore"}},
+	{Name: "blazor", Path: ".agent/skills/blazor", Description: "Blazor", Category: "framework", Tags: []string{"csharp", "dotnet", "wasm", "signalr"}},
+	{Name: "unity", Path: ".agent/skills/unity", Description: "Unity", Category: "framework", Tags: []string{"csharp", "game", "3d", "scripting"}},
 	// PHP
-	{Name: "laravel", Path: ".agent/framework-guides/laravel.md", Description: "Laravel"},
-	{Name: "symfony", Path: ".agent/framework-guides/symfony.md", Description: "Symfony"},
-	{Name: "wordpress", Path: ".agent/framework-guides/wordpress.md", Description: "WordPress"},
+	{Name: "laravel", Path: ".agent/skills/laravel", Description: "Laravel", Category: "framework", Tags: []string{"php", "eloquent", "blade", "artisan"}},
+	{Name: "symfony", Path: ".agent/skills/symfony", Description: "Symfony", Category: "framework", Tags: []string{"php", "doctrine", "twig", "components"}},
+	{Name: "wordpress", Path: ".agent/skills/wordpress", Description: "WordPress", Category: "framework", Tags: []string{"php", "cms", "themes", "plugins"}},
 	// Swift
-	{Name: "swiftui", Path: ".agent/framework-guides/swiftui.md", Description: "SwiftUI"},
-	{Name: "uikit", Path: ".agent/framework-guides/uikit.md", Description: "UIKit"},
-	{Name: "vapor", Path: ".agent/framework-guides/vapor.md", Description: "Vapor"},
+	{Name: "swiftui", Path: ".agent/skills/swiftui", Description: "SwiftUI", Category: "framework", Tags: []string{"swift", "ios", "macos", "declarative"}},
+	{Name: "uikit", Path: ".agent/skills/uikit", Description: "UIKit", Category: "framework", Tags: []string{"swift", "ios", "storyboard", "programmatic"}},
+	{Name: "vapor", Path: ".agent/skills/vapor", Description: "Vapor", Category: "framework", Tags: []string{"swift", "server", "fluent", "async"}},
 	// Ruby
-	{Name: "rails", Path: ".agent/framework-guides/rails.md", Description: "Rails"},
-	{Name: "sinatra", Path: ".agent/framework-guides/sinatra.md", Description: "Sinatra"},
-	{Name: "hanami", Path: ".agent/framework-guides/hanami.md", Description: "Hanami"},
+	{Name: "rails", Path: ".agent/skills/rails", Description: "Rails", Category: "framework", Tags: []string{"ruby", "activerecord", "mvc", "hotwire"}},
+	{Name: "sinatra", Path: ".agent/skills/sinatra", Description: "Sinatra", Category: "framework", Tags: []string{"ruby", "lightweight", "dsl", "rack"}},
+	{Name: "hanami", Path: ".agent/skills/hanami", Description: "Hanami", Category: "framework", Tags: []string{"ruby", "clean-architecture", "dry-rb"}},
 	// Dart
-	{Name: "flutter", Path: ".agent/framework-guides/flutter.md", Description: "Flutter"},
-	{Name: "shelf", Path: ".agent/framework-guides/shelf.md", Description: "Shelf"},
-	{Name: "dart-frog", Path: ".agent/framework-guides/dart-frog.md", Description: "Dart Frog"},
+	{Name: "flutter", Path: ".agent/skills/flutter", Description: "Flutter", Category: "framework", Tags: []string{"dart", "mobile", "material", "riverpod"}},
+	{Name: "shelf", Path: ".agent/skills/shelf", Description: "Shelf", Category: "framework", Tags: []string{"dart", "http", "server", "middleware"}},
+	{Name: "dart-frog", Path: ".agent/skills/dart-frog", Description: "Dart Frog", Category: "framework", Tags: []string{"dart", "server", "file-based", "routing"}},
 }
 
 // Workflows contains all available workflows
@@ -151,6 +152,40 @@ var Skills = []Component{
 	{Name: "cuda-guide", Path: ".agent/skills/cuda-guide", Description: "CUDA guardrails and patterns", Category: "language", Tags: []string{"cuda", "gpu"}},
 	{Name: "solidity-guide", Path: ".agent/skills/solidity-guide", Description: "Solidity guardrails and patterns", Category: "language", Tags: []string{"solidity", "ethereum"}},
 	{Name: "zig-guide", Path: ".agent/skills/zig-guide", Description: "Zig guardrails and patterns", Category: "language", Tags: []string{"zig", "comptime"}},
+	// Framework skills (mirrored from Frameworks)
+	{Name: "react", Path: ".agent/skills/react", Description: "React framework guardrails and patterns", Category: "framework", Tags: []string{"react", "reactjs", "jsx", "tsx"}},
+	{Name: "nextjs", Path: ".agent/skills/nextjs", Description: "Next.js framework guardrails and patterns", Category: "framework", Tags: []string{"nextjs", "next", "ssr"}},
+	{Name: "express", Path: ".agent/skills/express", Description: "Express.js framework guardrails and patterns", Category: "framework", Tags: []string{"express", "node", "rest"}},
+	{Name: "django", Path: ".agent/skills/django", Description: "Django framework guardrails and patterns", Category: "framework", Tags: []string{"django", "python", "orm"}},
+	{Name: "fastapi", Path: ".agent/skills/fastapi", Description: "FastAPI framework guardrails and patterns", Category: "framework", Tags: []string{"fastapi", "python", "async"}},
+	{Name: "flask", Path: ".agent/skills/flask", Description: "Flask framework guardrails and patterns", Category: "framework", Tags: []string{"flask", "python", "wsgi"}},
+	{Name: "gin", Path: ".agent/skills/gin", Description: "Gin framework guardrails and patterns", Category: "framework", Tags: []string{"gin", "go", "golang"}},
+	{Name: "echo", Path: ".agent/skills/echo", Description: "Echo framework guardrails and patterns", Category: "framework", Tags: []string{"echo", "go", "golang"}},
+	{Name: "fiber", Path: ".agent/skills/fiber", Description: "Fiber framework guardrails and patterns", Category: "framework", Tags: []string{"fiber", "go", "golang"}},
+	{Name: "axum", Path: ".agent/skills/axum", Description: "Axum framework guardrails and patterns", Category: "framework", Tags: []string{"axum", "rust", "tower"}},
+	{Name: "actix-web", Path: ".agent/skills/actix-web", Description: "Actix-web framework guardrails and patterns", Category: "framework", Tags: []string{"actix-web", "rust", "actor"}},
+	{Name: "rocket", Path: ".agent/skills/rocket", Description: "Rocket framework guardrails and patterns", Category: "framework", Tags: []string{"rocket", "rust", "macros"}},
+	{Name: "spring-boot-kotlin", Path: ".agent/skills/spring-boot-kotlin", Description: "Spring Boot (Kotlin) framework guardrails and patterns", Category: "framework", Tags: []string{"spring", "kotlin", "jvm"}},
+	{Name: "ktor", Path: ".agent/skills/ktor", Description: "Ktor framework guardrails and patterns", Category: "framework", Tags: []string{"ktor", "kotlin", "coroutines"}},
+	{Name: "android-compose", Path: ".agent/skills/android-compose", Description: "Android Compose framework guardrails and patterns", Category: "framework", Tags: []string{"compose", "android", "kotlin"}},
+	{Name: "spring-boot-java", Path: ".agent/skills/spring-boot-java", Description: "Spring Boot (Java) framework guardrails and patterns", Category: "framework", Tags: []string{"spring", "java", "jvm"}},
+	{Name: "quarkus", Path: ".agent/skills/quarkus", Description: "Quarkus framework guardrails and patterns", Category: "framework", Tags: []string{"quarkus", "java", "graalvm"}},
+	{Name: "micronaut", Path: ".agent/skills/micronaut", Description: "Micronaut framework guardrails and patterns", Category: "framework", Tags: []string{"micronaut", "java", "di"}},
+	{Name: "aspnet-core", Path: ".agent/skills/aspnet-core", Description: "ASP.NET Core framework guardrails and patterns", Category: "framework", Tags: []string{"aspnet", "csharp", "dotnet"}},
+	{Name: "blazor", Path: ".agent/skills/blazor", Description: "Blazor framework guardrails and patterns", Category: "framework", Tags: []string{"blazor", "csharp", "wasm"}},
+	{Name: "unity", Path: ".agent/skills/unity", Description: "Unity framework guardrails and patterns", Category: "framework", Tags: []string{"unity", "csharp", "game"}},
+	{Name: "laravel", Path: ".agent/skills/laravel", Description: "Laravel framework guardrails and patterns", Category: "framework", Tags: []string{"laravel", "php", "eloquent"}},
+	{Name: "symfony", Path: ".agent/skills/symfony", Description: "Symfony framework guardrails and patterns", Category: "framework", Tags: []string{"symfony", "php", "doctrine"}},
+	{Name: "wordpress", Path: ".agent/skills/wordpress", Description: "WordPress framework guardrails and patterns", Category: "framework", Tags: []string{"wordpress", "php", "cms"}},
+	{Name: "swiftui", Path: ".agent/skills/swiftui", Description: "SwiftUI framework guardrails and patterns", Category: "framework", Tags: []string{"swiftui", "swift", "ios"}},
+	{Name: "uikit", Path: ".agent/skills/uikit", Description: "UIKit framework guardrails and patterns", Category: "framework", Tags: []string{"uikit", "swift", "ios"}},
+	{Name: "vapor", Path: ".agent/skills/vapor", Description: "Vapor framework guardrails and patterns", Category: "framework", Tags: []string{"vapor", "swift", "server"}},
+	{Name: "rails", Path: ".agent/skills/rails", Description: "Rails framework guardrails and patterns", Category: "framework", Tags: []string{"rails", "ruby", "activerecord"}},
+	{Name: "sinatra", Path: ".agent/skills/sinatra", Description: "Sinatra framework guardrails and patterns", Category: "framework", Tags: []string{"sinatra", "ruby", "dsl"}},
+	{Name: "hanami", Path: ".agent/skills/hanami", Description: "Hanami framework guardrails and patterns", Category: "framework", Tags: []string{"hanami", "ruby", "dry-rb"}},
+	{Name: "flutter", Path: ".agent/skills/flutter", Description: "Flutter framework guardrails and patterns", Category: "framework", Tags: []string{"flutter", "dart", "mobile"}},
+	{Name: "shelf", Path: ".agent/skills/shelf", Description: "Shelf framework guardrails and patterns", Category: "framework", Tags: []string{"shelf", "dart", "http"}},
+	{Name: "dart-frog", Path: ".agent/skills/dart-frog", Description: "Dart Frog framework guardrails and patterns", Category: "framework", Tags: []string{"dart-frog", "dart", "server"}},
 }
 
 // CoreFiles contains essential files always installed
@@ -160,9 +195,8 @@ var CoreFiles = []string{
 	".agent/README.md",
 	".agent/project.md.template",
 	".agent/state.md.template",
-	".agent/framework-guides/README.md",
-	".agent/workflows/README.md",
 	".agent/skills/README.md",
+	".agent/workflows/README.md",
 	".agent/memory/.gitkeep",
 	".agent/tasks/.gitkeep",
 	".agent/rfd/.gitkeep",
@@ -339,6 +373,23 @@ func SkillToLanguageName(skillName string) string {
 		return skillName[:len(skillName)-6]
 	}
 	return skillName
+}
+
+// FrameworkToSkillName converts a framework name to its skill name.
+// For frameworks, the skill name IS the framework name (no suffix).
+func FrameworkToSkillName(fwName string) string {
+	return fwName
+}
+
+// GetFrameworkSkills returns skills with category "framework"
+func GetFrameworkSkills() []Component {
+	var result []Component
+	for _, s := range Skills {
+		if s.Category == "framework" {
+			result = append(result, s)
+		}
+	}
+	return result
 }
 
 // GetSourcePath returns the source path in the repository for a given destination path

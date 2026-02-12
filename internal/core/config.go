@@ -153,11 +153,15 @@ func (c *Config) AddLanguage(name string) {
 	c.AddSkill(skillName)
 }
 
-// AddFramework adds a framework to the installed list
+// AddFramework adds a framework to the installed list.
+// Also registers the corresponding framework skill.
 func (c *Config) AddFramework(name string) {
 	if !c.HasFramework(name) {
 		c.Installed.Frameworks = append(c.Installed.Frameworks, name)
 	}
+	// Also track as a skill
+	skillName := FrameworkToSkillName(name)
+	c.AddSkill(skillName)
 }
 
 // AddWorkflow adds a workflow to the installed list
@@ -182,9 +186,12 @@ func (c *Config) RemoveLanguage(name string) {
 	c.RemoveSkill(skillName)
 }
 
-// RemoveFramework removes a framework from the installed list
+// RemoveFramework removes a framework from the installed list.
+// Also removes the corresponding framework skill.
 func (c *Config) RemoveFramework(name string) {
 	c.Installed.Frameworks = removeFromSlice(c.Installed.Frameworks, name)
+	skillName := FrameworkToSkillName(name)
+	c.RemoveSkill(skillName)
 }
 
 // RemoveWorkflow removes a workflow from the installed list
@@ -213,6 +220,20 @@ func (c *Config) MigrateLanguagesToSkills() bool {
 	migrated := false
 	for _, lang := range c.Installed.Languages {
 		skillName := LanguageToSkillName(lang)
+		if !c.HasSkill(skillName) {
+			c.Installed.Skills = append(c.Installed.Skills, skillName)
+			migrated = true
+		}
+	}
+	return migrated
+}
+
+// MigrateFrameworksToSkills ensures all installed frameworks have corresponding skills.
+// This handles backward compatibility for configs created before framework-as-skills migration.
+func (c *Config) MigrateFrameworksToSkills() bool {
+	migrated := false
+	for _, fw := range c.Installed.Frameworks {
+		skillName := FrameworkToSkillName(fw)
 		if !c.HasSkill(skillName) {
 			c.Installed.Skills = append(c.Installed.Skills, skillName)
 			migrated = true

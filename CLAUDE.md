@@ -200,51 +200,51 @@ NODE_ENV=            # development | production | test
 - Solidity → .agent/skills/solidity-guide/SKILL.md
 - Zig → .agent/skills/zig-guide/SKILL.md
 
-**Load Framework Guide** (when using specific framework):
+**Load Framework Guide** (when using specific framework — framework guides are Agent Skills):
 - TypeScript/JavaScript:
-  - React → .agent/framework-guides/react.md
-  - Next.js → .agent/framework-guides/nextjs.md
-  - Express → .agent/framework-guides/express.md
+  - React → .agent/skills/react/SKILL.md
+  - Next.js → .agent/skills/nextjs/SKILL.md
+  - Express → .agent/skills/express/SKILL.md
 - Python:
-  - Django → .agent/framework-guides/django.md
-  - FastAPI → .agent/framework-guides/fastapi.md
-  - Flask → .agent/framework-guides/flask.md
+  - Django → .agent/skills/django/SKILL.md
+  - FastAPI → .agent/skills/fastapi/SKILL.md
+  - Flask → .agent/skills/flask/SKILL.md
 - Go:
-  - Gin → .agent/framework-guides/gin.md
-  - Echo → .agent/framework-guides/echo.md
-  - Fiber → .agent/framework-guides/fiber.md
+  - Gin → .agent/skills/gin/SKILL.md
+  - Echo → .agent/skills/echo/SKILL.md
+  - Fiber → .agent/skills/fiber/SKILL.md
 - Rust:
-  - Axum → .agent/framework-guides/axum.md
-  - Actix-web → .agent/framework-guides/actix-web.md
-  - Rocket → .agent/framework-guides/rocket.md
+  - Axum → .agent/skills/axum/SKILL.md
+  - Actix-web → .agent/skills/actix-web/SKILL.md
+  - Rocket → .agent/skills/rocket/SKILL.md
 - Kotlin:
-  - Spring Boot (Kotlin) → .agent/framework-guides/spring-boot-kotlin.md
-  - Ktor → .agent/framework-guides/ktor.md
-  - Android Compose → .agent/framework-guides/android-compose.md
+  - Spring Boot (Kotlin) → .agent/skills/spring-boot-kotlin/SKILL.md
+  - Ktor → .agent/skills/ktor/SKILL.md
+  - Android Compose → .agent/skills/android-compose/SKILL.md
 - Java:
-  - Spring Boot → .agent/framework-guides/spring-boot-java.md
-  - Quarkus → .agent/framework-guides/quarkus.md
-  - Micronaut → .agent/framework-guides/micronaut.md
+  - Spring Boot → .agent/skills/spring-boot-java/SKILL.md
+  - Quarkus → .agent/skills/quarkus/SKILL.md
+  - Micronaut → .agent/skills/micronaut/SKILL.md
 - C#:
-  - ASP.NET Core → .agent/framework-guides/aspnet-core.md
-  - Blazor → .agent/framework-guides/blazor.md
-  - Unity → .agent/framework-guides/unity.md
+  - ASP.NET Core → .agent/skills/aspnet-core/SKILL.md
+  - Blazor → .agent/skills/blazor/SKILL.md
+  - Unity → .agent/skills/unity/SKILL.md
 - PHP:
-  - Laravel → .agent/framework-guides/laravel.md
-  - Symfony → .agent/framework-guides/symfony.md
-  - WordPress → .agent/framework-guides/wordpress.md
+  - Laravel → .agent/skills/laravel/SKILL.md
+  - Symfony → .agent/skills/symfony/SKILL.md
+  - WordPress → .agent/skills/wordpress/SKILL.md
 - Swift:
-  - SwiftUI → .agent/framework-guides/swiftui.md
-  - UIKit → .agent/framework-guides/uikit.md
-  - Vapor → .agent/framework-guides/vapor.md
+  - SwiftUI → .agent/skills/swiftui/SKILL.md
+  - UIKit → .agent/skills/uikit/SKILL.md
+  - Vapor → .agent/skills/vapor/SKILL.md
 - Ruby:
-  - Rails → .agent/framework-guides/rails.md
-  - Sinatra → .agent/framework-guides/sinatra.md
-  - Hanami → .agent/framework-guides/hanami.md
+  - Rails → .agent/skills/rails/SKILL.md
+  - Sinatra → .agent/skills/sinatra/SKILL.md
+  - Hanami → .agent/skills/hanami/SKILL.md
 - Dart:
-  - Flutter → .agent/framework-guides/flutter.md
-  - Shelf → .agent/framework-guides/shelf.md
-  - Dart Frog → .agent/framework-guides/dart-frog.md
+  - Flutter → .agent/skills/flutter/SKILL.md
+  - Shelf → .agent/skills/shelf/SKILL.md
+  - Dart Frog → .agent/skills/dart-frog/SKILL.md
 
 ---
 
@@ -450,41 +450,7 @@ Refs: #issue-number"
 ├── project.md             # Tech stack, architecture (create when tech chosen)
 ├── patterns.md            # Coding patterns (create when patterns emerge)
 ├── state.md              # Current work (create for multi-session work)
-├── (language guides are now Agent Skills — see skills/ below)
-├── framework-guides/     # Framework-specific templates (pre-created, 33 frameworks)
-│   ├── react.md          # React 18+, hooks, state management
-│   ├── nextjs.md         # Next.js 14+, App Router, RSC
-│   ├── express.md        # Express.js, middleware, REST APIs
-│   ├── django.md         # Django 5+, ORM, admin, DRF
-│   ├── fastapi.md        # FastAPI, async, Pydantic, OpenAPI
-│   ├── flask.md          # Flask, blueprints, extensions
-│   ├── gin.md            # Gin, middleware, REST APIs
-│   ├── echo.md           # Echo, middleware, routing
-│   ├── fiber.md          # Fiber, Express-style, high-performance
-│   ├── axum.md           # Axum, Tower, async Rust
-│   ├── actix-web.md      # Actix-web, actors, high-performance
-│   ├── rocket.md         # Rocket, type-safe, macros
-│   ├── spring-boot-kotlin.md  # Spring Boot with Kotlin, coroutines
-│   ├── ktor.md           # Ktor, coroutines, DSL
-│   ├── android-compose.md # Jetpack Compose, Material 3
-│   ├── spring-boot.md    # Spring Boot Java, JPA, Security
-│   ├── quarkus.md        # Quarkus, GraalVM, reactive
-│   ├── micronaut.md      # Micronaut, compile-time DI
-│   ├── aspnet-core.md    # ASP.NET Core, Minimal APIs, EF Core
-│   ├── blazor.md         # Blazor, WebAssembly, SignalR
-│   ├── unity.md          # Unity, C# scripting, game dev
-│   ├── laravel.md        # Laravel 11+, Eloquent, Blade
-│   ├── symfony.md        # Symfony 7+, Doctrine, Twig
-│   ├── wordpress.md      # WordPress, themes, plugins, REST API
-│   ├── swiftui.md        # SwiftUI, declarative UI, Combine
-│   ├── uikit.md          # UIKit, programmatic/storyboard
-│   ├── vapor.md          # Vapor, Fluent, async Swift
-│   ├── rails.md          # Rails 7+, ActiveRecord, Hotwire
-│   ├── sinatra.md        # Sinatra, lightweight Ruby
-│   ├── hanami.md         # Hanami 2+, clean architecture
-│   ├── flutter.md        # Flutter, Riverpod, go_router
-│   ├── shelf.md          # Shelf, middleware HTTP server
-│   └── dart-frog.md      # Dart Frog, file-based routing
+├── (language and framework guides are now Agent Skills — see skills/ below)
 ├── workflows/            # Structured workflows (pre-created, 14 workflows)
 │   ├── initialize-project.md  # Project setup
 │   ├── create-rfd.md          # Request for Discussion (explore options)
@@ -631,7 +597,7 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
   - Swift: SwiftUI, UIKit, Vapor
   - Ruby: Rails, Sinatra, Hanami
   - Dart: Flutter, Shelf, Dart Frog
-- ✅ Added framework-guides/ directory under .agent/
+- ✅ Added framework skills under .agent/skills/
 - ✅ Updated Quick Reference with "Load Framework Guide" section
 - ✅ Updated .agent/ directory structure documentation
 

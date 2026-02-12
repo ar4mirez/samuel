@@ -13,7 +13,7 @@ This directory contains project-specific context for the AICoF framework develop
 ├── skills/                # Language-specific guardrails
 │   └── go-guide/          # Go language guide (this is a Go project)
 │       └── SKILL.md
-├── framework-guides/      # Framework-specific templates (empty - no framework used)
+├── (no framework skills installed - this is a pure Go project)
 ├── workflows/             # All 13 workflows
 │   ├── initialize-project.md
 │   ├── create-prd.md

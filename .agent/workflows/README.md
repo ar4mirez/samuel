@@ -235,7 +235,7 @@ Update project dependencies
 
 **When to use**:
 - New version released
-- Want new language/framework guides
+- Want new language/framework skills
 - Monthly maintenance check
 - Team version sync
 
@@ -933,8 +933,8 @@ AI: "Analyzing .agent/ directory...
 - .agent/skills/python-guide/ (156 KB)
 - .agent/skills/go-guide/ (142 KB)
 - .agent/skills/rust-guide/ (178 KB)
-- .agent/framework-guides/django.md (98 KB)
-- .agent/framework-guides/flask.md (87 KB)
+- .agent/skills/django/ (98 KB)
+- .agent/skills/flask/ (87 KB)
 
 #### Archive (stale tasks):
 - .agent/tasks/0001-prd-old-feature.md (6 months old)
