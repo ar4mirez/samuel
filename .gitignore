@@ -52,6 +52,10 @@ bin/
 *.dll
 *.exe
 
+# Test coverage
+coverage.out
+coverage.html
+
 # MkDocs documentation
 site/
 

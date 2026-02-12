@@ -25,7 +25,7 @@ BINARY_PATH := ./bin/$(BINARY_NAME)
 # Main package
 MAIN_PACKAGE := ./cmd/aicof
 
-.PHONY: all build clean test lint fmt deps help install uninstall
+.PHONY: all build clean test lint fmt deps help install uninstall docs docs-serve
 
 ## Default target
 all: deps lint test build
@@ -63,7 +63,7 @@ uninstall:
 ## Clean build artifacts
 clean:
 	@echo "Cleaning..."
-	@rm -rf ./bin
+	@rm -rf ./bin ./site coverage.out coverage.html
 	@$(GOCMD) clean
 	@echo "Clean complete."
 
@@ -129,6 +129,24 @@ release:
 		echo "goreleaser not installed. Run: go install github.com/goreleaser/goreleaser@latest"; \
 	fi
 
+## Build documentation site
+docs:
+	@echo "Building documentation..."
+	@if command -v mkdocs >/dev/null 2>&1; then \
+		mkdocs build --strict; \
+	else \
+		echo "mkdocs not installed. Run: pip install -r requirements-docs.txt"; \
+	fi
+
+## Serve documentation locally
+docs-serve:
+	@echo "Serving documentation at http://127.0.0.1:8000..."
+	@if command -v mkdocs >/dev/null 2>&1; then \
+		mkdocs serve; \
+	else \
+		echo "mkdocs not installed. Run: pip install -r requirements-docs.txt"; \
+	fi
+
 ## Help
 help:
 	@echo "AICoF CLI Makefile"
@@ -150,6 +168,8 @@ help:
 	@echo "  deps          Download dependencies"
 	@echo "  run           Run CLI (use ARGS=\"...\" for arguments)"
 	@echo "  version       Show version info"
+	@echo "  docs          Build documentation site"
+	@echo "  docs-serve    Serve documentation locally"
 	@echo "  release-dry   Test release with goreleaser"
 	@echo "  release       Release with goreleaser"
 	@echo "  help          Show this help"
