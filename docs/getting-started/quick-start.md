@@ -60,7 +60,7 @@ Get up and running with AICoF (Artificial Intelligence Coding Framework) in unde
 
 - [x] AI loads CLAUDE.md automatically (500 lines of guardrails + operations)
 - [x] Language guides auto-load based on file extensions
-- [x] 11 CLI commands for component management
+- [x] 13 CLI commands for component management
 - [x] Progressive - starts minimal, grows with your project
 - [x] Cross-tool: Works with any AI assistant via AGENTS.md
 
@@ -221,6 +221,8 @@ Here are the most useful commands to get started:
 | `update` | Update framework | `aicof update --check` |
 | `doctor` | Check installation health | `aicof doctor` |
 | `version` | Show version info | `aicof version` |
+| `skill` | Manage Agent Skills | `aicof skill list` |
+| `auto` | Autonomous AI coding loop | `aicof auto status` |
 
 **Type aliases**: `language` (lang, l), `framework` (fw, f), `workflow` (wf, w)
 
@@ -298,7 +300,7 @@ The `.claude/` directory grows with your project:
 
     ---
 
-    Learn all 11 commands and their options.
+    Learn all 13 commands and their options.
 
     [:octicons-arrow-right-24: CLI Commands](../reference/cli.md)
 

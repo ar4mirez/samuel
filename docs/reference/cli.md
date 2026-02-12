@@ -5,7 +5,7 @@ description: Complete reference for all AICoF CLI commands
 
 # CLI Command Reference
 
-The AICoF CLI provides 11 commands for managing and discovering components. This page documents all commands, flags, and usage examples.
+The AICoF CLI provides 13 commands for managing and discovering components. This page documents all commands, flags, and usage examples.
 
 ---
 
@@ -318,6 +318,11 @@ Manage AICoF configuration.
 | `installed.languages` | Comma-separated list of installed languages |
 | `installed.frameworks` | Comma-separated list of installed frameworks |
 | `installed.workflows` | Comma-separated list of installed workflows |
+| `installed.skills` | Comma-separated list of installed skills |
+| `auto.enabled` | Enable autonomous AI coding loop |
+| `auto.ai_tool` | AI tool for auto loop (claude, amp, codex) |
+| `auto.max_iterations` | Maximum loop iterations (default: 50) |
+| `auto.quality_checks` | Quality check commands for auto loop |
 
 **Examples:**
 
@@ -479,6 +484,137 @@ aicof version
 # Check for updates
 aicof version --check
 ```
+
+---
+
+### skill
+
+Manage Agent Skills — portable capability modules for AI agents.
+
+**Subcommands:**
+
+| Subcommand | Description |
+|------------|-------------|
+| `skill create <name>` | Create a new skill scaffold |
+| `skill validate [name]` | Validate skill(s) against the Agent Skills spec |
+| `skill list` | List installed skills |
+| `skill info <name>` | Show detailed information about a skill |
+
+**Examples:**
+
+```bash
+# Create a new skill
+aicof skill create database-ops
+
+# Validate all skills
+aicof skill validate
+
+# Validate a specific skill
+aicof skill validate database-ops
+
+# List installed skills
+aicof skill list
+
+# Show skill details
+aicof skill info database-ops
+```
+
+**Skill name requirements:**
+
+- Lowercase alphanumeric and hyphens only
+- No consecutive hyphens (`--`)
+- Cannot start or end with hyphen
+- Maximum 64 characters
+
+**Created files:**
+
+```text
+.claude/skills/<name>/
+├── SKILL.md           # Skill definition with YAML frontmatter
+├── scripts/           # Executable code
+├── references/        # Additional documentation
+└── assets/            # Templates and data files
+```
+
+---
+
+### auto
+
+Autonomous AI coding loop using the Ralph Wiggum methodology.
+
+**Subcommands:**
+
+| Subcommand | Description |
+|------------|-------------|
+| `auto init` | Initialize autonomous loop for a project |
+| `auto convert <prd-path>` | Convert markdown PRD/tasks to prd.json |
+| `auto status` | Show loop progress and current state |
+| `auto start` | Begin or resume the autonomous loop |
+| `auto task list` | List all tasks with status |
+| `auto task complete <id>` | Mark a task as completed |
+| `auto task skip <id>` | Mark a task as skipped |
+| `auto task reset <id>` | Reset a task to pending |
+| `auto task add <id> <title>` | Add a new task |
+
+**init flags:**
+
+| Flag | Description |
+|------|-------------|
+| `--prd <path>` | Path to PRD markdown file to convert |
+| `--ai-tool <name>` | AI tool to use: claude, amp, cursor, codex (default: claude) |
+| `--max-iterations <n>` | Maximum loop iterations (default: 50) |
+
+**start flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--iterations <n>` | | Override max iterations for this run |
+| `--yes` | `-y` | Skip confirmation prompt |
+| `--dry-run` | | Show what would happen without executing |
+
+**Examples:**
+
+```bash
+# Initialize from a PRD
+aicof auto init --prd .claude/tasks/0001-prd-auth.md
+
+# Initialize with custom settings
+aicof auto init --ai-tool amp --max-iterations 100
+
+# Convert a PRD to prd.json
+aicof auto convert .claude/tasks/0001-prd-auth.md
+
+# Check loop status
+aicof auto status
+
+# Start the loop
+aicof auto start
+
+# Start with custom iterations, skip confirmation
+aicof auto start --iterations 20 --yes
+
+# Dry run
+aicof auto start --dry-run
+
+# Manage tasks
+aicof auto task list
+aicof auto task complete 1.1
+aicof auto task skip 2.3
+aicof auto task reset 1.1
+aicof auto task add "3.0" "New parent task"
+```
+
+**Generated files:**
+
+```text
+.claude/auto/
+├── prd.json        # Machine-readable task state
+├── progress.md    # Append-only learnings journal
+├── prompt.md       # Iteration prompt template
+└── auto.sh         # Loop orchestration script
+```
+
+[:octicons-arrow-right-24: Auto Workflow Guide](../workflows/auto.md)
 
 ---
 

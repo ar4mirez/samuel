@@ -12,7 +12,7 @@ repo_url: https://github.com/ar4mirez/aicof
 edit_uri: edit/main/docs/
 
 # Copyright
-copyright: Copyright &copy; 2025 ar4mirez
+copyright: Copyright &copy; 2025-2026 ar4mirez
 
 # Theme configuration
 theme:
@@ -151,7 +151,7 @@ nav:
     - CLAUDE.md: core/claude-md.md
     - The 4D Methodology: core/methodology.md
     - Guardrails: core/guardrails.md
-    - The .agent Directory: core/agent-directory.md
+    - The .claude Directory: core/agent-directory.md
   - Language Guides:
     - Overview: languages/index.md
     - Core Languages:
@@ -244,6 +244,9 @@ nav:
       - Troubleshooting: workflows/troubleshooting.md
       - Generate AGENTS.md: workflows/generate-agents-md.md
       - Document Work: workflows/document-work.md
+      - Create Skill: workflows/create-skill.md
+    - Autonomous:
+      - Auto: workflows/auto.md
   - RFDs:
     - Overview: rfd/index.md
     - "0001: Progressive Disclosure": rfd/0001.md

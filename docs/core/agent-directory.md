@@ -23,11 +23,16 @@ While CLAUDE.md provides universal guardrails, `.claude/` stores skills specific
 │   ├── react/             # 33 framework skills
 │   │   ├── SKILL.md
 │   │   └── references/
-│   ├── create-prd/        # 15 workflow skills
+│   ├── create-prd/        # 16 workflow skills
 │   │   └── SKILL.md
-│   ├── generate-tasks/
+│   ├── auto/              # Autonomous loop skill
 │   │   └── SKILL.md
 │   └── ... (more skills)
+├── auto/                  # Autonomous loop state (generated)
+│   ├── prd.json           # Machine-readable task state
+│   ├── progress.md       # Append-only learnings journal
+│   ├── prompt.md          # Iteration prompt template
+│   └── auto.sh            # Loop orchestration script
 └── settings.local.json    # Claude Code local settings
 ```
 
@@ -43,7 +48,7 @@ Skills are capability modules following the [Agent Skills](https://agentskills.i
 |------|-------|--------|---------|
 | Language guides | 21 | Auto-load by file extension | `skills/go-guide/SKILL.md` |
 | Framework skills | 33 | On-demand | `skills/react/SKILL.md` |
-| Workflow skills | 15 | On-demand | `skills/create-prd/SKILL.md` |
+| Workflow skills | 16 | On-demand | `skills/create-prd/SKILL.md` |
 
 ### Per-Folder CLAUDE.md Files
 
@@ -111,6 +116,8 @@ On-demand workflows for structured tasks:
 | `generate-tasks` | Break PRD into tasks |
 | `troubleshooting` | Debug systematically |
 | `generate-agents-md` | Cross-tool compatibility |
+| `create-skill` | Create portable Agent Skills |
+| `auto` | Autonomous AI coding loop |
 
 **How to invoke**:
 

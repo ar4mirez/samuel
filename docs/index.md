@@ -44,11 +44,11 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 
     [:octicons-arrow-right-24: Framework Guides](frameworks/index.md)
 
--   :material-cog:{ .lg .middle } **13 Workflows**
+-   :material-cog:{ .lg .middle } **16 Workflows**
 
     ---
 
-    Planning, quality, maintenance, and utility workflows including PRD creation, code review, security audit, and more.
+    Planning, quality, maintenance, utility, and autonomous workflows including PRD creation, code review, security audit, autonomous loops, and more.
 
     [:octicons-arrow-right-24: Explore Workflows](workflows/index.md)
 
@@ -56,7 +56,7 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 
     ---
 
-    Full-featured CLI with 11 commands: search, info, add, remove, diff, config, and more. Discover components before installing.
+    Full-featured CLI with 13 commands: search, info, add, remove, diff, config, skill, auto, and more. Discover components before installing.
 
     [:octicons-arrow-right-24: CLI Reference](reference/cli.md)
 
@@ -110,7 +110,7 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 
 - [x] AI loads CLAUDE.md automatically (500 lines of guardrails + operations)
 - [x] Language guides auto-load based on file extensions
-- [x] **11 CLI commands** for component discovery and management
+- [x] **13 CLI commands** for component discovery and management
 - [x] Progressive - starts minimal, grows with your project
 
 [:octicons-arrow-right-24: Full Quick Start Guide](getting-started/quick-start.md)
@@ -205,12 +205,12 @@ graph LR
 
 ---
 
-## What's New in v1.7.0
+## What's New in v2.0.0
 
-- **Rebranded to AICoF** - Artificial Intelligence Coding Framework with clearer identity
-- **33 Framework Guides** - React, Django, Rails, Spring Boot, and 29 more frameworks
-- **21 Language Guides** - All major programming languages covered
-- **AGENTS.md Compatible** - Works with Claude Code, Cursor, Codex, Copilot, and 20+ other AI tools
+- **Autonomous AI Coding Loop** - Ralph Wiggum methodology for unattended AI-driven development (`aicof auto`)
+- **Native `.claude/` Integration** - Migrated from `.agent/` to `.claude/` native directory
+- **Agent Skills Standard** - Portable skill modules across 25+ AI tools (`aicof skill`)
+- **Per-folder CLAUDE.md** - Hierarchical instructions with folder-level overrides
 
 [:octicons-arrow-right-24: Full Changelog](reference/changelog.md)
 
@@ -220,15 +220,15 @@ graph LR
 
 | Metric | Value |
 |--------|-------|
-| **Version** | 1.7.0 |
+| **Version** | 2.0.0 |
 | **Status** | Production Ready |
 | **AGENTS.md** | Compatible |
-| **Total Files** | 67 markdown files |
+| **Total Files** | 70+ markdown files |
 | **CLAUDE.md** | ~500 lines |
-| **CLI Commands** | 11 (init, search, info, add, remove, list, config, diff, update, doctor, version) |
+| **CLI Commands** | 13 (init, search, info, add, remove, list, config, diff, update, doctor, version, skill, auto) |
 | **Language Guides** | 21 (all major programming languages) |
 | **Framework Guides** | 33 (across 11 language families) |
-| **Workflows** | 13 (planning, quality, maintenance, utility) |
+| **Workflows** | 16 (planning, quality, maintenance, utility, autonomous) |
 | **Guardrails** | 35+ testable rules |
 
 ---

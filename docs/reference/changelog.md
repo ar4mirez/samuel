@@ -9,6 +9,100 @@ All notable changes to AICoF (Artificial Intelligence Coding Framework).
 
 ---
 
+## [2.0.0] - 2026-02-11
+
+### Native Claude Code Integration
+
+Breaking change: migrated from `.agent/` to `.claude/` native directory. Added autonomous AI coding loop.
+
+### Added
+
+- **Autonomous AI Coding Loop** (Ralph Wiggum methodology):
+  - `aicof auto init` - Initialize autonomous loop from PRD
+  - `aicof auto convert` - Convert markdown PRD/tasks to prd.json
+  - `aicof auto status` - Show loop progress
+  - `aicof auto start` - Begin/resume autonomous execution
+  - `aicof auto task` - Manage tasks (list, complete, skip, reset, add)
+- **Auto workflow skill** at `.claude/skills/auto/SKILL.md`
+- **Per-folder CLAUDE.md** support for hierarchical instructions
+- **Auto config keys**: `auto.enabled`, `auto.ai_tool`, `auto.max_iterations`, `auto.quality_checks`
+- **AGENTS.md** now a real file copy (not symlink) for cross-tool compatibility
+
+### Changed
+
+- Migrated from `.agent/` to `.claude/` (native Claude Code directory)
+- Merged AI_INSTRUCTIONS.md + CLAUDE.md + project.md into single CLAUDE.md
+- Skills now live in `.claude/skills/` (native skill discovery)
+- Dropped `.agent/memory/`, `.agent/tasks/`, `.agent/rfd/`, `.agent/state.md`
+- Uses Claude Code's built-in memory system instead
+
+### Breaking
+
+- `.agent/` directory no longer used - migrate to `.claude/`
+- Workflow files moved from `.claude/workflows/` to `.claude/skills/`
+- Language guides moved from `.claude/language-guides/` to `.claude/skills/<name>-guide/`
+
+---
+
+## [1.8.0] - 2026-02-04
+
+### Agent Skills Integration
+
+Added Agent Skills support following the open standard for AI agent capabilities.
+
+### Added
+
+- **Agent Skills Management CLI**:
+  - `aicof skill create <name>` - Scaffold new skills
+  - `aicof skill validate [name]` - Validate against Agent Skills specification
+  - `aicof skill list` - List installed skills
+  - `aicof skill info <name>` - Show skill details
+- **Create Skill workflow** at `.claude/skills/create-skill/SKILL.md`
+- Skills compatible with 25+ agent products
+- `installed.skills` config key
+
+### Changed
+
+- All components now follow Agent Skills standard (SKILL.md with YAML frontmatter)
+- Language guides renamed to `<name>-guide/SKILL.md` format
+- Framework guides moved to `<name>/SKILL.md` format
+- Workflows moved to `<name>/SKILL.md` format
+
+---
+
+## [1.7.0] - 2026-01-14
+
+### Rebrand and CLI Enhancements
+
+Rebranded to AICoF (Artificial Intelligence Coding Framework) with expanded CLI capabilities.
+
+### Added
+
+- **Rebranded to AICoF** - clearer identity for the framework
+- **AGENTS.md Compatible** - cross-tool support for 20+ AI coding tools
+
+### Changed
+
+- Updated branding throughout documentation and CLI
+- Improved search scoring and fuzzy matching
+
+---
+
+## [1.6.0] - 2026-01-10
+
+### CLI-First Workflow
+
+Major expansion of the CLI tool with discovery-first workflow.
+
+### Added
+
+- **CLI Commands**: search, info, diff, config (bringing total to 11)
+- Fuzzy search with relevance scoring
+- Component preview before installing
+- Version comparison and diffing
+
+---
+
 ## [1.5.0] - 2025-12-15
 
 ### Framework Guides Release
@@ -225,6 +319,24 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ## Upgrade Guide
 
+### From 1.x to 2.0.0
+
+**Breaking change**: Full migration from `.agent/` to `.claude/`.
+
+1. Run `aicof update --version 2.0.0` (handles migration automatically)
+2. Or manually:
+   - Move `.agent/` contents to `.claude/skills/`
+   - Delete `.agent/` directory
+   - Update CLAUDE.md to v2.0.0 format
+   - Copy AGENTS.md as a real file (not symlink)
+3. Remove deprecated directories: `.agent/memory/`, `.agent/tasks/`, `.agent/rfd/`
+
+### From 1.7.x to 1.8.x
+
+1. New CLI commands available: `aicof skill create|validate|list|info`
+2. Skills directory `.claude/skills/` now follows Agent Skills standard
+3. Optional: Create custom skills with `aicof skill create <name>`
+
 ### From 1.4.x to 1.5.x
 
 1. Copy new framework guides to `.claude/framework-guides/`:
@@ -268,10 +380,12 @@ This project follows [Semantic Versioning](https://semver.org/):
 - [x] ~~Additional language guides (Java, C#, PHP, Swift)~~ - Completed in v1.3.0
 - [x] ~~Specialized language guides (SQL, Shell, Lua, etc.)~~ - Completed in v1.4.0
 - [x] ~~Framework-specific templates (Next.js, Django, Rails)~~ - Completed in v1.5.0
+- [x] ~~Agent Skills integration~~ - Completed in v1.8.0
+- [x] ~~Autonomous AI coding loop~~ - Completed in v2.0.0
 - [ ] IDE integrations (VS Code extension)
 - [ ] Automated guardrail checking
+- [ ] Web-based dashboard for auto loop monitoring
 - [ ] Interactive documentation tutorials
-- [ ] Project scaffold generators
 
 ### Community Contributions Welcome
 

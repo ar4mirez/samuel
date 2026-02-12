@@ -1,6 +1,6 @@
 ---
 title: Workflows
-description: Structured workflows for AI-assisted development (14 workflows)
+description: Structured workflows for AI-assisted development (16 workflows)
 ---
 
 # Workflows
@@ -20,7 +20,8 @@ Workflows are structured processes for handling specific types of tasks. They're
 | **Planning** | initialize-project, create-rfd, create-prd, generate-tasks | Define and break down work |
 | **Quality** | code-review, security-audit, testing-strategy | Validate and improve code |
 | **Maintenance** | cleanup-project, refactoring, dependency-update, update-framework | Keep codebase healthy |
-| **Utility** | troubleshooting, generate-agents-md, document-work | Support and documentation |
+| **Utility** | troubleshooting, generate-agents-md, document-work, create-skill | Support and documentation |
+| **Autonomous** | auto | Unattended AI-driven development |
 
 ---
 
@@ -42,6 +43,8 @@ Workflows are structured processes for handling specific types of tasks. They're
 | [Troubleshooting](troubleshooting.md) | Debug systematically | Stuck >30 minutes |
 | [Generate AGENTS.md](generate-agents-md.md) | Cross-tool compatibility | Multi-tool teams |
 | [Document Work](document-work.md) | Capture patterns and decisions | End of session, handoffs |
+| [Create Skill](create-skill.md) | Create portable Agent Skills | New AI capabilities |
+| [Auto](auto.md) | Autonomous AI coding loop | AFK development, batch tasks |
 
 ---
 
@@ -77,6 +80,11 @@ graph TD
     B -->|Cross-tool Setup| G[generate-agents-md.md]
     B -->|Update AICoF| H[update-framework.md]
     B -->|Document Session| I[document-work.md]
+    B -->|Autonomous Dev| P{PRD + Tasks ready?}
+    B -->|New AI Skill| Q[create-skill.md]
+
+    P -->|Yes| R[auto.md]
+    P -->|No| K
 
     D -->|Yes| J[create-rfd.md]
     J -->|Decision Made| K[create-prd.md]
@@ -349,5 +357,29 @@ Workflows can be chained for complex tasks:
     Capture patterns, decisions, and learnings from development.
 
     [:octicons-arrow-right-24: Document Work](document-work.md)
+
+-   :material-puzzle:{ .lg .middle } **Create Skill**
+
+    ---
+
+    Create portable Agent Skills for AI agents.
+
+    [:octicons-arrow-right-24: Create Skill](create-skill.md)
+
+</div>
+
+---
+
+## Autonomous Workflows
+
+<div class="grid cards" markdown>
+
+-   :material-robot:{ .lg .middle } **Auto**
+
+    ---
+
+    Autonomous AI coding loop (Ralph Wiggum methodology). Unattended AI-driven development.
+
+    [:octicons-arrow-right-24: Auto](auto.md)
 
 </div>
