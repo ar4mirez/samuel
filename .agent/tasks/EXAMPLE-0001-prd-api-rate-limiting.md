@@ -280,11 +280,11 @@ Content-Type: application/json
 ## Next Steps
 
 1. ✅ PRD reviewed and approved
-2. ⏭️ Use `@.agent/workflows/generate-tasks.md` to create task breakdown
+2. ⏭️ Use `@.agent/skills/generate-tasks/SKILL.md` to create task breakdown
 3. ⏭️ Implement tasks step-by-step
 4. ⏭️ Update `.agent/project.md` with rate limiting architecture
 5. ⏭️ Add to `.agent/patterns.md` (rate limiting pattern for future features)
 
 ---
 
-**This is an example PRD**. In a real project, AI would generate this after asking clarifying questions using `@.agent/workflows/create-prd.md`.
+**This is an example PRD**. In a real project, AI would generate this after asking clarifying questions using `@.agent/skills/create-prd/SKILL.md`.

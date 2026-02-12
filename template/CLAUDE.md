@@ -150,19 +150,19 @@ NODE_ENV=            # development | production | test
 **Task Classification:**
 - **ATOMIC** (<5 files, clear scope) → Implement directly
 - **FEATURE** (5-10 files) → Break into subtasks
-- **COMPLEX** (>10 files, new subsystem) → Use PRD workflow | .agent/workflows/create-prd.md
+- **COMPLEX** (>10 files, new subsystem) → Use PRD workflow | .agent/skills/create-prd/SKILL.md
 
 **Common Guardrails** (validate first):
 ✓ Function ≤50 lines | ✓ File ≤300 lines | ✓ Input validation | ✓ Parameterized queries
 ✓ Tests >80% (critical) | ✓ Conventional commits | ✓ No secrets in code
 
 **Emergency Quick Links:**
-- Security issue? → .agent/workflows/security-audit.md
-- Tests failing? → .agent/workflows/troubleshooting.md
-- Stuck >30 min? → .agent/workflows/troubleshooting.md
-- Complex feature? → .agent/workflows/create-prd.md
-- Code review? → .agent/workflows/code-review.md
-- Language-specific? → .agent/skills/{lang}-guide/
+- Security issue? → .agent/skills/security-audit/SKILL.md
+- Tests failing? → .agent/skills/troubleshooting/SKILL.md
+- Stuck >30 min? → .agent/skills/troubleshooting/SKILL.md
+- Complex feature? → .agent/skills/create-prd/SKILL.md
+- Code review? → .agent/skills/code-review/SKILL.md
+- Language-specific? → .agent/skills/{lang}-guide/SKILL.md
 
 **Workflows** (on-demand):
 
@@ -172,7 +172,7 @@ NODE_ENV=            # development | production | test
 - Utility: troubleshooting, generate-agents-md, document-work, create-skill
 
 **Skills** (capability modules - [Agent Skills](https://agentskills.io) standard):
-- Create: `aicof skill create <name>` or `.agent/workflows/create-skill.md`
+- Create: `aicof skill create <name>` or `.agent/skills/create-skill/SKILL.md`
 - Validate: `aicof skill validate`
 - List: `aicof skill list`
 - Load: `.agent/skills/<skill-name>/SKILL.md` when task matches description
@@ -192,8 +192,8 @@ Skills extend AI capabilities. Load a skill when task matches its description.
 
 **RFD vs PRD** (when exploring options):
 
-- **RFD** = "Why" (explore options, build consensus) → .agent/workflows/create-rfd.md
-- **PRD** = "What" (define implementation) → .agent/workflows/create-prd.md
+- **RFD** = "Why" (explore options, build consensus) → .agent/skills/create-rfd/SKILL.md
+- **PRD** = "What" (define implementation) → .agent/skills/create-prd/SKILL.md
 - Flow: Idea → RFD (explore) → Decision → PRD (plan) → Tasks → Code
 
 **Load Language Guide** (automatic based on file extensions — language guides are Agent Skills):
@@ -364,10 +364,9 @@ For architecture changes, major refactors, new systems:
 - Well-defined refactoring
 
 **Workflow:**
-1. Use `.agent/workflows/create-prd.md` to define requirements
-2. Use `.agent/workflows/generate-tasks.md` to break down implementation
+1. Use `.agent/skills/create-prd/SKILL.md` to define requirements
+2. Use `.agent/skills/generate-tasks/SKILL.md` to break down implementation
 3. Implement tasks step-by-step with verification checkpoints
-4. See `.agent/workflows/README.md` for full documentation
 
 **Escalation Triggers:**
 - Task affects >5 files → FEATURE mode
@@ -470,24 +469,39 @@ Refs: #issue-number"
 ├── patterns.md            # Coding patterns (create when patterns emerge)
 ├── state.md              # Current work (create for multi-session work)
 ├── (language and framework guides are now Agent Skills — see skills/ below)
-├── workflows/            # Structured workflows (pre-created, 15 workflows)
-│   ├── initialize-project.md  # Project setup
-│   ├── create-rfd.md          # Request for Discussion (explore options)
-│   ├── create-prd.md          # Requirements documents
-│   ├── generate-tasks.md      # Task breakdown
-│   ├── code-review.md         # Pre-commit quality review
-│   ├── security-audit.md      # Security assessment
-│   ├── testing-strategy.md    # Test planning & coverage
-│   ├── cleanup-project.md     # Prune unused guides
-│   ├── refactoring.md         # Technical debt remediation
-│   ├── dependency-update.md   # Safe dependency updates
-│   ├── troubleshooting.md     # Debugging workflow
-│   ├── generate-agents-md.md  # Cross-tool compatibility
-│   ├── document-work.md       # Capture patterns and decisions
-│   └── create-skill.md        # Create Agent Skills
 ├── skills/               # Agent Skills - capability modules (Agent Skills standard)
 │   ├── README.md              # How to create and use skills
 │   ├── commit-message/        # Generate commit messages
+│   │   └── SKILL.md
+│   ├── initialize-project/    # Project setup workflow
+│   │   └── SKILL.md
+│   ├── create-rfd/            # Request for Discussion (explore options)
+│   │   └── SKILL.md
+│   ├── create-prd/            # Requirements documents
+│   │   └── SKILL.md
+│   ├── generate-tasks/        # Task breakdown
+│   │   └── SKILL.md
+│   ├── code-review/           # Pre-commit quality review
+│   │   └── SKILL.md
+│   ├── security-audit/        # Security assessment
+│   │   └── SKILL.md
+│   ├── testing-strategy/      # Test planning & coverage
+│   │   └── SKILL.md
+│   ├── cleanup-project/       # Prune unused guides
+│   │   └── SKILL.md
+│   ├── refactoring/           # Technical debt remediation
+│   │   └── SKILL.md
+│   ├── dependency-update/     # Safe dependency updates
+│   │   └── SKILL.md
+│   ├── troubleshooting/       # Debugging workflow
+│   │   └── SKILL.md
+│   ├── generate-agents-md/    # Cross-tool compatibility
+│   │   └── SKILL.md
+│   ├── document-work/         # Capture patterns and decisions
+│   │   └── SKILL.md
+│   ├── update-framework/      # Update AICoF while preserving customizations
+│   │   └── SKILL.md
+│   ├── create-skill/          # Create Agent Skills
 │   │   └── SKILL.md
 │   ├── go-guide/              # Language guide skills (21 languages)
 │   │   ├── SKILL.md           # Core guardrails and patterns
@@ -562,9 +576,9 @@ Refs: #issue-number"
 
 ## Initialization
 
-**For new projects:** Use `.agent/workflows/initialize-project.md`
+**For new projects:** Use `.agent/skills/initialize-project/SKILL.md`
 
-**For existing projects:** Use `.agent/workflows/initialize-project.md`
+**For existing projects:** Use `.agent/skills/initialize-project/SKILL.md`
 
 AI will ask questions, analyze codebase, and create `.agent/project.md` with findings.
 
@@ -572,7 +586,7 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
 
 ## When Stuck
 
-**See:** `.agent/workflows/troubleshooting.md`
+**See:** `.agent/skills/troubleshooting/SKILL.md`
 
 **Quick recovery:**
 1. STOP trying random solutions (>30 min = stuck)
@@ -705,8 +719,8 @@ AI will ask questions, analyze codebase, and create `.agent/project.md` with fin
   - Smoke test validation
 - ✅ Clarified workflow requirements (MANDATORY vs RECOMMENDED)
 - ✅ Extracted language-specific guides to .agent/language-guides/
-- ✅ Extracted initialization to .agent/workflows/initialize-project.md
-- ✅ Extracted troubleshooting to .agent/workflows/troubleshooting.md
+- ✅ Extracted initialization to .agent/skills/initialize-project/SKILL.md
+- ✅ Extracted troubleshooting to .agent/skills/troubleshooting/SKILL.md
 - ✅ Created comprehensive language guides (TypeScript, Python, Go, Rust)
 
 **v1.0.0 (2025-01-14) - Initial Release**

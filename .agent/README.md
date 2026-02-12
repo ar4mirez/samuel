@@ -10,24 +10,19 @@ This directory contains project-specific context for the AICoF framework develop
 ├── project.md             # Project architecture and tech stack
 ├── patterns.md            # Coding patterns and conventions
 ├── state.md               # Current work state
-├── skills/                # Language-specific guardrails
-│   └── go-guide/          # Go language guide (this is a Go project)
-│       └── SKILL.md
-├── (no framework skills installed - this is a pure Go project)
-├── workflows/             # All 13 workflows
-│   ├── initialize-project.md
-│   ├── create-prd.md
-│   ├── generate-tasks.md
-│   ├── code-review.md
-│   ├── security-audit.md
-│   ├── testing-strategy.md
-│   ├── cleanup-project.md
-│   ├── refactoring.md
-│   ├── dependency-update.md
-│   ├── troubleshooting.md
-│   ├── generate-agents-md.md
-│   ├── document-work.md
-│   └── update-framework.md
+├── skills/                # Agent Skills (language guides, workflows, utilities)
+│   ├── go-guide/          # Go language guide (this is a Go project)
+│   │   └── SKILL.md
+│   ├── initialize-project/ # Workflow skills (15 total)
+│   │   └── SKILL.md
+│   ├── create-prd/
+│   │   └── SKILL.md
+│   ├── generate-tasks/
+│   │   └── SKILL.md
+│   └── ...                # code-review, security-audit, testing-strategy,
+│                          # cleanup-project, refactoring, dependency-update,
+│                          # troubleshooting, generate-agents-md, document-work,
+│                          # update-framework, create-rfd, create-skill, commit-message
 ├── tasks/                 # PRDs and task lists
 │   ├── 0001-prd-*.md      # PRD documents
 │   └── tasks-*.md         # Task breakdowns
@@ -48,5 +43,5 @@ The distributable template files are located in `template/.agent/` for distribut
 ## Usage
 
 - Language guide (`go-guide/SKILL.md`) is automatically loaded when working on Go files
-- Workflows are available on-demand for planning, reviews, etc.
+- Workflow skills (in `.agent/skills/`) are available on-demand for planning, reviews, etc.
 - State and memory files track ongoing work and decisions

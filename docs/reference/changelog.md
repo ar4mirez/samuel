@@ -165,8 +165,8 @@ Focus on reducing token usage while adding critical guardrails.
 - Reduced CLAUDE.md from 490 → 400 lines (18% reduction)
 - Clarified workflow requirements (MANDATORY vs RECOMMENDED)
 - Extracted language-specific content to `.agent/language-guides/`
-- Extracted initialization to `.agent/workflows/initialize-project.md`
-- Extracted troubleshooting to `.agent/workflows/troubleshooting.md`
+- Extracted initialization to `.agent/skills/initialize-project/SKILL.md`
+- Extracted troubleshooting to `.agent/skills/troubleshooting/SKILL.md`
 
 ### Technical
 
@@ -249,14 +249,14 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 1. Copy new CLAUDE.md (includes Operations section)
 2. Add AGENTS.md symlink if needed: `ln -s CLAUDE.md AGENTS.md`
-3. Copy new `.agent/workflows/generate-agents-md.md`
+3. Copy new `.agent/skills/generate-agents-md/SKILL.md`
 4. Copy new `.agent/language-guides/kotlin.md` (if using Kotlin)
 
 ### From 1.0.x to 1.1.x
 
 1. Copy new CLAUDE.md
 2. Copy new `.agent/language-guides/` directory
-3. Copy new `.agent/workflows/troubleshooting.md`
+3. Copy new `.agent/skills/troubleshooting/SKILL.md`
 4. Review Quick Reference section
 
 ---

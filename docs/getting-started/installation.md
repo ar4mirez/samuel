@@ -86,7 +86,9 @@ your-project/
     │   └── <framework>/         # 33 framework skills
     │       ├── SKILL.md
     │       └── references/
-    ├── workflows/               # 13 workflows
+    │   ├── create-prd/          # 15 workflow skills
+    │   │   └── SKILL.md
+    │   └── ...                  # initialize-project, generate-tasks, code-review, etc.
     ├── tasks/                   # PRDs and task lists (created on demand)
     └── memory/                  # Decision logs (created on demand)
 ```
@@ -144,7 +146,7 @@ Both files stay in sync automatically.
 ### Option B: Generate Standalone
 
 ```
-@.agent/workflows/generate-agents-md.md
+@.agent/skills/generate-agents-md/SKILL.md
 ```
 
 Creates a separate `AGENTS.md` with operations-only content.
@@ -200,8 +202,8 @@ ls -la .agent/
 # Check language guides
 ls .agent/skills/
 
-# Check workflows
-ls .agent/workflows/
+# Check skills (includes workflow skills)
+ls .agent/skills/
 ```
 
 ---
@@ -345,7 +347,7 @@ If AI doesn't seem to follow guardrails:
 Windows requires administrator privileges for symlinks. Use Option B (Generate Standalone) instead:
 
 ```
-@.agent/workflows/generate-agents-md.md
+@.agent/skills/generate-agents-md/SKILL.md
 ```
 
 ### Large Repository

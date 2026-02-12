@@ -256,7 +256,7 @@ Update project.md when:
 
 **User Request:**
 ```
-@.agent/workflows/document-work.md
+@.agent/skills/document-work/SKILL.md
 
 Document the work from today's session on the authentication feature.
 We made some decisions about JWT vs sessions and established a new
@@ -282,7 +282,7 @@ error handling pattern.
 
 **User Request:**
 ```
-@.agent/workflows/document-work.md
+@.agent/skills/document-work/SKILL.md
 
 I noticed we've been using the same API response format across
 multiple endpoints. Let's document this as a pattern.
@@ -304,7 +304,7 @@ multiple endpoints. Let's document this as a pattern.
 
 **User Request:**
 ```
-@.agent/workflows/document-work.md
+@.agent/skills/document-work/SKILL.md
 
 I'm handing off this project next week. Please review all recent
 work (last 2 weeks) and ensure comprehensive documentation for
@@ -333,7 +333,7 @@ the next developer.
 
 **User Request:**
 ```
-@.agent/workflows/document-work.md
+@.agent/skills/document-work/SKILL.md
 
 Just update state.md - I'm stopping for today and want to capture
 where I left off on the payment integration.

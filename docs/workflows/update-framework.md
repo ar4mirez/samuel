@@ -72,7 +72,7 @@ ls -la CLAUDE.md
 ls .agent/skills/
 
 # List installed workflows
-ls .agent/workflows/
+ls .agent/skills/
 ```
 
 ### AI Will Check
@@ -158,12 +158,12 @@ echo "Latest:  $(grep 'Current Version' .ai-update-temp/CLAUDE.md)"
 ## Update Summary: v1.5.0 → v1.7.0
 
 ### New Files (safe to add):
-- .agent/workflows/document-work.md
-- .agent/workflows/update-framework.md
+- .agent/skills/document-work/SKILL.md
+- .agent/skills/update-framework/SKILL.md
 
 ### Modified Files (review recommended):
 - CLAUDE.md (guardrails updated)
-- .agent/workflows/code-review.md (new checks)
+- .agent/skills/code-review/SKILL.md (new checks)
 
 ### Your Customizations (will preserve):
 - .agent/project.md (project-specific)
@@ -269,7 +269,7 @@ cp -r .ai-update-temp/.agent/skills/new-language-guide/ .agent/skills/
 cp -r .ai-update-temp/.agent/skills/new-framework/ .agent/skills/
 
 # Add only new workflows
-cp .ai-update-temp/.agent/workflows/new-workflow.md .agent/workflows/
+cp -r .ai-update-temp/.agent/skills/new-skill/ .agent/skills/
 ```
 
 ---
@@ -301,7 +301,7 @@ echo "=== Skills (Language Guides + Frameworks) ==="
 ls .agent/skills/
 
 echo "=== Workflows ==="
-ls .agent/workflows/
+ls .agent/skills/
 
 # Verify project files exist
 echo "=== Project Files ==="
@@ -320,7 +320,7 @@ ls .agent/memory/ 2>/dev/null | wc -l
 
 **User Request:**
 ```
-@.agent/workflows/update-framework.md
+@.agent/skills/update-framework/SKILL.md
 
 Update to the latest version of AICoF
 ```
@@ -340,7 +340,7 @@ Update to the latest version of AICoF
 
 **User Request:**
 ```
-@.agent/workflows/update-framework.md
+@.agent/skills/update-framework/SKILL.md
 
 Check what's new in the latest version (don't update yet)
 ```
@@ -359,7 +359,7 @@ Check what's new in the latest version (don't update yet)
 
 **User Request:**
 ```
-@.agent/workflows/update-framework.md
+@.agent/skills/update-framework/SKILL.md
 
 I only want to add the new React and Next.js framework guides.
 Keep everything else as-is.
@@ -378,7 +378,7 @@ Keep everything else as-is.
 
 **User Request:**
 ```
-@.agent/workflows/update-framework.md
+@.agent/skills/update-framework/SKILL.md
 
 Verify my installation matches version 1.7.0 that the team is using.
 ```
@@ -396,7 +396,7 @@ Verify my installation matches version 1.7.0 that the team is using.
 
 **User Request:**
 ```
-@.agent/workflows/update-framework.md
+@.agent/skills/update-framework/SKILL.md
 
 Update to latest. I have custom guardrails in CLAUDE.md that I need to keep.
 ```

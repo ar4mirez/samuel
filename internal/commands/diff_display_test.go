@@ -12,7 +12,7 @@ func TestCategorizeFiles(t *testing.T) {
 		".agent/skills/react/SKILL.md",
 		".agent/skills/nextjs/SKILL.md",
 		".agent/skills/django/SKILL.md",
-		".agent/workflows/create-prd.md",
+		".agent/skills/create-prd/SKILL.md",
 		"CLAUDE.md",
 		"README.md",
 	}
@@ -26,7 +26,7 @@ func TestCategorizeFiles(t *testing.T) {
 		t.Errorf("categorizeFiles() fws = %d, want 3; got %v", len(fws), fws)
 	}
 	if len(wfs) != 1 {
-		t.Errorf("categorizeFiles() wfs = %d, want 1", len(wfs))
+		t.Errorf("categorizeFiles() wfs = %d, want 1; got %v", len(wfs), wfs)
 	}
 
 	// Check extracted names use skill directory names
@@ -49,6 +49,17 @@ func TestCategorizeFiles(t *testing.T) {
 	}
 	if !foundReact {
 		t.Errorf("categorizeFiles() should extract 'react' from framework skill path, got %v", fws)
+	}
+
+	// Check workflow names are extracted correctly
+	foundPrd := false
+	for _, w := range wfs {
+		if w == "create-prd" {
+			foundPrd = true
+		}
+	}
+	if !foundPrd {
+		t.Errorf("categorizeFiles() should extract 'create-prd' from workflow skill path, got %v", wfs)
 	}
 }
 
@@ -99,7 +110,7 @@ func TestCategorizeOtherFiles(t *testing.T) {
 		"README.md",
 	}
 	removed := []string{
-		".agent/workflows/old.md",
+		".agent/skills/code-review/SKILL.md",
 		"deleted.md",
 	}
 
@@ -119,7 +130,7 @@ func TestCategorizeOtherFiles(t *testing.T) {
 func TestCategorizeOtherFiles_AllComponents(t *testing.T) {
 	added := []string{".agent/skills/go-guide/SKILL.md"}
 	modified := []string{".agent/skills/react/SKILL.md"}
-	removed := []string{".agent/workflows/old.md"}
+	removed := []string{".agent/skills/troubleshooting/SKILL.md"}
 
 	addedOther, modifiedOther, removedOther := categorizeOtherFiles(added, modified, removed)
 
@@ -133,7 +144,7 @@ func TestExtractComponentName(t *testing.T) {
 		path string
 		want string
 	}{
-		{".agent/workflows/create-prd.md", "create-prd"},
+		{".agent/skills/create-prd/SKILL.md", "SKILL"},
 		{"CLAUDE.md", "CLAUDE"},
 		{"path/to/file.md", "file"},
 		{"simple.md", "simple"},
@@ -187,7 +198,7 @@ func TestDisplayComponentDiff(t *testing.T) {
 			".agent/skills/axum/SKILL.md",
 		},
 		Removed: []string{
-			".agent/workflows/old.md",
+			".agent/skills/cleanup-project/SKILL.md",
 		},
 		Modified: []string{
 			"CLAUDE.md",
@@ -240,6 +251,29 @@ func TestIsFrameworkSkill(t *testing.T) {
 			got := isFrameworkSkill(tt.name)
 			if got != tt.want {
 				t.Errorf("isFrameworkSkill(%q) = %v, want %v", tt.name, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIsWorkflowSkill(t *testing.T) {
+	tests := []struct {
+		name string
+		want bool
+	}{
+		{"create-prd", true},
+		{"code-review", true},
+		{"troubleshooting", true},
+		{"react", false},
+		{"go-guide", false},
+		{"nonexistent", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := isWorkflowSkill(tt.name)
+			if got != tt.want {
+				t.Errorf("isWorkflowSkill(%q) = %v, want %v", tt.name, got, tt.want)
 			}
 		})
 	}

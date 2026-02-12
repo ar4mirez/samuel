@@ -9,7 +9,7 @@ This system is compatible with the [AGENTS.md](https://agents.md) standard (v1.0
 **How it works:**
 - `CLAUDE.md` contains Operations section (AGENTS.md compatible) + full methodology
 - For other AI tools (Cursor, Codex, Copilot), create symlink: `ln -s CLAUDE.md AGENTS.md`
-- Or use `@.agent/workflows/generate-agents-md.md` to generate standalone AGENTS.md
+- Or use `@.agent/skills/generate-agents-md/SKILL.md` to generate standalone AGENTS.md
 
 **File Priority:**
 | Tool | Primary | Fallback |
@@ -50,13 +50,17 @@ This system is compatible with the [AGENTS.md](https://agents.md) standard (v1.0
 │   │   ├── SKILL.md
 │   │   └── references/
 │   └── ... (30 more)     # nextjs, express, fastapi, flask, gin, echo, fiber, axum, actix-web, rocket, spring-boot-kotlin, ktor, android-compose, spring-boot-java, quarkus, micronaut, aspnet-core, blazor, unity, laravel, symfony, wordpress, swiftui, uikit, vapor, sinatra, hanami, flutter, shelf, dart-frog
-├── workflows/            # Structured workflows for complex features
-│   ├── README.md         # Workflow documentation
-│   ├── create-prd.md     # Product Requirements Document workflow
-│   ├── generate-tasks.md # Task breakdown workflow
-│   ├── initialize-project.md # Project initialization workflow
-│   ├── troubleshooting.md # Debugging workflow
-│   └── generate-agents-md.md # AGENTS.md generator for cross-tool compatibility
+│   ├── create-prd/            # Workflow skills (on-demand)
+│   │   └── SKILL.md           # Product Requirements Document workflow
+│   ├── generate-tasks/
+│   │   └── SKILL.md           # Task breakdown workflow
+│   ├── initialize-project/
+│   │   └── SKILL.md           # Project initialization workflow
+│   ├── troubleshooting/
+│   │   └── SKILL.md           # Debugging workflow
+│   ├── generate-agents-md/
+│   │   └── SKILL.md           # AGENTS.md generator for cross-tool compatibility
+│   └── ... (8 more)      # code-review, security-audit, testing-strategy, cleanup-project, refactoring, dependency-update, document-work, create-skill
 ├── tasks/                # PRDs and task lists for complex features
 │   ├── NNNN-prd-feature-name.md
 │   └── tasks-NNNN-prd-feature-name.md
@@ -119,13 +123,13 @@ This system is compatible with the [AGENTS.md](https://agents.md) standard (v1.0
 - After choosing between competing architectures
 - After discovering non-obvious solution
 
-### workflows/ (Complex Feature Development)
+### Skills for Complex Feature Development
 **Trigger**: COMPLEX mode scenario (>10 files, new subsystem, unclear scope)
-**Created by**: Already exists (templates provided)
+**Created by**: Already exists (skills provided in `.agent/skills/`)
 **Contains**:
-- `create-prd.md` - Workflow for generating Product Requirements Documents
-- `generate-tasks.md` - Workflow for breaking PRDs into task lists
-- `README.md` - Workflow documentation and usage guide
+- `.agent/skills/create-prd/SKILL.md` - Skill for generating Product Requirements Documents
+- `.agent/skills/generate-tasks/SKILL.md` - Skill for breaking PRDs into task lists
+- `.agent/skills/README.md` - Skills documentation and usage guide
 
 **When to use**:
 - Building major feature (user authentication, payment system, etc.)
@@ -136,9 +140,9 @@ This system is compatible with the [AGENTS.md](https://agents.md) standard (v1.0
 **Example workflow**:
 1. User: "Build user authentication with OAuth"
 2. AI detects COMPLEX mode → Suggests PRD workflow
-3. AI uses `@.agent/workflows/create-prd.md` → Creates `.agent/tasks/0001-prd-user-auth.md`
+3. AI uses `@.agent/skills/create-prd/SKILL.md` → Creates `.agent/tasks/0001-prd-user-auth.md`
 4. User reviews and approves PRD
-5. AI uses `@.agent/workflows/generate-tasks.md` → Creates `./agent/tasks/tasks-0001-prd-user-auth.md`
+5. AI uses `@.agent/skills/generate-tasks/SKILL.md` → Creates `./agent/tasks/tasks-0001-prd-user-auth.md`
 6. AI implements tasks step-by-step with verification
 
 **Skip workflows for**:

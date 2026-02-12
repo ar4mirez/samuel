@@ -3,7 +3,7 @@
 > **Purpose**: Get started with the AICoF (Artificial Intelligence Coding Framework) in 5 minutes
 >
 > **Status**: Production ready, use immediately
-> **Version**: 1.7.0
+> **Version**: 1.8.0
 > **Cross-Tool**: AGENTS.md compatible (works with Cursor, Codex, Copilot, etc.)
 
 ---
@@ -34,8 +34,9 @@ ln -s CLAUDE.md AGENTS.md
 
 AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI development framework** with:
 - **35+ specific guardrails** (not vague suggestions)
-- **5 language guides** (TypeScript, Python, Go, Rust, Kotlin)
-- **5 workflows** (PRD, tasks, init, troubleshooting, AGENTS.md generator)
+- **21 language guide skills** (TypeScript, Python, Go, Rust, Kotlin, Java, C#, PHP, Swift, C/C++, Ruby, SQL, Shell, R, Dart, HTML/CSS, Lua, Assembly, CUDA, Solidity, Zig)
+- **15 workflow skills** (PRD, tasks, init, troubleshooting, AGENTS.md generator, code-review, security-audit, testing-strategy, cleanup-project, refactoring, dependency-update, document-work, update-framework, create-rfd, create-skill)
+- **33 framework skills** (React, Next.js, Express, Django, FastAPI, Flask, Gin, and more)
 - **3 modes** (ATOMIC/FEATURE/COMPLEX - scales from bugs to architecture)
 - **Cross-tool compatible** (AGENTS.md standard)
 
@@ -48,7 +49,7 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 ### Path 1: New Project (10 minutes)
 
 ```
-@.agent/workflows/initialize-project.md
+@.agent/skills/initialize-project/SKILL.md
 
 "Initialize a new [TypeScript/Python/Go/Rust] project with [describe your project]"
 ```
@@ -72,7 +73,7 @@ AICoF (Artificial Intelligence Coding Framework) is an **opinionated AI developm
 ### Path 2: Existing Project (5 minutes)
 
 ```
-@.agent/workflows/initialize-project.md
+@.agent/skills/initialize-project/SKILL.md
 
 "This is an existing project - analyze the codebase"
 ```
@@ -210,11 +211,11 @@ AI automatically loads the right guide based on file extensions:
 
 ```
 Step 1: Create PRD
-@.agent/workflows/create-prd.md
+@.agent/skills/create-prd/SKILL.md
 "Build user authentication with OAuth"
 
 Step 2: Generate Tasks
-@.agent/workflows/generate-tasks.md
+@.agent/skills/generate-tasks/SKILL.md
 (AI uses the PRD you just created)
 
 Step 3: Implement
@@ -253,7 +254,7 @@ AI will:
 ### I'm Stuck!
 
 ```
-@.agent/workflows/troubleshooting.md
+@.agent/skills/troubleshooting/SKILL.md
 
 AI will:
 1. Help you debug systematically
@@ -282,14 +283,18 @@ your-project/
     │   │   └── references/      # Detailed patterns, pitfalls
     │   ├── typescript-guide/    # TypeScript language guide skill
     │   ├── python-guide/        # Python language guide skill
-    │   └── ...                  # 18 more language guide skills
-    │
-    ├── workflows/               # On-demand workflows
-    │   ├── create-prd.md        # Product Requirements Doc
-    │   ├── generate-tasks.md    # Task breakdown
-    │   ├── initialize-project.md # New/existing project setup
-    │   ├── troubleshooting.md   # Debug guide
-    │   └── generate-agents-md.md # Cross-tool compatibility
+    │   ├── ...                  # 18 more language guide skills
+    │   ├── create-prd/          # Workflow skills (on-demand)
+    │   │   └── SKILL.md         # Product Requirements Doc
+    │   ├── generate-tasks/
+    │   │   └── SKILL.md         # Task breakdown
+    │   ├── initialize-project/
+    │   │   └── SKILL.md         # New/existing project setup
+    │   ├── troubleshooting/
+    │   │   └── SKILL.md         # Debug guide
+    │   ├── generate-agents-md/
+    │   │   └── SKILL.md         # Cross-tool compatibility
+    │   └── ... (8 more)         # code-review, security-audit, testing-strategy, cleanup-project, refactoring, dependency-update, document-work, create-skill
     │
     ├── tasks/                   # PRDs and task lists (complex features)
     │   └── (created on demand)
@@ -407,7 +412,7 @@ One logical change per commit. Tests must pass. Guardrails must validate.
 **A:** Explicitly remind: "Validate all guardrails from CLAUDE.md before committing." AI will check each ✓.
 
 ### Q: Can I use this with [Cursor/GitHub Copilot/other AI]?
-**A:** Yes! Create a symlink: `ln -s CLAUDE.md AGENTS.md`. This follows the AGENTS.md standard that 20+ AI tools support. Or use the workflow: `@.agent/workflows/generate-agents-md.md`
+**A:** Yes! Create a symlink: `ln -s CLAUDE.md AGENTS.md`. This follows the AGENTS.md standard that 20+ AI tools support. Or use the workflow: `@.agent/skills/generate-agents-md/SKILL.md`
 
 ---
 
@@ -415,13 +420,13 @@ One logical change per commit. Tests must pass. Guardrails must validate.
 
 ### Tests Failing After Change?
 ```
-@.agent/workflows/troubleshooting.md
+@.agent/skills/troubleshooting/SKILL.md
 "Tests broke after my last commit"
 ```
 
 ### Stuck on Same Issue >30 Minutes?
 ```
-@.agent/workflows/troubleshooting.md
+@.agent/skills/troubleshooting/SKILL.md
 "Been stuck on [issue] for 45 minutes, tried [what you tried]"
 ```
 
@@ -438,7 +443,7 @@ AI will:
 
 ### Build Broken?
 ```
-@.agent/workflows/troubleshooting.md
+@.agent/skills/troubleshooting/SKILL.md
 "Build failing with [error message]"
 ```
 
@@ -450,14 +455,14 @@ AI will check: dependencies, versions, config, environment variables, common iss
 
 ### Built-in Help
 - **Quick Reference**: CLAUDE.md lines 7-30
-- **Troubleshooting**: @.agent/workflows/troubleshooting.md
-- **Initialization**: @.agent/workflows/initialize-project.md
+- **Troubleshooting**: @.agent/skills/troubleshooting/SKILL.md
+- **Initialization**: @.agent/skills/initialize-project/SKILL.md
 - **Language-specific**: @.agent/skills/[your-language]-guide/SKILL.md
 
 ### Documentation
 - **Core guardrails**: [CLAUDE.md](CLAUDE.md)
 - **System overview**: [.agent/README.md](.agent/README.md)
-- **Workflows**: [.agent/workflows/README.md](.agent/workflows/README.md)
+- **Skills**: [.agent/skills/README.md](.agent/skills/README.md)
 
 ### Ask AI
 ```
@@ -510,19 +515,19 @@ AI has full context of the system and can explain anything.
 
 ```bash
 # Initialize new project
-@.agent/workflows/initialize-project.md
+@.agent/skills/initialize-project/SKILL.md
 
 # Create PRD for complex feature
-@.agent/workflows/create-prd.md
+@.agent/skills/create-prd/SKILL.md
 
 # Generate tasks from PRD
-@.agent/workflows/generate-tasks.md
+@.agent/skills/generate-tasks/SKILL.md
 
 # Get unstuck / debug
-@.agent/workflows/troubleshooting.md
+@.agent/skills/troubleshooting/SKILL.md
 
 # Generate AGENTS.md for cross-tool compatibility
-@.agent/workflows/generate-agents-md.md
+@.agent/skills/generate-agents-md/SKILL.md
 
 # Check guardrails
 @CLAUDE.md lines 33-80
@@ -545,7 +550,7 @@ ln -s CLAUDE.md AGENTS.md
 
 ---
 
-*Version: 1.7.0*
+*Version: 1.8.0*
 *Last Updated: 2025-01-14*
 *Status: Production Ready*
 *Cross-Tool: AGENTS.md Compatible*

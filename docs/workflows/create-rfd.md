@@ -75,7 +75,7 @@ stateDiagram-v2
 ### Basic Usage
 
 ```
-@.agent/workflows/create-rfd.md
+@.agent/skills/create-rfd/SKILL.md
 
 Explore options for caching strategy in our API
 ```
@@ -83,7 +83,7 @@ Explore options for caching strategy in our API
 ### With Context
 
 ```
-@.agent/workflows/create-rfd.md
+@.agent/skills/create-rfd/SKILL.md
 
 I'm considering authentication approaches for our new service.
 We could use JWT tokens, session cookies, or OAuth. The service needs
