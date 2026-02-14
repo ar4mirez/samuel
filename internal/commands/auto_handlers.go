@@ -24,15 +24,21 @@ func runAutoInit(cmd *cobra.Command, args []string) error {
 	aiTool, _ := cmd.Flags().GetString("ai-tool")
 	maxIter, _ := cmd.Flags().GetInt("max-iterations")
 	prdPath, _ := cmd.Flags().GetString("prd")
+	sandbox, _ := cmd.Flags().GetString("sandbox")
+	sandboxImage, _ := cmd.Flags().GetString("sandbox-image")
 
 	if !core.IsValidAITool(aiTool) {
 		return fmt.Errorf("unsupported AI tool: %s (supported: %v)", aiTool, core.GetSupportedAITools())
 	}
 
-	return initAutoDir(cwd, prdPath, aiTool, maxIter)
+	if !core.IsValidSandboxMode(sandbox) {
+		return fmt.Errorf("unsupported sandbox mode: %s (supported: %v)", sandbox, core.GetSupportedSandboxModes())
+	}
+
+	return initAutoDir(cwd, prdPath, aiTool, maxIter, sandbox, sandboxImage)
 }
 
-func initAutoDir(cwd, prdPath, aiTool string, maxIter int) error {
+func initAutoDir(cwd, prdPath, aiTool string, maxIter int, sandbox, sandboxImage string) error {
 	autoDir := core.GetAutoDir(cwd)
 	if err := os.MkdirAll(autoDir, 0755); err != nil {
 		return fmt.Errorf("failed to create auto directory: %w", err)
@@ -43,7 +49,8 @@ func initAutoDir(cwd, prdPath, aiTool string, maxIter int) error {
 		QualityChecks: detectQualityChecks(cwd),
 		AITool:        aiTool,
 		PromptFile:    filepath.Join(core.AutoDir, core.AutoPromptFile),
-		Sandbox:       "none",
+		Sandbox:       sandbox,
+		SandboxImage:  sandboxImage,
 	}
 
 	if err := writeAutoFiles(autoDir, config); err != nil {
@@ -201,6 +208,10 @@ func printStatus(prd *core.AutoPRD) {
 	ui.TableRow("Progress", fmt.Sprintf("%d/%d tasks (%d%%)",
 		prd.Progress.CompletedTasks, prd.Progress.TotalTasks, pct))
 	ui.TableRow("AI Tool", prd.Config.AITool)
+	ui.TableRow("Sandbox", prd.Config.Sandbox)
+	if prd.Config.Sandbox == core.SandboxDocker && prd.Config.SandboxImage != "" {
+		ui.TableRow("Sandbox Image", prd.Config.SandboxImage)
+	}
 	ui.TableRow("Max Iterations", fmt.Sprintf("%d", prd.Config.MaxIterations))
 
 	if prd.Progress.TotalIterationsRun > 0 {
@@ -250,9 +261,29 @@ func runAutoStart(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to load prd.json: %w", err)
 	}
 
+	// Resolve sandbox mode: CLI flag overrides prd.json config
+	sandbox := prd.Config.Sandbox
+	if flagSandbox, _ := cmd.Flags().GetString("sandbox"); flagSandbox != "" {
+		sandbox = flagSandbox
+	}
+	sandboxImage := prd.Config.SandboxImage
+	if flagImage, _ := cmd.Flags().GetString("sandbox-image"); flagImage != "" {
+		sandboxImage = flagImage
+	}
+
+	if !core.IsValidSandboxMode(sandbox) {
+		return fmt.Errorf("unsupported sandbox mode: %s (supported: %v)", sandbox, core.GetSupportedSandboxModes())
+	}
+
+	if sandbox == core.SandboxDocker {
+		if err := core.CheckDockerAvailable(); err != nil {
+			return fmt.Errorf("docker sandbox unavailable: %w", err)
+		}
+	}
+
 	dryRun, _ := cmd.Flags().GetBool("dry-run")
 	if dryRun {
-		return printDryRun(prd, scriptPath)
+		return printDryRun(prd, scriptPath, sandbox, sandboxImage)
 	}
 
 	skipConfirm, _ := cmd.Flags().GetBool("yes")
@@ -265,14 +296,26 @@ func runAutoStart(cmd *cobra.Command, args []string) error {
 	}
 
 	iterOverride, _ := cmd.Flags().GetInt("iterations")
+
+	if sandbox == core.SandboxDocker {
+		return executeAutoScriptInDocker(cwd, scriptPath, iterOverride, sandboxImage)
+	}
 	return executeAutoScript(scriptPath, iterOverride)
 }
 
-func printDryRun(prd *core.AutoPRD, scriptPath string) error {
+func printDryRun(prd *core.AutoPRD, scriptPath, sandbox, sandboxImage string) error {
 	ui.Header("Dry Run - Auto Loop")
 	ui.Print("  Script:     %s", scriptPath)
 	ui.Print("  AI Tool:    %s", prd.Config.AITool)
 	ui.Print("  Iterations: %d", prd.Config.MaxIterations)
+	ui.Print("  Sandbox:    %s", sandbox)
+	if sandbox == core.SandboxDocker {
+		image := sandboxImage
+		if image == "" {
+			image = core.DefaultSandboxImage
+		}
+		ui.Print("  Image:      %s", image)
+	}
 	ui.Print("  Tasks:      %d pending", countTaskStatuses(prd)["pending"])
 	ui.Print("")
 	ui.Print("  Quality checks:")
@@ -300,6 +343,41 @@ func executeAutoScript(scriptPath string, iterOverride int) error {
 
 	if err := execCmd.Run(); err != nil {
 		return fmt.Errorf("auto loop exited with error: %w", err)
+	}
+	return nil
+}
+
+func executeAutoScriptInDocker(cwd, scriptPath string, iterOverride int, image string) error {
+	relScript, err := filepath.Rel(cwd, scriptPath)
+	if err != nil {
+		return fmt.Errorf("failed to compute relative script path: %w", err)
+	}
+
+	dockerConfig := core.DockerSandboxConfig{
+		Image:        image,
+		WorkDir:      cwd,
+		ScriptPath:   relScript,
+		IterOverride: iterOverride,
+	}
+
+	args := core.BuildDockerArgs(dockerConfig)
+	execCmd := exec.Command("docker", args...)
+	execCmd.Stdout = os.Stdout
+	execCmd.Stderr = os.Stderr
+	execCmd.Stdin = os.Stdin
+
+	resolvedImage := image
+	if resolvedImage == "" {
+		resolvedImage = core.DefaultSandboxImage
+	}
+
+	ui.Info("Starting auto loop in Docker sandbox...")
+	ui.Print("  Image: %s", resolvedImage)
+	ui.Print("  Mount: %s -> %s", cwd, core.DockerContainerMount)
+	ui.Print("")
+
+	if err := execCmd.Run(); err != nil {
+		return fmt.Errorf("docker auto loop exited with error: %w", err)
 	}
 	return nil
 }

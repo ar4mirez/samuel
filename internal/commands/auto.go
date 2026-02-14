@@ -169,9 +169,13 @@ func init() {
 	autoInitCmd.Flags().String("prd", "", "Path to PRD markdown file to convert")
 	autoInitCmd.Flags().String("ai-tool", "claude", "AI tool to use (claude, amp, cursor, codex)")
 	autoInitCmd.Flags().Int("max-iterations", 50, "Maximum loop iterations")
+	autoInitCmd.Flags().String("sandbox", "none", "Sandbox mode (none, docker)")
+	autoInitCmd.Flags().String("sandbox-image", "", "Docker image for sandbox mode (default: ubuntu:latest)")
 
 	// start flags
 	autoStartCmd.Flags().Int("iterations", 0, "Override max iterations for this run")
 	autoStartCmd.Flags().BoolP("yes", "y", false, "Skip confirmation prompt")
 	autoStartCmd.Flags().Bool("dry-run", false, "Show what would happen without executing")
+	autoStartCmd.Flags().String("sandbox", "", "Override sandbox mode for this run (none, docker)")
+	autoStartCmd.Flags().String("sandbox-image", "", "Override Docker image for this run")
 }

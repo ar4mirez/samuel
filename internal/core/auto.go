@@ -77,6 +77,7 @@ type AutoConfig struct {
 	AITool        string   `json:"ai_tool"`
 	PromptFile    string   `json:"ai_prompt_file"`
 	Sandbox       string   `json:"sandbox"`
+	SandboxImage  string   `json:"sandbox_image,omitempty"`
 }
 
 // AutoTask represents a single task in the autonomous loop
@@ -123,7 +124,7 @@ func NewAutoPRD(name, description string) *AutoPRD {
 			QualityChecks: []string{"go test ./...", "go vet ./...", "go build ./..."},
 			AITool:        "claude",
 			PromptFile:    filepath.Join(AutoDir, AutoPromptFile),
-			Sandbox:       "none",
+			Sandbox:       SandboxNone,
 		},
 		Tasks: []AutoTask{},
 		Progress: AutoProgress{
