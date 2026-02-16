@@ -72,12 +72,13 @@ type AutoProject struct {
 
 // AutoConfig holds loop configuration
 type AutoConfig struct {
-	MaxIterations int      `json:"max_iterations"`
-	QualityChecks []string `json:"quality_checks"`
-	AITool        string   `json:"ai_tool"`
-	PromptFile    string   `json:"ai_prompt_file"`
-	Sandbox       string   `json:"sandbox"`
-	SandboxImage  string   `json:"sandbox_image,omitempty"`
+	MaxIterations   int      `json:"max_iterations"`
+	QualityChecks   []string `json:"quality_checks"`
+	AITool          string   `json:"ai_tool"`
+	PromptFile      string   `json:"ai_prompt_file"`
+	Sandbox         string   `json:"sandbox"`
+	SandboxImage    string   `json:"sandbox_image,omitempty"`
+	SandboxTemplate string   `json:"sandbox_template,omitempty"`
 }
 
 // AutoTask represents a single task in the autonomous loop

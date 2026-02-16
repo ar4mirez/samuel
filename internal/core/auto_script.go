@@ -13,6 +13,12 @@ func GenerateAutoScript(config AutoConfig) string {
 	sb.WriteString(scriptHeader())
 	sb.WriteString(scriptConfig(config))
 	sb.WriteString(scriptValidation())
+
+	// Skip tool setup in docker-sandbox mode — tools are pre-installed
+	if config.Sandbox != SandboxDockerSandbox {
+		sb.WriteString(scriptSetup())
+	}
+
 	sb.WriteString(scriptHelpers())
 	sb.WriteString(scriptAIToolFunction())
 	sb.WriteString(scriptMainLoop())
@@ -57,6 +63,92 @@ if [ ! -f "$PROMPT_FILE" ]; then
   echo "ERROR: $PROMPT_FILE not found."
   exit 1
 fi
+
+`
+}
+
+func scriptSetup() string {
+	return `# --- Setup: ensure AI tool is available ---
+install_nodejs() {
+  if command -v node &>/dev/null && command -v npm &>/dev/null; then
+    return 0
+  fi
+  echo "Installing Node.js..."
+  if [ "$(id -u)" = "0" ]; then
+    # Running as root — use system package manager
+    if command -v apt-get &>/dev/null; then
+      apt-get update -qq && apt-get install -y -qq nodejs npm curl >/dev/null 2>&1
+    elif command -v apk &>/dev/null; then
+      apk add --quiet nodejs npm curl >/dev/null 2>&1
+    elif command -v yum &>/dev/null; then
+      yum install -y -q nodejs npm curl >/dev/null 2>&1
+    else
+      echo "ERROR: Cannot install Node.js — unsupported package manager."
+      echo "Use an image with Node.js pre-installed (e.g., node:lts)."
+      exit 1
+    fi
+  else
+    echo "ERROR: Node.js not found and cannot install as non-root user."
+    echo "Use an image with Node.js pre-installed (e.g., node:lts) or run with --sandbox-image node:lts"
+    exit 1
+  fi
+}
+
+npm_install_tool() {
+  local package="$1"
+  if [ "$(id -u)" = "0" ]; then
+    npm install -g "$package" 2>&1
+  else
+    # Non-root: install to user-local prefix so no sudo required
+    local prefix="${HOME:-/tmp}/.local"
+    mkdir -p "$prefix"
+    npm install --prefix "$prefix" -g "$package" 2>&1
+    export PATH="$prefix/bin:$PATH"
+  fi
+}
+
+setup_ai_tool() {
+  if command -v "$AI_TOOL" &>/dev/null; then
+    echo "AI tool '$AI_TOOL' found in PATH."
+    return 0
+  fi
+
+  echo "AI tool '$AI_TOOL' not found. Attempting auto-install..."
+
+  case "$AI_TOOL" in
+    claude)
+      install_nodejs
+      npm_install_tool @anthropic-ai/claude-code
+      ;;
+    codex)
+      install_nodejs
+      npm_install_tool @openai/codex
+      ;;
+    amp)
+      if ! command -v curl &>/dev/null; then
+        echo "ERROR: curl required to install amp. Install curl or use a different image."
+        exit 1
+      fi
+      curl -fsSL https://install.amp.dev | bash 2>&1
+      ;;
+    *)
+      echo "ERROR: Cannot auto-install unsupported AI tool: $AI_TOOL"
+      echo "Supported for auto-install: claude, codex, amp"
+      exit 1
+      ;;
+  esac
+
+  # Verify installation succeeded
+  if ! command -v "$AI_TOOL" &>/dev/null; then
+    echo "ERROR: Failed to install '$AI_TOOL'. It is not in PATH after installation."
+    echo "Try using an image with '$AI_TOOL' pre-installed, or install it manually."
+    exit 1
+  fi
+
+  echo "Successfully installed '$AI_TOOL'."
+}
+
+setup_ai_tool
 
 `
 }

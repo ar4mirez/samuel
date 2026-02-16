@@ -16,8 +16,11 @@ import (
 const (
 	SandboxNone          = "none"
 	SandboxDocker        = "docker"
-	DefaultSandboxImage  = "ubuntu:latest"
+	SandboxDockerSandbox = "docker-sandbox"
+	DefaultSandboxImage  = "node:lts"
 	DockerContainerMount = "/workspace"
+	// DefaultDockerSandboxAgent is the agent name for docker sandbox run.
+	DefaultDockerSandboxAgent = "claude"
 )
 
 // aiToolEnvVarNames is the allowlist of environment variables passed into the
@@ -42,9 +45,18 @@ type DockerSandboxConfig struct {
 	IterOverride int
 }
 
+// DockerSandboxRunConfig holds the parameters for docker sandbox run.
+type DockerSandboxRunConfig struct {
+	Agent     string   // agent name: claude, codex, copilot, gemini, kiro
+	WorkDir   string   // host path (mounted at same absolute path inside VM)
+	Template  string   // custom template override (optional)
+	Name      string   // sandbox name for persistence (optional)
+	AgentArgs []string // extra arguments passed after -- to the agent
+}
+
 // GetSupportedSandboxModes returns the list of supported sandbox modes.
 func GetSupportedSandboxModes() []string {
-	return []string{SandboxNone, SandboxDocker}
+	return []string{SandboxNone, SandboxDocker, SandboxDockerSandbox}
 }
 
 // IsValidSandboxMode checks if the given mode is supported.
@@ -114,4 +126,70 @@ func getAIToolEnvVars() []string {
 		}
 	}
 	return envArgs
+}
+
+// CheckDockerSandboxAvailable verifies the docker sandbox plugin is installed.
+func CheckDockerSandboxAvailable() error {
+	if _, err := exec.LookPath("docker"); err != nil {
+		return fmt.Errorf("docker not found in PATH; install Docker Desktop")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := exec.CommandContext(ctx, "docker", "sandbox", "version").Run(); err != nil {
+		return fmt.Errorf(
+			"docker sandbox plugin not available; " +
+				"install Docker Desktop with Sandbox support",
+		)
+	}
+	return nil
+}
+
+// BuildDockerSandboxArgs constructs the argument slice for docker sandbox run.
+func BuildDockerSandboxArgs(config DockerSandboxRunConfig) []string {
+	agent := config.Agent
+	if agent == "" {
+		agent = DefaultDockerSandboxAgent
+	}
+
+	args := []string{"sandbox", "run"}
+
+	if config.Name != "" {
+		args = append(args, "--name", config.Name)
+	}
+	if config.Template != "" {
+		args = append(args, "--template", config.Template)
+	}
+
+	args = append(args, agent)
+
+	workDir := config.WorkDir
+	if workDir == "" {
+		workDir = "."
+	}
+	args = append(args, workDir)
+
+	if len(config.AgentArgs) > 0 {
+		args = append(args, "--")
+		args = append(args, config.AgentArgs...)
+	}
+
+	return args
+}
+
+// GetAgentArgs returns the CLI arguments for an AI agent in docker sandbox.
+func GetAgentArgs(aiTool, promptPath string) []string {
+	switch aiTool {
+	case "claude":
+		return []string{
+			"--print", "--dangerously-skip-permissions", promptPath,
+		}
+	case "codex":
+		return []string{"--prompt-file", promptPath, "--auto"}
+	case "amp":
+		return []string{"--prompt-file", promptPath}
+	default:
+		return []string{promptPath}
+	}
 }
