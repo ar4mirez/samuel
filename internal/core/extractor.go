@@ -314,24 +314,60 @@ func (e *Extractor) GetDestPath() string {
 	return e.destPath
 }
 
-// CopyFromCache copies a single file from the cache source directly
-// The filePath is the destination path; source is found in template/ subdirectory
+// CopyFromCache copies a file or directory from the cache source directly.
+// The filePath is the destination path; source is found in template/ subdirectory.
+// If the source is a directory, all contents are copied recursively.
 func CopyFromCache(cachePath, destPath, filePath string) error {
-	srcFile := filepath.Join(cachePath, TemplatePrefix, filePath)
-	dstFile := filepath.Join(destPath, filePath)
+	srcPath := filepath.Join(cachePath, TemplatePrefix, filePath)
+	dstPath := filepath.Join(destPath, filePath)
 
-	// Ensure destination directory exists
-	if err := os.MkdirAll(filepath.Dir(dstFile), 0755); err != nil {
+	srcInfo, err := os.Stat(srcPath)
+	if err != nil {
+		return fmt.Errorf("source not found: %w", err)
+	}
+
+	if srcInfo.IsDir() {
+		return copyDirRecursive(srcPath, dstPath)
+	}
+
+	return copySingleFile(srcPath, dstPath)
+}
+
+// copyDirRecursive copies a directory and all its contents recursively
+func copyDirRecursive(srcDir, dstDir string) error {
+	return filepath.Walk(srcDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		relPath, err := filepath.Rel(srcDir, path)
+		if err != nil {
+			return err
+		}
+
+		destPath := filepath.Join(dstDir, relPath)
+
+		if info.IsDir() {
+			return os.MkdirAll(destPath, 0755)
+		}
+
+		return copySingleFile(path, destPath)
+	})
+}
+
+// copySingleFile copies a single file from src to dst
+func copySingleFile(srcPath, dstPath string) error {
+	if err := os.MkdirAll(filepath.Dir(dstPath), 0755); err != nil {
 		return err
 	}
 
-	src, err := os.Open(srcFile)
+	src, err := os.Open(srcPath)
 	if err != nil {
 		return err
 	}
 	defer src.Close()
 
-	dst, err := os.Create(dstFile)
+	dst, err := os.Create(dstPath)
 	if err != nil {
 		return err
 	}
