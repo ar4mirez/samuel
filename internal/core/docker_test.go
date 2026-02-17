@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -273,17 +274,43 @@ func TestBuildDockerSandboxArgs(t *testing.T) {
 	}
 }
 
-func TestGetAgentArgs(t *testing.T) {
+func TestGetAgentArgs_Claude(t *testing.T) {
+	// Claude reads the prompt file and passes content as -p arg
+	promptFile := filepath.Join(t.TempDir(), "prompt.md")
+	if err := os.WriteFile(promptFile, []byte("do the work"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	args, err := GetAgentArgs("claude", promptFile)
+	if err != nil {
+		t.Fatalf("GetAgentArgs claude: %v", err)
+	}
+
+	wantArgs := []string{"-p", "do the work", "--dangerously-skip-permissions"}
+	if len(args) != len(wantArgs) {
+		t.Fatalf("got %d args %v, want %d args %v",
+			len(args), args, len(wantArgs), wantArgs)
+	}
+	for i, got := range args {
+		if got != wantArgs[i] {
+			t.Errorf("arg[%d] = %q, want %q", i, got, wantArgs[i])
+		}
+	}
+}
+
+func TestGetAgentArgs_Claude_MissingFile(t *testing.T) {
+	_, err := GetAgentArgs("claude", "/nonexistent/prompt.md")
+	if err == nil {
+		t.Error("expected error for missing prompt file, got nil")
+	}
+}
+
+func TestGetAgentArgs_OtherTools(t *testing.T) {
 	tests := []struct {
 		aiTool     string
 		promptPath string
 		wantArgs   []string
 	}{
-		{
-			"claude",
-			"/path/prompt.md",
-			[]string{"--print", "--dangerously-skip-permissions", "/path/prompt.md"},
-		},
 		{
 			"codex",
 			"/path/prompt.md",
@@ -303,7 +330,10 @@ func TestGetAgentArgs(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.aiTool, func(t *testing.T) {
-			args := GetAgentArgs(tt.aiTool, tt.promptPath)
+			args, err := GetAgentArgs(tt.aiTool, tt.promptPath)
+			if err != nil {
+				t.Fatalf("GetAgentArgs %s: %v", tt.aiTool, err)
+			}
 			if len(args) != len(tt.wantArgs) {
 				t.Fatalf("got %d args %v, want %d args %v",
 					len(args), args, len(tt.wantArgs), tt.wantArgs)

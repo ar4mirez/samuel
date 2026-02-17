@@ -452,7 +452,10 @@ func executeAutoInDockerSandbox(
 
 		ui.Info("[iteration:%d] Starting iteration %d of %d", i, i, maxIter)
 
-		agentArgs := core.GetAgentArgs(prd.Config.AITool, promptPath)
+		agentArgs, err := core.GetAgentArgs(prd.Config.AITool, promptPath)
+		if err != nil {
+			return fmt.Errorf("iteration %d: %w", i, err)
+		}
 		config := core.DockerSandboxRunConfig{
 			Agent:     prd.Config.AITool,
 			WorkDir:   cwd,

@@ -177,17 +177,23 @@ func BuildDockerSandboxArgs(config DockerSandboxRunConfig) []string {
 }
 
 // GetAgentArgs returns the CLI arguments for an AI agent in docker sandbox.
-func GetAgentArgs(aiTool, promptPath string) []string {
+// For Claude, the prompt file content must be read and passed as the -p
+// argument since Claude CLI does not have a --prompt-file flag.
+func GetAgentArgs(aiTool, promptPath string) ([]string, error) {
 	switch aiTool {
 	case "claude":
-		return []string{
-			"--print", "--dangerously-skip-permissions", promptPath,
+		content, err := os.ReadFile(promptPath)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read prompt file: %w", err)
 		}
+		return []string{
+			"-p", string(content), "--dangerously-skip-permissions",
+		}, nil
 	case "codex":
-		return []string{"--prompt-file", promptPath, "--auto"}
+		return []string{"--prompt-file", promptPath, "--auto"}, nil
 	case "amp":
-		return []string{"--prompt-file", promptPath}
+		return []string{"--prompt-file", promptPath}, nil
 	default:
-		return []string{promptPath}
+		return []string{promptPath}, nil
 	}
 }

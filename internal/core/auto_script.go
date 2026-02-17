@@ -190,7 +190,9 @@ func scriptAIToolFunction() string {
 	return `run_ai_tool() {
   case "$AI_TOOL" in
     claude)
-      claude --print --dangerously-skip-permissions "$PROMPT_FILE"
+      # Claude CLI -p takes a prompt string, not a file path.
+      # Read file contents and pass as the prompt argument.
+      claude -p "$(cat "$PROMPT_FILE")" --dangerously-skip-permissions
       ;;
     amp)
       amp --prompt-file "$PROMPT_FILE"
