@@ -34,8 +34,11 @@ func TestGenerateAutoScript_SetupInstallsClaude(t *testing.T) {
 
 	script := GenerateAutoScript(config)
 
-	if !strings.Contains(script, "@anthropic-ai/claude-code") {
-		t.Error("expected claude-code npm package in setup section")
+	if !strings.Contains(script, "claude.ai/install.sh") {
+		t.Error("expected native installer URL in setup section")
+	}
+	if !strings.Contains(script, "native_install_claude") {
+		t.Error("expected native_install_claude function in setup section")
 	}
 }
 
@@ -100,18 +103,9 @@ func TestGenerateAutoScript_SetupHandlesNonRootUser(t *testing.T) {
 	if !strings.Contains(script, `id -u`) {
 		t.Error("expected root user detection via id -u")
 	}
-	// Should fall back to /tmp when HOME doesn't exist or isn't writable
-	if !strings.Contains(script, `base="/tmp"`) {
-		t.Error("expected /tmp fallback when HOME is unavailable")
-	}
-	if !strings.Contains(script, `-d "$HOME"`) {
-		t.Error("expected check that HOME directory exists before using it")
-	}
-	if !strings.Contains(script, `-w "$HOME"`) {
-		t.Error("expected check that HOME directory is writable")
-	}
-	if !strings.Contains(script, `"$HOME" != "/"`) {
-		t.Error("expected guard against HOME=/ (Docker --user default)")
+	// ensure_writable_home handles HOME fallback centrally
+	if !strings.Contains(script, "ensure_writable_home") {
+		t.Error("expected ensure_writable_home function in setup section")
 	}
 }
 
@@ -253,5 +247,50 @@ func TestGenerateAutoScript_SectionOrderDockerSandbox(t *testing.T) {
 	}
 	if helpersIdx >= mainLoopIdx {
 		t.Error("helpers section should come before main loop section")
+	}
+}
+
+func TestGenerateAutoScript_SetupClaudeNpmFallback(t *testing.T) {
+	config := AutoConfig{
+		MaxIterations: 10,
+		AITool:        "claude",
+		PromptFile:    ".claude/auto/prompt.md",
+	}
+
+	script := GenerateAutoScript(config)
+
+	// npm fallback should still be present for claude
+	if !strings.Contains(script, "@anthropic-ai/claude-code") {
+		t.Error("expected npm fallback with claude-code package")
+	}
+	if !strings.Contains(script, "Native install failed, falling back to npm") {
+		t.Error("expected npm fallback message when native install fails")
+	}
+}
+
+func TestGenerateAutoScript_SetupEnsuresWritableHome(t *testing.T) {
+	config := AutoConfig{
+		MaxIterations: 10,
+		AITool:        "claude",
+		PromptFile:    ".claude/auto/prompt.md",
+	}
+
+	script := GenerateAutoScript(config)
+
+	// ensure_writable_home should guard against unwritable HOME
+	if !strings.Contains(script, "ensure_writable_home") {
+		t.Error("expected ensure_writable_home function")
+	}
+	if !strings.Contains(script, `export HOME="/tmp"`) {
+		t.Error("expected HOME=/tmp fallback in ensure_writable_home")
+	}
+	if !strings.Contains(script, `-d "$HOME"`) {
+		t.Error("expected check that HOME directory exists")
+	}
+	if !strings.Contains(script, `-w "$HOME"`) {
+		t.Error("expected check that HOME directory is writable")
+	}
+	if !strings.Contains(script, `"$HOME" != "/"`) {
+		t.Error("expected guard against HOME=/ (Docker --user default)")
 	}
 }

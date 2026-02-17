@@ -69,13 +69,21 @@ fi
 
 func scriptSetup() string {
 	return `# --- Setup: ensure AI tool is available ---
+ensure_writable_home() {
+  # When Docker runs --user UID:GID without /etc/passwd entry, HOME
+  # defaults to "/" which is not writable. Set a safe fallback.
+  if [ -n "${HOME:-}" ] && [ "$HOME" != "/" ] && [ -d "$HOME" ] && [ -w "$HOME" ]; then
+    return 0
+  fi
+  export HOME="/tmp"
+}
+
 install_nodejs() {
   if command -v node &>/dev/null && command -v npm &>/dev/null; then
     return 0
   fi
   echo "Installing Node.js..."
   if [ "$(id -u)" = "0" ]; then
-    # Running as root — use system package manager
     if command -v apt-get &>/dev/null; then
       apt-get update -qq && apt-get install -y -qq nodejs npm curl >/dev/null 2>&1
     elif command -v apk &>/dev/null; then
@@ -99,18 +107,23 @@ npm_install_tool() {
   if [ "$(id -u)" = "0" ]; then
     npm install -g "$package" 2>&1
   else
-    # Non-root: install to a writable prefix so no sudo required.
-    # When Docker runs --user UID:GID without /etc/passwd entry, HOME
-    # defaults to "/" which is not writable. Use /tmp as safe fallback.
-    local base="/tmp"
-    if [ -n "${HOME:-}" ] && [ "$HOME" != "/" ] && [ -d "$HOME" ] && [ -w "$HOME" ]; then
-      base="$HOME"
-    fi
-    local prefix="$base/.local"
+    local prefix="$HOME/.local"
     mkdir -p "$prefix"
     npm install --prefix "$prefix" -g "$package" 2>&1
     export PATH="$prefix/bin:$PATH"
   fi
+}
+
+native_install_claude() {
+  if ! command -v curl &>/dev/null; then
+    echo "curl not found, skipping native installer."
+    return 1
+  fi
+  echo "Installing Claude Code via native installer..."
+  curl -fsSL https://claude.ai/install.sh | bash 2>&1
+  # Native installer puts binary in ~/.local/bin
+  export PATH="$HOME/.local/bin:$PATH"
+  command -v claude &>/dev/null
 }
 
 setup_ai_tool() {
@@ -120,11 +133,15 @@ setup_ai_tool() {
   fi
 
   echo "AI tool '$AI_TOOL' not found. Attempting auto-install..."
+  ensure_writable_home
 
   case "$AI_TOOL" in
     claude)
-      install_nodejs
-      npm_install_tool @anthropic-ai/claude-code
+      if ! native_install_claude; then
+        echo "Native install failed, falling back to npm..."
+        install_nodejs
+        npm_install_tool @anthropic-ai/claude-code
+      fi
       ;;
     codex)
       install_nodejs
