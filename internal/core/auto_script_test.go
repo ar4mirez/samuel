@@ -205,18 +205,22 @@ func TestGenerateAutoScript_SectionOrder(t *testing.T) {
 
 	validationIdx := strings.Index(script, "# --- Validation ---")
 	setupIdx := strings.Index(script, "# --- Setup:")
+	authIdx := strings.Index(script, "# --- Auth Check:")
 	helpersIdx := strings.Index(script, "# --- Helpers ---")
 	mainLoopIdx := strings.Index(script, "# --- Main Loop ---")
 
-	if validationIdx < 0 || setupIdx < 0 || helpersIdx < 0 || mainLoopIdx < 0 {
+	if validationIdx < 0 || setupIdx < 0 || authIdx < 0 || helpersIdx < 0 || mainLoopIdx < 0 {
 		t.Fatal("missing expected section headers in generated script")
 	}
 
 	if validationIdx >= setupIdx {
 		t.Error("validation section should come before setup section")
 	}
-	if setupIdx >= helpersIdx {
-		t.Error("setup section should come before helpers section")
+	if setupIdx >= authIdx {
+		t.Error("setup section should come before auth check section")
+	}
+	if authIdx >= helpersIdx {
+		t.Error("auth check section should come before helpers section")
 	}
 	if helpersIdx >= mainLoopIdx {
 		t.Error("helpers section should come before main loop section")
@@ -233,17 +237,21 @@ func TestGenerateAutoScript_SectionOrderDockerSandbox(t *testing.T) {
 
 	script := GenerateAutoScript(config)
 
-	// Should go directly from validation to helpers (no setup)
+	// Should go directly from validation to auth check to helpers (no setup)
 	validationIdx := strings.Index(script, "# --- Validation ---")
+	authIdx := strings.Index(script, "# --- Auth Check:")
 	helpersIdx := strings.Index(script, "# --- Helpers ---")
 	mainLoopIdx := strings.Index(script, "# --- Main Loop ---")
 
-	if validationIdx < 0 || helpersIdx < 0 || mainLoopIdx < 0 {
+	if validationIdx < 0 || authIdx < 0 || helpersIdx < 0 || mainLoopIdx < 0 {
 		t.Fatal("missing expected section headers in generated script")
 	}
 
-	if validationIdx >= helpersIdx {
-		t.Error("validation section should come before helpers section")
+	if validationIdx >= authIdx {
+		t.Error("validation section should come before auth check section")
+	}
+	if authIdx >= helpersIdx {
+		t.Error("auth check section should come before helpers section")
 	}
 	if helpersIdx >= mainLoopIdx {
 		t.Error("helpers section should come before main loop section")

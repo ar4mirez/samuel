@@ -32,6 +32,7 @@ var aiToolEnvVarNames = []string{
 	"AMP_API_KEY",
 	"AI_TOOL",
 	"PAUSE_SECONDS",
+	"MAX_CONSECUTIVE_FAILURES",
 	"TERM",
 }
 

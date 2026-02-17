@@ -19,6 +19,7 @@ func GenerateAutoScript(config AutoConfig) string {
 		sb.WriteString(scriptSetup())
 	}
 
+	sb.WriteString(scriptAuthCheck())
 	sb.WriteString(scriptHelpers())
 	sb.WriteString(scriptAIToolFunction())
 	sb.WriteString(scriptMainLoop())
@@ -45,6 +46,7 @@ PRD_FILE="%s/%s"
 PROGRESS_FILE="%s/%s"
 PROMPT_FILE="%s/%s"
 PAUSE_SECONDS="${PAUSE_SECONDS:-2}"
+MAX_CONSECUTIVE_FAILURES="${MAX_CONSECUTIVE_FAILURES:-3}"
 
 `, config.MaxIterations, config.AITool,
 		AutoDir, AutoPRDFile,
@@ -176,6 +178,35 @@ setup_ai_tool
 `
 }
 
+func scriptAuthCheck() string {
+	return `# --- Auth Check: warn if API key is missing ---
+check_ai_auth() {
+  case "$AI_TOOL" in
+    claude)
+      if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+        echo "WARNING: ANTHROPIC_API_KEY is not set."
+        echo "Claude Code requires authentication. Set the env var before running:"
+        echo "  export ANTHROPIC_API_KEY=your-key-here"
+      fi
+      ;;
+    codex)
+      if [ -z "${OPENAI_API_KEY:-}" ]; then
+        echo "WARNING: OPENAI_API_KEY is not set. Codex requires authentication."
+      fi
+      ;;
+    amp)
+      if [ -z "${AMP_API_KEY:-}" ]; then
+        echo "WARNING: AMP_API_KEY is not set. Amp requires authentication."
+      fi
+      ;;
+  esac
+}
+
+check_ai_auth
+
+`
+}
+
 func scriptHelpers() string {
 	return `# --- Helpers ---
 log() {
@@ -235,6 +266,7 @@ func scriptAIToolFunction() string {
 func scriptMainLoop() string {
 	return `# --- Main Loop ---
 log "Auto loop starting. Max iterations: $MAX_ITERATIONS. Tool: $AI_TOOL"
+consecutive_failures=0
 
 for ((i = 1; i <= MAX_ITERATIONS; i++)); do
   log "[iteration:$i] Starting iteration $i of $MAX_ITERATIONS"
@@ -245,8 +277,16 @@ for ((i = 1; i <= MAX_ITERATIONS; i++)); do
   fi
 
   log "[iteration:$i] Running $AI_TOOL..."
-  if ! run_ai_tool; then
-    log "[iteration:$i] ERROR: AI tool exited with error. Continuing to next iteration..."
+  if run_ai_tool; then
+    consecutive_failures=0
+  else
+    consecutive_failures=$((consecutive_failures + 1))
+    log "[iteration:$i] ERROR: AI tool exited with error. ($consecutive_failures consecutive)"
+    if [ "$consecutive_failures" -ge "$MAX_CONSECUTIVE_FAILURES" ]; then
+      log "FATAL: $MAX_CONSECUTIVE_FAILURES consecutive failures reached. Aborting loop."
+      log "Check that '$AI_TOOL' is configured correctly (auth, API keys, network)."
+      exit 1
+    fi
   fi
 
   sleep "$PAUSE_SECONDS"

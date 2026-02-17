@@ -438,6 +438,15 @@ func executeAutoInDockerSandbox(
 		}
 	}
 
+	maxConsecFailures := 3
+	if val := os.Getenv("MAX_CONSECUTIVE_FAILURES"); val != "" {
+		if parsed, err := strconv.Atoi(val); err == nil {
+			maxConsecFailures = parsed
+		}
+	}
+
+	consecutiveFailures := 0
+
 	var i int
 	for i = 1; i <= maxIter; i++ {
 		currentPRD, err := core.LoadAutoPRD(prdPath)
@@ -470,7 +479,13 @@ func executeAutoInDockerSandbox(
 		execCmd.Stdin = os.Stdin
 
 		if err := execCmd.Run(); err != nil {
-			ui.Warn("[iteration:%d] Agent exited with error: %v. Continuing...", i, err)
+			consecutiveFailures++
+			ui.Warn("[iteration:%d] Agent exited with error: %v. (%d consecutive)", i, err, consecutiveFailures)
+			if consecutiveFailures >= maxConsecFailures {
+				return fmt.Errorf("%d consecutive failures reached — aborting. Check AI tool auth/config", maxConsecFailures)
+			}
+		} else {
+			consecutiveFailures = 0
 		}
 
 		time.Sleep(time.Duration(pauseSeconds) * time.Second)
