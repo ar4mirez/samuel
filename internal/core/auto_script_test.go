@@ -100,6 +100,13 @@ func TestGenerateAutoScript_SetupHandlesNonRootUser(t *testing.T) {
 	if !strings.Contains(script, `id -u`) {
 		t.Error("expected root user detection via id -u")
 	}
+	// Should fall back to /tmp when HOME doesn't exist
+	if !strings.Contains(script, `base="/tmp"`) {
+		t.Error("expected /tmp fallback when HOME is unavailable")
+	}
+	if !strings.Contains(script, `-d "$HOME"`) {
+		t.Error("expected check that HOME directory exists before using it")
+	}
 }
 
 func TestGenerateAutoScript_SetupSkipsWhenToolExists(t *testing.T) {

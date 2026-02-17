@@ -99,8 +99,13 @@ npm_install_tool() {
   if [ "$(id -u)" = "0" ]; then
     npm install -g "$package" 2>&1
   else
-    # Non-root: install to user-local prefix so no sudo required
-    local prefix="${HOME:-/tmp}/.local"
+    # Non-root: install to a writable prefix so no sudo required.
+    # Prefer $HOME if it exists, otherwise fall back to /tmp.
+    local base="/tmp"
+    if [ -n "${HOME:-}" ] && [ -d "$HOME" ]; then
+      base="$HOME"
+    fi
+    local prefix="$base/.local"
     mkdir -p "$prefix"
     npm install --prefix "$prefix" -g "$package" 2>&1
     export PATH="$prefix/bin:$PATH"

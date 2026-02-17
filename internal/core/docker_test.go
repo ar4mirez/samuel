@@ -343,6 +343,29 @@ func TestGetAIToolEnvVars(t *testing.T) {
 	}
 }
 
+func TestGetAIToolEnvVars_NoHomeOrPath(t *testing.T) {
+	// HOME and PATH must NOT be forwarded — they leak host paths into
+	// the container where they don't exist.
+	for _, name := range aiToolEnvVarNames {
+		os.Unsetenv(name)
+	}
+
+	// Set HOME and PATH to verify they are NOT in the forwarded list
+	t.Setenv("HOME", "/Users/testuser")
+	t.Setenv("PATH", "/usr/local/bin:/usr/bin")
+	t.Setenv("ANTHROPIC_API_KEY", "sk-test")
+
+	envArgs := getAIToolEnvVars()
+	joined := strings.Join(envArgs, " ")
+
+	if strings.Contains(joined, "HOME=") {
+		t.Errorf("HOME should NOT be forwarded to container: %v", envArgs)
+	}
+	if strings.Contains(joined, "PATH=") {
+		t.Errorf("PATH should NOT be forwarded to container: %v", envArgs)
+	}
+}
+
 func TestCheckDockerAvailable(t *testing.T) {
 	// Only run if docker is available on the test machine
 	if _, err := exec.LookPath("docker"); err != nil {

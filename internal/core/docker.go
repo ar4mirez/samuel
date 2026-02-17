@@ -32,9 +32,7 @@ var aiToolEnvVarNames = []string{
 	"AMP_API_KEY",
 	"AI_TOOL",
 	"PAUSE_SECONDS",
-	"HOME",
 	"TERM",
-	"PATH",
 }
 
 // DockerSandboxConfig holds the parameters needed to build a docker run command.
