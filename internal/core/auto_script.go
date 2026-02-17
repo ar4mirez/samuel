@@ -100,9 +100,10 @@ npm_install_tool() {
     npm install -g "$package" 2>&1
   else
     # Non-root: install to a writable prefix so no sudo required.
-    # Prefer $HOME if it exists, otherwise fall back to /tmp.
+    # When Docker runs --user UID:GID without /etc/passwd entry, HOME
+    # defaults to "/" which is not writable. Use /tmp as safe fallback.
     local base="/tmp"
-    if [ -n "${HOME:-}" ] && [ -d "$HOME" ]; then
+    if [ -n "${HOME:-}" ] && [ "$HOME" != "/" ] && [ -d "$HOME" ] && [ -w "$HOME" ]; then
       base="$HOME"
     fi
     local prefix="$base/.local"
