@@ -18,6 +18,7 @@ Subcommands:
   convert   Convert markdown PRD/tasks to prd.json
   status    Show loop progress and current state
   start     Begin or resume the autonomous loop
+  pilot     Fully autonomous discover-and-implement loop (zero setup)
   task      Manage individual tasks (list, complete, skip, reset, add)
 
 Workflow:
@@ -43,9 +44,8 @@ var autoInitCmd = &cobra.Command{
 
 Creates .claude/auto/ with:
   - prd.json      Machine-readable task state
-  - progress.md  Append-only learnings journal
+  - progress.md   Append-only learnings journal
   - prompt.md     Iteration prompt template
-  - auto.sh       Loop orchestration script
 
 If --prd is provided, converts the PRD and associated task file to prd.json.
 
@@ -85,10 +85,10 @@ Examples:
 var autoStartCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Begin or resume the autonomous loop",
-	Long: `Start the autonomous AI coding loop by executing auto.sh.
+	Long: `Start the autonomous AI coding loop.
 
-The loop will iterate until all tasks are completed or the maximum
-iteration count is reached.
+The loop runs natively in Go, invoking the configured AI tool on each
+iteration until all tasks are completed or the max iteration count is reached.
 
 Examples:
   samuel auto start
@@ -159,6 +159,7 @@ func init() {
 	autoCmd.AddCommand(autoStatusCmd)
 	autoCmd.AddCommand(autoStartCmd)
 	autoCmd.AddCommand(autoTaskCmd)
+	registerPilotCmd()
 	autoTaskCmd.AddCommand(autoTaskListCmd)
 	autoTaskCmd.AddCommand(autoTaskCompleteCmd)
 	autoTaskCmd.AddCommand(autoTaskSkipCmd)

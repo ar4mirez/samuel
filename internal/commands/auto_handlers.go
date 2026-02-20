@@ -3,10 +3,7 @@ package commands
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"strconv"
-	"time"
 
 	"github.com/ar4mirez/samuel/internal/core"
 	"github.com/ar4mirez/samuel/internal/ui"
@@ -85,12 +82,6 @@ func writeAutoFiles(autoDir string, config core.AutoConfig) error {
 		return fmt.Errorf("failed to write prompt.md: %w", err)
 	}
 
-	scriptContent := core.GenerateAutoScript(config)
-	scriptPath := filepath.Join(autoDir, core.AutoScriptFile)
-	if err := os.WriteFile(scriptPath, []byte(scriptContent), 0755); err != nil {
-		return fmt.Errorf("failed to write auto.sh: %w", err)
-	}
-
 	progressPath := filepath.Join(autoDir, core.AutoProgressFile)
 	if _, err := os.Stat(progressPath); os.IsNotExist(err) {
 		if err := os.WriteFile(progressPath, []byte(""), 0644); err != nil {
@@ -108,7 +99,6 @@ func printInitSummary(autoDir, prdPath string) {
 	ui.Print("    %s", filepath.Join(core.AutoDir, core.AutoPRDFile))
 	ui.Print("    %s", filepath.Join(core.AutoDir, core.AutoProgressFile))
 	ui.Print("    %s", filepath.Join(core.AutoDir, core.AutoPromptFile))
-	ui.Print("    %s", filepath.Join(core.AutoDir, core.AutoScriptFile))
 	ui.Print("")
 
 	if prdPath != "" {
@@ -203,6 +193,9 @@ func printStatus(prd *core.AutoPRD) {
 	ui.Header("Auto Loop Status")
 
 	ui.TableRow("Project", prd.Project.Name)
+	if prd.Config.PilotMode {
+		ui.TableRow("Mode", "pilot (autonomous discovery)")
+	}
 	ui.TableRow("Status", prd.Progress.Status)
 
 	pct := 0
@@ -228,6 +221,8 @@ func printStatus(prd *core.AutoPRD) {
 		ui.TableRow("Last Iteration", prd.Progress.LastIterationAt)
 	}
 
+	printPilotStatus(prd)
+
 	// Count by status
 	counts := countTaskStatuses(prd)
 	ui.Print("")
@@ -241,6 +236,25 @@ func printStatus(prd *core.AutoPRD) {
 	}
 }
 
+func printPilotStatus(prd *core.AutoPRD) {
+	if !prd.Config.PilotMode || prd.Config.PilotConfig == nil {
+		return
+	}
+
+	pilot := prd.Config.PilotConfig
+	ui.TableRow("Discover Interval", fmt.Sprintf("every %d iterations", pilot.DiscoverInterval))
+	ui.TableRow("Max Tasks/Discovery", fmt.Sprintf("%d", pilot.MaxDiscoveryTasks))
+	if pilot.Focus != "" {
+		ui.TableRow("Focus", pilot.Focus)
+	}
+	if prd.Progress.DiscoveryIterations > 0 {
+		ui.TableRow("Discovery Iterations", fmt.Sprintf("%d", prd.Progress.DiscoveryIterations))
+	}
+	if prd.Progress.ImplIterations > 0 {
+		ui.TableRow("Impl Iterations", fmt.Sprintf("%d", prd.Progress.ImplIterations))
+	}
+}
+
 func countTaskStatuses(prd *core.AutoPRD) map[string]int {
 	counts := map[string]int{
 		"pending": 0, "in_progress": 0, "completed": 0, "skipped": 0, "blocked": 0,
@@ -251,41 +265,7 @@ func countTaskStatuses(prd *core.AutoPRD) map[string]int {
 	return counts
 }
 
-func runAutoStart(cmd *cobra.Command, args []string) error {
-	cwd, err := os.Getwd()
-	if err != nil {
-		return fmt.Errorf("failed to get working directory: %w", err)
-	}
-
-	scriptPath := filepath.Join(core.GetAutoDir(cwd), core.AutoScriptFile)
-	if _, err := os.Stat(scriptPath); os.IsNotExist(err) {
-		return fmt.Errorf("auto.sh not found. Run 'samuel auto init' first")
-	}
-
-	prdPath := core.GetAutoPRDPath(cwd)
-	prd, err := core.LoadAutoPRD(prdPath)
-	if err != nil {
-		return fmt.Errorf("failed to load prd.json: %w", err)
-	}
-
-	// Resolve sandbox mode: CLI flag overrides prd.json config
-	sandbox := prd.Config.Sandbox
-	if flagSandbox, _ := cmd.Flags().GetString("sandbox"); flagSandbox != "" {
-		sandbox = flagSandbox
-	}
-	sandboxImage := prd.Config.SandboxImage
-	if flagImage, _ := cmd.Flags().GetString("sandbox-image"); flagImage != "" {
-		sandboxImage = flagImage
-	}
-	sandboxTemplate := prd.Config.SandboxTemplate
-	if flagTpl, _ := cmd.Flags().GetString("sandbox-template"); flagTpl != "" {
-		sandboxTemplate = flagTpl
-	}
-
-	if !core.IsValidSandboxMode(sandbox) {
-		return fmt.Errorf("unsupported sandbox mode: %s (supported: %v)", sandbox, core.GetSupportedSandboxModes())
-	}
-
+func validateSandbox(sandbox string) error {
 	if sandbox == core.SandboxDocker {
 		if err := core.CheckDockerAvailable(); err != nil {
 			return fmt.Errorf("docker sandbox unavailable: %w", err)
@@ -296,326 +276,5 @@ func runAutoStart(cmd *cobra.Command, args []string) error {
 			return fmt.Errorf("docker sandbox unavailable: %w", err)
 		}
 	}
-
-	dryRun, _ := cmd.Flags().GetBool("dry-run")
-	if dryRun {
-		return printDryRun(prd, cwd, scriptPath, sandbox, sandboxImage, sandboxTemplate)
-	}
-
-	skipConfirm, _ := cmd.Flags().GetBool("yes")
-	if !skipConfirm {
-		confirmed, err := ui.Confirm("Start autonomous loop?", false)
-		if err != nil || !confirmed {
-			ui.Info("Cancelled")
-			return nil
-		}
-	}
-
-	iterOverride, _ := cmd.Flags().GetInt("iterations")
-
-	switch sandbox {
-	case core.SandboxDocker:
-		return executeAutoScriptInDocker(cwd, scriptPath, iterOverride, sandboxImage)
-	case core.SandboxDockerSandbox:
-		return executeAutoInDockerSandbox(cwd, prd, iterOverride, sandboxTemplate)
-	default:
-		return executeAutoScript(scriptPath, iterOverride)
-	}
-}
-
-func printDryRun(prd *core.AutoPRD, cwd, scriptPath, sandbox, sandboxImage, sandboxTemplate string) error {
-	ui.Header("Dry Run - Auto Loop")
-	ui.Print("  Script:     %s", scriptPath)
-	ui.Print("  AI Tool:    %s", prd.Config.AITool)
-	ui.Print("  Iterations: %d", prd.Config.MaxIterations)
-	ui.Print("  Sandbox:    %s", sandbox)
-	if sandbox == core.SandboxDocker {
-		image := sandboxImage
-		if image == "" {
-			image = core.DefaultSandboxImage
-		}
-		ui.Print("  Image:      %s", image)
-	}
-	if sandbox == core.SandboxDockerSandbox {
-		ui.Print("  Workspace:  %s (same path inside VM)", cwd)
-		if sandboxTemplate != "" {
-			ui.Print("  Template:   %s", sandboxTemplate)
-		}
-		ui.Print("  Note:       API keys read from shell config (~/.bashrc, ~/.zshrc)")
-	}
-	ui.Print("  Tasks:      %d pending", countTaskStatuses(prd)["pending"])
-	ui.Print("")
-	ui.Print("  Quality checks:")
-	for _, check := range prd.Config.QualityChecks {
-		ui.Print("    - %s", check)
-	}
-	ui.Print("")
-	ui.Info("Run without --dry-run to execute")
-	return nil
-}
-
-func executeAutoScript(scriptPath string, iterOverride int) error {
-	args := []string{scriptPath}
-	if iterOverride > 0 {
-		args = append(args, fmt.Sprintf("%d", iterOverride))
-	}
-
-	execCmd := exec.Command("bash", args...)
-	execCmd.Stdout = os.Stdout
-	execCmd.Stderr = os.Stderr
-	execCmd.Stdin = os.Stdin
-
-	ui.Info("Starting auto loop...")
-	ui.Print("")
-
-	if err := execCmd.Run(); err != nil {
-		return fmt.Errorf("auto loop exited with error: %w", err)
-	}
-	return nil
-}
-
-func executeAutoScriptInDocker(cwd, scriptPath string, iterOverride int, image string) error {
-	relScript, err := filepath.Rel(cwd, scriptPath)
-	if err != nil {
-		return fmt.Errorf("failed to compute relative script path: %w", err)
-	}
-
-	dockerConfig := core.DockerSandboxConfig{
-		Image:        image,
-		WorkDir:      cwd,
-		ScriptPath:   relScript,
-		IterOverride: iterOverride,
-	}
-
-	args := core.BuildDockerArgs(dockerConfig)
-	execCmd := exec.Command("docker", args...)
-	execCmd.Stdout = os.Stdout
-	execCmd.Stderr = os.Stderr
-	execCmd.Stdin = os.Stdin
-
-	resolvedImage := image
-	if resolvedImage == "" {
-		resolvedImage = core.DefaultSandboxImage
-	}
-
-	ui.Info("Starting auto loop in Docker sandbox...")
-	ui.Print("  Image: %s", resolvedImage)
-	ui.Print("  Mount: %s -> %s", cwd, core.DockerContainerMount)
-	ui.Print("")
-
-	if err := execCmd.Run(); err != nil {
-		return fmt.Errorf("docker auto loop exited with error: %w", err)
-	}
-	return nil
-}
-
-func executeAutoInDockerSandbox(
-	cwd string,
-	prd *core.AutoPRD,
-	iterOverride int,
-	template string,
-) error {
-	maxIter := prd.Config.MaxIterations
-	if iterOverride > 0 {
-		maxIter = iterOverride
-	}
-
-	prdPath := core.GetAutoPRDPath(cwd)
-	promptPath := filepath.Join(cwd, prd.Config.PromptFile)
-
-	ui.Info("Starting auto loop in Docker Sandbox (microVM)...")
-	ui.Print("  Agent:     %s", prd.Config.AITool)
-	ui.Print("  Workspace: %s", cwd)
-	if template != "" {
-		ui.Print("  Template:  %s", template)
-	}
-	ui.Print("")
-
-	pauseSeconds := 2
-	if val := os.Getenv("PAUSE_SECONDS"); val != "" {
-		if parsed, err := strconv.Atoi(val); err == nil {
-			pauseSeconds = parsed
-		}
-	}
-
-	maxConsecFailures := 3
-	if val := os.Getenv("MAX_CONSECUTIVE_FAILURES"); val != "" {
-		if parsed, err := strconv.Atoi(val); err == nil {
-			maxConsecFailures = parsed
-		}
-	}
-
-	consecutiveFailures := 0
-
-	var i int
-	for i = 1; i <= maxIter; i++ {
-		currentPRD, err := core.LoadAutoPRD(prdPath)
-		if err != nil {
-			return fmt.Errorf("iteration %d: failed to reload prd.json: %w", i, err)
-		}
-
-		if currentPRD.GetNextTask() == nil {
-			ui.Success("All tasks completed after %d iterations!", i-1)
-			return nil
-		}
-
-		ui.Info("[iteration:%d] Starting iteration %d of %d", i, i, maxIter)
-
-		agentArgs, err := core.GetAgentArgs(prd.Config.AITool, promptPath)
-		if err != nil {
-			return fmt.Errorf("iteration %d: %w", i, err)
-		}
-		config := core.DockerSandboxRunConfig{
-			Agent:     prd.Config.AITool,
-			WorkDir:   cwd,
-			Template:  template,
-			AgentArgs: agentArgs,
-		}
-
-		args := core.BuildDockerSandboxArgs(config)
-		execCmd := exec.Command("docker", args...)
-		execCmd.Stdout = os.Stdout
-		execCmd.Stderr = os.Stderr
-		execCmd.Stdin = os.Stdin
-
-		if err := execCmd.Run(); err != nil {
-			consecutiveFailures++
-			ui.Warn("[iteration:%d] Agent exited with error: %v. (%d consecutive)", i, err, consecutiveFailures)
-			if consecutiveFailures >= maxConsecFailures {
-				return fmt.Errorf("%d consecutive failures reached — aborting. Check AI tool auth/config", maxConsecFailures)
-			}
-		} else {
-			consecutiveFailures = 0
-		}
-
-		time.Sleep(time.Duration(pauseSeconds) * time.Second)
-		ui.Info("[iteration:%d] Iteration %d complete.", i, i)
-	}
-
-	// Final summary
-	finalPRD, _ := core.LoadAutoPRD(prdPath)
-	if finalPRD != nil {
-		finalPRD.RecalculateProgress()
-		remaining := finalPRD.Progress.TotalTasks - finalPRD.Progress.CompletedTasks
-		ui.Info("Loop finished after %d iterations. Remaining tasks: %d", i-1, remaining)
-	}
-
-	return nil
-}
-
-func runAutoTaskList(cmd *cobra.Command, args []string) error {
-	cwd, err := os.Getwd()
-	if err != nil {
-		return fmt.Errorf("failed to get working directory: %w", err)
-	}
-
-	prd, err := core.LoadAutoPRD(core.GetAutoPRDPath(cwd))
-	if err != nil {
-		return fmt.Errorf("no auto loop found. Run 'samuel auto init' first")
-	}
-
-	ui.Header("Tasks")
-	for _, t := range prd.Tasks {
-		icon := taskStatusIcon(t.Status)
-		indent := 0
-		if t.ParentID != "" {
-			indent = 1
-		}
-		ui.ListItem(indent, "%s %s %s", icon, t.ID, t.Title)
-	}
-
-	ui.Print("")
-	prd.RecalculateProgress()
-	ui.Print("Total: %d  Completed: %d  Pending: %d",
-		prd.Progress.TotalTasks, prd.Progress.CompletedTasks,
-		prd.Progress.TotalTasks-prd.Progress.CompletedTasks)
-	return nil
-}
-
-func taskStatusIcon(status string) string {
-	switch status {
-	case core.TaskStatusCompleted:
-		return "[x]"
-	case core.TaskStatusSkipped:
-		return "[-]"
-	case core.TaskStatusBlocked:
-		return "[!]"
-	case core.TaskStatusInProgress:
-		return "[>]"
-	default:
-		return "[ ]"
-	}
-}
-
-func runAutoTaskComplete(cmd *cobra.Command, args []string) error {
-	return updateTaskStatus(args[0], func(prd *core.AutoPRD, id string) error {
-		return prd.CompleteTask(id, "", 0)
-	}, "completed")
-}
-
-func runAutoTaskSkip(cmd *cobra.Command, args []string) error {
-	return updateTaskStatus(args[0], func(prd *core.AutoPRD, id string) error {
-		return prd.SkipTask(id)
-	}, "skipped")
-}
-
-func runAutoTaskReset(cmd *cobra.Command, args []string) error {
-	return updateTaskStatus(args[0], func(prd *core.AutoPRD, id string) error {
-		return prd.ResetTask(id)
-	}, "reset to pending")
-}
-
-func updateTaskStatus(id string, fn func(*core.AutoPRD, string) error, label string) error {
-	cwd, err := os.Getwd()
-	if err != nil {
-		return fmt.Errorf("failed to get working directory: %w", err)
-	}
-
-	prdPath := core.GetAutoPRDPath(cwd)
-	prd, err := core.LoadAutoPRD(prdPath)
-	if err != nil {
-		return fmt.Errorf("no auto loop found. Run 'samuel auto init' first")
-	}
-
-	if err := fn(prd, id); err != nil {
-		return err
-	}
-
-	if err := prd.Save(prdPath); err != nil {
-		return fmt.Errorf("failed to save prd.json: %w", err)
-	}
-
-	ui.Success("Task %s %s", id, label)
-	return nil
-}
-
-func runAutoTaskAdd(cmd *cobra.Command, args []string) error {
-	cwd, err := os.Getwd()
-	if err != nil {
-		return fmt.Errorf("failed to get working directory: %w", err)
-	}
-
-	prdPath := core.GetAutoPRDPath(cwd)
-	prd, err := core.LoadAutoPRD(prdPath)
-	if err != nil {
-		return fmt.Errorf("no auto loop found. Run 'samuel auto init' first")
-	}
-
-	task := core.AutoTask{
-		ID:       args[0],
-		Title:    args[1],
-		Status:   core.TaskStatusPending,
-		Priority: core.TaskPriorityMedium,
-	}
-
-	if err := prd.AddTask(task); err != nil {
-		return err
-	}
-
-	if err := prd.Save(prdPath); err != nil {
-		return fmt.Errorf("failed to save prd.json: %w", err)
-	}
-
-	ui.Success("Task %s added: %s", task.ID, task.Title)
 	return nil
 }
