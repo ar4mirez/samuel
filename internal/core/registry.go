@@ -139,6 +139,7 @@ var Workflows = []Component{
 	{Name: "theme-factory", Path: ".claude/skills/theme-factory", Description: "Artifact theming toolkit", Category: "workflow", Tags: []string{"theme", "styling", "design", "colors"}},
 	{Name: "web-artifacts-builder", Path: ".claude/skills/web-artifacts-builder", Description: "React/shadcn web apps", Category: "workflow", Tags: []string{"react", "typescript", "shadcn", "vite"}},
 	{Name: "webapp-testing", Path: ".claude/skills/webapp-testing", Description: "Playwright web testing", Category: "workflow", Tags: []string{"playwright", "testing", "browser", "e2e"}},
+	{Name: "sync-claude-md", Path: ".claude/skills/sync-claude-md", Description: "Sync per-folder CLAUDE.md files", Category: "workflow", Tags: []string{"sync", "claude-md", "folder", "context"}},
 }
 
 // Skills contains bundled skills (community skills loaded dynamically).
@@ -226,6 +227,7 @@ var Skills = []Component{
 	{Name: "theme-factory", Path: ".claude/skills/theme-factory", Description: "Artifact theming toolkit workflow", Category: "workflow", Tags: []string{"theme", "styling", "design"}},
 	{Name: "web-artifacts-builder", Path: ".claude/skills/web-artifacts-builder", Description: "React/shadcn web apps workflow", Category: "workflow", Tags: []string{"react", "typescript", "shadcn"}},
 	{Name: "webapp-testing", Path: ".claude/skills/webapp-testing", Description: "Playwright web testing workflow", Category: "workflow", Tags: []string{"playwright", "testing", "browser"}},
+	{Name: "sync-claude-md", Path: ".claude/skills/sync-claude-md", Description: "Sync per-folder CLAUDE.md files workflow", Category: "workflow", Tags: []string{"sync", "claude-md", "folder"}},
 }
 
 // CoreFiles contains essential files always installed

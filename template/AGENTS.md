@@ -185,6 +185,7 @@ Skills extend AI capabilities. Load a skill when task matches its description.
 | mcp-builder | MCP server creation and integration guide. |
 | refactoring | Technical debt remediation and code restructuring workflow. |
 | security-audit | Security assessment workflow (OWASP, auth, vulnerabilities). |
+| sync-claude-md | Sync per-folder CLAUDE.md/AGENTS.md with context-aware content. |
 | testing-strategy | Test planning and coverage strategy workflow. |
 | theme-factory | Toolkit for styling artifacts with pre-set or custom themes. |
 | troubleshooting | Debugging and problem-solving workflow. |

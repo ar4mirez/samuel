@@ -44,7 +44,7 @@ Samuel (Artificial Intelligence Coding Framework) is an **opinionated AI develop
 
     [:octicons-arrow-right-24: Framework Guides](frameworks/index.md)
 
--   :material-cog:{ .lg .middle } **23 Workflows**
+-   :material-cog:{ .lg .middle } **24 Workflows**
 
     ---
 
@@ -56,7 +56,7 @@ Samuel (Artificial Intelligence Coding Framework) is an **opinionated AI develop
 
     ---
 
-    Full-featured CLI with 13 commands: search, info, add, remove, diff, config, skill, auto, and more. Discover components before installing.
+    Full-featured CLI with 14 commands: search, info, add, remove, diff, config, skill, auto, sync, and more. Discover components before installing.
 
     [:octicons-arrow-right-24: CLI Reference](reference/cli.md)
 
@@ -110,7 +110,7 @@ Samuel (Artificial Intelligence Coding Framework) is an **opinionated AI develop
 
 - [x] AI loads CLAUDE.md automatically (500 lines of guardrails + operations)
 - [x] Language guides auto-load based on file extensions
-- [x] **13 CLI commands** for component discovery and management
+- [x] **14 CLI commands** for component discovery and management
 - [x] Progressive - starts minimal, grows with your project
 
 [:octicons-arrow-right-24: Full Quick Start Guide](getting-started/quick-start.md)
@@ -225,10 +225,10 @@ graph LR
 | **AGENTS.md** | Compatible |
 | **Total Files** | 70+ markdown files |
 | **CLAUDE.md** | ~500 lines |
-| **CLI Commands** | 13 (init, search, info, add, remove, list, config, diff, update, doctor, version, skill, auto) |
+| **CLI Commands** | 14 (init, search, info, add, remove, list, config, diff, update, doctor, version, skill, auto, sync) |
 | **Language Guides** | 21 (all major programming languages) |
 | **Framework Guides** | 33 (across 11 language families) |
-| **Workflows** | 23 (planning, quality, maintenance, utility, autonomous, community) |
+| **Workflows** | 24 (planning, quality, maintenance, utility, autonomous, community) |
 | **Guardrails** | 35+ testable rules |
 
 ---

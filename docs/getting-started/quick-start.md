@@ -60,7 +60,7 @@ Get up and running with Samuel (Artificial Intelligence Coding Framework) in und
 
 - [x] AI loads CLAUDE.md automatically (500 lines of guardrails + operations)
 - [x] Language guides auto-load based on file extensions
-- [x] 13 CLI commands for component management
+- [x] 14 CLI commands for component management
 - [x] Progressive - starts minimal, grows with your project
 - [x] Cross-tool: Works with any AI assistant via AGENTS.md
 
@@ -223,6 +223,7 @@ Here are the most useful commands to get started:
 | `version` | Show version info | `samuel version` |
 | `skill` | Manage Agent Skills | `samuel skill list` |
 | `auto` | Autonomous AI coding loop | `samuel auto status` |
+| `sync` | Sync per-folder CLAUDE.md/AGENTS.md | `samuel sync --dry-run` |
 
 **Type aliases**: `language` (lang, l), `framework` (fw, f), `workflow` (wf, w)
 
@@ -300,7 +301,7 @@ The `.claude/` directory grows with your project:
 
     ---
 
-    Learn all 13 commands and their options.
+    Learn all 14 commands and their options.
 
     [:octicons-arrow-right-24: CLI Commands](../reference/cli.md)
 

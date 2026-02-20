@@ -13,6 +13,8 @@ All notable changes to Samuel (Artificial Intelligence Coding Framework).
 
 ### Added
 
+- **`samuel sync`** — New CLI command to recursively create/update per-folder CLAUDE.md and AGENTS.md files with context-aware content (language detection, purpose inference, key file identification)
+- **`sync-claude-md` skill** — Workflow skill for AI agents to invoke sync after structural changes
 - **7 Community Skills** from Anthropic (`github.com/anthropics/skills`):
   - `algorithmic-art` — Generative art with p5.js and seeded randomness
   - `doc-coauthoring` — Collaborative document writing workflow
@@ -26,6 +28,7 @@ All notable changes to Samuel (Artificial Intelligence Coding Framework).
 
 ### Changed
 
+- `samuel init` now delegates per-folder CLAUDE.md creation to `core.SyncFolderCLAUDEMDs` with richer content (was minimal stubs)
 - Auto loop rewritten from shell script (`auto.sh`) to Go-native implementation
 - `create-skill` workflow enhanced with Anthropic's skill-creator guidance
 

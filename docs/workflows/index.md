@@ -1,6 +1,6 @@
 ---
 title: Workflows
-description: Structured workflows for AI-assisted development (23 workflows)
+description: Structured workflows for AI-assisted development (24 workflows)
 ---
 
 # Workflows
@@ -20,7 +20,7 @@ Workflows are structured processes for handling specific types of tasks. They're
 | **Planning** | initialize-project, create-rfd, create-prd, generate-tasks | Define and break down work |
 | **Quality** | code-review, security-audit, testing-strategy | Validate and improve code |
 | **Maintenance** | cleanup-project, refactoring, dependency-update, update-framework | Keep codebase healthy |
-| **Utility** | troubleshooting, generate-agents-md, document-work, create-skill | Support and documentation |
+| **Utility** | troubleshooting, generate-agents-md, document-work, create-skill, sync-claude-md | Support and documentation |
 | **Autonomous** | auto | Unattended AI-driven development |
 | **Community** | algorithmic-art, doc-coauthoring, frontend-design, mcp-builder, theme-factory, web-artifacts-builder, webapp-testing | Anthropic community skills |
 
@@ -45,6 +45,7 @@ Workflows are structured processes for handling specific types of tasks. They're
 | [Generate AGENTS.md](generate-agents-md.md) | Cross-tool compatibility | Multi-tool teams |
 | [Document Work](document-work.md) | Capture patterns and decisions | End of session, handoffs |
 | [Create Skill](create-skill.md) | Create portable Agent Skills | New AI capabilities |
+| [Sync CLAUDE.md](sync-claude-md.md) | Sync per-folder CLAUDE.md files | After structural changes |
 | [Auto](auto.md) | Autonomous AI coding loop | AFK development, batch tasks |
 | [Algorithmic Art](algorithmic-art.md) | Generative art with p5.js | Creative coding, generative art |
 | [Doc Co-Authoring](doc-coauthoring.md) | Collaborative document writing | Proposals, specs, decision docs |

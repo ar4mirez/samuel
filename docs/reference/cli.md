@@ -5,7 +5,7 @@ description: Complete reference for all Samuel CLI commands
 
 # CLI Command Reference
 
-The Samuel CLI provides 13 commands for managing and discovering components. This page documents all commands, flags, and usage examples.
+The Samuel CLI provides 14 commands for managing and discovering components. This page documents all commands, flags, and usage examples.
 
 ---
 
@@ -643,6 +643,58 @@ samuel auto pilot --dry-run
 ```
 
 [:octicons-arrow-right-24: Auto Workflow Guide](../workflows/auto.md)
+
+---
+
+### sync
+
+Sync per-folder CLAUDE.md and AGENTS.md files with context-aware content.
+
+**Usage:**
+
+```bash
+samuel sync [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Default | Description |
+|------|-------|---------|-------------|
+| `--depth` | `-d` | -1 | Max recursion depth (-1=unlimited) |
+| `--force` | `-f` | false | Overwrite user-customized files |
+| `--dry-run` | | false | Preview changes without writing files |
+
+**Examples:**
+
+```bash
+# Sync all directories recursively
+samuel sync
+
+# Preview what would change
+samuel sync --dry-run
+
+# Only top-level directories
+samuel sync --depth 1
+
+# Force overwrite user-customized files
+samuel sync --force
+```
+
+**Update strategy:**
+
+| Condition | Action |
+|-----------|--------|
+| File doesn't exist | Create new file |
+| File has auto-generated marker | Update (overwrite) |
+| File exists without marker | Skip (user-customized) |
+| `--force` flag | Always overwrite |
+
+**Content detection:**
+
+- Languages detected by file extension (Go, Python, TypeScript, etc.)
+- Purpose inferred from folder name (`cmd/`, `internal/`, `tests/`, etc.)
+- Key files identified (main.go, package.json, Dockerfile, etc.)
+- Test files detected by naming patterns
 
 ---
 

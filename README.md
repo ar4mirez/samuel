@@ -15,7 +15,7 @@
 - **Renamed to Samuel** - Cleaner, memorable name (formerly AICoF). Binary: `samuel`, config: `samuel.yaml`
 - **Autonomous AI Coding Loop** - Ralph Wiggum methodology for unattended task completion (`samuel auto`)
 - **Migrated to `.claude/` directory** - Skills and context now live under `.claude/skills/` instead of `.agent/skills/`
-- **18 Workflows** - Including `auto`, `create-rfd`, `create-skill`, and more
+- **24 Workflows** - Including `auto`, `create-rfd`, `create-skill`, `sync-claude-md`, and more
 - **33 Framework Skills** - Comprehensive framework-specific guidance across 11 language families
 - **21 Language Guides** - All major programming languages covered
 - **Homebrew formula** - Install with `brew install samuel` (was a cask)
@@ -112,7 +112,7 @@ Samuel (Artificial Intelligence Coding Framework) is an **opinionated AI develop
 | **35+ Guardrails** | Testable rules, not vague suggestions |
 | **21 Language Guides** | All major languages with auto-loading support |
 | **33 Framework Skills** | Framework-specific patterns and best practices |
-| **13 Workflows** | PRD, tasks, init, troubleshooting, code-review, and more |
+| **24 Workflows** | PRD, tasks, init, troubleshooting, code-review, sync, and more |
 | **3 Modes** | ATOMIC/FEATURE/COMPLEX (scales from bugs to architecture) |
 | **4D Methodology** | Deconstruct → Diagnose → Develop → Deliver |
 | **Cross-Tool** | Works with any AI coding assistant |
@@ -153,6 +153,12 @@ The `samuel` CLI manages framework installation, updates, and component discover
 | `search <query>` | Search components by keyword | `samuel search api` |
 | `info <type> <name>` | Show component details | `samuel info fw nextjs` |
 | `diff [v1] [v2]` | Compare versions | `samuel diff v1.6.0 v1.7.0` |
+
+### Maintenance
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `sync` | Sync per-folder CLAUDE.md/AGENTS.md | `samuel sync --dry-run` |
 
 ### Configuration
 
@@ -578,7 +584,7 @@ samuel/
 | **CLAUDE.md** | ~500 lines |
 | **Language Guides** | 21 (all major programming languages) |
 | **Framework Skills** | 33 (across 11 language families) |
-| **Workflows** | 15 (PRD, tasks, init, troubleshoot, code-review, etc.) |
+| **Workflows** | 24 (PRD, tasks, init, troubleshoot, code-review, sync, etc.) |
 | **Guardrails** | 35+ testable rules |
 
 ---

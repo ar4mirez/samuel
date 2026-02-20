@@ -85,7 +85,7 @@ mkdocs build          # Build static site to ./site/
 samuel/
 ├── cmd/samuel/              # Entry point (main.go) — minimal
 ├── internal/
-│   ├── commands/            # 13 CLI commands (init, update, add, remove, list, doctor, version, search, info, config, diff, skill, auto)
+│   ├── commands/            # 14 CLI commands (init, update, add, remove, list, doctor, version, search, info, config, diff, skill, auto, sync)
 │   ├── core/                # Business logic (config, registry, extractor, skill, auto)
 │   ├── github/              # GitHub API client (releases, archives)
 │   └── ui/                  # User interface helpers (prompts, spinner, colors)
@@ -171,6 +171,7 @@ Skills extend AI capabilities. Load a skill when task matches its description.
 | mcp-builder | MCP server creation and integration guide. |
 | refactoring | Technical debt remediation and code restructuring workflow. |
 | security-audit | Security assessment workflow (OWASP, auth, vulnerabilities). |
+| sync-claude-md | Sync per-folder CLAUDE.md/AGENTS.md with context-aware content. |
 | testing-strategy | Test planning and coverage strategy workflow. |
 | theme-factory | Toolkit for styling artifacts with pre-set or custom themes. |
 | troubleshooting | Debugging and problem-solving workflow. |
