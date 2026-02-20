@@ -2,7 +2,7 @@
 # Install with: pip install -r requirements-docs.txt
 
 # Core
-mkdocs>=1.5.3
+mkdocs>=1.5.3,<2.0
 
 # Theme
 mkdocs-material>=9.5.0
