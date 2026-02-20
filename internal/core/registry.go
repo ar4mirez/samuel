@@ -131,6 +131,14 @@ var Workflows = []Component{
 	{Name: "create-skill", Path: ".claude/skills/create-skill", Description: "Create Agent Skills", Category: "workflow", Tags: []string{"skill", "create", "scaffold", "agent-skills"}},
 	// Autonomous
 	{Name: "auto", Path: ".claude/skills/auto", Description: "Autonomous AI coding loop", Category: "workflow", Tags: []string{"auto", "autonomous", "loop", "ralph", "afk"}},
+	// Anthropic community (source: github.com/anthropics/skills)
+	{Name: "algorithmic-art", Path: ".claude/skills/algorithmic-art", Description: "Generative art with p5.js", Category: "workflow", Tags: []string{"art", "generative", "p5js", "creative"}},
+	{Name: "doc-coauthoring", Path: ".claude/skills/doc-coauthoring", Description: "Collaborative document writing", Category: "workflow", Tags: []string{"writing", "docs", "collaboration"}},
+	{Name: "frontend-design", Path: ".claude/skills/frontend-design", Description: "Design-thinking for frontend", Category: "workflow", Tags: []string{"design", "frontend", "ui", "ux"}},
+	{Name: "mcp-builder", Path: ".claude/skills/mcp-builder", Description: "MCP server development", Category: "workflow", Tags: []string{"mcp", "server", "api", "integration"}},
+	{Name: "theme-factory", Path: ".claude/skills/theme-factory", Description: "Artifact theming toolkit", Category: "workflow", Tags: []string{"theme", "styling", "design", "colors"}},
+	{Name: "web-artifacts-builder", Path: ".claude/skills/web-artifacts-builder", Description: "React/shadcn web apps", Category: "workflow", Tags: []string{"react", "typescript", "shadcn", "vite"}},
+	{Name: "webapp-testing", Path: ".claude/skills/webapp-testing", Description: "Playwright web testing", Category: "workflow", Tags: []string{"playwright", "testing", "browser", "e2e"}},
 }
 
 // Skills contains bundled skills (community skills loaded dynamically).
@@ -210,6 +218,14 @@ var Skills = []Component{
 	{Name: "document-work", Path: ".claude/skills/document-work", Description: "Capture patterns workflow", Category: "workflow", Tags: []string{"document", "patterns", "decisions"}},
 	{Name: "create-skill", Path: ".claude/skills/create-skill", Description: "Create Agent Skills workflow", Category: "workflow", Tags: []string{"skill", "create", "scaffold"}},
 	{Name: "auto", Path: ".claude/skills/auto", Description: "Autonomous AI coding loop workflow", Category: "workflow", Tags: []string{"auto", "autonomous", "loop", "ralph"}},
+	// Anthropic community workflow skills (source: github.com/anthropics/skills)
+	{Name: "algorithmic-art", Path: ".claude/skills/algorithmic-art", Description: "Generative art with p5.js workflow", Category: "workflow", Tags: []string{"art", "generative", "p5js"}},
+	{Name: "doc-coauthoring", Path: ".claude/skills/doc-coauthoring", Description: "Collaborative document writing workflow", Category: "workflow", Tags: []string{"writing", "docs", "collaboration"}},
+	{Name: "frontend-design", Path: ".claude/skills/frontend-design", Description: "Design-thinking for frontend workflow", Category: "workflow", Tags: []string{"design", "frontend", "ui"}},
+	{Name: "mcp-builder", Path: ".claude/skills/mcp-builder", Description: "MCP server development workflow", Category: "workflow", Tags: []string{"mcp", "server", "api"}},
+	{Name: "theme-factory", Path: ".claude/skills/theme-factory", Description: "Artifact theming toolkit workflow", Category: "workflow", Tags: []string{"theme", "styling", "design"}},
+	{Name: "web-artifacts-builder", Path: ".claude/skills/web-artifacts-builder", Description: "React/shadcn web apps workflow", Category: "workflow", Tags: []string{"react", "typescript", "shadcn"}},
+	{Name: "webapp-testing", Path: ".claude/skills/webapp-testing", Description: "Playwright web testing workflow", Category: "workflow", Tags: []string{"playwright", "testing", "browser"}},
 }
 
 // CoreFiles contains essential files always installed

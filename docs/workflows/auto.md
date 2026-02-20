@@ -99,7 +99,7 @@ samuel auto init --prd .claude/tasks/0001-prd-feature.md
 # 3. Review generated files
 cat .claude/auto/prd.json      # Task list in JSON
 cat .claude/auto/prompt.md     # Iteration prompt
-cat .claude/auto/auto.sh       # Loop script
+cat .claude/auto/prompt.md     # Iteration prompt
 ```
 
 ### Running the Loop
@@ -116,9 +116,20 @@ samuel auto start --yes
 
 # Dry run (see what would happen)
 samuel auto start --dry-run
+```
 
-# Or run the script directly
-./.claude/auto/auto.sh 50
+### Pilot Mode (Zero Setup)
+
+```bash
+# Fully autonomous — no PRD or task files needed
+samuel auto pilot
+
+# Customize iterations, focus, and discovery frequency
+samuel auto pilot --iterations 20 --focus testing
+samuel auto pilot --discover-interval 3 --max-tasks 5
+
+# Dry run to preview without executing
+samuel auto pilot --dry-run
 ```
 
 ### Monitoring
@@ -281,11 +292,14 @@ The auto loop extends the existing COMPLEX mode workflow:
 Standard COMPLEX Mode:
   create-prd → generate-tasks → manual implementation (HITL)
 
-With Auto Loop:
+With Auto Loop (PRD-based):
   create-prd → generate-tasks → samuel auto init → samuel auto start (autonomous)
+
+With Pilot Mode (zero setup):
+  samuel auto pilot (discovers and implements autonomously)
 ```
 
-The human can re-enter the loop at any point by stopping auto.sh and returning to manual task-by-task implementation.
+The human can re-enter the loop at any point by stopping the process and returning to manual task-by-task implementation.
 
 ---
 

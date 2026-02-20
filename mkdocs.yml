@@ -247,6 +247,14 @@ nav:
       - Create Skill: workflows/create-skill.md
     - Autonomous:
       - Auto: workflows/auto.md
+    - Community:
+      - Algorithmic Art: workflows/algorithmic-art.md
+      - Doc Co-Authoring: workflows/doc-coauthoring.md
+      - Frontend Design: workflows/frontend-design.md
+      - MCP Builder: workflows/mcp-builder.md
+      - Theme Factory: workflows/theme-factory.md
+      - Web Artifacts Builder: workflows/web-artifacts-builder.md
+      - Web App Testing: workflows/webapp-testing.md
   - RFDs:
     - Overview: rfd/index.md
     - "0001: Progressive Disclosure": rfd/0001.md

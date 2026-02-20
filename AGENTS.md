@@ -92,7 +92,7 @@ samuel/
 ├── template/                # Distributable template files
 │   ├── CLAUDE.md            # Template AI instructions
 │   ├── AGENTS.md            # Cross-tool copy
-│   └── .claude/skills/      # 21 language + 33 framework + 18 workflow skills
+│   └── .claude/skills/      # 21 language + 33 framework + 25 workflow/utility skills
 ├── docs/                    # MkDocs documentation source
 ├── Makefile                 # Build targets (build, test, lint, install)
 └── .goreleaser.yaml         # Release automation
@@ -108,7 +108,7 @@ samuel/
 - **GitHub archive downloads**: Uses GitHub's tar.gz API — no git required on user machines.
 - **Standard Go layout**: `cmd/` + `internal/` at root. `internal/commands/` (not `cmd/`) to avoid confusion.
 - **Go for CLI**: Single binary, cross-platform, no runtime dependencies. Cobra for CLI framework.
-- **Auto (Ralph Wiggum)**: Autonomous AI coding loop. Tasks stored in `.claude/auto/prd.json`, progress in `progress.md`, orchestrated by `auto.sh` or Go CLI.
+- **Auto (Ralph Wiggum)**: Autonomous AI coding loop. Tasks stored in `.claude/auto/prd.json`, progress in `progress.md`, orchestrated by Go-native loop. Supports PRD-based and zero-setup pilot modes.
 
 ---
 
@@ -152,6 +152,7 @@ Skills extend AI capabilities. Load a skill when task matches its description.
 
 | Skill | Description |
 |-------|-------------|
+| algorithmic-art | Generative art creation using p5.js with seeded randomness. |
 | auto | Autonomous AI coding loop (Ralph Wiggum methodology). |
 | cleanup-project | Project cleanup and pruning workflow. |
 | code-review | Pre-commit code quality review workflow. |
@@ -160,16 +161,22 @@ Skills extend AI capabilities. Load a skill when task matches its description.
 | create-rfd | Request for Discussion (RFD) creation workflow. |
 | create-skill | Agent Skill creation workflow. |
 | dependency-update | Safe dependency update workflow. |
+| doc-coauthoring | Collaborative document writing workflow. |
 | document-work | Work documentation and pattern capture workflow. |
+| frontend-design | Design-thinking workflow for frontend interfaces. |
 | generate-agents-md | Cross-tool compatibility workflow (AGENTS.md). |
 | generate-tasks | Task generation and breakdown workflow from PRDs. |
 | go-guide | Go language guardrails, patterns, and best practices. |
 | initialize-project | Project initialization and setup workflow. |
+| mcp-builder | MCP server creation and integration guide. |
 | refactoring | Technical debt remediation and code restructuring workflow. |
 | security-audit | Security assessment workflow (OWASP, auth, vulnerabilities). |
 | testing-strategy | Test planning and coverage strategy workflow. |
+| theme-factory | Toolkit for styling artifacts with pre-set or custom themes. |
 | troubleshooting | Debugging and problem-solving workflow. |
 | update-framework | Samuel version update workflow. |
+| web-artifacts-builder | React/TypeScript/shadcn toolchain for web applications. |
+| webapp-testing | Playwright-based web application testing workflow. |
 
 **To use a skill**: Read `.claude/skills/<skill-name>/SKILL.md`
 <!-- SKILLS_END -->

@@ -23,23 +23,39 @@ Use this skill when you need to:
 - Convert an existing guide or workflow into the Agent Skills format
 - Build a capability module for AI agents
 
+## About Skills
+
+Skills are modular, self-contained packages that extend AI capabilities by providing specialized knowledge, workflows, and tools. Think of them as "onboarding guides" for specific domains or tasks - they transform a general-purpose agent into a specialized one equipped with procedural knowledge that no model can fully possess.
+
+**What Skills Provide:**
+1. **Specialized workflows** - Multi-step procedures for specific domains
+2. **Tool integrations** - Instructions for working with specific file formats or APIs
+3. **Domain expertise** - Company-specific knowledge, schemas, business logic
+4. **Bundled resources** - Scripts, references, and assets for complex and repetitive tasks
+
 ## Process
 
 ### Step 1: Define the Skill
 
-Before creating the skill, clarify its purpose:
+Before creating the skill, understand it through **concrete examples**. Ask questions like:
+- "What functionality should this skill support?"
+- "Can you give examples of how this skill would be used?"
+- "What would a user say that should trigger this skill?"
+
+Then clarify its purpose:
 
 1. **What capability** does this skill provide?
    - Example: "Process PDF files", "Generate API documentation", "Manage database migrations"
 
-2. **When should it activate?**
+2. **When should it activate?** (Critical for the description field)
    - What user requests should trigger this skill?
    - What keywords or contexts indicate this skill is needed?
+   - The description is the **primary triggering mechanism** - include all "when to use" information there, not in the body (the body is only loaded after triggering)
 
 3. **What resources does it need?**
-   - Scripts for complex operations?
-   - Reference documentation?
-   - Templates or assets?
+   - Scripts for deterministic operations that are repeatedly rewritten?
+   - Reference documentation for domain knowledge?
+   - Templates or assets for output generation?
 
 4. **What's the scope?**
    - Keep skills focused on one capability
@@ -205,7 +221,7 @@ If the skill is significant, record in `.claude/memory/`:
 
 ### Concise is Key
 
-The context window is a shared resource. Only include what the AI doesn't already know:
+The context window is a public good. Skills share it with everything else: system prompt, conversation history, other skills' metadata, and the actual user request. **Default assumption: the AI is already very smart.** Only add context it doesn't already have. Challenge each piece of information: "Does this paragraph justify its token cost?"
 
 **Good** (50 tokens):
 ```markdown
@@ -226,15 +242,15 @@ with pdfplumber.open("file.pdf") as pdf:
 PDF files are a common format... [unnecessary explanation]
 ```
 
-### Set Appropriate Freedom
+### Set Appropriate Degrees of Freedom
 
-Match specificity to task fragility:
+Match the level of specificity to the task's fragility and variability. Think of the AI as exploring a path: a narrow bridge with cliffs needs specific guardrails (low freedom), while an open field allows many routes (high freedom).
 
-| Freedom Level | When to Use | Example |
-|--------------|-------------|---------|
-| High | Multiple valid approaches | Code review process |
-| Medium | Preferred pattern exists | Report generation |
-| Low | Fragile/critical operations | Database migrations |
+| Freedom Level | When to Use | Implementation | Example |
+|--------------|-------------|---------------|---------|
+| High | Multiple valid approaches | Text-based instructions | Code review process |
+| Medium | Preferred pattern exists | Pseudocode or scripts with parameters | Report generation |
+| Low | Fragile/critical operations | Specific scripts, few parameters | Database migrations |
 
 ### Use Progressive Disclosure
 
@@ -243,6 +259,16 @@ Match specificity to task fragility:
 3. **References/Scripts**: Loaded on-demand
 
 Keep SKILL.md lean; move details to reference files.
+
+### What NOT to Include
+
+A skill should only contain essential files that directly support its functionality. Do NOT create extraneous documentation like README.md, INSTALLATION_GUIDE.md, QUICK_REFERENCE.md, or CHANGELOG.md. The skill should only contain information needed for an AI agent to do the job at hand.
+
+### Bundled Resource Guidelines
+
+- **Scripts** (`scripts/`): Include when the same code is being rewritten repeatedly or deterministic reliability is needed. Scripts may be executed without loading into context, saving tokens.
+- **References** (`references/`): For documentation the AI should reference while working. Keeps SKILL.md lean; loaded only when determined needed. If files are large (>10k words), include grep search patterns in SKILL.md. **Avoid duplication** - information should live in either SKILL.md or references, not both.
+- **Assets** (`assets/`): Files not intended to be loaded into context, but used in the output (templates, images, boilerplate code, fonts).
 
 ### Provide Examples
 

@@ -555,6 +555,7 @@ Autonomous AI coding loop using the Ralph Wiggum methodology.
 | `auto task skip <id>` | Mark a task as skipped |
 | `auto task reset <id>` | Reset a task to pending |
 | `auto task add <id> <title>` | Add a new task |
+| `auto pilot` | Start zero-setup autonomous mode |
 
 **init flags:**
 
@@ -571,6 +572,21 @@ Autonomous AI coding loop using the Ralph Wiggum methodology.
 | `--iterations <n>` | | Override max iterations for this run |
 | `--yes` | `-y` | Skip confirmation prompt |
 | `--dry-run` | | Show what would happen without executing |
+
+**pilot flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--iterations <n>` | | Max total iterations (default: 30) |
+| `--discover-interval <n>` | | Re-discover every N iterations (default: 5) |
+| `--max-tasks <n>` | | Max tasks per discovery (default: 5) |
+| `--focus <area>` | | Focus area: testing, docs, security, performance, refactoring |
+| `--ai-tool <name>` | | AI tool: claude, amp, codex (default: claude) |
+| `--sandbox <mode>` | | Sandbox mode: none, docker, docker-sandbox |
+| `--sandbox-image <img>` | | Docker image for docker mode |
+| `--sandbox-template <tpl>` | | Docker sandbox template |
+| `--dry-run` | | Preview without executing |
+| `--yes` | `-y` | Skip confirmation prompt |
 
 **Examples:**
 
@@ -602,6 +618,18 @@ samuel auto task complete 1.1
 samuel auto task skip 2.3
 samuel auto task reset 1.1
 samuel auto task add "3.0" "New parent task"
+
+# Zero-setup pilot mode
+samuel auto pilot
+
+# Pilot with focus area
+samuel auto pilot --iterations 20 --focus testing
+
+# Pilot with Docker sandbox
+samuel auto pilot --sandbox docker --yes
+
+# Pilot dry run
+samuel auto pilot --dry-run
 ```
 
 **Generated files:**
@@ -611,7 +639,7 @@ samuel auto task add "3.0" "New parent task"
 ├── prd.json        # Machine-readable task state
 ├── progress.md    # Append-only learnings journal
 ├── prompt.md       # Iteration prompt template
-└── auto.sh         # Loop orchestration script
+└── discovery-prompt.md # Discovery prompt (pilot mode)
 ```
 
 [:octicons-arrow-right-24: Auto Workflow Guide](../workflows/auto.md)

@@ -23,7 +23,7 @@ While CLAUDE.md provides universal guardrails, `.claude/` stores skills specific
 │   ├── react/             # 33 framework skills
 │   │   ├── SKILL.md
 │   │   └── references/
-│   ├── create-prd/        # 16 workflow skills
+│   ├── create-prd/        # 23 workflow skills
 │   │   └── SKILL.md
 │   ├── auto/              # Autonomous loop skill
 │   │   └── SKILL.md
@@ -32,7 +32,7 @@ While CLAUDE.md provides universal guardrails, `.claude/` stores skills specific
 │   ├── prd.json           # Machine-readable task state
 │   ├── progress.md       # Append-only learnings journal
 │   ├── prompt.md          # Iteration prompt template
-│   └── auto.sh            # Loop orchestration script
+│   └── discovery-prompt.md # Discovery prompt (pilot mode)
 └── settings.local.json    # Claude Code local settings
 ```
 
@@ -48,7 +48,7 @@ Skills are capability modules following the [Agent Skills](https://agentskills.i
 |------|-------|--------|---------|
 | Language guides | 21 | Auto-load by file extension | `skills/go-guide/SKILL.md` |
 | Framework skills | 33 | On-demand | `skills/react/SKILL.md` |
-| Workflow skills | 16 | On-demand | `skills/create-prd/SKILL.md` |
+| Workflow skills | 23 | On-demand | `skills/create-prd/SKILL.md` |
 
 ### Per-Folder CLAUDE.md Files
 
@@ -118,6 +118,13 @@ On-demand workflows for structured tasks:
 | `generate-agents-md` | Cross-tool compatibility |
 | `create-skill` | Create portable Agent Skills |
 | `auto` | Autonomous AI coding loop |
+| `algorithmic-art` | Generative art with p5.js |
+| `doc-coauthoring` | Collaborative document writing |
+| `frontend-design` | Design-driven frontend interfaces |
+| `mcp-builder` | MCP server development guide |
+| `theme-factory` | Theme styling for artifacts |
+| `web-artifacts-builder` | React/TypeScript/shadcn toolchain |
+| `webapp-testing` | Playwright-based web testing |
 
 **How to invoke**:
 

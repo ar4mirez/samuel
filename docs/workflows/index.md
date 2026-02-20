@@ -1,6 +1,6 @@
 ---
 title: Workflows
-description: Structured workflows for AI-assisted development (16 workflows)
+description: Structured workflows for AI-assisted development (23 workflows)
 ---
 
 # Workflows
@@ -22,6 +22,7 @@ Workflows are structured processes for handling specific types of tasks. They're
 | **Maintenance** | cleanup-project, refactoring, dependency-update, update-framework | Keep codebase healthy |
 | **Utility** | troubleshooting, generate-agents-md, document-work, create-skill | Support and documentation |
 | **Autonomous** | auto | Unattended AI-driven development |
+| **Community** | algorithmic-art, doc-coauthoring, frontend-design, mcp-builder, theme-factory, web-artifacts-builder, webapp-testing | Anthropic community skills |
 
 ---
 
@@ -45,6 +46,13 @@ Workflows are structured processes for handling specific types of tasks. They're
 | [Document Work](document-work.md) | Capture patterns and decisions | End of session, handoffs |
 | [Create Skill](create-skill.md) | Create portable Agent Skills | New AI capabilities |
 | [Auto](auto.md) | Autonomous AI coding loop | AFK development, batch tasks |
+| [Algorithmic Art](algorithmic-art.md) | Generative art with p5.js | Creative coding, generative art |
+| [Doc Co-Authoring](doc-coauthoring.md) | Collaborative document writing | Proposals, specs, decision docs |
+| [Frontend Design](frontend-design.md) | Design-driven frontend interfaces | Landing pages, dashboards, UI |
+| [MCP Builder](mcp-builder.md) | MCP server development guide | LLM tool integration |
+| [Theme Factory](theme-factory.md) | Theme styling for artifacts | Slides, reports, landing pages |
+| [Web Artifacts Builder](web-artifacts-builder.md) | React/TypeScript/shadcn toolchain | Complex web applications |
+| [Web App Testing](webapp-testing.md) | Playwright-based web testing | Frontend testing, UI debugging |
 
 ---
 
@@ -365,6 +373,70 @@ Workflows can be chained for complex tasks:
     Create portable Agent Skills for AI agents.
 
     [:octicons-arrow-right-24: Create Skill](create-skill.md)
+
+</div>
+
+---
+
+## Community Workflows
+
+<div class="grid cards" markdown>
+
+-   :material-palette:{ .lg .middle } **Algorithmic Art**
+
+    ---
+
+    Generative art using p5.js with seeded randomness.
+
+    [:octicons-arrow-right-24: Algorithmic Art](algorithmic-art.md)
+
+-   :material-file-edit:{ .lg .middle } **Doc Co-Authoring**
+
+    ---
+
+    Collaborative document writing through structured iteration.
+
+    [:octicons-arrow-right-24: Doc Co-Authoring](doc-coauthoring.md)
+
+-   :material-palette-swatch:{ .lg .middle } **Frontend Design**
+
+    ---
+
+    Distinctive, production-grade frontend interfaces.
+
+    [:octicons-arrow-right-24: Frontend Design](frontend-design.md)
+
+-   :material-connection:{ .lg .middle } **MCP Builder**
+
+    ---
+
+    Create MCP servers for LLM-service integration.
+
+    [:octicons-arrow-right-24: MCP Builder](mcp-builder.md)
+
+-   :material-format-paint:{ .lg .middle } **Theme Factory**
+
+    ---
+
+    Apply professional themes to slides, docs, and reports.
+
+    [:octicons-arrow-right-24: Theme Factory](theme-factory.md)
+
+-   :material-application-brackets:{ .lg .middle } **Web Artifacts Builder**
+
+    ---
+
+    React/TypeScript/shadcn toolchain for web applications.
+
+    [:octicons-arrow-right-24: Web Artifacts Builder](web-artifacts-builder.md)
+
+-   :material-test-tube:{ .lg .middle } **Web App Testing**
+
+    ---
+
+    Playwright-based web application testing and debugging.
+
+    [:octicons-arrow-right-24: Web App Testing](webapp-testing.md)
 
 </div>
 

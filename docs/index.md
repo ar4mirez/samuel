@@ -44,11 +44,11 @@ Samuel (Artificial Intelligence Coding Framework) is an **opinionated AI develop
 
     [:octicons-arrow-right-24: Framework Guides](frameworks/index.md)
 
--   :material-cog:{ .lg .middle } **16 Workflows**
+-   :material-cog:{ .lg .middle } **23 Workflows**
 
     ---
 
-    Planning, quality, maintenance, utility, and autonomous workflows including PRD creation, code review, security audit, autonomous loops, and more.
+    Planning, quality, maintenance, utility, autonomous, and community workflows including PRD creation, code review, security audit, autonomous loops, and more.
 
     [:octicons-arrow-right-24: Explore Workflows](workflows/index.md)
 
@@ -228,7 +228,7 @@ graph LR
 | **CLI Commands** | 13 (init, search, info, add, remove, list, config, diff, update, doctor, version, skill, auto) |
 | **Language Guides** | 21 (all major programming languages) |
 | **Framework Guides** | 33 (across 11 language families) |
-| **Workflows** | 16 (planning, quality, maintenance, utility, autonomous) |
+| **Workflows** | 23 (planning, quality, maintenance, utility, autonomous, community) |
 | **Guardrails** | 35+ testable rules |
 
 ---

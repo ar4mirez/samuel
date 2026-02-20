@@ -9,6 +9,33 @@ All notable changes to Samuel (Artificial Intelligence Coding Framework).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- **7 Community Skills** from Anthropic (`github.com/anthropics/skills`):
+  - `algorithmic-art` — Generative art with p5.js and seeded randomness
+  - `doc-coauthoring` — Collaborative document writing workflow
+  - `frontend-design` — Design-driven frontend interface creation
+  - `mcp-builder` — MCP server development guide
+  - `theme-factory` — Professional theme styling for artifacts
+  - `web-artifacts-builder` — React/TypeScript/shadcn web application toolchain
+  - `webapp-testing` — Playwright-based web application testing
+- **`samuel auto pilot`** — Zero-setup autonomous mode that discovers and implements tasks without PRD setup
+- **Go-native auto loop** — Autonomous loop now runs entirely in Go (replaces shell script)
+
+### Changed
+
+- Auto loop rewritten from shell script (`auto.sh`) to Go-native implementation
+- `create-skill` workflow enhanced with Anthropic's skill-creator guidance
+
+### Removed
+
+- Shell-script auto loop (`auto.sh`)
+- `DockerSandboxConfig` / `BuildDockerArgs` from docker.go (replaced by simpler sandbox configuration)
+
+---
+
 ## [2.0.0] - 2026-02-12
 
 ### Renamed to Samuel
