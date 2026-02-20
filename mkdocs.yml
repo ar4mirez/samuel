@@ -245,6 +245,7 @@ nav:
       - Generate AGENTS.md: workflows/generate-agents-md.md
       - Document Work: workflows/document-work.md
       - Create Skill: workflows/create-skill.md
+      - Sync CLAUDE.md: workflows/sync-claude-md.md
     - Autonomous:
       - Auto: workflows/auto.md
     - Community:
