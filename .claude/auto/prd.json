@@ -81,7 +81,8 @@
       "id": "5",
       "title": "Add unit tests for internal/core/auto_tasks.go",
       "description": "auto_tasks.go (213 LOC) manages task state transitions and persistence with no test coverage. Add table-driven tests for task status changes, filtering, and edge cases.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "3c73231",
       "priority": "high",
       "complexity": "medium",
       "files_to_modify": [
@@ -153,9 +154,9 @@
   ],
   "progress": {
     "total_tasks": 10,
-    "completed_tasks": 3,
-    "current_iteration": 3,
-    "total_iterations_run": 3,
+    "completed_tasks": 4,
+    "current_iteration": 4,
+    "total_iterations_run": 4,
     "status": "in_progress"
   }
 }

@@ -63,6 +63,16 @@
 - LEARNING: ParseSkillMD splitting on empty string returns `[""]` (1 element), not `[]` (0 elements), so the `len(lines) == 0` guard in the function is effectively dead code
 - Commit: 16771cf
 
+[2026-02-21T17:30:00Z] [iteration:4] [task:5] COMPLETED: Added unit tests for internal/core/auto_tasks.go
+- Created auto_tasks_test.go with 12 test functions (including table-driven tests)
+- Coverage: 100% on all 13 functions (previously ~90% from tests scattered in auto_test.go)
+- Filled gaps: priorityRank default case, SkipTask/ResetTask not-found paths, validateTasks empty-ID edge case
+- Table-driven tests for: priorityRank (6 cases), allDependenciesMet (5 cases), isValidStatus (9 cases)
+- Subtests for: getAvailableTasks (unmet deps, in-progress exclusion), findTask not-found, AddTask status preservation
+- LEARNING: auto_test.go already had substantial tests covering auto_tasks.go functions, but with small gaps. The new file fills those gaps to achieve 100%
+- LEARNING: validateTasks uses `continue` after detecting empty ID, so further checks (title, status) are skipped for that task — only 1 error produced
+- Commit: 3c73231
+
 ### Tasks Generated: 10
 | ID | Priority | Title |
 |----|----------|-------|
