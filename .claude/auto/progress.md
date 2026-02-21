@@ -488,3 +488,12 @@
 - LEARNING: `ScanSkillsDirectory` returns `[]*core.SkillInfo` (pointer slice), not `[]core.SkillInfo`. When refactoring, type mismatches in return values are caught immediately by the compiler — always `go build` after extraction.
 - LEARNING: Similar to the doctor.go refactor (task 6), splitting into two files (orchestrator + steps) keeps both under the 300-line limit. The logical grouping (init.go = command setup + helpers, init_steps.go = initialization steps) is a natural split.
 - Commit: f9017e3
+
+[2026-02-22T05:00:00Z] [iteration:22] [task:9] COMPLETED: Added unit tests for internal/core/auto_prompt.go
+- Created auto_prompt_test.go with 12 test cases covering both exported functions
+- Coverage: GetDefaultPromptTemplate 100%, GeneratePromptFile 100%
+- Table-driven tests for GeneratePromptFile: 8 cases covering basic config, quality checks, pilot mode, combined features, empty/zero edge cases
+- Separate tests for: template idempotency, template composition (starts with default template), quality checks ordering
+- LEARNING: `auto_prompt.go` is a pure function module — no filesystem, no HTTP, no state. Both functions are deterministic string builders. The `GetDefaultPromptTemplate` function uses Go string concatenation with backtick-quoted strings to embed backtick characters (e.g., `` "`CLAUDE.md`" ``), which makes the template content itself contain markdown code formatting.
+- LEARNING: `GeneratePromptFile` appends to the base template using `strings.Builder`. The pilot mode section and quality checks section are independently conditional — testing all 4 combinations (neither, only checks, only pilot, both) provides full branch coverage.
+- Commit: 3bc2809

@@ -135,6 +135,7 @@
       "title": "Add unit tests for internal/core/auto_prompt.go",
       "description": "auto_prompt.go (104 LOC) generates prompts for the autonomous AI loop with no test coverage. Add tests for prompt template rendering and edge cases.",
       "status": "completed",
+      "commit_sha": "3bc2809",
       "priority": "medium",
       "complexity": "low",
       "files_to_modify": [
