@@ -122,44 +122,10 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 
 	// Check for local modifications
 	extractor := core.NewExtractor(cachePath, cwd)
-	var modifiedFiles []string
-	var newFiles []string
-	var unchangedFiles []string
-
-	for _, path := range paths {
-		localPath := filepath.Join(cwd, path)
-		cacheSrcPath := filepath.Join(cachePath, path)
-
-		localExists := fileExists(localPath)
-		cacheExists := fileExists(cacheSrcPath)
-
-		if !cacheExists {
-			// File was removed in new version
-			continue
-		}
-
-		if !localExists {
-			newFiles = append(newFiles, path)
-			continue
-		}
-
-		// Check if file was modified
-		localContent, err := os.ReadFile(localPath)
-		if err != nil {
-			continue
-		}
-
-		cacheContent, err := os.ReadFile(cacheSrcPath)
-		if err != nil {
-			continue
-		}
-
-		if string(localContent) != string(cacheContent) {
-			modifiedFiles = append(modifiedFiles, path)
-		} else {
-			unchangedFiles = append(unchangedFiles, path)
-		}
-	}
+	changes := categorizeFileChanges(paths, cwd, cachePath)
+	modifiedFiles := changes.modifiedFiles
+	newFiles := changes.newFiles
+	unchangedFiles := changes.unchangedFiles
 
 	// Show diff if requested
 	if showDiff {
@@ -256,6 +222,51 @@ func runUpdate(cmd *cobra.Command, args []string) error {
 	}
 
 	return nil
+}
+
+// fileChanges holds the categorized file lists from comparing local vs cached files.
+type fileChanges struct {
+	newFiles       []string
+	modifiedFiles  []string
+	unchangedFiles []string
+}
+
+// categorizeFileChanges compares component paths between the local project and
+// the cache, categorizing each file as new, modified, or unchanged.
+func categorizeFileChanges(paths []string, cwd, cachePath string) fileChanges {
+	var changes fileChanges
+
+	for _, path := range paths {
+		localPath := filepath.Join(cwd, path)
+		cacheSrcPath := filepath.Join(cachePath, path)
+
+		if !fileExists(cacheSrcPath) {
+			continue
+		}
+
+		if !fileExists(localPath) {
+			changes.newFiles = append(changes.newFiles, path)
+			continue
+		}
+
+		localContent, err := os.ReadFile(localPath)
+		if err != nil {
+			continue
+		}
+
+		cacheContent, err := os.ReadFile(cacheSrcPath)
+		if err != nil {
+			continue
+		}
+
+		if string(localContent) != string(cacheContent) {
+			changes.modifiedFiles = append(changes.modifiedFiles, path)
+		} else {
+			changes.unchangedFiles = append(changes.unchangedFiles, path)
+		}
+	}
+
+	return changes
 }
 
 func fileExists(path string) bool {
