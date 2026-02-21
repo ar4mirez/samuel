@@ -122,12 +122,13 @@
       "id": "68",
       "title": "Add URL scheme validation for registry config value in config_cmd.go",
       "description": "The 'config set registry' command accepts any string without URL format validation (config_cmd.go:162-175). A malicious or accidental registry URL (e.g., http:// instead of https://, or a non-URL string) could redirect future downloads to untrusted sources. Add validation that the registry value is a valid HTTPS URL when the key is 'registry'.",
-      "status": "pending",
+      "status": "completed",
       "priority": "medium",
       "complexity": "low",
       "files_to_modify": [
         "internal/commands/config_cmd.go"
       ],
+      "commit_sha": "57a1aa7",
       "source": "pilot-discovery"
     },
     {
@@ -405,9 +406,9 @@
   ],
   "progress": {
     "total_tasks": 30,
-    "completed_tasks": 8,
-    "current_iteration": 34,
-    "total_iterations_run": 34,
+    "completed_tasks": 9,
+    "current_iteration": 35,
+    "total_iterations_run": 35,
     "status": "in_progress"
   }
 }

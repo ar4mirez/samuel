@@ -783,3 +783,14 @@
 - LEARNING: `core.NewLoopConfig()` returns a value type `core.LoopConfig` (not a pointer), and `core.RunAutoLoop()` takes a value type. When extracting `buildLoopConfig`, the return type must be `core.LoopConfig` not `*core.LoopConfig` — the compiler catches this immediately.
 - LEARNING: For small files (140 lines), keeping extracted helpers in the same file is cleaner than creating a separate file. The doctor.go/init.go split pattern (task 6/7) was necessary because those files were 400+ lines. Here, a single file at 153 lines is readable and well-organized.
 - Commit: ee69280
+
+[2026-02-22T13:00:00Z] [iteration:35] [task:68] COMPLETED: Added URL scheme validation for registry config value in config_cmd.go
+- Added `validateRegistryURL(value)` function using `net/url.Parse` + scheme/host checks
+- Rejects: HTTP URLs, FTP URLs, non-URL strings, empty strings, URLs without hosts (e.g., `https://`)
+- Accepts: valid HTTPS URLs with paths, ports, etc.
+- Validation runs in `runConfigSet` before config loading — fail-fast on invalid registry values
+- Added 9 table-driven tests covering valid HTTPS URLs, HTTP rejection, empty scheme, FTP, empty string, plain text, scheme-only
+- File stayed at 239 lines — well under 300-line limit
+- LEARNING: Go's `url.Parse` is very permissive — `"not-a-url"` parses successfully with an empty scheme and the string as the path. Checking `u.Scheme != "https"` catches this case naturally since the scheme will be empty.
+- LEARNING: `url.Parse("https://")` succeeds with `Host: ""` — the host check is necessary to reject scheme-only URLs that `url.Parse` considers valid.
+- Commit: 57a1aa7
