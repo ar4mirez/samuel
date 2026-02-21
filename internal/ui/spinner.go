@@ -3,6 +3,7 @@ package ui
 import (
 	"fmt"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/schollz/progressbar/v3"
@@ -10,8 +11,10 @@ import (
 
 // Spinner provides a simple loading spinner
 type Spinner struct {
-	bar     *progressbar.ProgressBar
-	message string
+	bar      *progressbar.ProgressBar
+	message  string
+	done     chan struct{}
+	stopOnce sync.Once
 }
 
 // NewSpinner creates a new spinner with the given message
@@ -27,28 +30,32 @@ func NewSpinner(message string) *Spinner {
 	return &Spinner{
 		bar:     bar,
 		message: message,
+		done:    make(chan struct{}),
 	}
 }
 
 // Start begins the spinner animation
 func (s *Spinner) Start() {
 	go func() {
+		ticker := time.NewTicker(100 * time.Millisecond)
+		defer ticker.Stop()
 		for {
-			if s.bar == nil {
+			select {
+			case <-s.done:
 				return
+			case <-ticker.C:
+				_ = s.bar.Add(1)
 			}
-			_ = s.bar.Add(1)
-			time.Sleep(100 * time.Millisecond)
 		}
 	}()
 }
 
-// Stop halts the spinner
+// Stop halts the spinner. Safe to call multiple times and concurrently.
 func (s *Spinner) Stop() {
-	if s.bar != nil {
+	s.stopOnce.Do(func() {
+		close(s.done)
 		_ = s.bar.Finish()
-		s.bar = nil
-	}
+	})
 }
 
 // Success stops the spinner and prints a success message
