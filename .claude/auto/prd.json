@@ -241,12 +241,13 @@
       "id": "77",
       "title": "Add unit tests for commands/config_cmd.go pure functions",
       "description": "config_cmd.go (216 LOC) has only 62 lines of tests (3 cases). Contains testable pure functions: formatConfigValue (formats values for display), isValidConfigKey (validates against allowed keys). Add table-driven tests for both functions covering: valid keys (version, registry, owner, repo), invalid keys, empty/special characters, and formatConfigValue with various types.",
-      "status": "pending",
+      "status": "completed",
       "priority": "medium",
       "complexity": "low",
       "files_to_modify": [
         "internal/commands/config_cmd_test.go"
       ],
+      "commit_sha": "a9d0b2a",
       "source": "pilot-discovery"
     },
     {
@@ -410,9 +411,9 @@
   ],
   "progress": {
     "total_tasks": 30,
-    "completed_tasks": 13,
-    "current_iteration": 39,
-    "total_iterations_run": 39,
+    "completed_tasks": 14,
+    "current_iteration": 40,
+    "total_iterations_run": 40,
     "status": "in_progress"
   }
 }

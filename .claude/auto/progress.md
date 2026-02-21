@@ -832,3 +832,18 @@
 - LEARNING: The `listInstalled` workflows section has special handling: when `config.Installed.Workflows` is `["all"]`, the count shows the full `len(core.Workflows)` and iterates over all workflow entries from the registry instead of the config list. This is the same "all" expansion pattern used in doctor_checks.go.
 - LEARNING: Unknown component names (not in registry) are displayed without descriptions — `FindLanguage/FindFramework/FindWorkflow` returns nil, and the fallback path just prints the name. This is forward-compatible with newer registry versions.
 - Commit: 6acf65c
+
+[2026-02-22T15:30:00Z] [iteration:40] [task:77] COMPLETED: Added unit tests for commands/config_cmd.go pure functions and handlers
+- Expanded config_cmd_test.go from 98 lines (3 test functions) to 270 lines (7 test functions)
+- `isValidConfigKey`: expanded from 9 to 16 table-driven cases — added all 5 missing auto.* keys (auto.enabled, auto.ai_tool, auto.max_iterations, auto.quality_checks) and installed.skills, plus edge cases (partial prefixes "installed.", "auto.", leading/trailing spaces)
+- `isValidConfigKey_MatchesValidConfigKeys`: new meta-test ensuring every key in `core.ValidConfigKeys` passes validation — prevents desync between the two
+- `formatConfigValue`: expanded from 7 to 12 cases — added bool true/false, float, URL string, string with spaces
+- `validateRegistryURL`: expanded from 9 to 11 cases — added bare host, SSH scheme rejection
+- `runConfigList`: 3 tests (no config graceful, valid config display, corrupt config error)
+- `runConfigGet`: 4 tests (invalid key error, no config graceful, valid key, installed.languages list)
+- `runConfigSet`: 6 tests (invalid key, invalid registry URL, no config graceful, set version + verify reload, set registry + verify reload, set installed.languages + verify reload)
+- Created `setupConfigTestDir` helper with `t.TempDir()` + `os.Chdir` + cleanup for config-dependent tests
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: The existing tests only covered 5 of 10 valid config keys. The `auto.*` and `installed.skills` keys were added to `ValidConfigKeys` after the initial tests were written. The `MatchesValidConfigKeys` meta-test prevents this drift in the future.
+- LEARNING: `runConfigSet` with `installed.languages` uses `config.SetValue` which splits comma-separated strings into a slice internally. The test verifies the round-trip: set "go,rust,python" → reload → verify 3 items in the Languages slice.
+- Commit: a9d0b2a
