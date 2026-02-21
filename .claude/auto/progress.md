@@ -232,3 +232,13 @@
 - LEARNING: The `io.LimitReader(r, n+1)` + `bytesRead > n` pattern is preferable to `io.LimitReader(r, n)` because the latter silently truncates without error — you can't distinguish between a file exactly `n` bytes and one larger than `n`. The +1 approach lets you detect the overflow.
 - LEARNING: Using `var` for size limits instead of `const` is the right tradeoff — it enables test isolation while keeping the production default immutable in practice. The save/restore `defer` pattern prevents test pollution.
 - Commit: 050f9f6
+
+[2026-02-21T22:30:00Z] [iteration:11] [task:16] COMPLETED: Added unit tests for internal/core/extractor.go
+- Added 22 new test cases covering all previously untested functions
+- Created `createTemplateFile` helper to DRY up test setup for template directory structures
+- Test coverage for extractor.go: 10 functions at 100%, 9 functions at 73-85% (up from ~15% with 13 of 17 functions at 0%)
+- Tests cover: shouldSkip (9 table-driven cases), NewExtractor/GetSourcePath/GetDestPath, Extract (single file, skip existing, force overwrite, source not found, directory, multiple files), ExtractAll (with files, skips .git/node_modules, no template dir), RestoreBackup (nested files, empty dir), RemoveFile/FileExists/BackupFile/ValidateExtraction (positive-path tests)
+- Overall `internal/core` package coverage: 80.4%
+- LEARNING: `shouldSkip` treats `.github` and `.gitignore` as skip targets because it uses `strings.HasPrefix(path, ".git")` — this is intentional for the template directory context where only `.claude/` directories should exist
+- LEARNING: `ExtractAll` handles missing template directory gracefully via `filepath.SkipAll` in the Walk callback — tested with `TestExtractAll_NoTemplateDir`
+- Commit: fbc447e

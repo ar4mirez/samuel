@@ -221,7 +221,8 @@
       "id": "16",
       "title": "Add unit tests for internal/core/extractor.go",
       "description": "extractor.go (378 LOC) has ~15% coverage with 13 of 17 functions at 0%. This file handles tar extraction, file I/O, backup/restore — critical operations. Add tests for Extract, ExtractAll, shouldSkip, ValidateExtraction, FileExists, ReadFile, WriteFile, RemoveFile, BackupFile, RestoreBackup using t.TempDir().",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "fbc447e",
       "priority": "high",
       "complexity": "medium",
       "files_to_modify": [
@@ -409,9 +410,9 @@
   ],
   "progress": {
     "total_tasks": 30,
-    "completed_tasks": 10,
-    "current_iteration": 10,
-    "total_iterations_run": 10,
+    "completed_tasks": 11,
+    "current_iteration": 11,
+    "total_iterations_run": 11,
     "status": "in_progress"
   }
 }
