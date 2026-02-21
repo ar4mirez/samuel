@@ -4,7 +4,7 @@
     "name": "samuel",
     "description": "Autonomous pilot mode - AI-discovered tasks",
     "created_at": "2026-02-21T15:51:24Z",
-    "updated_at": "2026-02-21T15:51:24Z"
+    "updated_at": "2026-02-21T17:45:00Z"
   },
   "config": {
     "max_iterations": 30,
@@ -150,13 +150,136 @@
         "internal/core/skill_validate.go"
       ],
       "source": "pilot-discovery"
+    },
+    {
+      "id": "11",
+      "title": "Fix symlink traversal vulnerability in tar extraction",
+      "description": "In downloader.go:124-133, symlink targets (header.Linkname) are not validated during tar extraction. A malicious archive could contain a symlink pointing outside the destination directory (e.g., ../../etc/shadow), allowing subsequent file writes through the symlink to arbitrary locations. Validate that resolved symlink targets stay within the destination directory.",
+      "status": "completed",
+      "commit_sha": "1cf9484",
+      "priority": "critical",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/downloader.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "12",
+      "title": "Fix nil pointer dereference in CheckForUpdates",
+      "description": "In client.go:216-228, GetLatestRelease can return (nil, nil) when no releases exist (line 90-92). CheckForUpdates accesses release.TagName without a nil check, causing a panic. Add a nil guard: if release == nil, return an error.",
+      "status": "pending",
+      "priority": "critical",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/github/client.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "13",
+      "title": "Add path traversal validation to extractor.go file operations",
+      "description": "ReadFile, WriteFile, RemoveFile, and BackupFile in extractor.go accept a path parameter and join it with destPath, but never validate the result stays within the destination directory. A path like '../../etc/passwd' would escape. Add filepath.Clean + strings.HasPrefix containment checks to all four functions.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/extractor.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "14",
+      "title": "Add size limits to tar extraction and file downloads",
+      "description": "In downloader.go:117-121, io.Copy has no size limit during tar extraction (decompression bomb risk). In client.go:204-206, io.ReadAll reads entire HTTP response without limit (OOM risk). Add io.LimitReader with reasonable max sizes (e.g., 100MB per extracted file, 10MB per downloaded file).",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/downloader.go",
+        "internal/github/client.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "15",
+      "title": "Fix silently discarded filepath.Walk errors in diff.go",
+      "description": "In diff.go:201 and diff.go:223, filepath.Walk return values are discarded with `_ =`. If the walk encounters errors (permission denied, concurrent deletion), diff results will be silently incomplete. Also fix discarded filepath.Glob error at diff.go:192. Handle errors or propagate them to callers.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/diff.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "16",
+      "title": "Add unit tests for internal/core/extractor.go",
+      "description": "extractor.go (378 LOC) has ~15% coverage with 13 of 17 functions at 0%. This file handles tar extraction, file I/O, backup/restore — critical operations. Add tests for Extract, ExtractAll, shouldSkip, ValidateExtraction, FileExists, ReadFile, WriteFile, RemoveFile, BackupFile, RestoreBackup using t.TempDir().",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/extractor_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "17",
+      "title": "Add unit tests for internal/ui/output.go",
+      "description": "output.go (137 LOC) has 0% coverage. It contains 14 formatting functions (Success, Error, Warn, Info, Print, Bold, Dim, Header, Section, ListItem, etc.) that are the most testable of the UI files. Test by capturing stdout and verifying output format. Also test DisableColors toggle.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/ui/output_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "18",
+      "title": "Refactor runUpdate() into smaller helper functions",
+      "description": "runUpdate() in update.go spans 220 lines (lines 41-261), which is 4.4x the 50-line guardrail limit — the worst violation after runDoctor and runInit. Extract into helpers: checkForUpdate(), downloadUpdate(), applyUpdate(), handleComponentMerge(), and displayUpdateSummary().",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/update.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "19",
+      "title": "Add unit tests for registry.go skill lookup functions",
+      "description": "registry.go has ~85% coverage but 6 skill-related lookup functions at 0%: FindSkill, GetAllSkillNames, GetLanguageSkills, SkillToLanguageName, GetFrameworkSkills, GetWorkflowSkills. Add table-driven tests to cover these pure functions. These are simple data lookups that should be easy to test.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/registry_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "20",
+      "title": "Reduce file size of internal/core/sync.go below 300-line limit",
+      "description": "sync.go is 431 lines, exceeding the 300-line guardrail. Extract CLAUDE.md generation logic into sync_generate.go and/or folder scanning logic into sync_scan.go. The SyncFolderCLAUDEMDs function (60 lines) and related helpers can be logically grouped to bring each file under the limit.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/sync.go",
+        "internal/core/sync_generate.go"
+      ],
+      "source": "pilot-discovery"
     }
   ],
   "progress": {
-    "total_tasks": 10,
-    "completed_tasks": 4,
-    "current_iteration": 4,
-    "total_iterations_run": 4,
+    "total_tasks": 20,
+    "completed_tasks": 5,
+    "current_iteration": 5,
+    "total_iterations_run": 5,
     "status": "in_progress"
   }
 }

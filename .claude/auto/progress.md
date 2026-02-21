@@ -73,7 +73,7 @@
 - LEARNING: validateTasks uses `continue` after detecting empty ID, so further checks (title, status) are skipped for that task — only 1 error produced
 - Commit: 3c73231
 
-### Tasks Generated: 10
+### Tasks Generated (Initial Discovery): 10
 | ID | Priority | Title |
 |----|----------|-------|
 | 1  | high     | Fix silent error handling in init.go, doctor.go, and search.go |
@@ -86,3 +86,61 @@
 | 8  | high     | Add unit tests for internal/core/downloader.go |
 | 9  | medium   | Add unit tests for internal/core/auto_prompt.go |
 | 10 | low      | Reduce file size of internal/core/skill.go below 300-line limit |
+
+[2026-02-21T18:00:00Z] [iteration:5] [task:11] COMPLETED: Fixed symlink traversal vulnerability in tar extraction
+- Added `validateSymlinkTarget()` function that rejects: (1) absolute symlink targets, (2) relative targets that resolve outside the destination directory
+- Validation uses `filepath.Join(filepath.Dir(symlinkPath), linkTarget)` to resolve relative targets against the symlink's parent directory, then checks containment with `strings.HasPrefix`
+- Created `downloader_test.go` with 12 test cases covering: symlink traversal attacks, absolute symlink rejection, valid symlinks, basic extraction, and path traversal in file names
+- The existing path traversal check (line 140) already protects file *names* — this fix closes the gap for symlink *targets*
+- LEARNING: Symlink traversal is a two-step attack: (1) create a symlink pointing outside dest, (2) write files through the symlink. Validating `target` (the symlink location) alone is insufficient — `Linkname` (where it points) must also be validated
+- LEARNING: `filepath.Clean` resolves `../` components, so `filepath.Join(dir, "../../etc") → filepath.Clean(result)` gives the actual resolved path for containment checking
+- Commit: 1cf9484
+
+---
+
+[2026-02-21T17:45:00Z] [discovery] FOUND: Second discovery iteration — deep security & quality analysis
+
+### Security Vulnerabilities (NEW)
+- **CRITICAL**: `downloader.go:124-133` — Symlink targets not validated in tar extraction; malicious archives can escape destination via symlink traversal
+- **CRITICAL**: `client.go:216-228` — Nil pointer dereference in `CheckForUpdates` when `GetLatestRelease` returns `(nil, nil)` (no releases case)
+- **HIGH**: `extractor.go:216-248` — `ReadFile`, `WriteFile`, `RemoveFile`, `BackupFile` accept paths without traversal validation; `../../etc/passwd` would escape destination
+- **HIGH**: `downloader.go:117-121` — Unbounded `io.Copy` in tar extraction (decompression bomb risk); `client.go:204-206` — unbounded `io.ReadAll` in `DownloadFile` (OOM risk)
+
+### Additional Error Handling Issues (NEW)
+- `diff.go:201` — `_ = filepath.Walk(agentDir, ...)` silently discards walk errors
+- `diff.go:223` — `_ = filepath.Walk(templatePath, ...)` silently discards walk errors
+- `diff.go:192` — `_ = filepath.Glob(...)` discards error from malformed patterns
+
+### Test Coverage Update
+- Overall coverage: **37.5%** (below 60% target)
+- `internal/core` at **65.9%**, `internal/github` at **89.7%**
+- `internal/ui/` still at **0%** — `output.go` (137 LOC) is most testable
+- `internal/core/extractor.go` at **~15%** (13 of 17 functions untested)
+- `internal/core/registry.go` at **~85%** but 6 skill lookup functions at 0%
+
+### Code Quality Violations (NEW)
+- `runUpdate()` in update.go: **220 lines** (4.4x the 50-line limit) — worst new violation
+- `runRemove()`: 98 lines, `runAdd()`: 97 lines, `executePilotLoop()`: 95 lines
+- `sync.go`: **431 lines** (exceeds 300-line file limit)
+- `commands/skill.go`: **375 lines**, `search.go`: **337 lines** (exceed limits)
+- 45+ raw `fmt.Print*` calls in commands bypassing `ui` package abstraction
+- 8 uses of deprecated `filepath.Walk` (should be `filepath.WalkDir` since Go 1.16)
+
+### Positive Findings
+- `go vet ./...` still clean
+- No TODO/FIXME/HACK markers in code
+- Good test quality where tests exist (table-driven, t.TempDir patterns)
+
+### Tasks Generated (Second Discovery): 10
+| ID | Priority | Title |
+|----|----------|-------|
+| 11 | critical | Fix symlink traversal vulnerability in tar extraction |
+| 12 | critical | Fix nil pointer dereference in CheckForUpdates |
+| 13 | high     | Add path traversal validation to extractor.go file operations |
+| 14 | high     | Add size limits to tar extraction and file downloads |
+| 15 | medium   | Fix silently discarded filepath.Walk errors in diff.go |
+| 16 | high     | Add unit tests for internal/core/extractor.go |
+| 17 | medium   | Add unit tests for internal/ui/output.go |
+| 18 | medium   | Refactor runUpdate() into smaller helper functions |
+| 19 | medium   | Add unit tests for registry.go skill lookup functions |
+| 20 | low      | Reduce file size of internal/core/sync.go below 300-line limit |
