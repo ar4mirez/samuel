@@ -84,7 +84,10 @@ func (e *Extractor) extractFile(srcPath, dstPath string, result *ExtractResult, 
 	// Check if destination exists
 	if _, err := os.Stat(dstPath); err == nil {
 		if !force {
-			relPath, _ := filepath.Rel(e.destPath, dstPath)
+			relPath, err := filepath.Rel(e.destPath, dstPath)
+			if err != nil {
+				return fmt.Errorf("failed to compute relative path for %s: %w", dstPath, err)
+			}
 			result.FilesSkipped = append(result.FilesSkipped, relPath)
 			return nil
 		}
@@ -101,7 +104,10 @@ func (e *Extractor) extractFile(srcPath, dstPath string, result *ExtractResult, 
 		return fmt.Errorf("failed to copy %s: %w", srcPath, err)
 	}
 
-	relPath, _ := filepath.Rel(e.destPath, dstPath)
+	relPath, err := filepath.Rel(e.destPath, dstPath)
+	if err != nil {
+		return fmt.Errorf("failed to compute relative path for %s: %w", dstPath, err)
+	}
 	result.FilesCreated = append(result.FilesCreated, relPath)
 
 	return nil
@@ -114,7 +120,10 @@ func (e *Extractor) extractDir(srcPath, dstPath string, result *ExtractResult, f
 		return fmt.Errorf("failed to create directory %s: %w", dstPath, err)
 	}
 
-	relDir, _ := filepath.Rel(e.destPath, dstPath)
+	relDir, err := filepath.Rel(e.destPath, dstPath)
+	if err != nil {
+		return fmt.Errorf("failed to compute relative path for %s: %w", dstPath, err)
+	}
 	result.DirsCreated = append(result.DirsCreated, relDir)
 
 	return filepath.Walk(srcPath, func(path string, info os.FileInfo, err error) error {
