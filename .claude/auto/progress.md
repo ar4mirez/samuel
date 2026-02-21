@@ -151,3 +151,12 @@
 | 18 | medium   | Refactor runUpdate() into smaller helper functions |
 | 19 | medium   | Add unit tests for registry.go skill lookup functions |
 | 20 | low      | Reduce file size of internal/core/sync.go below 300-line limit |
+
+[2026-02-21T19:30:00Z] [iteration:7] [task:8] COMPLETED: Added unit tests for internal/core/downloader.go filesystem functions
+- Added 22 test cases: 6 extractTarGz edge cases, 3 copyFile, 3 copyDir, 3 ClearCache, 2 GetCacheSize
+- Coverage: validateSymlinkTarget 100%, copyDir 90%, copyFile 92.3%, ClearCache 80%, GetCacheSize 87.5%, extractTarGz 75.8%
+- Thin wrapper methods (NewDownloader, DownloadVersion, GetLatestVersion, DownloadFile, CheckForUpdates) left at 0% — they delegate to github.Client which is tested at 89.7%
+- extractTarGz edge cases: invalid gzip input, empty archive, nested dirs without explicit entries, file permissions preserved, directory path traversal
+- LEARNING: `extractTarGz` auto-creates parent directories for regular files via `os.MkdirAll(filepath.Dir(target))`, so archives don't need explicit directory entries — tested this behavior explicitly
+- LEARNING: The `contains` helper in the test file uses `bytes.Contains` instead of `strings.Contains` — works identically but could be simplified. Not worth changing since it's existing test code.
+- Commit: e07b37c

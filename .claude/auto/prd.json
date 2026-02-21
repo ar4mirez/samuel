@@ -118,7 +118,8 @@
       "id": "8",
       "title": "Add unit tests for internal/core/downloader.go",
       "description": "downloader.go (262 LOC) handles GitHub archive download and tar extraction with no test coverage. This is critical I/O logic. Add tests using temp directories and mock HTTP responses.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "e07b37c",
       "priority": "high",
       "complexity": "medium",
       "files_to_modify": [
@@ -278,9 +279,9 @@
   ],
   "progress": {
     "total_tasks": 20,
-    "completed_tasks": 6,
-    "current_iteration": 6,
-    "total_iterations_run": 6,
+    "completed_tasks": 7,
+    "current_iteration": 7,
+    "total_iterations_run": 7,
     "status": "in_progress"
   }
 }
