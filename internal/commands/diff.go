@@ -187,7 +187,11 @@ func getLocalFileHashes(basePath string) map[string]string {
 	}
 
 	for _, pattern := range patterns {
-		matches, _ := filepath.Glob(filepath.Join(basePath, pattern))
+		matches, err := filepath.Glob(filepath.Join(basePath, pattern))
+		if err != nil {
+			ui.Warn("Failed to glob pattern %q: %v", pattern, err)
+			continue
+		}
 		for _, match := range matches {
 			relPath, _ := filepath.Rel(basePath, match)
 			if hash, err := hashFile(match); err == nil {
@@ -198,7 +202,7 @@ func getLocalFileHashes(basePath string) map[string]string {
 
 	// Also walk .agent directory explicitly
 	agentDir := filepath.Join(basePath, ".agent")
-	_ = filepath.Walk(agentDir, func(path string, info os.FileInfo, err error) error {
+	if err := filepath.Walk(agentDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil || info.IsDir() {
 			return nil
 		}
@@ -209,7 +213,9 @@ func getLocalFileHashes(basePath string) map[string]string {
 			}
 		}
 		return nil
-	})
+	}); err != nil && !os.IsNotExist(err) {
+		ui.Warn("Failed to walk .agent directory: %v", err)
+	}
 
 	return hashes
 }
@@ -220,7 +226,7 @@ func getVersionFileHashes(cachePath string) map[string]string {
 	// The template files are in cachePath/template/
 	templatePath := filepath.Join(cachePath, "template")
 
-	_ = filepath.Walk(templatePath, func(path string, info os.FileInfo, err error) error {
+	if err := filepath.Walk(templatePath, func(path string, info os.FileInfo, err error) error {
 		if err != nil || info.IsDir() {
 			return nil
 		}
@@ -235,7 +241,9 @@ func getVersionFileHashes(cachePath string) map[string]string {
 			hashes[relPath] = hash
 		}
 		return nil
-	})
+	}); err != nil && !os.IsNotExist(err) {
+		ui.Warn("Failed to walk template directory: %v", err)
+	}
 
 	return hashes
 }
