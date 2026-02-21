@@ -319,7 +319,8 @@
       "id": "83",
       "title": "Add unit tests for commands/add.go component addition logic",
       "description": "add.go (130 LOC) has 0% test coverage. After task 82 refactors runAdd() into smaller functions, test the extracted helpers: resolveComponent (valid/invalid type aliases, unknown component, already-installed component), updateAddConfig (config loading failures, successful addition). Use t.TempDir() with crafted samuel.yaml configs. The download path is hard to unit test without mocking, so focus on validation and config logic.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "21812f3",
       "priority": "medium",
       "complexity": "medium",
       "files_to_modify": [
@@ -659,9 +660,9 @@
   ],
   "progress": {
     "total_tasks": 50,
-    "completed_tasks": 21,
-    "current_iteration": 47,
-    "total_iterations_run": 47,
+    "completed_tasks": 22,
+    "current_iteration": 48,
+    "total_iterations_run": 48,
     "status": "in_progress"
   }
 }

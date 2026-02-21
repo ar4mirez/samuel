@@ -1023,3 +1023,12 @@
 - All four functions well under 50-line limit. File size: 143 lines (under 300).
 - LEARNING: The three component types (language/framework/workflow) each have their own aliases (lang/l, fw/f, wf/w) and use different Find/Has/Add methods on the config. The switch statement is repeated in `resolveComponent` and `updateAddConfig` — this could be further reduced with a component type descriptor pattern, but that's over-engineering for the current scope.
 - Commit: f1ba197
+
+[2026-02-22T18:00:00Z] [iteration:48] [task:83] COMPLETED: Added unit tests for commands/add.go component addition logic
+- Created add_test.go with 12 test functions covering resolveComponent, updateAddConfig, and runAdd error paths
+- `resolveComponent`: table-driven tests for all 3 type aliases (language/lang/l, framework/fw/f, workflow/wf/w), already-installed detection, unknown component errors, unknown type error, component path verification
+- `updateAddConfig`: tested all 6 type aliases (3 types × 2 aliases each), config persistence via LoadConfigFrom, preservation of existing components
+- `runAdd` error paths: no config (samuel init message), corrupt YAML, invalid type, unknown component, already-installed (returns nil)
+- LEARNING: `runAdd` accepts nil for cmd parameter because the function only uses `args` (not cmd flags). This makes testing the error paths straightforward without needing a cobra.Command setup.
+- LEARNING: `setupConfigTestDir` from config_cmd_test.go is reusable across test files in the same package — no need to duplicate the helper.
+- Commit: 21812f3
