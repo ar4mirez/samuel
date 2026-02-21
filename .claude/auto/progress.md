@@ -131,6 +131,13 @@
 - No TODO/FIXME/HACK markers in code
 - Good test quality where tests exist (table-driven, t.TempDir patterns)
 
+[2026-02-21T19:00:00Z] [iteration:6] [task:12] COMPLETED: Fixed nil pointer dereference in CheckForUpdates
+- Added nil guard: `if release == nil { return nil, fmt.Errorf(...) }` before accessing `release.TagName`
+- Added regression test `no_releases_returns_error` to TestCheckForUpdates table-driven tests
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: `GetLatestRelease` returns `(nil, nil)` on 404 — this is by design (documented in godoc). All callers must check for nil. `GetLatestVersionOrBranch` already had the nil check; only `CheckForUpdates` was missing it.
+- Commit: e484979
+
 ### Tasks Generated (Second Discovery): 10
 | ID | Priority | Title |
 |----|----------|-------|
