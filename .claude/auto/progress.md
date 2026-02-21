@@ -335,3 +335,64 @@
 - LEARNING: `countTaskStatuses` initializes 5 known status keys but unknown statuses (e.g., "unknown") also get counted via map increment — the function doesn't validate against known statuses. The `unknown_status_counted_separately` test verifies this behavior.
 - LEARNING: `validateSandbox` only checks docker availability for "docker" and "docker-sandbox" modes. Any other string (including empty) passes through without error since neither `if` branch matches.
 - Commit: 66435a9
+
+[2026-02-22T01:30:00Z] [iteration:17] [task:34] COMPLETED: Added unit tests for init.go helper functions
+- Created init_test.go with 44 test cases covering 4 functions
+- `expandLanguages`: 18 table-driven tests (all 10 aliases, comma-separated, multiple flags, unknown filtered, uppercase normalized, whitespace trimmed)
+- `expandFrameworks`: 10 table-driven tests (2 aliases, comma-separated, multiple flags, unknown filtered, uppercase normalized, whitespace trimmed)
+- `isSamuelRepository`: 6 subtests using t.TempDir() (empty dir, template dir without CLAUDE.md, template dir with CLAUDE.md, packages/cli with go.mod, packages/cli without go.mod, nonexistent dir)
+- `getRelevantFrameworks`: 10 subtests (3 single-language mapping tests, multi-language dedup, unknown/empty/nil input, Component type validation, all 11 mapped languages verified, registry consistency check)
+- LEARNING: `expandLanguages` maps both "js" and "javascript" to "typescript" — the alias "ts" also maps there. Three aliases converge to one language.
+- LEARNING: `isSamuelRepository` has two independent detection paths (template/CLAUDE.md OR packages/cli/go.mod). Either match triggers detection. The "packages/cli" check is for a legacy or alternative repo structure.
+- LEARNING: `getRelevantFrameworks` uses a `seen` map to deduplicate — if two languages share a framework, it only appears once. The mapping covers 11 languages × 3 frameworks each = 33 framework mappings.
+- Commit: 45c720b
+
+---
+
+[2026-02-21T01:30:00Z] [discovery] FOUND: Fifth discovery iteration — security, coverage, error handling
+
+### Security Vulnerabilities (NEW)
+- **HIGH**: `remove.go:108` — `filePath := filepath.Join(cwd, component.Path)` uses `component.Path` from `samuel.yaml` without path traversal validation. A tampered config could cause `os.Remove` to delete arbitrary files outside the project directory. No `validateContainedPath` equivalent is applied.
+- **MEDIUM**: `skill.go:148` — User-provided skill name from CLI used directly in `filepath.Join(skillsDir, name)`. While `ValidateSkillName` restricts format, the path is constructed *before* validation in the create command flow (line 134). A name like `../../etc` could escape the skills directory.
+
+### Test Coverage Update
+- Overall: `cmd/samuel` **0%**, `internal/commands` **20.3%**, `internal/core` **83.9%**, `internal/github` **89.4%**, `internal/ui` **17.4%**
+- `internal/commands/` still has 15 of 21 source files with 0% test coverage
+- New testable files identified: `config_cmd.go` (2 pure functions: `formatConfigValue`, `isValidConfigKey`), `diff.go` (pure function: `computeDiff`), `auto_pilot.go` (flag parsing functions)
+- `internal/ui` improved from 0% to 17.4% (spinner tests added in task 31), but `output.go` and `prompts.go` still untested
+
+### Error Handling Issues (NEW)
+- **MEDIUM**: `info.go:62` — `config, _ := core.LoadConfig()` silently discards error (same pattern as task 40 for list.go)
+- **LOW**: `config_cmd.go:168` — `oldValue, _ := config.GetValue(key)` silently discards error (display-only, non-critical)
+
+### Code Quality Update
+- 19 functions exceed 50-line limit (unchanged from previous discovery)
+- 9 non-test files exceed 300-line limit (unchanged)
+- `auto_pilot.go` at 296 lines — just under 300-line limit but `executePilotLoop` is 100 lines (2x function limit)
+- `go vet ./...` clean, no panic() calls, no TODO/FIXME markers
+- No hardcoded secrets or credentials found
+- All `exec.Command` calls protected by AITool allowlist
+- HTTP client properly uses custom client with 30s timeout (no `http.DefaultClient`)
+
+### Positive Findings
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- Security posture strong: path traversal, symlink, size limits, TOCTOU all fixed in previous iterations
+- `internal/core` at 83.9% exceeds 80% business logic target
+- `internal/github` at 89.4% well above target
+- Established test patterns (table-driven, t.TempDir, redirectTransport) consistently applied
+- Docker env var forwarding uses explicit allowlist (not forwarding all vars)
+- Decompression bomb and download size protections in place
+
+### Tasks Generated (Fifth Discovery): 10
+| ID | Priority | Title |
+|----|----------|-------|
+| 41 | high     | Add path traversal validation to remove.go component deletion |
+| 42 | medium   | Add skill name validation against path traversal in skill.go |
+| 43 | medium   | Fix silently discarded LoadConfig error in info.go |
+| 44 | medium   | Add unit tests for config_cmd.go pure functions |
+| 45 | low      | Fix silently discarded GetValue error in config_cmd.go |
+| 46 | medium   | Add unit tests for auto_pilot.go parsePilotFlags and parseAutoFlags |
+| 47 | medium   | Add unit tests for diff.go pure functions |
+| 48 | medium   | Add unit tests for list.go helper functions |
+| 49 | low      | Reduce file size of auto_pilot.go / refactor executePilotLoop |
+| 50 | medium   | Add unit tests for sync.go GenerateFolderCLAUDEMD function |

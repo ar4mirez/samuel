@@ -452,7 +452,8 @@
       "id": "34",
       "title": "Add unit tests for init.go helper functions",
       "description": "init.go (437 LOC) has 0% test coverage but contains 4 testable helper functions: expandLanguages (expands language aliases like 'ts' to 'typescript'), expandFrameworks (expands framework aliases like 'fw' to framework names), isSamuelRepository (detects if target dir is the samuel repo itself), getRelevantFrameworks (returns frameworks associated with selected languages). These are pure/near-pure functions that can be tested with table-driven tests without mocking.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "45c720b",
       "priority": "high",
       "complexity": "low",
       "files_to_modify": [
@@ -533,13 +534,133 @@
         "internal/commands/list.go"
       ],
       "source": "pilot-discovery"
+    },
+    {
+      "id": "41",
+      "title": "Add path traversal validation to remove.go component deletion",
+      "description": "In remove.go:108, `filePath := filepath.Join(cwd, component.Path)` uses component.Path from samuel.yaml config without validating the resolved path stays within the project directory. A tampered config with `component.Path = '../../etc/important_file'` would cause os.Remove to delete arbitrary files. Add filepath.Clean + strings.HasPrefix containment check before the os.Remove call, consistent with the validateContainedPath pattern used in extractor.go.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/remove.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "42",
+      "title": "Add skill name validation against path traversal in skill.go",
+      "description": "In skill.go:148, user-provided skill name from CLI input is used directly in `filepath.Join(skillsDir, name)` without validation against directory traversal characters. A name like '../../etc' would escape the skills directory. While CreateSkillScaffold validates the name format (ValidateSkillName checks for lowercase alphanumeric), the create command at line 134 also constructs `filepath.Join(cwd, '.claude', 'skills')` before calling ValidateSkillName. Add explicit path containment check after filepath.Join to ensure the resolved path stays within skillsDir.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/skill.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "43",
+      "title": "Fix silently discarded LoadConfig error in info.go",
+      "description": "In info.go:62, `config, _ := core.LoadConfig()` silently discards the error. Same pattern as list.go (task 40). Non-file-not-found errors (corrupt YAML, permission denied) should be logged via ui.Warn. Apply the os.IsNotExist check pattern: if file doesn't exist, proceed with nil config; if other error, log warning.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/info.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "44",
+      "title": "Add unit tests for config_cmd.go pure functions",
+      "description": "config_cmd.go (216 LOC) has 0% test coverage but contains 2 easily testable pure functions: formatConfigValue (line 192, formats config values with type-specific handling for string, []string, and default) and isValidConfigKey (line 209, checks key against ValidConfigKeys list). Add table-driven tests for both: formatConfigValue with empty string, non-empty string, empty slice, non-empty slice, and non-string types; isValidConfigKey with valid and invalid keys.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/config_cmd_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "45",
+      "title": "Fix silently discarded GetValue error in config_cmd.go",
+      "description": "In config_cmd.go:168, `oldValue, _ := config.GetValue(key)` silently discards the error when reading the old value before setting a new one. While the old value is only used for display purposes (showing 'changed X from Y to Z'), a GetValue error could indicate a deeper config parsing issue. Log the error via ui.Warn if non-nil, since it's non-critical (the Set operation should still proceed).",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/config_cmd.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "46",
+      "title": "Add unit tests for auto_pilot.go parsePilotFlags and parseAutoFlags",
+      "description": "auto_pilot.go (296 LOC) has 0% test coverage. parsePilotFlags (line 102) and parseAutoFlags (line 118) extract CLI flags into config structs — they can be tested by constructing cobra.Command with preset flag values. parseAutoFlags also validates AITool and sandbox mode. Add table-driven tests for both functions covering: default values, custom values, invalid AITool, and invalid sandbox mode.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/auto_pilot_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "47",
+      "title": "Add unit tests for diff.go pure functions",
+      "description": "diff.go (290 LOC) has 0% test coverage. Contains testable pure logic: computeDiff (computes added/removed/modified files from two hash maps), getStatusIcon (returns icon string for diff status), and formatDiffOutput (formats diff results for display). computeDiff is a pure function comparing two map[string]string — perfect for table-driven tests. Add tests for: no changes, files added, files removed, files modified, mixed changes.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/diff_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "48",
+      "title": "Add unit tests for list.go helper functions",
+      "description": "list.go (164 LOC) has 0% test coverage. Contains two command handlers (listInstalled, listAvailable) that depend on config state. listInstalled reads samuel.yaml to show what's installed; listAvailable calls registry functions. While full integration tests are complex, the formatting and display logic can be tested by constructing core.Config structs with known values and capturing stdout output.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/list_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "49",
+      "title": "Reduce file size of internal/commands/auto_pilot.go below 300-line limit",
+      "description": "auto_pilot.go is 296 lines, just under the 300-line limit but contains executePilotLoop at 100 lines (2x the 50-line function guardrail). Extract the main loop body (discovery check, task iteration, progress save) into helper functions: shouldRunDiscovery(), executeDiscoveryIteration(), executeTaskIteration(), and saveIterationProgress(). This also improves testability of individual loop phases.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/auto_pilot.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "50",
+      "title": "Add unit tests for sync.go GenerateFolderCLAUDEMD function",
+      "description": "sync.go (431 LOC) has 0% test coverage in the commands package. The core sync.go has GenerateFolderCLAUDEMD (generates context-aware CLAUDE.md content for subdirectories) and SyncFolderCLAUDEMDs (walks directory tree). GenerateFolderCLAUDEMD is testable with constructed SyncOptions and temp directory structures. Add tests for: root directory, nested subdirectory, directory with Go files, directory with test files, empty directory.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/sync_test.go"
+      ],
+      "source": "pilot-discovery"
     }
   ],
   "progress": {
-    "total_tasks": 40,
-    "completed_tasks": 16,
-    "current_iteration": 16,
-    "total_iterations_run": 16,
+    "total_tasks": 50,
+    "completed_tasks": 17,
+    "current_iteration": 17,
+    "total_iterations_run": 17,
     "status": "in_progress"
   }
 }
