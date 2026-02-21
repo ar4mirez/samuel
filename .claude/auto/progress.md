@@ -608,3 +608,18 @@
 - LEARNING: `checkInstalledSkills` with a nil-returning finder (unknown component) silently skips that component — it only checks SKILL.md existence when `finder(name) != nil`. This means unknown components in the config are not flagged as errors, which is intentional (forward compatibility with newer registry versions).
 - LEARNING: `extractVersion` tries the bold pattern (`**Current Version**: X.Y.Z`) first, then falls back to plain. If both match, bold wins. This is tested explicitly in the `bold_preferred_over_plain` case.
 - LEARNING: `checkAutoHealth` depends on `core.ValidateAutoPRD` which checks for empty Version, empty Project.Name, empty Project.Description, etc. A PRD with only `Version` missing triggers validation errors — useful for testing the validation-errors branch without constructing a fully invalid PRD.
+
+[2026-02-22T08:30:00Z] [iteration:28] [task:64] COMPLETED: Added unit tests for init_steps.go step functions
+- Created init_steps_test.go with 28 test cases covering 5 functions + 2 structs
+- `parseInitFlags`: 9 tests (defaults, target args existing/nonexistent, force, non-interactive, template/languages/frameworks flags, dot target, cliProvided detection)
+- `validateInitTarget`: 5 tests (valid dir, samuel repo rejected, config exists with/without force, alt config)
+- `selectComponents` (non-interactive paths): 7 tests (template resolution, unknown template error, language/framework flag overrides, defaults to starter, minimal template, language-only flags without template)
+- `updateSkillsAndAgentsMD`: 4 tests (CLAUDE.md → AGENTS.md copy, skills directory scanning, no CLAUDE.md, multiple skills returned)
+- `installAndSetup`: 1 test (directory creation when createDir flag set)
+- `initSelections` struct: 2 tests (zero value, populated)
+- Used `newInitCmd()` helper to create fresh cobra.Command with correct flags for each test
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: `selectComponents` has many interactive paths (template selection, language selection, framework selection) that require UI prompts. The non-interactive + cliProvided code paths are fully testable without mocking. Setting `nonInteractive=true` or `cliProvided=true` bypasses all `ui.Select`/`ui.MultiSelect` calls.
+- LEARNING: `parseInitFlags` uses cobra's `cmd.Flags().GetBool/GetString/GetStringSlice` which silently return zero values if the flag wasn't registered. The test helper `newInitCmd()` must register all 5 flags to match the real command setup, otherwise tests would pass with wrong zero values.
+- LEARNING: `installAndSetup` can be partially tested — directory creation happens before the extractor runs, so even with a nonexistent cache path, we can verify the directory was created. The extractor errors are handled gracefully (reported via `ui.Error` calls).
+- Commit: 7a9c814

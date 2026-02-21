@@ -75,7 +75,7 @@
       "files_to_modify": [
         "internal/commands/init_steps_test.go"
       ],
-      "commit_sha": "",
+      "commit_sha": "7a9c814",
       "source": "pilot-discovery"
     },
     {
