@@ -442,3 +442,424 @@ func TestWriteFile_ValidPath(t *testing.T) {
 		t.Errorf("got %q, want %q", string(data), "content")
 	}
 }
+
+func TestShouldSkip(t *testing.T) {
+	tests := []struct {
+		path string
+		want bool
+	}{
+		{".", false},
+		{".git", true},
+		{".github", true}, // starts with ".git"
+		{".gitignore", true},
+		{"node_modules", true},
+		{"sub/node_modules/pkg", true},
+		{"CLAUDE.md", false},
+		{".claude/skills/go-guide", false},
+		{"src/main.go", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.path, func(t *testing.T) {
+			if got := shouldSkip(tt.path); got != tt.want {
+				t.Errorf("shouldSkip(%q) = %v, want %v", tt.path, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNewExtractor_Getters(t *testing.T) {
+	ext := NewExtractor("/src", "/dst")
+	if ext.GetSourcePath() != "/src" {
+		t.Errorf("GetSourcePath() = %q, want %q", ext.GetSourcePath(), "/src")
+	}
+	if ext.GetDestPath() != "/dst" {
+		t.Errorf("GetDestPath() = %q, want %q", ext.GetDestPath(), "/dst")
+	}
+}
+
+// createTemplateFile is a helper that creates a file inside source/template/path
+func createTemplateFile(t *testing.T, sourceDir, path, content string) {
+	t.Helper()
+	fullPath := filepath.Join(sourceDir, TemplatePrefix, path)
+	if err := os.MkdirAll(filepath.Dir(fullPath), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(fullPath, []byte(content), 0644); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestExtract_SingleFile(t *testing.T) {
+	srcDir := t.TempDir()
+	destDir := t.TempDir()
+	createTemplateFile(t, srcDir, "CLAUDE.md", "# Instructions")
+
+	ext := NewExtractor(srcDir, destDir)
+	result, err := ext.Extract([]string{"CLAUDE.md"}, false)
+	if err != nil {
+		t.Fatalf("Extract: %v", err)
+	}
+	if len(result.FilesCreated) != 1 {
+		t.Fatalf("expected 1 file created, got %d", len(result.FilesCreated))
+	}
+	if result.FilesCreated[0] != "CLAUDE.md" {
+		t.Errorf("created file = %q, want %q", result.FilesCreated[0], "CLAUDE.md")
+	}
+
+	data, err := os.ReadFile(filepath.Join(destDir, "CLAUDE.md"))
+	if err != nil {
+		t.Fatalf("failed to read: %v", err)
+	}
+	if string(data) != "# Instructions" {
+		t.Errorf("content = %q, want %q", string(data), "# Instructions")
+	}
+}
+
+func TestExtract_SkipExisting(t *testing.T) {
+	srcDir := t.TempDir()
+	destDir := t.TempDir()
+	createTemplateFile(t, srcDir, "CLAUDE.md", "new content")
+
+	// Pre-create the file in destDir
+	if err := os.WriteFile(filepath.Join(destDir, "CLAUDE.md"), []byte("old content"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	ext := NewExtractor(srcDir, destDir)
+	result, err := ext.Extract([]string{"CLAUDE.md"}, false)
+	if err != nil {
+		t.Fatalf("Extract: %v", err)
+	}
+	if len(result.FilesSkipped) != 1 {
+		t.Fatalf("expected 1 file skipped, got %d", len(result.FilesSkipped))
+	}
+
+	// Original content should be preserved
+	data, _ := os.ReadFile(filepath.Join(destDir, "CLAUDE.md"))
+	if string(data) != "old content" {
+		t.Errorf("content = %q, want %q (should be preserved)", string(data), "old content")
+	}
+}
+
+func TestExtract_ForceOverwrite(t *testing.T) {
+	srcDir := t.TempDir()
+	destDir := t.TempDir()
+	createTemplateFile(t, srcDir, "CLAUDE.md", "new content")
+
+	// Pre-create the file in destDir
+	if err := os.WriteFile(filepath.Join(destDir, "CLAUDE.md"), []byte("old content"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	ext := NewExtractor(srcDir, destDir)
+	result, err := ext.Extract([]string{"CLAUDE.md"}, true)
+	if err != nil {
+		t.Fatalf("Extract: %v", err)
+	}
+	if len(result.FilesCreated) != 1 {
+		t.Fatalf("expected 1 file created (overwritten), got %d", len(result.FilesCreated))
+	}
+
+	data, _ := os.ReadFile(filepath.Join(destDir, "CLAUDE.md"))
+	if string(data) != "new content" {
+		t.Errorf("content = %q, want %q (should be overwritten)", string(data), "new content")
+	}
+}
+
+func TestExtract_SourceNotFound(t *testing.T) {
+	srcDir := t.TempDir()
+	destDir := t.TempDir()
+	// Create template dir but not the file
+	if err := os.MkdirAll(filepath.Join(srcDir, TemplatePrefix), 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	ext := NewExtractor(srcDir, destDir)
+	result, err := ext.Extract([]string{"nonexistent.txt"}, false)
+	if err != nil {
+		t.Fatalf("Extract should not return error for missing source: %v", err)
+	}
+	if len(result.Errors) != 1 {
+		t.Fatalf("expected 1 error in result, got %d", len(result.Errors))
+	}
+	if !strings.Contains(result.Errors[0].Error(), "source not found") {
+		t.Errorf("expected 'source not found' error, got: %v", result.Errors[0])
+	}
+}
+
+func TestExtract_Directory(t *testing.T) {
+	srcDir := t.TempDir()
+	destDir := t.TempDir()
+	createTemplateFile(t, srcDir, ".claude/skills/go-guide/SKILL.md", "# Go Guide")
+	createTemplateFile(t, srcDir, ".claude/skills/go-guide/references/patterns.md", "patterns")
+
+	ext := NewExtractor(srcDir, destDir)
+	result, err := ext.Extract([]string{".claude/skills/go-guide"}, false)
+	if err != nil {
+		t.Fatalf("Extract directory: %v", err)
+	}
+	if len(result.DirsCreated) < 1 {
+		t.Error("expected at least 1 directory created")
+	}
+
+	data, err := os.ReadFile(filepath.Join(destDir, ".claude", "skills", "go-guide", "SKILL.md"))
+	if err != nil {
+		t.Fatalf("failed to read SKILL.md: %v", err)
+	}
+	if string(data) != "# Go Guide" {
+		t.Errorf("content = %q, want %q", string(data), "# Go Guide")
+	}
+
+	data, err = os.ReadFile(filepath.Join(destDir, ".claude", "skills", "go-guide", "references", "patterns.md"))
+	if err != nil {
+		t.Fatalf("failed to read patterns.md: %v", err)
+	}
+	if string(data) != "patterns" {
+		t.Errorf("content = %q, want %q", string(data), "patterns")
+	}
+}
+
+func TestExtractAll_WithFiles(t *testing.T) {
+	srcDir := t.TempDir()
+	destDir := t.TempDir()
+	createTemplateFile(t, srcDir, "CLAUDE.md", "instructions")
+	createTemplateFile(t, srcDir, ".claude/skills/test/SKILL.md", "skill")
+
+	ext := NewExtractor(srcDir, destDir)
+	result, err := ext.ExtractAll(false)
+	if err != nil {
+		t.Fatalf("ExtractAll: %v", err)
+	}
+	if len(result.FilesCreated) != 2 {
+		t.Errorf("expected 2 files created, got %d: %v", len(result.FilesCreated), result.FilesCreated)
+	}
+}
+
+func TestExtractAll_SkipsGitAndNodeModules(t *testing.T) {
+	srcDir := t.TempDir()
+	destDir := t.TempDir()
+	createTemplateFile(t, srcDir, "CLAUDE.md", "ok")
+	createTemplateFile(t, srcDir, ".git/config", "should be skipped")
+	createTemplateFile(t, srcDir, "node_modules/pkg/index.js", "should be skipped")
+
+	ext := NewExtractor(srcDir, destDir)
+	result, err := ext.ExtractAll(false)
+	if err != nil {
+		t.Fatalf("ExtractAll: %v", err)
+	}
+	if len(result.FilesCreated) != 1 {
+		t.Errorf("expected 1 file (only CLAUDE.md), got %d: %v",
+			len(result.FilesCreated), result.FilesCreated)
+	}
+	// Verify skipped files don't exist in dest
+	if _, err := os.Stat(filepath.Join(destDir, ".git", "config")); !os.IsNotExist(err) {
+		t.Error(".git/config should not be extracted")
+	}
+	if _, err := os.Stat(filepath.Join(destDir, "node_modules")); !os.IsNotExist(err) {
+		t.Error("node_modules should not be extracted")
+	}
+}
+
+func TestExtractAll_NoTemplateDir(t *testing.T) {
+	srcDir := t.TempDir()
+	destDir := t.TempDir()
+	// Don't create template/ dir — ExtractAll should return empty result
+
+	ext := NewExtractor(srcDir, destDir)
+	result, err := ext.ExtractAll(false)
+	if err != nil {
+		t.Fatalf("ExtractAll with no template dir: %v", err)
+	}
+	if len(result.FilesCreated) != 0 {
+		t.Errorf("expected 0 files, got %d", len(result.FilesCreated))
+	}
+}
+
+func TestRestoreBackup(t *testing.T) {
+	destDir := t.TempDir()
+	backupDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	// Create backup files
+	if err := os.MkdirAll(filepath.Join(backupDir, "sub"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(backupDir, "file.txt"), []byte("backup1"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(backupDir, "sub", "nested.txt"), []byte("backup2"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := ext.RestoreBackup(backupDir); err != nil {
+		t.Fatalf("RestoreBackup: %v", err)
+	}
+
+	// Verify restored files
+	data, err := os.ReadFile(filepath.Join(destDir, "file.txt"))
+	if err != nil {
+		t.Fatalf("failed to read file.txt: %v", err)
+	}
+	if string(data) != "backup1" {
+		t.Errorf("file.txt = %q, want %q", string(data), "backup1")
+	}
+
+	data, err = os.ReadFile(filepath.Join(destDir, "sub", "nested.txt"))
+	if err != nil {
+		t.Fatalf("failed to read sub/nested.txt: %v", err)
+	}
+	if string(data) != "backup2" {
+		t.Errorf("sub/nested.txt = %q, want %q", string(data), "backup2")
+	}
+}
+
+func TestRestoreBackup_EmptyDir(t *testing.T) {
+	destDir := t.TempDir()
+	backupDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	if err := ext.RestoreBackup(backupDir); err != nil {
+		t.Fatalf("RestoreBackup empty dir: %v", err)
+	}
+}
+
+func TestRemoveFile_ValidPath(t *testing.T) {
+	destDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	filePath := filepath.Join(destDir, "removeme.txt")
+	if err := os.WriteFile(filePath, []byte("data"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := ext.RemoveFile("removeme.txt"); err != nil {
+		t.Fatalf("RemoveFile: %v", err)
+	}
+
+	if _, err := os.Stat(filePath); !os.IsNotExist(err) {
+		t.Error("file should have been removed")
+	}
+}
+
+func TestFileExists_ValidPaths(t *testing.T) {
+	destDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	if err := os.WriteFile(filepath.Join(destDir, "exists.txt"), []byte("yes"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if !ext.FileExists("exists.txt") {
+		t.Error("FileExists should return true for existing file")
+	}
+	if ext.FileExists("nope.txt") {
+		t.Error("FileExists should return false for non-existing file")
+	}
+}
+
+func TestBackupFile_NonExistent(t *testing.T) {
+	destDir := t.TempDir()
+	backupDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	// Backup a file that doesn't exist — should be a no-op (returns nil)
+	err := ext.BackupFile("missing.txt", backupDir)
+	if err != nil {
+		t.Fatalf("BackupFile of non-existent file should be no-op: %v", err)
+	}
+
+	// Verify no file was created in backupDir
+	entries, _ := os.ReadDir(backupDir)
+	if len(entries) != 0 {
+		t.Errorf("expected empty backup dir, got %d entries", len(entries))
+	}
+}
+
+func TestBackupFile_ValidFile(t *testing.T) {
+	destDir := t.TempDir()
+	backupDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	if err := os.WriteFile(filepath.Join(destDir, "config.yaml"), []byte("key: value"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := ext.BackupFile("config.yaml", backupDir); err != nil {
+		t.Fatalf("BackupFile: %v", err)
+	}
+
+	data, err := os.ReadFile(filepath.Join(backupDir, "config.yaml"))
+	if err != nil {
+		t.Fatalf("backup file not created: %v", err)
+	}
+	if string(data) != "key: value" {
+		t.Errorf("backup content = %q, want %q", string(data), "key: value")
+	}
+}
+
+func TestValidateExtraction_AllPresent(t *testing.T) {
+	destDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	if err := os.WriteFile(filepath.Join(destDir, "a.txt"), []byte("a"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(destDir, "sub"), 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(destDir, "sub", "b.txt"), []byte("b"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	missing := ext.ValidateExtraction([]string{"a.txt", "sub/b.txt"})
+	if len(missing) != 0 {
+		t.Errorf("expected no missing files, got %v", missing)
+	}
+}
+
+func TestValidateExtraction_SomeMissing(t *testing.T) {
+	destDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	if err := os.WriteFile(filepath.Join(destDir, "a.txt"), []byte("a"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	missing := ext.ValidateExtraction([]string{"a.txt", "missing.txt", "also-missing.txt"})
+	if len(missing) != 2 {
+		t.Fatalf("expected 2 missing, got %d: %v", len(missing), missing)
+	}
+}
+
+func TestValidateExtraction_EmptyList(t *testing.T) {
+	destDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	missing := ext.ValidateExtraction([]string{})
+	if len(missing) != 0 {
+		t.Errorf("expected no missing for empty list, got %v", missing)
+	}
+}
+
+func TestExtract_MultipleFiles(t *testing.T) {
+	srcDir := t.TempDir()
+	destDir := t.TempDir()
+	createTemplateFile(t, srcDir, "CLAUDE.md", "instructions")
+	createTemplateFile(t, srcDir, "AGENTS.md", "agents")
+	createTemplateFile(t, srcDir, ".claude/settings.json", "{}")
+
+	ext := NewExtractor(srcDir, destDir)
+	result, err := ext.Extract([]string{
+		"CLAUDE.md", "AGENTS.md", ".claude/settings.json",
+	}, false)
+	if err != nil {
+		t.Fatalf("Extract multiple: %v", err)
+	}
+	if len(result.FilesCreated) != 3 {
+		t.Errorf("expected 3 files created, got %d: %v",
+			len(result.FilesCreated), result.FilesCreated)
+	}
+	if len(result.Errors) != 0 {
+		t.Errorf("expected no errors, got %v", result.Errors)
+	}
+}
