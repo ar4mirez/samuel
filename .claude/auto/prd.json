@@ -439,12 +439,13 @@
       "id": "93",
       "title": "Add unit tests for registry.go skill lookup functions",
       "description": "registry.go has 6 skill-related functions at 0% coverage: FindSkill (line 305), GetAllSkillNames (line 385), GetLanguageSkills (line 390), SkillToLanguageName (line 406), GetFrameworkSkills (line 420), GetWorkflowSkills (line 437). All are pure functions operating on the static registry data — ideal for table-driven tests. Test: valid skill lookups, unknown skill returns nil, all skill names returned in expected order, language-to-skill mapping completeness, skill category accessors return correct counts.",
-      "status": "pending",
+      "status": "completed",
       "priority": "high",
       "complexity": "low",
       "files_to_modify": [
         "internal/core/registry_test.go"
       ],
+      "commit_sha": "093a3df",
       "source": "pilot-discovery"
     },
     {
@@ -534,9 +535,9 @@
   ],
   "progress": {
     "total_tasks": 40,
-    "completed_tasks": 16,
-    "current_iteration": 42,
-    "total_iterations_run": 42,
+    "completed_tasks": 17,
+    "current_iteration": 43,
+    "total_iterations_run": 43,
     "status": "in_progress"
   }
 }

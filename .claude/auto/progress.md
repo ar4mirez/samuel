@@ -922,3 +922,11 @@
 - LEARNING: The task description mentioned 2 instances at lines 87 and 104, but there was a 3rd instance at line 117 in `extractDir`. Always grep for the full pattern when fixing a class of issues.
 - LEARNING: In the core package, error propagation via `return fmt.Errorf(...)` is preferred over `ui.Warn` because core is a dependency of commands, not the other way around. The UI layer should handle display; core should return errors.
 - Commit: cb5acdc
+
+[2026-02-22T16:30:00Z] [iteration:43] [task:93] COMPLETED: Added unit tests for registry.go skill lookup functions
+- Added 12 new test functions covering FindSkill, GetAllSkillNames, GetLanguageSkills, GetFrameworkSkills, GetWorkflowSkills, SkillToLanguageName, LanguageToSkillName, FrameworkToSkillName, WorkflowToSkillName, round-trip conversion, category coverage, and Skills data integrity
+- 287 lines of new test code added to registry_test.go
+- All pure functions — no mocking needed, table-driven tests throughout
+- LEARNING: SkillToLanguageName uses `len > 6` (not `>=`), meaning it requires at least 1 character before the "-guide" suffix. Input "-guide" (exactly 6 chars) is returned unchanged — this is intentional design.
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- Commit: 093a3df
