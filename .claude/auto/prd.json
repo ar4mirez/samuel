@@ -282,6 +282,7 @@
       "title": "Fix TOCTOU vulnerability in AITool validation for auto loop",
       "description": "In auto_loop.go:116, cfg.AITool is passed directly to exec.Command without validation. While parseAutoFlags() calls core.IsValidAITool() at CLI parse time, the PRD file is re-read from disk at each loop iteration (auto_loop.go:74), so a modified prd.json could inject an arbitrary binary path between validation and execution. Add IsValidAITool() check inside invokeAgentLocal() before exec.Command.",
       "status": "completed",
+      "commit_sha": "4db5316",
       "priority": "critical",
       "complexity": "low",
       "files_to_modify": [

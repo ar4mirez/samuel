@@ -170,3 +170,55 @@
 - LEARNING: On Unix, `filepath.Join("/base", "/absolute")` does NOT replace the base — it produces `/base/absolute`. So absolute paths as the second arg to `filepath.Join` don't actually escape on Unix (they're treated as relative). The containment check naturally passes for this case.
 - LEARNING: The `validateContainedPath` pattern is the same one used in `downloader.go` for symlink validation (task 11) — the project now has consistent path containment checks across both tar extraction and file operations.
 - Commit: 8b69661
+
+---
+
+[2026-02-21T21:00:00Z] [discovery] FOUND: Third discovery iteration — TOCTOU security, error handling, coverage, and file size analysis
+
+### Security Vulnerabilities (NEW)
+- **CRITICAL**: `auto_loop.go:116` — TOCTOU in AITool validation. `cfg.AITool` from PRD file is passed to `exec.Command` without re-validation. PRD is re-read from disk each iteration (line 74), so file modification between CLI parse and loop execution bypasses the `IsValidAITool()` check in `parseAutoFlags()`.
+- **HIGH**: `extractor.go:319-338` — `RestoreBackup` computes `dstPath = filepath.Join(e.destPath, relPath)` without calling `validateContainedPath`. Task 13 covered ReadFile/WriteFile/RemoveFile/BackupFile but missed RestoreBackup and CopyFromCache.
+
+### Error Handling Issues (NEW)
+- **HIGH**: 4 `LoadAutoPRD` errors silently discarded: `auto_pilot.go:196`, `auto_pilot.go:225`, `auto_start_handler.go:124`, `auto_pilot_output.go:45`
+- **MEDIUM**: 3 `filepath.Rel` errors silently discarded in `extractor.go` (lines 87, 104, 117) — empty `relPath` on failure causes incorrect file path construction
+
+### Test Coverage Update
+- Overall coverage: `internal/commands` **19.4%**, `internal/core` **73.0%**, `internal/github` **89.9%**, `internal/ui` **0.0%**
+- `auto_loop.go`: 5 of 9 functions at 0% (InvokeAgent, invokeAgentLocal, invokeAgentDocker, invokeAgentDockerSandbox, buildDockerRunArgs)
+- `config.go`: GetGlobalConfigPath (0%), GetCachePath (0%), EnsureCacheDir (0%), GetValue (45%)
+
+### Code Quality Update
+- 19 functions exceed 50-line limit (top 3: runDoctor 366, runInit 281, runUpdate 219)
+- 9 non-test files exceed 300-line limit: doctor.go (471), registry.go (460), init.go (437), sync.go (431), skill.go (431), config.go (425), extractor.go (413), skill.go (375), search.go (337)
+- 8 deprecated `filepath.Walk` calls (should be `filepath.WalkDir` since Go 1.16)
+- No panic() calls, no TODOs/FIXMEs, go vet clean
+
+### Positive Findings
+- `go test ./...` all pass, `go vet ./...` clean, `go build ./...` clean
+- No new security suppression comments (#nosec)
+- HTTP client correctly uses 30s timeout (not http.DefaultClient)
+- No hardcoded credentials or tokens
+- Good test patterns established (table-driven, t.TempDir, redirectTransport)
+
+### Tasks Generated (Third Discovery): 10
+| ID | Priority | Title |
+|----|----------|-------|
+| 21 | critical | Fix TOCTOU vulnerability in AITool validation for auto loop |
+| 22 | high     | Add path containment validation to RestoreBackup and CopyFromCache |
+| 23 | high     | Fix silently discarded LoadAutoPRD errors in auto pilot commands |
+| 24 | medium   | Replace deprecated filepath.Walk with filepath.WalkDir across codebase |
+| 25 | medium   | Fix silently discarded filepath.Rel errors in extractor.go |
+| 26 | high     | Add unit tests for auto_loop.go agent invocation functions |
+| 27 | medium   | Add unit tests for config.go path and value functions |
+| 28 | low      | Reduce file size of internal/core/config.go below 300-line limit |
+| 29 | low      | Reduce file size of internal/core/registry.go below 300-line limit |
+| 30 | low      | Reduce file size of internal/core/extractor.go below 300-line limit |
+
+[2026-02-21T21:30:00Z] [iteration:9] [task:21] COMPLETED: Fixed TOCTOU vulnerability in AITool validation
+- Added `IsValidAITool(cfg.AITool)` check at the top of `InvokeAgent()` before dispatching to local/docker/docker-sandbox execution paths
+- The validation is a single point of defense that covers all three execution modes
+- Added 9 regression tests: 5 invalid tool cases (path traversal, shell injection, empty, arbitrary binary, unknown tool) and 4 valid tool acceptance tests
+- LEARNING: The described TOCTOU was partially inaccurate — `cfg.AITool` is set once in `NewLoopConfig` and not updated when PRD is re-read in the loop. However, in `auto_start_handler.go`, `NewLoopConfig` reads `AITool` from `prd.Config.AITool` without any validation (only sandbox mode is validated). The fix at `InvokeAgent` level provides defense-in-depth regardless of how `cfg.AITool` is populated.
+- LEARNING: `exec.Command` with Go does NOT invoke a shell, so shell metacharacters like `;` in the tool name won't cause injection. But an arbitrary binary path (e.g., `/bin/sh`) would still be executed. The allow-list validation prevents both attack vectors.
+- Commit: 4db5316
