@@ -426,12 +426,13 @@
       "id": "92",
       "title": "Fix silently discarded filepath.Rel errors in extractor.go",
       "description": "extractor.go has 2 instances of `relPath, _ := filepath.Rel(e.destPath, dstPath)` at lines 87 and 104. These compute relative paths for backup and restore operations. An empty relPath on failure causes incorrect file path construction in the backup directory. Check the error and return it with context. The core package should use `return fmt.Errorf(...)` (not ui.Warn) since core doesn't depend on ui.",
-      "status": "pending",
+      "status": "completed",
       "priority": "high",
       "complexity": "low",
       "files_to_modify": [
         "internal/core/extractor.go"
       ],
+      "commit_sha": "cb5acdc",
       "source": "pilot-discovery"
     },
     {
@@ -533,9 +534,9 @@
   ],
   "progress": {
     "total_tasks": 40,
-    "completed_tasks": 15,
-    "current_iteration": 41,
-    "total_iterations_run": 41,
+    "completed_tasks": 16,
+    "current_iteration": 42,
+    "total_iterations_run": 42,
     "status": "in_progress"
   }
 }

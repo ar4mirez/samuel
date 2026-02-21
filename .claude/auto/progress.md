@@ -911,3 +911,14 @@
 - LEARNING: This task was previously identified in both the Fourth Discovery (task 37) and Tenth Discovery (task 91). The earlier task 37 fixed only the `filepath.Walk` return values and `filepath.Glob` errors (committed as cacd3f2 in iteration 23), but the `filepath.Rel` errors within the callbacks remained. Task 91 completes the job by fixing the 3 `filepath.Rel` calls that were silently discarding errors inside the loop/callback bodies.
 - LEARNING: In Walk callbacks, using `relErr` (not `err`) avoids shadowing the outer `err` parameter from the callback signature `func(path string, info os.FileInfo, err error)`.
 - Commit: 50a1b18
+
+[2026-02-22T17:00:00Z] [iteration:42] [task:92] COMPLETED: Fixed silently discarded filepath.Rel errors in extractor.go
+- Fixed 3 instances of `relPath, _ := filepath.Rel(e.destPath, dstPath)` in extractFile (2 locations) and extractDir (1 location)
+- extractFile skip path (line 87): checks error, returns `fmt.Errorf` with context
+- extractFile success path (line 104): checks error, returns `fmt.Errorf` with context
+- extractDir (line 117): checks error, returns `fmt.Errorf` with context
+- Core package uses `return fmt.Errorf(...)` (not `ui.Warn`) since core doesn't depend on ui
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: The task description mentioned 2 instances at lines 87 and 104, but there was a 3rd instance at line 117 in `extractDir`. Always grep for the full pattern when fixing a class of issues.
+- LEARNING: In the core package, error propagation via `return fmt.Errorf(...)` is preferred over `ui.Warn` because core is a dependency of commands, not the other way around. The UI layer should handle display; core should return errors.
+- Commit: cb5acdc
