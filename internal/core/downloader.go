@@ -165,7 +165,10 @@ func extractTarGz(reader io.Reader, dest string) error {
 			file.Close()
 
 		case tar.TypeSymlink:
-			// Handle symlinks
+			// Validate symlink target to prevent traversal attacks
+			if err := validateSymlinkTarget(dest, target, header.Linkname); err != nil {
+				return err
+			}
 			if err := os.MkdirAll(filepath.Dir(target), 0755); err != nil {
 				return fmt.Errorf("failed to create parent directory: %w", err)
 			}
@@ -174,6 +177,28 @@ func extractTarGz(reader io.Reader, dest string) error {
 				continue
 			}
 		}
+	}
+
+	return nil
+}
+
+// validateSymlinkTarget checks that a symlink target resolves within the
+// destination directory. This prevents symlink traversal attacks where a
+// malicious archive creates symlinks pointing outside the extraction directory.
+func validateSymlinkTarget(dest, symlinkPath, linkTarget string) error {
+	// Reject absolute symlink targets — they always point outside dest
+	if filepath.IsAbs(linkTarget) {
+		return fmt.Errorf("invalid symlink target: absolute path %q", linkTarget)
+	}
+
+	// Resolve the symlink target relative to the symlink's parent directory
+	resolvedTarget := filepath.Join(filepath.Dir(symlinkPath), linkTarget)
+	resolvedTarget = filepath.Clean(resolvedTarget)
+
+	// Ensure the resolved path stays within the destination directory
+	destPrefix := filepath.Clean(dest) + string(os.PathSeparator)
+	if !strings.HasPrefix(resolvedTarget, destPrefix) && resolvedTarget != filepath.Clean(dest) {
+		return fmt.Errorf("invalid symlink target: %q escapes destination directory", linkTarget)
 	}
 
 	return nil
