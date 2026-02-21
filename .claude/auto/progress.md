@@ -423,3 +423,68 @@
 | 48 | medium   | Add unit tests for list.go helper functions |
 | 49 | low      | Reduce file size of auto_pilot.go / refactor executePilotLoop |
 | 50 | medium   | Add unit tests for sync.go GenerateFolderCLAUDEMD function |
+
+---
+
+[2026-02-22T04:00:00Z] [discovery] FOUND: Sixth discovery iteration — function size violations, error handling, test coverage
+
+### Code Quality Violations (NEW)
+- **runAdd()** in add.go: **97 lines** (1.9x the 50-line limit) — no existing refactor task
+- **runRemove()** in remove.go: **101 lines** (2x the 50-line limit) — no existing refactor task
+- **DownloadVersion()** in downloader.go: **65 lines** (1.3x the 50-line limit)
+- **extractTarGz()** in downloader.go: **69 lines** (1.4x the 50-line limit)
+- **runVersion()** in version.go: **68 lines** (1.4x the 50-line limit)
+- downloader.go at 296 lines — borderline 300-line limit with two oversized functions
+
+### Error Handling Issues (NEW)
+- **MEDIUM**: `downloader.go:49` — `os.RemoveAll(cacheDest)` error silently discarded when clearing dev cache. Failed removal + subsequent download = corrupted state
+- **MEDIUM**: `update.go:147-155` — Two `os.ReadFile` errors silently swallowed with `continue`. Permission or I/O errors cause files to be treated as "unchanged", silently skipped during update
+
+### Performance Issue (NEW)
+- **LOW**: `update.go:157` — `string(localContent) != string(cacheContent)` allocates two string copies for comparison. `bytes.Equal` does the same comparison with zero allocations
+
+### Code Duplication (NEW)
+- Three nearly identical path containment validation functions: `validateContainedPath` (extractor.go), `validateRemovePath` (remove.go), `validateSymlinkTarget` (downloader.go). Should be consolidated into a single exported `ValidateContainedPath` in core package
+
+### Test Coverage Update
+- Overall: `cmd/samuel` **0%**, `internal/commands` **22.6%**, `internal/core` **83.9%**, `internal/github` **89.4%**, `internal/ui` **17.4%**
+- `internal/commands` improved from 19.4% → 22.6% (tasks 32, 34, 41 completed since last discovery)
+- Files with 0% coverage still not covered by existing tasks: `add.go` (131 LOC), `version.go` (99 LOC), `remove.go` (partial — only validateRemovePath tested)
+- 91 total silently discarded errors across 17 files (many are Cobra flag parsing, lower risk)
+- 33 `fmt.Println` calls in commands/ bypassing ui package (consistency issue, not prioritized)
+
+### Positive Findings
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- `go vet` clean — no issues
+- No panic() calls, no TODO/FIXME/HACK markers
+- No hardcoded credentials or secrets
+- Security posture strong (path traversal, symlink, size limits, TOCTOU all fixed)
+- `internal/core` at 83.9% exceeds 80% business logic coverage target
+- `internal/github` at 89.4% well above target
+- Linear commit history, clean branch structure
+- All 20 completed tasks have passing quality checks
+
+### Tasks Generated (Sixth Discovery): 10
+| ID | Priority | Title |
+|----|----------|-------|
+| 51 | medium   | Fix silently discarded os.RemoveAll error in downloader.go dev cache clear |
+| 52 | medium   | Fix silently discarded ReadFile errors in update.go file comparison |
+| 53 | low      | Use bytes.Equal instead of string conversion for file comparison in update.go |
+| 54 | medium   | Refactor runAdd() into smaller helper functions |
+| 55 | medium   | Refactor runRemove() into smaller helper functions |
+| 56 | medium   | Add unit tests for add.go command logic |
+| 57 | medium   | Add unit tests for version.go runVersion function |
+| 58 | low      | Refactor DownloadVersion() and extractTarGz() in downloader.go below 50-line limit |
+| 59 | low      | Consolidate path containment validation into shared core utility |
+| 60 | medium   | Add unit tests for remove.go validateRemovePath and removal logic |
+
+[2026-02-22T04:30:00Z] [iteration:21] [task:7] COMPLETED: Refactored runInit() into smaller helper functions
+- Split 277-line `runInit()` into a 28-line orchestrator that delegates to focused functions
+- Created `init_steps.go` (284 lines) with step functions: parseInitFlags, validateInitTarget, selectComponents, selectTemplateInteractive, selectLanguagesInteractive, selectFrameworksInteractive, displayAndConfirm, downloadFramework, installAndSetup, updateSkillsAndAgentsMD
+- Kept `init.go` (222 lines) with command registration, runInit orchestrator, and existing helpers (expandLanguages, expandFrameworks, isSamuelRepository, getRelevantFrameworks), plus reportInitResults and saveInitConfig
+- Introduced `initFlags` and `initSelections` structs to reduce parameter passing between functions
+- All functions under 50 lines, both files under 300 lines
+- LEARNING: The `selectComponents` function was initially 60 lines even after extracting interactive selection helpers. Extracting `selectTemplateInteractive` (template options construction + prompt) brought it under 50. The key insight: the condition check + option construction + prompt + error handling pattern (13 lines) is a reusable extraction target.
+- LEARNING: `ScanSkillsDirectory` returns `[]*core.SkillInfo` (pointer slice), not `[]core.SkillInfo`. When refactoring, type mismatches in return values are caught immediately by the compiler — always `go build` after extraction.
+- LEARNING: Similar to the doctor.go refactor (task 6), splitting into two files (orchestrator + steps) keeps both under the 300-line limit. The logical grouping (init.go = command setup + helpers, init_steps.go = initialization steps) is a natural split.
+- Commit: f9017e3

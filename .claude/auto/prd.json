@@ -108,7 +108,8 @@
       "id": "7",
       "title": "Refactor runInit() into smaller helper functions",
       "description": "runInit() in init.go spans 277 lines (lines 41-318), far exceeding the 50-line guardrail. Extract into helper functions: selectTemplate(), selectLanguages(), selectFrameworks(), downloadAndExtract(), and postInitSetup().",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "f9017e3",
       "priority": "medium",
       "complexity": "medium",
       "files_to_modify": [
@@ -657,13 +658,135 @@
         "internal/core/sync_test.go"
       ],
       "source": "pilot-discovery"
+    },
+    {
+      "id": "51",
+      "title": "Fix silently discarded os.RemoveAll error in downloader.go dev cache clear",
+      "description": "In downloader.go:49, `os.RemoveAll(cacheDest)` silently discards the error when clearing the dev cache before re-download. If the directory cannot be removed (permissions, locked file), the subsequent download proceeds but may fail or produce corrupted state when the old cache partially remains. Log the error via a warning or return it, since this is the dev-version code path where users expect fresh downloads.",
+      "priority": "medium",
+      "complexity": "low",
+      "status": "pending",
+      "files_to_modify": [
+        "internal/core/downloader.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "52",
+      "title": "Fix silently discarded ReadFile errors in update.go file comparison",
+      "description": "In update.go:147-155, two os.ReadFile calls inside the file modification check use `continue` on error, silently skipping the file. This means permission errors or corrupted files are treated as 'unchanged' — the update overwrites them without warning. Log a ui.Warn for non-trivial errors before continuing, so users can diagnose issues when files are unexpectedly not included in the modified-files list.",
+      "priority": "medium",
+      "complexity": "low",
+      "status": "pending",
+      "files_to_modify": [
+        "internal/commands/update.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "53",
+      "title": "Use bytes.Equal instead of string conversion for file comparison in update.go",
+      "description": "In update.go:157, `string(localContent) != string(cacheContent)` converts two byte slices to strings for comparison. This is wasteful — it allocates two new string copies of potentially large file contents. Replace with `!bytes.Equal(localContent, cacheContent)` which compares byte slices in-place with zero allocations. Add `bytes` to imports.",
+      "priority": "low",
+      "complexity": "low",
+      "status": "pending",
+      "files_to_modify": [
+        "internal/commands/update.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "54",
+      "title": "Refactor runAdd() into smaller helper functions",
+      "description": "runAdd() in add.go spans 97 lines (lines 34-130), nearly 2x the 50-line guardrail. Extract into helpers: resolveComponent(componentType, componentName) to handle the switch statement for type validation and component lookup, and installComponent(config, component, componentType, componentName) to handle download, copy, and config update. This also makes the logic more testable.",
+      "priority": "medium",
+      "complexity": "low",
+      "status": "pending",
+      "files_to_modify": [
+        "internal/commands/add.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "55",
+      "title": "Refactor runRemove() into smaller helper functions",
+      "description": "runRemove() in remove.go spans 101 lines (lines 39-139), 2x the 50-line guardrail. Extract into helpers: resolveComponentForRemoval(config, componentType, componentName) for switch-based type validation and installed-check, and removeComponentFiles(cwd, component, config, componentType, componentName) for file deletion and config update. Same pattern as runAdd refactor.",
+      "priority": "medium",
+      "complexity": "low",
+      "status": "pending",
+      "files_to_modify": [
+        "internal/commands/remove.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "56",
+      "title": "Add unit tests for add.go command logic",
+      "description": "add.go (131 LOC) has 0% test coverage. While the full runAdd() requires a GitHub download, the component resolution logic (switch statement for type validation, alias expansion, already-installed check) can be extracted and tested. After task 54 extracts resolveComponent(), add table-driven tests for: valid types (language/lang/l, framework/fw/f, workflow/wf/w), unknown type, unknown component name, and already-installed detection.",
+      "priority": "medium",
+      "complexity": "medium",
+      "status": "pending",
+      "files_to_modify": [
+        "internal/commands/add_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "57",
+      "title": "Add unit tests for version.go runVersion function",
+      "description": "version.go (99 LOC) has 0% test coverage. runVersion (68 lines) exceeds the 50-line guardrail. The function has testable branches: no config (new project), valid config (installed project), config load error (corrupt file), and --check flag for update checking. Test the no-config and valid-config paths by creating samuel.yaml in t.TempDir(). The --check path requires HTTP mocking but the display logic is still testable.",
+      "priority": "medium",
+      "complexity": "medium",
+      "status": "pending",
+      "files_to_modify": [
+        "internal/commands/version_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "58",
+      "title": "Refactor DownloadVersion() and extractTarGz() in downloader.go below 50-line limit",
+      "description": "Two functions in downloader.go exceed the 50-line guardrail: DownloadVersion (65 lines, lines 40-104) and extractTarGz (69 lines, lines 124-192). DownloadVersion can be split by extracting findExtractedDir() and moveToCache(). extractTarGz can be split by extracting processRegularFile() and processSymlink() helpers for the tar entry type switch. Both are I/O-heavy functions where the split improves readability.",
+      "priority": "low",
+      "complexity": "medium",
+      "status": "pending",
+      "files_to_modify": [
+        "internal/core/downloader.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "59",
+      "title": "Consolidate path containment validation into shared core utility",
+      "description": "Three nearly identical path containment validation functions exist: validateContainedPath in extractor.go (unexported), validateRemovePath in remove.go (unexported), and validateSymlinkTarget in downloader.go (different signature but same concept). Export a single ValidateContainedPath(baseDir, relativePath) function from the core package, and update all three callers to use it. This eliminates code duplication and ensures consistent security behavior.",
+      "priority": "low",
+      "complexity": "medium",
+      "status": "pending",
+      "files_to_modify": [
+        "internal/core/extractor.go",
+        "internal/commands/remove.go",
+        "internal/core/downloader.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "60",
+      "title": "Add unit tests for remove.go validateRemovePath and removal logic",
+      "description": "remove.go (150 LOC) has test coverage only for validateRemovePath (from task 41). The component resolution switch and config update logic are untested. Add table-driven tests for: valid component types (with aliases), unknown type, component not installed, successful removal flow (using t.TempDir with config), and config save verification. Complements task 55 (refactor) which makes the logic more testable.",
+      "priority": "medium",
+      "complexity": "medium",
+      "status": "pending",
+      "files_to_modify": [
+        "internal/commands/remove_test.go"
+      ],
+      "source": "pilot-discovery"
     }
   ],
   "progress": {
-    "total_tasks": 50,
-    "completed_tasks": 20,
-    "current_iteration": 20,
-    "total_iterations_run": 20,
+    "total_tasks": 60,
+    "completed_tasks": 21,
+    "current_iteration": 21,
+    "total_iterations_run": 21,
     "status": "in_progress"
   }
 }
