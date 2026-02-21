@@ -62,7 +62,7 @@
       "files_to_modify": [
         "internal/commands/doctor_checks_test.go"
       ],
-      "commit_sha": "",
+      "commit_sha": "5782ea2",
       "source": "pilot-discovery"
     },
     {
