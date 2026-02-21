@@ -222,3 +222,13 @@
 - LEARNING: The described TOCTOU was partially inaccurate — `cfg.AITool` is set once in `NewLoopConfig` and not updated when PRD is re-read in the loop. However, in `auto_start_handler.go`, `NewLoopConfig` reads `AITool` from `prd.Config.AITool` without any validation (only sandbox mode is validated). The fix at `InvokeAgent` level provides defense-in-depth regardless of how `cfg.AITool` is populated.
 - LEARNING: `exec.Command` with Go does NOT invoke a shell, so shell metacharacters like `;` in the tool name won't cause injection. But an arbitrary binary path (e.g., `/bin/sh`) would still be executed. The allow-list validation prevents both attack vectors.
 - Commit: 4db5316
+
+[2026-02-21T22:00:00Z] [iteration:10] [task:14] COMPLETED: Added size limits to tar extraction and file downloads
+- Added `MaxExtractedFileSize` (100MB) as a package-level var in `downloader.go` — applied via `io.LimitReader(tarReader, MaxExtractedFileSize+1)` in `extractTarGz`, checked after copy
+- Added `MaxDownloadFileSize` (10MB) as a package-level var in `client.go` — applied via `io.LimitReader(resp.Body, MaxDownloadFileSize+1)` in `DownloadFile`, checked after read
+- Both use the `LimitReader(r, max+1)` + `n > max` pattern: read up to max+1 bytes, then check if we hit the boundary. Files exactly at the limit succeed; files exceeding it fail.
+- Used `var` instead of `const` for the limits so tests can temporarily override them (test isolation with save/restore pattern)
+- Added 4 regression tests: `TestExtractTarGz_FileSizeLimit` (oversized rejected), `TestExtractTarGz_FileSizeAtLimit` (exact size OK), `TestDownloadFile_SizeLimit/oversized_file_rejected`, `TestDownloadFile_SizeLimit/file_at_limit_succeeds`
+- LEARNING: The `io.LimitReader(r, n+1)` + `bytesRead > n` pattern is preferable to `io.LimitReader(r, n)` because the latter silently truncates without error — you can't distinguish between a file exactly `n` bytes and one larger than `n`. The +1 approach lets you detect the overflow.
+- LEARNING: Using `var` for size limits instead of `const` is the right tradeoff — it enables test isolation while keeping the production default immutable in practice. The save/restore `defer` pattern prevents test pollution.
+- Commit: 050f9f6

@@ -195,7 +195,8 @@
       "id": "14",
       "title": "Add size limits to tar extraction and file downloads",
       "description": "In downloader.go:117-121, io.Copy has no size limit during tar extraction (decompression bomb risk). In client.go:204-206, io.ReadAll reads entire HTTP response without limit (OOM risk). Add io.LimitReader with reasonable max sizes (e.g., 100MB per extracted file, 10MB per downloaded file).",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "050f9f6",
       "priority": "high",
       "complexity": "low",
       "files_to_modify": [
@@ -408,9 +409,9 @@
   ],
   "progress": {
     "total_tasks": 30,
-    "completed_tasks": 9,
-    "current_iteration": 9,
-    "total_iterations_run": 9,
+    "completed_tasks": 10,
+    "current_iteration": 10,
+    "total_iterations_run": 10,
     "status": "in_progress"
   }
 }
