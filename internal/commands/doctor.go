@@ -92,7 +92,10 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 		})
 	} else {
 		// Check version in CLAUDE.md
-		content, _ := os.ReadFile(claudeMdPath)
+		content, readErr := os.ReadFile(claudeMdPath)
+		if readErr != nil {
+			ui.Warn("Could not read CLAUDE.md: %v", readErr)
+		}
 		version := extractVersion(string(content))
 		if version != "" {
 			results = append(results, checkResult{

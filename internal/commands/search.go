@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"os"
 	"sort"
 	"strings"
 
@@ -54,7 +55,10 @@ func runSearch(cmd *cobra.Command, args []string) error {
 	limit, _ := cmd.Flags().GetInt("limit")
 
 	typeFilter = normalizeTypeFilter(typeFilter)
-	config, _ := core.LoadConfig()
+	config, configErr := core.LoadConfig()
+	if configErr != nil && !os.IsNotExist(configErr) {
+		ui.Warn("Could not load config: %v", configErr)
+	}
 	results := searchComponents(query, typeFilter, config)
 
 	if len(results) == 0 {

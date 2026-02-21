@@ -247,7 +247,10 @@ func runInit(cmd *cobra.Command, args []string) error {
 	// Update skills section in CLAUDE.md
 	skillsDir := filepath.Join(absTargetDir, ".claude", "skills")
 	claudeMDPath := filepath.Join(absTargetDir, "CLAUDE.md")
-	installedSkills, _ := core.ScanSkillsDirectory(skillsDir)
+	installedSkills, scanErr := core.ScanSkillsDirectory(skillsDir)
+	if scanErr != nil {
+		ui.Warn("Could not scan skills directory: %v", scanErr)
+	}
 	if len(installedSkills) > 0 {
 		if err := core.UpdateCLAUDEMDSkillsSection(claudeMDPath, installedSkills); err != nil {
 			// Non-fatal error, just log it
