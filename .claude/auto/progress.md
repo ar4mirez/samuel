@@ -811,3 +811,12 @@
 - LEARNING: When a previous iteration marks a task as `in_progress` but doesn't commit, the next iteration should check `git diff` to see if the work was already done. In this case, the code changes were correct and just needed quality checks + commit.
 - LEARNING: Task 65 already created the test cases for this exact scenario (unreadable files) when it extracted `categorizeFileChanges`, but the `ui.Warn` calls weren't in the code yet. The tests still passed because they only verified the file was skipped (not in any category), not that a warning was logged. The tests now additionally exercise the warning path.
 - Commit: 9d4c70d
+
+[2026-02-22T14:30:00Z] [iteration:38] [task:75] COMPLETED: Fixed silently discarded filepath.Rel error in sync.go SyncFolderCLAUDEMDs
+- Changed `rel, _ := filepath.Rel(opts.RootDir, path)` to check the error
+- On failure, appends to `result.Errors` with context and returns `filepath.SkipDir` to skip the directory
+- Follows the existing `result.Errors` pattern used by `AnalyzeFolder` errors (line 230) rather than `ui.Warn`, since the `core` package does not import `ui`
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: The `core` package has no dependency on `ui` — error reporting in `core` uses `result.Errors` (append to a slice) rather than direct console output. This is the correct pattern for a library package. The calling code (in `commands/sync.go`) can decide how to present errors to the user.
+- LEARNING: `filepath.Rel` only fails on Unix when the two paths are on different volumes (which doesn't happen on Unix — volumes are a Windows concept). So this error path is primarily for Windows cross-volume scenarios. The fix is still correct for defense-in-depth and avoids the `_ =` anti-pattern.
+- Commit: cd347a9
