@@ -182,7 +182,8 @@
       "id": "13",
       "title": "Add path traversal validation to extractor.go file operations",
       "description": "ReadFile, WriteFile, RemoveFile, and BackupFile in extractor.go accept a path parameter and join it with destPath, but never validate the result stays within the destination directory. A path like '../../etc/passwd' would escape. Add filepath.Clean + strings.HasPrefix containment checks to all four functions.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "8b69661",
       "priority": "high",
       "complexity": "low",
       "files_to_modify": [
@@ -279,9 +280,9 @@
   ],
   "progress": {
     "total_tasks": 20,
-    "completed_tasks": 7,
-    "current_iteration": 7,
-    "total_iterations_run": 7,
+    "completed_tasks": 8,
+    "current_iteration": 8,
+    "total_iterations_run": 8,
     "status": "in_progress"
   }
 }

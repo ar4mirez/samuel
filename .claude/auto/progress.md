@@ -160,3 +160,13 @@
 - LEARNING: `extractTarGz` auto-creates parent directories for regular files via `os.MkdirAll(filepath.Dir(target))`, so archives don't need explicit directory entries — tested this behavior explicitly
 - LEARNING: The `contains` helper in the test file uses `bytes.Contains` instead of `strings.Contains` — works identically but could be simplified. Not worth changing since it's existing test code.
 - Commit: e07b37c
+
+[2026-02-21T20:00:00Z] [iteration:8] [task:13] COMPLETED: Added path traversal validation to extractor.go file operations
+- Added `validateContainedPath(baseDir, relativePath)` helper using `filepath.Clean` + `strings.HasPrefix` containment check
+- Applied to 6 functions: `ReadFile`, `WriteFile`, `RemoveFile`, `BackupFile`, `FileExists`, `ValidateExtraction`
+- `BackupFile` validates both source path (against `destPath`) and destination path (against `backupDir`)
+- Added 11 regression tests: `TestValidateContainedPath` (8 table-driven cases), plus individual tests for ReadFile, WriteFile, RemoveFile, FileExists, BackupFile, ValidateExtraction with traversal paths
+- Also added 2 positive tests (ReadFile_ValidPath, WriteFile_ValidPath) to verify normal operation isn't broken
+- LEARNING: On Unix, `filepath.Join("/base", "/absolute")` does NOT replace the base — it produces `/base/absolute`. So absolute paths as the second arg to `filepath.Join` don't actually escape on Unix (they're treated as relative). The containment check naturally passes for this case.
+- LEARNING: The `validateContainedPath` pattern is the same one used in `downloader.go` for symlink validation (task 11) — the project now has consistent path containment checks across both tar extraction and file operations.
+- Commit: 8b69661
