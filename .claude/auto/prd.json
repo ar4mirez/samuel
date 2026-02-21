@@ -69,12 +69,13 @@
       "id": "64",
       "title": "Add unit tests for init_steps.go step functions",
       "description": "init_steps.go (284 LOC) was created by the task 7 refactor of runInit() but has 0% test coverage. Contains testable functions: parseInitFlags (struct extraction from cobra command), validateInitTarget (directory validation), downloadFramework (delegates to downloader). Focus on parseInitFlags and validateInitTarget which are pure-ish functions testable without mocking.",
-      "status": "pending",
+      "status": "completed",
       "priority": "medium",
       "complexity": "medium",
       "files_to_modify": [
         "internal/commands/init_steps_test.go"
       ],
+      "commit_sha": "",
       "source": "pilot-discovery"
     },
     {
@@ -155,9 +156,9 @@
   ],
   "progress": {
     "total_tasks": 10,
-    "completed_tasks": 3,
-    "current_iteration": 27,
-    "total_iterations_run": 27,
+    "completed_tasks": 4,
+    "current_iteration": 28,
+    "total_iterations_run": 28,
     "status": "in_progress"
   }
 }
