@@ -21,19 +21,7 @@ func runAutoStart(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to load prd.json. Run 'samuel auto init' first: %w", err)
 	}
 
-	// Resolve sandbox mode: CLI flag overrides prd.json config
-	sandbox := prd.Config.Sandbox
-	if flagSandbox, _ := cmd.Flags().GetString("sandbox"); flagSandbox != "" {
-		sandbox = flagSandbox
-	}
-	sandboxImage := prd.Config.SandboxImage
-	if flagImage, _ := cmd.Flags().GetString("sandbox-image"); flagImage != "" {
-		sandboxImage = flagImage
-	}
-	sandboxTemplate := prd.Config.SandboxTemplate
-	if flagTpl, _ := cmd.Flags().GetString("sandbox-template"); flagTpl != "" {
-		sandboxTemplate = flagTpl
-	}
+	sandbox, sandboxImage, sandboxTemplate := resolveSandboxFlags(cmd, prd)
 
 	if !core.IsValidSandboxMode(sandbox) {
 		return fmt.Errorf("unsupported sandbox mode: %s (supported: %v)", sandbox, core.GetSupportedSandboxModes())
@@ -57,6 +45,41 @@ func runAutoStart(cmd *cobra.Command, args []string) error {
 		}
 	}
 
+	cfg := buildLoopConfig(cmd, cwd, prd, sandbox, sandboxImage, sandboxTemplate)
+
+	ui.Info("Starting auto loop...")
+	ui.Print("  AI Tool:  %s", cfg.AITool)
+	ui.Print("  Sandbox:  %s", sandbox)
+	ui.Print("")
+
+	if err := core.RunAutoLoop(cfg); err != nil {
+		return fmt.Errorf("auto loop exited with error: %w", err)
+	}
+
+	printLoopSummary(prdPath)
+	return nil
+}
+
+// resolveSandboxFlags extracts sandbox configuration from CLI flags,
+// falling back to prd.json config values.
+func resolveSandboxFlags(cmd *cobra.Command, prd *core.AutoPRD) (sandbox, image, template string) {
+	sandbox = prd.Config.Sandbox
+	if flagSandbox, _ := cmd.Flags().GetString("sandbox"); flagSandbox != "" {
+		sandbox = flagSandbox
+	}
+	image = prd.Config.SandboxImage
+	if flagImage, _ := cmd.Flags().GetString("sandbox-image"); flagImage != "" {
+		image = flagImage
+	}
+	template = prd.Config.SandboxTemplate
+	if flagTpl, _ := cmd.Flags().GetString("sandbox-template"); flagTpl != "" {
+		template = flagTpl
+	}
+	return sandbox, image, template
+}
+
+// buildLoopConfig creates a LoopConfig with CLI overrides and UI callbacks.
+func buildLoopConfig(cmd *cobra.Command, cwd string, prd *core.AutoPRD, sandbox, sandboxImage, sandboxTemplate string) core.LoopConfig {
 	cfg := core.NewLoopConfig(cwd, prd)
 	cfg.Sandbox = sandbox
 	cfg.SandboxImage = sandboxImage
@@ -77,17 +100,7 @@ func runAutoStart(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	ui.Info("Starting auto loop...")
-	ui.Print("  AI Tool:  %s", cfg.AITool)
-	ui.Print("  Sandbox:  %s", sandbox)
-	ui.Print("")
-
-	if err := core.RunAutoLoop(cfg); err != nil {
-		return fmt.Errorf("auto loop exited with error: %w", err)
-	}
-
-	printLoopSummary(prdPath)
-	return nil
+	return cfg
 }
 
 func printStartDryRun(prd *core.AutoPRD, cwd, sandbox, sandboxImage, sandboxTemplate string) error {
