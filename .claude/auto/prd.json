@@ -56,12 +56,13 @@
       "id": "63",
       "title": "Add unit tests for doctor_checks.go check functions",
       "description": "doctor_checks.go (291 LOC) was created by the task 6 refactor of runDoctor() but has 0% test coverage. Contains 8 exported check functions (checkConfigFile, checkCLAUDEMD, checkAGENTSMD, checkDirectoryStructure, checkInstalledComponents, checkSkillsIntegrity, checkAutoHealth, checkLocalModifications) plus the generic checkInstalledSkills helper. Use t.TempDir() with crafted project directory structures to test each check function independently.",
-      "status": "pending",
+      "status": "completed",
       "priority": "medium",
       "complexity": "high",
       "files_to_modify": [
         "internal/commands/doctor_checks_test.go"
       ],
+      "commit_sha": "",
       "source": "pilot-discovery"
     },
     {
@@ -154,9 +155,9 @@
   ],
   "progress": {
     "total_tasks": 10,
-    "completed_tasks": 2,
-    "current_iteration": 26,
-    "total_iterations_run": 26,
+    "completed_tasks": 3,
+    "current_iteration": 27,
+    "total_iterations_run": 27,
     "status": "in_progress"
   }
 }

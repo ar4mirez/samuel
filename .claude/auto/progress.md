@@ -596,3 +596,15 @@
 - LEARNING: Docker image names always start with an alphanumeric character — names starting with `.` or `/` are filesystem paths, not image references. The regex `^[a-zA-Z0-9]` naturally rejects both absolute and relative path attacks.
 - LEARNING: `exec.Command("docker", "run", image)` does NOT invoke a shell, so shell metacharacters in `image` won't cause command injection. However, a malicious image name like `evil-registry.com/backdoor:latest` is still dangerous because Docker will pull and run it. The validation ensures the format is valid but cannot prevent pulling from untrusted registries — that's a policy decision outside scope.
 - Commit: 8f60188
+
+[2026-02-22T08:00:00Z] [iteration:27] [task:63] COMPLETED: Added unit tests for doctor_checks.go check functions
+- Created doctor_checks_test.go with 34 test cases covering all 10 functions + extractVersion
+- Functions tested: checkCLAUDEMD (4), checkAGENTSMD (2), checkDirectoryStructure (3), checkInstalledSkills (4), checkInstalledComponents (2), checkSkillsIntegrity (5), checkAutoHealth (4), checkLocalModifications (2), checkModification (2), extractVersion (6 table-driven)
+- Used t.TempDir() for all filesystem tests — crafted directory structures with SKILL.md, CLAUDE.md, AGENTS.md, prd.json as needed
+- checkConfigFile not directly tested (reads from cwd via core.LoadConfig which is hard to redirect without changing cwd)
+- checkAutoHealth tests create real prd.json files with valid/invalid JSON/structure to test all branches
+- checkSkillsIntegrity tests create valid and invalid SKILL.md files (with/without YAML frontmatter) to exercise the skill validation pipeline
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: `checkInstalledSkills` with a nil-returning finder (unknown component) silently skips that component — it only checks SKILL.md existence when `finder(name) != nil`. This means unknown components in the config are not flagged as errors, which is intentional (forward compatibility with newer registry versions).
+- LEARNING: `extractVersion` tries the bold pattern (`**Current Version**: X.Y.Z`) first, then falls back to plain. If both match, bold wins. This is tested explicitly in the `bold_preferred_over_plain` case.
+- LEARNING: `checkAutoHealth` depends on `core.ValidateAutoPRD` which checks for empty Version, empty Project.Name, empty Project.Description, etc. A PRD with only `Version` missing triggers validation errors — useful for testing the validation-errors branch without constructing a fully invalid PRD.
