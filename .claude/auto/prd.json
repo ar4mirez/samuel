@@ -4,7 +4,7 @@
     "name": "samuel",
     "description": "Autonomous pilot mode - AI-discovered tasks",
     "created_at": "2026-02-21T15:51:24Z",
-    "updated_at": "2026-02-21T17:45:00Z"
+    "updated_at": "2026-02-21T23:30:00Z"
   },
   "config": {
     "max_iterations": 30,
@@ -309,7 +309,8 @@
       "id": "23",
       "title": "Fix silently discarded LoadAutoPRD errors in auto pilot commands",
       "description": "Four places silently discard LoadAutoPRD errors with `_ :=`: auto_pilot.go:196, auto_pilot.go:225, auto_start_handler.go:124, auto_pilot_output.go:45. When PRD loading fails mid-loop, the code proceeds with nil checks but loses the error context. Log warnings via ui.Warn for non-critical paths (printLoopSummary, printPilotSummary) and return errors for critical paths (pilot loop iteration logic).",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "d7339f9",
       "priority": "high",
       "complexity": "low",
       "files_to_modify": [
@@ -407,13 +408,135 @@
         "internal/core/extractor_backup.go"
       ],
       "source": "pilot-discovery"
+    },
+    {
+      "id": "31",
+      "title": "Fix race condition in ui/spinner.go Start/Stop",
+      "description": "Spinner.Start() launches a goroutine that reads s.bar on every tick (line 37), while Stop() sets s.bar = nil (line 50) from the main goroutine — no synchronization protects this field. This is a data race: the goroutine can read s.bar as non-nil, then Stop() sets it to nil, then the goroutine calls s.bar.Add(1) on a nil pointer. Fix by using a done channel or sync.Once for shutdown, or protect s.bar with a sync.Mutex.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/ui/spinner.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "32",
+      "title": "Add unit tests for auto_handlers.go pure functions",
+      "description": "auto_handlers.go (280 LOC) has 0% test coverage. Three functions are highly testable pure functions: detectQualityChecks (line 118, detects go.mod/package.json/Cargo.toml/requirements.txt), countTaskStatuses (line 258, counts task statuses), and validateSandbox (line 268, validates sandbox mode). Add table-driven tests using t.TempDir() for detectQualityChecks and constructed AutoPRD structs for countTaskStatuses.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/auto_handlers_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "33",
+      "title": "Add unit tests for auto_task_handlers.go functions",
+      "description": "auto_task_handlers.go (127 LOC) has 0% test coverage. Contains taskStatusIcon (line 41, pure function mapping status to icon string — perfect for table-driven tests) and updateTaskStatus (line 74, generic task state update). taskStatusIcon has 5 cases (completed, skipped, blocked, in_progress, default). Add tests for taskStatusIcon plus integration-style tests for updateTaskStatus using temp directories with PRD files.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/auto_task_handlers_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "34",
+      "title": "Add unit tests for init.go helper functions",
+      "description": "init.go (437 LOC) has 0% test coverage but contains 4 testable helper functions: expandLanguages (expands language aliases like 'ts' to 'typescript'), expandFrameworks (expands framework aliases like 'fw' to framework names), isSamuelRepository (detects if target dir is the samuel repo itself), getRelevantFrameworks (returns frameworks associated with selected languages). These are pure/near-pure functions that can be tested with table-driven tests without mocking.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/init_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "35",
+      "title": "Add unit tests for doctor.go helper functions",
+      "description": "doctor.go (471 LOC) has 0% test coverage but contains testable helpers: extractVersion (line ~420, extracts version string from CLAUDE.md content using regex), checkModification (compares file hashes to detect modifications). extractVersion is a pure function parsing markdown text — easily testable with table-driven tests for valid versions, missing versions, and malformed content.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/doctor_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "36",
+      "title": "Fix silently discarded filepath.Rel error in sync.go",
+      "description": "In sync.go:221, `rel, _ := filepath.Rel(opts.RootDir, path)` silently discards the error. If filepath.Rel fails (e.g., on Windows with different drive roots), rel becomes an empty string, causing incorrect path construction downstream. This is in the SyncFolderCLAUDEMDs function which processes directory structures — an incorrect relative path could generate CLAUDE.md files with wrong content. Handle the error by logging a warning and skipping the path.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/sync.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "37",
+      "title": "Fix silently discarded filepath.Rel errors in diff.go helper functions",
+      "description": "In diff.go, three calls to filepath.Rel silently discard errors: line 192 in getLocalFileHashes, line 206 in getLocalFileHashes (inside Walk callback), line 233 in getVersionFileHashes. When filepath.Rel fails, relPath becomes empty string, causing incorrect hash map keys. This means file comparisons could silently produce wrong results (files appearing as added/removed when they're actually unchanged). Handle errors by skipping the file and logging a warning.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/diff.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "38",
+      "title": "Reduce file size of internal/commands/skill.go below 300-line limit",
+      "description": "commands/skill.go is 375 lines, exceeding the 300-line guardrail by 25%. It contains four command handlers (runSkillCreate, runSkillValidate, runSkillList, runSkillInfo) plus CLI registration. Extract runSkillCreate (longest handler, includes scaffold creation and user prompts) and runSkillInfo into a new skill_handlers.go file, keeping the CLI registration and shorter handlers in skill.go.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/skill.go",
+        "internal/commands/skill_handlers.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "39",
+      "title": "Reduce file size of internal/commands/search.go below 300-line limit",
+      "description": "commands/search.go is 337 lines, exceeding the 300-line guardrail by 12%. It contains search logic (matchScore, levenshteinDistance) mixed with CLI display functions. Extract the search algorithm functions (searchComponents, searchLanguages, searchFrameworks, searchWorkflows, searchSkills, matchScore, levenshteinDistance) into search_engine.go, keeping only CLI command registration and display in search.go.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/search.go",
+        "internal/commands/search_engine.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "40",
+      "title": "Fix silently discarded LoadConfig error in list.go",
+      "description": "In list.go:122, `config, _ := core.LoadConfig()` inside listAvailable() silently discards the error. While this is semi-intentional (to allow listing available components without a local installation), non-file-not-found errors (e.g., corrupt YAML, permission denied) should be logged. Apply the same pattern used in search.go (task 1): check os.IsNotExist — if true, proceed with nil config; if other error, log via ui.Warn.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/list.go"
+      ],
+      "source": "pilot-discovery"
     }
   ],
   "progress": {
-    "total_tasks": 30,
-    "completed_tasks": 12,
-    "current_iteration": 12,
-    "total_iterations_run": 12,
+    "total_tasks": 40,
+    "completed_tasks": 13,
+    "current_iteration": 13,
+    "total_iterations_run": 13,
     "status": "in_progress"
   }
 }

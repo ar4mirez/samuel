@@ -250,3 +250,58 @@
 - All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
 - LEARNING: `RestoreBackup` uses `filepath.Walk` which generates paths from the actual filesystem tree, so `filepath.Rel` will produce clean relative paths for real files. The traversal risk is more theoretical (crafted backup directory or symlink following), but the validation provides defense-in-depth consistent with ReadFile/WriteFile/RemoveFile/BackupFile.
 - LEARNING: `CopyFromCache` is a standalone function (not a method on Extractor) — `validateContainedPath` works equally well for standalone functions since it only needs a base dir and relative path.
+
+---
+
+[2026-02-21T23:30:00Z] [discovery] FOUND: Fourth discovery iteration — race condition, test coverage, error handling
+
+### Security Issues (NEW)
+- **HIGH**: `internal/ui/spinner.go:35-50` — Data race between Start() goroutine reading `s.bar` and Stop() setting `s.bar = nil`. No synchronization protects the field. Could cause nil pointer dereference under concurrent access.
+
+### Test Coverage Update
+- Overall coverage: `cmd/samuel` **0%**, `internal/commands` **19.4%**, `internal/core` **80.4%**, `internal/github` **89.4%**, `internal/ui` **0.0%**
+- `internal/commands/` has 16 of 21 source files with 0% test coverage
+- Highest-value untested command files: `auto_handlers.go` (pure functions: detectQualityChecks, countTaskStatuses, validateSandbox), `auto_task_handlers.go` (taskStatusIcon), `init.go` (expandLanguages, expandFrameworks, isSamuelRepository), `doctor.go` (extractVersion)
+- All tests passing, `go vet` clean, `go build` clean
+
+### Error Handling Issues (NEW)
+- **MEDIUM**: `sync.go:221` — `rel, _ := filepath.Rel(opts.RootDir, path)` silently discards error in SyncFolderCLAUDEMDs — could produce incorrect relative paths
+- **MEDIUM**: `diff.go:192,206,233` — Three `filepath.Rel` calls silently discard errors — incorrect hash map keys could cause wrong diff results
+- **MEDIUM**: `list.go:122` — `config, _ := core.LoadConfig()` discards non-file-not-found errors (corrupt YAML, permission denied)
+
+### Code Quality Update
+- 9 non-test files exceed 300-line limit (no change from previous discovery)
+- 2 command files exceed 300-line limit that don't have pending refactor tasks: `skill.go` (375 lines), `search.go` (337 lines)
+- No new panic() calls, no hardcoded credentials, no TODO/FIXME markers
+- File permissions consistently 0755 (dirs) and 0644 (files)
+
+### Positive Findings
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- Security posture improved significantly since previous discoveries (path traversal, symlink, size limits, TOCTOU all fixed)
+- Good test quality patterns maintained (table-driven, t.TempDir, redirectTransport)
+- No new environment variable leaks or temp file issues
+- HTTP client properly configured with 30s timeout and size limits
+- All exec.Command calls validated against allowlist
+
+### Tasks Generated (Fourth Discovery): 10
+| ID | Priority | Title |
+|----|----------|-------|
+| 31 | high     | Fix race condition in ui/spinner.go Start/Stop |
+| 32 | high     | Add unit tests for auto_handlers.go pure functions |
+| 33 | medium   | Add unit tests for auto_task_handlers.go functions |
+| 34 | high     | Add unit tests for init.go helper functions |
+| 35 | medium   | Add unit tests for doctor.go helper functions |
+| 36 | medium   | Fix silently discarded filepath.Rel error in sync.go |
+| 37 | medium   | Fix silently discarded filepath.Rel errors in diff.go |
+| 38 | low      | Reduce file size of commands/skill.go below 300-line limit |
+| 39 | low      | Reduce file size of commands/search.go below 300-line limit |
+| 40 | medium   | Fix silently discarded LoadConfig error in list.go |
+
+[2026-02-21T23:45:00Z] [iteration:13] [task:23] COMPLETED: Fixed silently discarded LoadAutoPRD errors in auto pilot commands
+- Fixed 4 locations: auto_pilot.go (2), auto_start_handler.go (1), auto_pilot_output.go (1)
+- All 4 now log `ui.Warn` when `LoadAutoPRD` returns a non-nil error, preserving the error context
+- Existing nil-check behavior kept intact — the code still degrades gracefully when PRD is nil
+- Mid-loop locations (auto_pilot.go:196, :225): warn + continue with existing nil handling. These affect discovery task counting and empty-discovery loop termination.
+- Summary locations (printLoopSummary, printPilotSummary): warn + early return on nil (unchanged behavior, just with error logging)
+- LEARNING: All 4 call sites already had nil guards (`if finalPRD == nil`), so the behavior is safe even without the error. The issue was purely about error visibility — a corrupt prd.json or permission error would be silently swallowed, making debugging difficult.
+- Commit: d7339f9
