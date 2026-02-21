@@ -506,3 +506,15 @@
 - LEARNING: `filepath.Walk` with a callback that returns nil for all errors will itself always return nil. The Walk return value reflects only what the callback returns. So `_ = filepath.Walk(...)` is technically safe when the callback swallows errors, but handling the return value is still good practice for defense-in-depth (e.g., if the callback is later changed to return errors).
 - LEARNING: `filepath.Glob` only returns errors for syntactically invalid patterns (per Go docs). Since the patterns here are hardcoded constants (`"CLAUDE.md"`, `"AGENTS.md"`, `".claude/**/*.md"`), the error path should never trigger in practice. The fix is still worthwhile for correctness and to avoid the `_ =` anti-pattern.
 - Commit: cacd3f2
+
+[2026-02-22T06:00:00Z] [iteration:24] [task:17] COMPLETED: Added unit tests for internal/ui/output.go
+- Created output_test.go with 42 test cases covering all 14 exported functions + DisableColors
+- Coverage: ui package improved from 17.4% to 49.6%
+- `captureStdout` helper redirects both `os.Stdout` AND `color.Output` to a pipe — necessary because `color.Println()` methods write to `color.Output` (set at package init), not the current `os.Stdout`
+- `captureStderr` helper for `Error()` which writes to `os.Stderr`
+- Table-driven tests for: Success (3), Error (2), ListItem (4), SuccessItem (3), WarnItem (2), ErrorItem (2)
+- Single assertion tests for: DisableColors, Warn, Info, Print, Bold, Dim, Header, Section, TableRow, ColoredTableRow
+- All tests disable colors via `color.NoColor = true` + defer restore for deterministic output assertions
+- LEARNING: `fatih/color` has two output paths: `Fprintf(writer, ...)` uses the explicit writer, but `Println(...)` uses `c.Output()` which defaults to `color.Output` (package-level var, set to `os.Stdout` at init). Replacing `os.Stdout` alone doesn't capture `Println` output — must also redirect `color.Output`.
+- LEARNING: `Header` function uses both `fmt.Println()` (writes to `os.Stdout`) and `boldColor.Println(title)` (writes to `color.Output`). The two different output targets caused the initial test failure — the title line went to the original stdout while the blank lines went to the pipe.
+- Commit: 73d44fa
