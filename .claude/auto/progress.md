@@ -679,3 +679,17 @@
 - LEARNING: The `config, _ := core.LoadConfig()` anti-pattern appeared in 4 command files total: search.go (fixed task 1), info.go (fixed this task), list.go (fixed this task), and the `os` import was already present in both files so no import changes were needed.
 - LEARNING: `listInstalled` vs `listAvailable` have different error handling requirements: `listInstalled` needs a valid config (returns error on failure), while `listAvailable` uses config only for marking installed items (config is optional/best-effort). The warn-and-continue pattern is correct for `listAvailable`.
 - Commit: 8550e2c
+
+[2026-02-22T10:00:00Z] [iteration:31] [task:72] COMPLETED: Added unit tests for commands/skill.go skill management functions
+- Created skill_test.go with 25 test cases covering all 4 command handlers
+- `runSkillCreate`: 5 tests (invalid name, consecutive hyphens, no config, successful creation, duplicate skill)
+- `runSkillValidate`: 7 tests (no skills dir, empty skills dir, specific not found, specific valid, specific invalid, all valid, mixed valid/invalid)
+- `runSkillList`: 5 tests (no skills dir, empty skills dir, valid skills, skills with errors, long description truncation)
+- `runSkillInfo`: 8 tests (not found, valid with metadata, optional directories, multiline description, custom metadata, validation errors, long body >500 lines warning, missing SKILL.md)
+- Used `setupSkillTestDir` helper that creates t.TempDir() with samuel.yaml + .claude/skills/ and os.Chdir with defer restore
+- Used `createSkillDir` helper to DRY up SKILL.md file creation in test directories
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: `runSkillInfo` does NOT return an error when the skill has validation errors — it displays the errors via `ui.ErrorItem` and returns nil. This contrasts with `runSkillValidate` which returns `fmt.Errorf` when any skill is invalid. The difference is intentional: info is display-only, validate is a check command.
+- LEARNING: `ScanSkillsDirectory` only includes directories that contain a SKILL.md file. A directory without SKILL.md is silently skipped — it doesn't appear in the scan results and doesn't trigger errors. But `LoadSkillInfo` (used by info/validate with specific name) returns info with `Errors: ["missing required file: SKILL.md"]` for such directories.
+- LEARNING: The `os.Chdir(t.TempDir()) + defer restore` pattern is necessary because all 4 command handlers use `os.Getwd()` to find the skills directory. There's no way to inject the working directory without this approach.
+- Commit: 1875291

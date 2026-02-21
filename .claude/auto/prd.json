@@ -171,12 +171,13 @@
       "id": "72",
       "title": "Add unit tests for commands/skill.go skill management functions",
       "description": "skill.go (375 LOC) has 0% test coverage and is the largest untested command file. Contains 4 command handlers: runSkillCreate (input validation + scaffold), runSkillValidate (directory scanning + validation), runSkillList (listing + formatting), runSkillInfo (lookup + display). Focus on testable paths: validation error display, missing skills directory handling, empty skills list. Use t.TempDir() with crafted .claude/skills/ structures.",
-      "status": "pending",
+      "status": "completed",
       "priority": "high",
       "complexity": "high",
       "files_to_modify": [
         "internal/commands/skill_test.go"
       ],
+      "commit_sha": "1875291",
       "source": "pilot-discovery"
     },
     {
@@ -280,9 +281,9 @@
   ],
   "progress": {
     "total_tasks": 20,
-    "completed_tasks": 5,
-    "current_iteration": 30,
-    "total_iterations_run": 30,
+    "completed_tasks": 6,
+    "current_iteration": 31,
+    "total_iterations_run": 31,
     "status": "in_progress"
   }
 }
