@@ -218,7 +218,11 @@ func SyncFolderCLAUDEMDs(opts SyncOptions) (*SyncResult, error) {
 
 		// Enforce depth limit
 		if opts.MaxDepth >= 0 {
-			rel, _ := filepath.Rel(opts.RootDir, path)
+			rel, relErr := filepath.Rel(opts.RootDir, path)
+			if relErr != nil {
+				result.Errors = append(result.Errors, fmt.Errorf("%s: failed to compute relative path: %w", path, relErr))
+				return filepath.SkipDir
+			}
 			depth := len(strings.Split(rel, string(filepath.Separator)))
 			if depth > opts.MaxDepth {
 				return filepath.SkipDir
