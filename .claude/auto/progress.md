@@ -325,3 +325,13 @@
 - LEARNING: The `select` on a closed channel approach (`select { case <-s.done: return; default: close(s.done) }`) is NOT safe for concurrent callers — two goroutines can both enter the `default` branch before either closes. `sync.Once` is the correct primitive for one-time channel close.
 - LEARNING: `time.NewTicker` is preferred over `time.Sleep` in goroutine loops because the ticker can be deferred-stopped, ensuring cleanup when the goroutine exits via the `done` channel. The `select` pattern with ticker also avoids busy-waiting during the sleep interval when shutdown is requested.
 - Commit: 0819b18
+
+[2026-02-22T01:00:00Z] [iteration:16] [task:32] COMPLETED: Added unit tests for auto_handlers.go pure functions
+- Created auto_handlers_test.go with 19 test cases covering 3 functions
+- `detectQualityChecks`: 9 table-driven tests (go.mod, package.json, Cargo.toml, requirements.txt, empty dir, priority ordering for go>node>rust>python, unrecognized file)
+- `countTaskStatuses`: 5 table-driven tests (empty, all pending, all completed, mixed statuses, unknown status key)
+- `validateSandbox`: 5 subtests (none, empty, unrecognized mode, docker, docker-sandbox)
+- LEARNING: `detectQualityChecks` uses early-return pattern — the first matching project file wins. Priority order: go.mod > package.json > Cargo.toml > requirements.txt. Multiple project files present = first match takes priority.
+- LEARNING: `countTaskStatuses` initializes 5 known status keys but unknown statuses (e.g., "unknown") also get counted via map increment — the function doesn't validate against known statuses. The `unknown_status_counted_separately` test verifies this behavior.
+- LEARNING: `validateSandbox` only checks docker availability for "docker" and "docker-sandbox" modes. Any other string (including empty) passes through without error since neither `if` branch matches.
+- Commit: 66435a9

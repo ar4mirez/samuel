@@ -427,7 +427,8 @@
       "id": "32",
       "title": "Add unit tests for auto_handlers.go pure functions",
       "description": "auto_handlers.go (280 LOC) has 0% test coverage. Three functions are highly testable pure functions: detectQualityChecks (line 118, detects go.mod/package.json/Cargo.toml/requirements.txt), countTaskStatuses (line 258, counts task statuses), and validateSandbox (line 268, validates sandbox mode). Add table-driven tests using t.TempDir() for detectQualityChecks and constructed AutoPRD structs for countTaskStatuses.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "66435a9",
       "priority": "high",
       "complexity": "low",
       "files_to_modify": [
@@ -536,9 +537,9 @@
   ],
   "progress": {
     "total_tasks": 40,
-    "completed_tasks": 15,
-    "current_iteration": 15,
-    "total_iterations_run": 15,
+    "completed_tasks": 16,
+    "current_iteration": 16,
+    "total_iterations_run": 16,
     "status": "in_progress"
   }
 }
