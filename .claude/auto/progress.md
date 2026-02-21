@@ -1014,3 +1014,12 @@
 - `runAutoTaskComplete/Skip/Reset`: end-to-end through cobra handler wrappers
 - LEARNING: Functions using `os.Getwd()` for PRD path resolution require `os.Chdir()` to temp dir in tests, with cleanup via `t.Cleanup(func() { os.Chdir(origDir) })`. The `setupTestPRD` helper creates `.claude/auto/prd.json` in a temp dir for reuse across tests.
 - Commit: a4d9fe1
+
+[2026-02-22T17:00:00Z] [iteration:47] [task:82] COMPLETED: Refactored runAdd() in commands/add.go below 50-line limit
+- Decomposed runAdd() (97 lines → 27 lines) into three focused helpers:
+  - `resolveComponent()` (24 lines): type alias resolution, registry lookup, duplicate check — returns (*Component, bool, error)
+  - `downloadAndInstall()` (28 lines): spinner, downloader init, version download, cache copy
+  - `updateAddConfig()` (23 lines): config mutation by type, save, success messages
+- All four functions well under 50-line limit. File size: 143 lines (under 300).
+- LEARNING: The three component types (language/framework/workflow) each have their own aliases (lang/l, fw/f, wf/w) and use different Find/Has/Add methods on the config. The switch statement is repeated in `resolveComponent` and `updateAddConfig` — this could be further reduced with a component type descriptor pattern, but that's over-engineering for the current scope.
+- Commit: f1ba197

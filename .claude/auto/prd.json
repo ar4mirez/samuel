@@ -306,7 +306,8 @@
       "id": "82",
       "title": "Refactor runAdd() in commands/add.go below 50-line limit",
       "description": "runAdd() is 97 lines (1.94x the 50-line limit) at add.go:34. Mixes component type validation, duplicate checking, download orchestration, extraction, and config update in a single function. Extract helper functions for: (1) resolveComponent (type alias resolution + registry lookup + duplicate check), (2) downloadAndExtract (version resolution + download + extraction), (3) updateAddConfig (config loading + component addition + save). Each extracted function should be independently testable.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "f1ba197",
       "priority": "medium",
       "complexity": "medium",
       "files_to_modify": [
@@ -658,9 +659,9 @@
   ],
   "progress": {
     "total_tasks": 50,
-    "completed_tasks": 20,
-    "current_iteration": 46,
-    "total_iterations_run": 46,
+    "completed_tasks": 21,
+    "current_iteration": 47,
+    "total_iterations_run": 47,
     "status": "in_progress"
   }
 }
