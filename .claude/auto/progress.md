@@ -623,3 +623,59 @@
 - LEARNING: `parseInitFlags` uses cobra's `cmd.Flags().GetBool/GetString/GetStringSlice` which silently return zero values if the flag wasn't registered. The test helper `newInitCmd()` must register all 5 flags to match the real command setup, otherwise tests would pass with wrong zero values.
 - LEARNING: `installAndSetup` can be partially tested — directory creation happens before the extractor runs, so even with a nonexistent cache path, we can verify the directory was created. The extractor errors are handled gracefully (reported via `ui.Error` calls).
 - Commit: 7a9c814
+
+---
+
+[2026-02-22T09:00:00Z] [discovery] FOUND: Eighth discovery iteration — error handling, test coverage, code quality, performance
+
+### Error Handling Issues (NEW)
+- **HIGH**: `info.go:62` and `list.go:122` — `config, _ := core.LoadConfig()` silently discards errors (permission denied, corrupt YAML, I/O errors). Same pattern previously fixed in search.go (task 1). Non-ErrNotExist errors should be warned.
+- **MEDIUM**: `downloader.go:49` — `os.RemoveAll(cacheDest)` error silently discarded when clearing dev branch cache. Failed removal + new download = corrupted mixed state.
+- **MEDIUM**: `update.go:147-155` — Two `os.ReadFile` calls silently `continue` on error. Permission/I/O errors cause files to be treated as "unchanged" and skipped during update.
+- **MEDIUM**: `sync.go:221` — `rel, _ := filepath.Rel(opts.RootDir, path)` discards error. Empty `rel` on failure causes incorrect path construction.
+
+### Test Coverage Update
+- Overall: `cmd/samuel` **0%**, `internal/commands` **22.6%**, `internal/core` **85.5%**, `internal/github` **89.4%**, `internal/ui` **49.6%**
+- `internal/commands/` still has 13 of 23 source files with 0% test coverage
+- Highest-value untested files: `skill.go` (375 LOC, 0%), `list.go` (164 LOC, 0%), `config_cmd.go` (216 LOC, minimal 62-line tests)
+- `internal/core` at 85.5% exceeds the 80% business logic target
+- `internal/github` at 89.4% well above target
+- `internal/ui` improved from 0% to 49.6% across previous iterations
+
+### Code Quality Issues (NEW/PERSISTING)
+- `runUpdate()` at 219 lines (4.4x the 50-line function limit) — largest function in codebase, no existing refactor task
+- `update.go:157` uses `string(localContent) != string(cacheContent)` — allocates 2 unnecessary string copies; `bytes.Equal` is zero-allocation
+- 3 duplicate path containment validation functions: `validateContainedPath` (extractor.go), `validateRemovePath` (remove.go), `validateSymlinkTarget` (downloader.go) — should consolidate
+
+### Positive Findings
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- `go vet` clean — no issues
+- No TODO/FIXME/HACK markers, no hardcoded secrets, no panic() calls
+- Security posture strong: path traversal, symlink, size limits, TOCTOU, race condition, Docker image validation all fixed
+- HTTP client properly configured (30s timeout, size limits, no DefaultClient)
+- All exec.Command calls validated against allowlist
+- 28 iterations completed with 4 tasks finished in this batch (61-64)
+
+### Tasks Generated (Eighth Discovery): 10
+| ID | Priority | Title |
+|----|----------|-------|
+| 71 | high     | Fix silently discarded LoadConfig errors in info.go and list.go |
+| 72 | high     | Add unit tests for commands/skill.go skill management functions |
+| 73 | medium   | Fix silently discarded os.RemoveAll error in downloader.go dev cache clear |
+| 74 | medium   | Fix silently discarded ReadFile errors in update.go file comparison |
+| 75 | medium   | Fix silently discarded filepath.Rel error in sync.go SyncFolderCLAUDEMDs |
+| 76 | medium   | Add unit tests for commands/list.go helper functions |
+| 77 | medium   | Add unit tests for commands/config_cmd.go pure functions |
+| 78 | medium   | Refactor runUpdate() in commands/update.go below 50-line limit |
+| 79 | low      | Use bytes.Equal instead of string conversion in update.go |
+| 80 | low      | Consolidate path containment validation into shared core utility |
+
+[2026-02-22T09:30:00Z] [iteration:29] [task:71] COMPLETED: Fixed silently discarded LoadConfig errors in info.go and list.go
+- `info.go:62`: Changed `config, _ := core.LoadConfig()` to check error — warns via `ui.Warn` for non-`os.ErrNotExist` errors
+- `list.go:122` (`listAvailable`): Same pattern applied — warns on non-ErrNotExist errors while keeping config nil-safe
+- Both match the pattern established in search.go (task 1): `if configErr != nil && !os.IsNotExist(configErr) { ui.Warn(...) }`
+- Note: `listInstalled` (list.go:44) already properly handles LoadConfig errors with a full error return — only `listAvailable` needed fixing
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: The `config, _ := core.LoadConfig()` anti-pattern appeared in 4 command files total: search.go (fixed task 1), info.go (fixed this task), list.go (fixed this task), and the `os` import was already present in both files so no import changes were needed.
+- LEARNING: `listInstalled` vs `listAvailable` have different error handling requirements: `listInstalled` needs a valid config (returns error on failure), while `listAvailable` uses config only for marking installed items (config is optional/best-effort). The warn-and-continue pattern is correct for `listAvailable`.
+- Commit: 8550e2c

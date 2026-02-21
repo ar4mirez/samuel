@@ -152,13 +152,137 @@
         "internal/ui/spinner.go"
       ],
       "source": "pilot-discovery"
+    },
+    {
+      "id": "71",
+      "title": "Fix silently discarded LoadConfig errors in info.go and list.go",
+      "description": "info.go:62 and list.go:122 both use `config, _ := core.LoadConfig()` discarding errors. Permission denied, corrupt YAML, or I/O errors are silently swallowed. Add error checking: for non-os.ErrNotExist errors, log via ui.Warn (matching the pattern established in search.go task 1). Missing config (ErrNotExist) is expected and should remain silent.",
+      "status": "completed",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/info.go",
+        "internal/commands/list.go"
+      ],
+      "commit_sha": "8550e2c",
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "72",
+      "title": "Add unit tests for commands/skill.go skill management functions",
+      "description": "skill.go (375 LOC) has 0% test coverage and is the largest untested command file. Contains 4 command handlers: runSkillCreate (input validation + scaffold), runSkillValidate (directory scanning + validation), runSkillList (listing + formatting), runSkillInfo (lookup + display). Focus on testable paths: validation error display, missing skills directory handling, empty skills list. Use t.TempDir() with crafted .claude/skills/ structures.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "high",
+      "files_to_modify": [
+        "internal/commands/skill_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "73",
+      "title": "Fix silently discarded os.RemoveAll error in downloader.go dev cache clear",
+      "description": "downloader.go:49 calls `os.RemoveAll(cacheDest)` when clearing dev branch cache but discards the error. A failed removal followed by a new download could produce a corrupted mixed state (old + new files). Check the error and return it with context: `if err := os.RemoveAll(cacheDest); err != nil { return fmt.Errorf(\"failed to clear dev cache: %w\", err) }`.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/downloader.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "74",
+      "title": "Fix silently discarded ReadFile errors in update.go file comparison",
+      "description": "update.go:147-155 has two os.ReadFile calls that silently `continue` on error. Permission denied or I/O errors cause files to be treated as 'unchanged' and silently skipped during update. Instead, log a warning via ui.Warn when ReadFile fails on either the local or cache copy, so users know a file was skipped and why.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/update.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "75",
+      "title": "Fix silently discarded filepath.Rel error in sync.go SyncFolderCLAUDEMDs",
+      "description": "sync.go:221 uses `rel, _ := filepath.Rel(opts.RootDir, path)` discarding the error. If filepath.Rel fails (e.g., paths on different volumes on Windows), `rel` would be empty, causing incorrect relative path construction for folder CLAUDE.md generation. Check the error and skip the directory with a ui.Warn log.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/sync.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "76",
+      "title": "Add unit tests for commands/list.go helper functions",
+      "description": "list.go (164 LOC) has 0% test coverage. Contains listInstalled (73 lines) and listAvailable (69 lines) which format component listings. Test the formatting/display logic by setting up samuel.yaml configs with various component combinations (languages only, frameworks only, workflows, mixed). Verify output includes expected component names and categories.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/list_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "77",
+      "title": "Add unit tests for commands/config_cmd.go pure functions",
+      "description": "config_cmd.go (216 LOC) has only 62 lines of tests (3 cases). Contains testable pure functions: formatConfigValue (formats values for display), isValidConfigKey (validates against allowed keys). Add table-driven tests for both functions covering: valid keys (version, registry, owner, repo), invalid keys, empty/special characters, and formatConfigValue with various types.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/config_cmd_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "78",
+      "title": "Refactor runUpdate() in commands/update.go below 50-line limit",
+      "description": "runUpdate() is 219 lines (4.4x the 50-line limit) — the largest function in the codebase. Extract helper functions for: (1) resolveUpdateVersion (version checking + download), (2) categorizeFileChanges (file comparison loop producing new/modified/unchanged lists), (3) displayUpdateSummary (formatting change report), (4) applyUpdate (backup + extraction). This also helps reduce update.go (264 lines) below the 300-line file limit.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "high",
+      "files_to_modify": [
+        "internal/commands/update.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "79",
+      "title": "Use bytes.Equal instead of string conversion for file comparison in update.go",
+      "description": "update.go:157 uses `string(localContent) != string(cacheContent)` which allocates two string copies of the file contents for comparison. Replace with `!bytes.Equal(localContent, cacheContent)` which performs the same comparison with zero allocations. Add `bytes` import. This is a minor performance improvement but also a code clarity win.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/update.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "80",
+      "title": "Consolidate path containment validation into shared core utility",
+      "description": "Three nearly identical path containment validation functions exist: validateContainedPath (extractor.go:204), validateRemovePath (remove.go:141), and validateSymlinkTarget (downloader.go:196). Export ValidateContainedPath from the core package and replace the duplicates. validateSymlinkTarget has slightly different logic (resolves relative to symlink parent dir) — keep as a wrapper that calls the shared function after resolving the target.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/extractor.go",
+        "internal/core/downloader.go",
+        "internal/commands/remove.go"
+      ],
+      "source": "pilot-discovery"
     }
   ],
   "progress": {
-    "total_tasks": 10,
-    "completed_tasks": 4,
-    "current_iteration": 28,
-    "total_iterations_run": 28,
+    "total_tasks": 20,
+    "completed_tasks": 5,
+    "current_iteration": 30,
+    "total_iterations_run": 30,
     "status": "in_progress"
   }
 }
