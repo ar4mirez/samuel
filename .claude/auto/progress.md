@@ -930,3 +930,19 @@
 - LEARNING: SkillToLanguageName uses `len > 6` (not `>=`), meaning it requires at least 1 character before the "-guide" suffix. Input "-guide" (exactly 6 chars) is returned unchanged — this is intentional design.
 - All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
 - Commit: 093a3df
+
+[2026-02-22T17:30:00Z] [iteration:44] [task:78] COMPLETED: Refactored runUpdate() in commands/update.go below 50-line limit
+- Split 184-line `runUpdate()` into a 44-line orchestrator that delegates to 5 focused helpers
+- `downloadTargetVersion` (48 lines): downloader init, version resolution, version display, check-only and up-to-date short-circuits, download
+- `displayChangeDiff` (27 lines): formats and prints file change summary for `--diff` flag
+- `applyUpdate` (36 lines): orchestrates backup, extraction, reporting, and config save
+- `backupModifiedFiles` (20 lines): creates timestamped backup directory and copies modified files
+- `reportUpdateResults` (22 lines): displays new/preserved file counts and instructions for handling modifications
+- `categorizeFileChanges` (37 lines) and `fileChanges` struct were already extracted by task 65 — retained as-is
+- File went from 278 to exactly 300 lines — at the limit due to added function signatures and godocs
+- All existing tests pass (16 tests across TestFileExists, TestCategorizeFileChanges, TestRunUpdate)
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: `downloadTargetVersion` returns `("", targetVersion, nil)` for two distinct "no-op" cases: (1) already up-to-date and (2) check-only mode. The caller checks `cachePath == ""` to detect both, since both mean "don't proceed with extraction." The empty-string sentinel is a clean Go idiom for optional return values.
+- LEARNING: The original function had `var backupDir string` at the top of a 60-line block. Extracting `backupModifiedFiles` returns both `(backupDir, error)`, making the control flow clearer: backup is only attempted when there are modified files AND force is off.
+- LEARNING: File size is the binding constraint, not function size. The original 278-line file grew to 304 after adding function signatures and godocs for 5 new functions. Trimming multi-line godocs to single lines (e.g., "backs up modified files, extracts updated files, reports results, and saves the updated config version" → "backs up modified files, extracts updates, and saves the config") saved 4 lines to hit exactly 300.
+- Commit: a31c0fd

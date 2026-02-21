@@ -254,12 +254,13 @@
       "id": "78",
       "title": "Refactor runUpdate() in commands/update.go below 50-line limit",
       "description": "runUpdate() is 219 lines (4.4x the 50-line limit) — the largest function in the codebase. Extract helper functions for: (1) resolveUpdateVersion (version checking + download), (2) categorizeFileChanges (file comparison loop producing new/modified/unchanged lists), (3) displayUpdateSummary (formatting change report), (4) applyUpdate (backup + extraction). This also helps reduce update.go (264 lines) below the 300-line file limit.",
-      "status": "pending",
+      "status": "completed",
       "priority": "medium",
       "complexity": "high",
       "files_to_modify": [
         "internal/commands/update.go"
       ],
+      "commit_sha": "a31c0fd",
       "source": "pilot-discovery"
     },
     {
@@ -535,9 +536,9 @@
   ],
   "progress": {
     "total_tasks": 40,
-    "completed_tasks": 17,
-    "current_iteration": 43,
-    "total_iterations_run": 43,
+    "completed_tasks": 18,
+    "current_iteration": 44,
+    "total_iterations_run": 44,
     "status": "in_progress"
   }
 }
