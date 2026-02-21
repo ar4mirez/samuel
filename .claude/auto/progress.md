@@ -497,3 +497,12 @@
 - LEARNING: `auto_prompt.go` is a pure function module — no filesystem, no HTTP, no state. Both functions are deterministic string builders. The `GetDefaultPromptTemplate` function uses Go string concatenation with backtick-quoted strings to embed backtick characters (e.g., `` "`CLAUDE.md`" ``), which makes the template content itself contain markdown code formatting.
 - LEARNING: `GeneratePromptFile` appends to the base template using `strings.Builder`. The pilot mode section and quality checks section are independently conditional — testing all 4 combinations (neither, only checks, only pilot, both) provides full branch coverage.
 - Commit: 3bc2809
+
+[2026-02-22T05:30:00Z] [iteration:23] [task:15] COMPLETED: Fixed silently discarded filepath.Walk and filepath.Glob errors in diff.go
+- `filepath.Glob` error (line 190): now checked — logs warning via `ui.Warn` with the pattern that failed, then `continue` to skip to next pattern
+- `filepath.Walk` for `.agent` directory (line 201): return value now checked — non-`os.IsNotExist` errors logged via `ui.Warn`
+- `filepath.Walk` for template directory (line 223): return value now checked — non-`os.IsNotExist` errors logged via `ui.Warn`
+- All three use `!os.IsNotExist(err)` guard because missing directories are expected cases (`.agent` dir may not exist, template path may not exist for certain versions)
+- LEARNING: `filepath.Walk` with a callback that returns nil for all errors will itself always return nil. The Walk return value reflects only what the callback returns. So `_ = filepath.Walk(...)` is technically safe when the callback swallows errors, but handling the return value is still good practice for defense-in-depth (e.g., if the callback is later changed to return errors).
+- LEARNING: `filepath.Glob` only returns errors for syntactically invalid patterns (per Go docs). Since the patterns here are hardcoded constants (`"CLAUDE.md"`, `"AGENTS.md"`, `".claude/**/*.md"`), the error path should never trigger in practice. The fix is still worthwhile for correctness and to avoid the `_ =` anti-pattern.
+- Commit: cacd3f2
