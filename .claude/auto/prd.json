@@ -4,7 +4,7 @@
     "name": "samuel",
     "description": "Autonomous pilot mode - AI-discovered tasks",
     "created_at": "2026-02-21T21:55:56Z",
-    "updated_at": "2026-02-22T06:30:00Z"
+    "updated_at": "2026-02-22T16:00:00Z"
   },
   "config": {
     "max_iterations": 30,
@@ -408,12 +408,134 @@
       ],
       "source": "pilot-discovery"
     }
+    ,
+    {
+      "id": "91",
+      "title": "Fix silently discarded filepath.Rel errors in diff.go",
+      "description": "diff.go has 3 instances of `relPath, _ := filepath.Rel(...)` at lines 196, 210, and 239. If filepath.Rel fails (different volumes on Windows, or unexpected path structures), `relPath` will be empty, causing incorrect hash map keys and wrong diff results. Check the error and skip the entry with a `ui.Warn` log for each occurrence. Match the pattern established in sync.go (task 75).",
+      "status": "completed",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/diff.go"
+      ],
+      "commit_sha": "50a1b18",
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "92",
+      "title": "Fix silently discarded filepath.Rel errors in extractor.go",
+      "description": "extractor.go has 2 instances of `relPath, _ := filepath.Rel(e.destPath, dstPath)` at lines 87 and 104. These compute relative paths for backup and restore operations. An empty relPath on failure causes incorrect file path construction in the backup directory. Check the error and return it with context. The core package should use `return fmt.Errorf(...)` (not ui.Warn) since core doesn't depend on ui.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/extractor.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "93",
+      "title": "Add unit tests for registry.go skill lookup functions",
+      "description": "registry.go has 6 skill-related functions at 0% coverage: FindSkill (line 305), GetAllSkillNames (line 385), GetLanguageSkills (line 390), SkillToLanguageName (line 406), GetFrameworkSkills (line 420), GetWorkflowSkills (line 437). All are pure functions operating on the static registry data — ideal for table-driven tests. Test: valid skill lookups, unknown skill returns nil, all skill names returned in expected order, language-to-skill mapping completeness, skill category accessors return correct counts.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/registry_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "94",
+      "title": "Fix unchecked Close() error on write handle in auto_progress.go",
+      "description": "auto_progress.go:51 uses `defer f.Close()` where `f` is opened with `os.O_APPEND|os.O_CREATE|os.O_WRONLY`. The file is used for writing progress entries via `f.WriteString()`. If Close() fails, appended progress data could be silently lost. Apply the named return + deferred error check pattern from task 61: `defer func() { if cerr := f.Close(); cerr != nil && err == nil { err = cerr } }()`.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/auto_progress.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "95",
+      "title": "Add skill name path traversal validation before path construction in skill.go",
+      "description": "skill.go:148 uses `filepath.Join(skillsDir, name)` where `name` comes from CLI args. While `core.ValidateSkillName` is called later (line 138) and rejects most special characters, the path is constructed *after* validation at line 148. However, `core.CreateSkillScaffold` (called at line 144) also uses the name for directory creation. Verify the validation happens before any path operations and add an explicit `validateContainedPath` check on the resulting skillPath to ensure defense-in-depth.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/skill.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "96",
+      "title": "Add unit tests for diff.go comparison functions",
+      "description": "diff.go (305 LOC) has 0% test coverage. Contains testable pure functions: computeDiff (computes file hash differences between two directory trees), plus helper functions collectHashes and hashFile. Test computeDiff with t.TempDir() setups: identical dirs (no diff), new files, modified files, deleted files, mixed changes. Also test hashFile with known content for deterministic SHA256 output. The compareVersions orchestrator is harder to test (requires downloaded versions) but computeDiff is independently testable.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/diff_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "97",
+      "title": "Add unit tests for doctor.go display and orchestrator functions",
+      "description": "doctor.go (175 LOC) has 0% test coverage on the orchestrator side. While doctor_checks.go was tested (task 63), the display functions in doctor.go remain untested: printCheckResults (formats check outcomes), printCheckSummary (aggregates pass/fail/warn counts), performAutoFix (conditional auto-repair logic), restoreMissingComponents (component restoration). Test printCheckResults and printCheckSummary with crafted CheckResult slices. Test performAutoFix with --fix flag enabled/disabled. Use stdout capture pattern from output_test.go.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/doctor_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "98",
+      "title": "Refactor runRemove() in commands/remove.go below 50-line limit",
+      "description": "runRemove() is 101 lines (2x the 50-line limit) at remove.go:39. Mixes component type resolution, duplicate checking, path validation, file deletion, and config update in a single function. Extract: (1) resolveRemoveComponent (type alias resolution + registry lookup + installed check, ~20 lines), (2) removeComponentFiles (path validation + file deletion loop, ~20 lines), (3) updateRemoveConfig (config loading + component removal + save, ~15 lines). Each extracted function is independently testable.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/remove.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "99",
+      "title": "Add unit tests for auto_start_handler.go pure functions",
+      "description": "auto_start_handler.go (152 LOC) has 0% test coverage. Contains testable functions extracted by task 67: resolveSandboxFlags (extracts sandbox, image, template from CLI flags with PRD defaults) and buildLoopConfig (creates LoopConfig with CLI overrides). Also test printStartDryRun and printLoopSummary display functions. Use cobra.Command helper pattern from init_steps_test.go for flag parsing, t.TempDir() with crafted prd.json for PRD-dependent functions.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/auto_start_handler_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "100",
+      "title": "Extract search scoring magic numbers to named constants in search.go",
+      "description": "search.go contains 5 magic numbers for fuzzy-match scoring thresholds: 100 (exact match, line 238), 80 (prefix match, line 243), 60 (contains match, line 248), 40 (description contains, line 253), 30 and 5 (Levenshtein-based, line 260). Extract to package-level constants with descriptive names: scoreExactMatch, scorePrefixMatch, scoreContainsMatch, scoreDescriptionMatch, scoreLevenshteinBase, scoreLevenshteinPenalty. This makes the scoring algorithm self-documenting.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/search.go"
+      ],
+      "source": "pilot-discovery"
+    }
   ],
   "progress": {
-    "total_tasks": 30,
-    "completed_tasks": 14,
-    "current_iteration": 40,
-    "total_iterations_run": 40,
+    "total_tasks": 40,
+    "completed_tasks": 15,
+    "current_iteration": 41,
+    "total_iterations_run": 41,
     "status": "in_progress"
   }
 }

@@ -847,3 +847,67 @@
 - LEARNING: The existing tests only covered 5 of 10 valid config keys. The `auto.*` and `installed.skills` keys were added to `ValidConfigKeys` after the initial tests were written. The `MatchesValidConfigKeys` meta-test prevents this drift in the future.
 - LEARNING: `runConfigSet` with `installed.languages` uses `config.SetValue` which splits comma-separated strings into a slice internally. The test verifies the round-trip: set "go,rust,python" → reload → verify 3 items in the Languages slice.
 - Commit: a9d0b2a
+
+---
+
+[2026-02-22T16:00:00Z] [discovery] FOUND: Tenth discovery iteration — error handling, test coverage, security, code quality
+
+### Test Coverage Update
+- Overall: `cmd/samuel` **0%**, `internal/commands` **45.4%** (up from 38.9%), `internal/core` **85.3%**, `internal/github` **89.4%**, `internal/ui` **49.6%**
+- `internal/commands` improved from 38.9% → 45.4% — still below 60% target
+- Overall coverage: **61.2%** — marginally above 60% minimum
+- `go vet ./...` clean — zero warnings
+- 11 source files in `internal/commands/` still have no corresponding test file
+
+### Error Handling Issues (NEW — not covered by existing tasks)
+- **HIGH**: `diff.go:196,210,239` — 3 instances of `relPath, _ := filepath.Rel(...)` silently discarded. Empty relPath on failure causes incorrect hash map keys and wrong diff results. Was task 37 (Fourth Discovery) but never completed.
+- **HIGH**: `extractor.go:87,104` — 2 instances of `relPath, _ := filepath.Rel(e.destPath, dstPath)` silently discarded. Empty relPath causes incorrect backup/restore path construction. Was task 25 (Third Discovery) but never completed.
+- **MEDIUM**: `auto_progress.go:51` — `defer f.Close()` on write handle opened with `os.O_APPEND|os.O_WRONLY`. Failed Close() means silently lost progress data.
+
+### Security Concern (NEW)
+- **MEDIUM**: `skill.go:148` — `filepath.Join(skillsDir, name)` uses CLI-provided name. While `ValidateSkillName` runs before this at line 138, adding a `validateContainedPath` check provides defense-in-depth against any future validation bypass.
+
+### Test Coverage Gaps (NEW — not covered by existing tasks)
+- `registry.go` has 6 skill lookup functions at 0%: FindSkill, GetAllSkillNames, GetLanguageSkills, SkillToLanguageName, GetFrameworkSkills, GetWorkflowSkills. These are pure functions operating on static data — trivial to test with table-driven tests.
+- `diff.go` (305 LOC) has 0% coverage. computeDiff, collectHashes, hashFile are testable with t.TempDir() setups.
+- `doctor.go` (175 LOC) has 0% coverage on orchestrator side. printCheckResults, printCheckSummary, performAutoFix are testable with crafted CheckResult slices.
+- `auto_start_handler.go` (152 LOC) has 0% coverage. resolveSandboxFlags and buildLoopConfig (extracted by task 67) are testable pure functions.
+
+### Code Quality Issues (NEW — not covered by existing tasks)
+- `runRemove()` in remove.go: **101 lines** (2x the 50-line limit) — mixes component resolution, file deletion, config update. No existing refactor task.
+- Search scoring magic numbers in search.go: 100, 80, 60, 40, 30, 5 used without named constants. Not covered by task 70 (which covers skill.go/prompts.go/spinner.go only).
+
+### Positive Findings
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- `go vet` clean — no issues
+- No TODO/FIXME/HACK markers in production code
+- No hardcoded credentials or secrets
+- Security posture strong: path traversal, symlink, size limits, TOCTOU, race condition, Docker image validation all fixed
+- `internal/core` at 85.3% exceeds 80% business logic coverage target
+- `internal/github` at 89.4% well above target
+- 40 iterations completed, 14 tasks completed in this batch (61-77)
+- 16 functions still exceed 50-line limit, 8 files still exceed 300-line limit
+
+### Tasks Generated (Tenth Discovery): 10
+| ID  | Priority | Title |
+|-----|----------|-------|
+| 91  | high     | Fix silently discarded filepath.Rel errors in diff.go |
+| 92  | high     | Fix silently discarded filepath.Rel errors in extractor.go |
+| 93  | high     | Add unit tests for registry.go skill lookup functions |
+| 94  | medium   | Fix unchecked Close() error on write handle in auto_progress.go |
+| 95  | medium   | Add skill name path traversal validation in skill.go |
+| 96  | medium   | Add unit tests for diff.go comparison functions |
+| 97  | medium   | Add unit tests for doctor.go display and orchestrator functions |
+| 98  | medium   | Refactor runRemove() in commands/remove.go below 50-line limit |
+| 99  | medium   | Add unit tests for auto_start_handler.go pure functions |
+| 100 | low      | Extract search scoring magic numbers to named constants in search.go |
+
+[2026-02-22T16:30:00Z] [iteration:41] [task:91] COMPLETED: Fixed silently discarded filepath.Rel errors in diff.go
+- Fixed 3 instances of `relPath, _ := filepath.Rel(...)` in `getLocalFileHashes` (2 locations) and `getVersionFileHashes` (1 location)
+- Glob loop (line 196): checks error, logs via `ui.Warn`, `continue` to skip the match
+- Walk callback for .agent dir (line 210): checks error, logs via `ui.Warn`, `return nil` to skip the entry
+- Walk callback for template dir (line 239): checks error, logs via `ui.Warn`, `return nil` to skip the entry
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: This task was previously identified in both the Fourth Discovery (task 37) and Tenth Discovery (task 91). The earlier task 37 fixed only the `filepath.Walk` return values and `filepath.Glob` errors (committed as cacd3f2 in iteration 23), but the `filepath.Rel` errors within the callbacks remained. Task 91 completes the job by fixing the 3 `filepath.Rel` calls that were silently discarding errors inside the loop/callback bodies.
+- LEARNING: In Walk callbacks, using `relErr` (not `err`) avoids shadowing the outer `err` parameter from the callback signature `func(path string, info os.FileInfo, err error)`.
+- Commit: 50a1b18
