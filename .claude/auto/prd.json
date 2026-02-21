@@ -234,6 +234,7 @@
       "files_to_modify": [
         "internal/commands/list_test.go"
       ],
+      "commit_sha": "6acf65c",
       "source": "pilot-discovery"
     },
     {

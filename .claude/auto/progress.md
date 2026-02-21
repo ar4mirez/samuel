@@ -831,3 +831,4 @@
 - LEARNING: `listInstalled` returns a proper error on corrupt config (non-ErrNotExist), while `listAvailable` warns and continues with nil config. This asymmetry is intentional: `listInstalled` requires a valid config to show installed items, while `listAvailable` uses config only as an optional enhancement to mark installed items.
 - LEARNING: The `listInstalled` workflows section has special handling: when `config.Installed.Workflows` is `["all"]`, the count shows the full `len(core.Workflows)` and iterates over all workflow entries from the registry instead of the config list. This is the same "all" expansion pattern used in doctor_checks.go.
 - LEARNING: Unknown component names (not in registry) are displayed without descriptions — `FindLanguage/FindFramework/FindWorkflow` returns nil, and the fallback path just prints the name. This is forward-compatible with newer registry versions.
+- Commit: 6acf65c
