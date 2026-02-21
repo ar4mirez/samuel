@@ -296,7 +296,8 @@
       "id": "22",
       "title": "Add path containment validation to RestoreBackup and CopyFromCache",
       "description": "In extractor.go:319-338, RestoreBackup computes dstPath = filepath.Join(e.destPath, relPath) without calling validateContainedPath, allowing a crafted backup directory to write outside the destination. Similarly, CopyFromCache (line 358+) and helpers copyDirRecursive/copySingleFile lack path containment checks. Add validateContainedPath calls to both RestoreBackup and CopyFromCache for defense-in-depth consistency with ReadFile/WriteFile/RemoveFile.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "4f77da2",
       "priority": "high",
       "complexity": "low",
       "files_to_modify": [
@@ -410,9 +411,9 @@
   ],
   "progress": {
     "total_tasks": 30,
-    "completed_tasks": 11,
-    "current_iteration": 11,
-    "total_iterations_run": 11,
+    "completed_tasks": 12,
+    "current_iteration": 12,
+    "total_iterations_run": 12,
     "status": "in_progress"
   }
 }

@@ -242,3 +242,11 @@
 - LEARNING: `shouldSkip` treats `.github` and `.gitignore` as skip targets because it uses `strings.HasPrefix(path, ".git")` — this is intentional for the template directory context where only `.claude/` directories should exist
 - LEARNING: `ExtractAll` handles missing template directory gracefully via `filepath.SkipAll` in the Walk callback — tested with `TestExtractAll_NoTemplateDir`
 - Commit: fbc447e
+
+[2026-02-21T23:00:00Z] [iteration:12] [task:22] COMPLETED: Added path containment validation to RestoreBackup and CopyFromCache
+- `RestoreBackup`: replaced `dstPath := filepath.Join(e.destPath, relPath)` with `dstPath, err := validateContainedPath(e.destPath, relPath)` — now rejects backup entries that would write outside the destination directory
+- `CopyFromCache`: replaced `dstPath := filepath.Join(destPath, filePath)` with `dstPath, err := validateContainedPath(destPath, filePath)` — now rejects file paths that escape the destination
+- Added 3 regression tests: `TestRestoreBackup_PathTraversal` (validates normal operation still works with validation in place), `TestCopyFromCache_PathTraversal` (file traversal rejected), `TestCopyFromCache_PathTraversal_Directory` (directory traversal rejected)
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: `RestoreBackup` uses `filepath.Walk` which generates paths from the actual filesystem tree, so `filepath.Rel` will produce clean relative paths for real files. The traversal risk is more theoretical (crafted backup directory or symlink following), but the validation provides defense-in-depth consistent with ReadFile/WriteFile/RemoveFile/BackupFile.
+- LEARNING: `CopyFromCache` is a standalone function (not a method on Extractor) — `validateContainedPath` works equally well for standalone functions since it only needs a base dir and relative path.

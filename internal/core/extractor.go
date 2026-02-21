@@ -321,7 +321,10 @@ func (e *Extractor) RestoreBackup(backupDir string) error {
 			return err
 		}
 
-		dstPath := filepath.Join(e.destPath, relPath)
+		dstPath, err := validateContainedPath(e.destPath, relPath)
+		if err != nil {
+			return err
+		}
 
 		// Read backup
 		content, err := os.ReadFile(path)
@@ -354,7 +357,10 @@ func (e *Extractor) GetDestPath() string {
 // If the source is a directory, all contents are copied recursively.
 func CopyFromCache(cachePath, destPath, filePath string) error {
 	srcPath := filepath.Join(cachePath, TemplatePrefix, filePath)
-	dstPath := filepath.Join(destPath, filePath)
+	dstPath, err := validateContainedPath(destPath, filePath)
+	if err != nil {
+		return err
+	}
 
 	srcInfo, err := os.Stat(srcPath)
 	if err != nil {
