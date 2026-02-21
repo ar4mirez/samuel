@@ -119,7 +119,10 @@ func listAvailable(typeFilter string) error {
 	fmt.Println()
 
 	// Check if installed to mark installed items
-	config, _ := core.LoadConfig()
+	config, configErr := core.LoadConfig()
+	if configErr != nil && !os.IsNotExist(configErr) {
+		ui.Warn("Could not load config: %v", configErr)
+	}
 
 	// Languages
 	if typeFilter == "" || typeFilter == "languages" {

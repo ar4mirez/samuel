@@ -59,7 +59,10 @@ func runInfo(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("component not found")
 	}
 
-	config, _ := core.LoadConfig()
+	config, configErr := core.LoadConfig()
+	if configErr != nil && !os.IsNotExist(configErr) {
+		ui.Warn("Could not load config: %v", configErr)
+	}
 	installed := checkInstallStatus(config, componentType, componentName)
 
 	displayComponentInfo(component, componentType, installed)
