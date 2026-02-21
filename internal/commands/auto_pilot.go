@@ -193,7 +193,10 @@ func executePilotLoop(cwd string, autoCfg core.AutoConfig, pilotCfg *core.PilotC
 				return err
 			}
 
-			reloaded, _ := core.LoadAutoPRD(prdPath)
+			reloaded, reloadErr := core.LoadAutoPRD(prdPath)
+			if reloadErr != nil {
+				ui.Warn("[iteration:%d] Failed to reload prd.json after discovery: %v", i, reloadErr)
+			}
 			if reloaded != nil && len(reloaded.Tasks) <= tasksBefore {
 				emptyDiscoveries++
 				ui.Warn("[iteration:%d] Discovery found no new tasks (%d/%d empty)",
@@ -222,7 +225,10 @@ func executePilotLoop(cwd string, autoCfg core.AutoConfig, pilotCfg *core.PilotC
 		}
 
 		if emptyDiscoveries >= core.MaxEmptyDiscoveries {
-			reloaded, _ := core.LoadAutoPRD(prdPath)
+			reloaded, reloadErr := core.LoadAutoPRD(prdPath)
+			if reloadErr != nil {
+				ui.Warn("Failed to reload prd.json for empty discovery check: %v", reloadErr)
+			}
 			if reloaded == nil || core.CountPendingTasks(reloaded) == 0 {
 				ui.Info("No new tasks after %d discoveries. Stopping.", emptyDiscoveries)
 				break

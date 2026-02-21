@@ -42,7 +42,10 @@ func printPilotSummary(prdPath string, stats pilotStats) {
 	ui.Print("")
 	ui.Header("Pilot Summary")
 
-	finalPRD, _ := core.LoadAutoPRD(prdPath)
+	finalPRD, err := core.LoadAutoPRD(prdPath)
+	if err != nil {
+		ui.Warn("Failed to load prd.json for pilot summary: %v", err)
+	}
 	if finalPRD == nil {
 		ui.Print("  Could not load final state.")
 		return

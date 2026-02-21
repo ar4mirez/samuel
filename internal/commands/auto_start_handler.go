@@ -121,7 +121,10 @@ func printStartDryRun(prd *core.AutoPRD, cwd, sandbox, sandboxImage, sandboxTemp
 }
 
 func printLoopSummary(prdPath string) {
-	finalPRD, _ := core.LoadAutoPRD(prdPath)
+	finalPRD, err := core.LoadAutoPRD(prdPath)
+	if err != nil {
+		ui.Warn("Failed to load prd.json for summary: %v", err)
+	}
 	if finalPRD == nil {
 		return
 	}
