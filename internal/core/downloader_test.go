@@ -182,6 +182,336 @@ func TestExtractTarGz_PathTraversal(t *testing.T) {
 	}
 }
 
+func TestExtractTarGz_InvalidGzip(t *testing.T) {
+	buf := bytes.NewBufferString("this is not gzip data")
+
+	err := extractTarGz(buf, t.TempDir())
+	if err == nil {
+		t.Fatal("expected error for invalid gzip data, got nil")
+	}
+	if !contains(err.Error(), "gzip") {
+		t.Errorf("expected gzip-related error, got: %v", err)
+	}
+}
+
+func TestExtractTarGz_EmptyArchive(t *testing.T) {
+	dest := t.TempDir()
+
+	// Create a valid tar.gz with no entries
+	var buf bytes.Buffer
+	gw := gzip.NewWriter(&buf)
+	tw := tar.NewWriter(gw)
+	tw.Close()
+	gw.Close()
+
+	err := extractTarGz(&buf, dest)
+	if err != nil {
+		t.Fatalf("unexpected error for empty archive: %v", err)
+	}
+}
+
+func TestExtractTarGz_NestedDirsWithoutExplicitEntries(t *testing.T) {
+	dest := t.TempDir()
+
+	// Create archive with a deeply nested file but no explicit dir entries
+	var buf bytes.Buffer
+	gw := gzip.NewWriter(&buf)
+	tw := tar.NewWriter(gw)
+
+	content := "deep file content"
+	if err := tw.WriteHeader(&tar.Header{
+		Name:     "repo/a/b/c/deep.txt",
+		Typeflag: tar.TypeReg,
+		Mode:     0644,
+		Size:     int64(len(content)),
+	}); err != nil {
+		t.Fatalf("failed to write header: %v", err)
+	}
+	if _, err := tw.Write([]byte(content)); err != nil {
+		t.Fatalf("failed to write content: %v", err)
+	}
+
+	tw.Close()
+	gw.Close()
+
+	err := extractTarGz(&buf, dest)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	got, err := os.ReadFile(filepath.Join(dest, "repo", "a", "b", "c", "deep.txt"))
+	if err != nil {
+		t.Fatalf("failed to read deep file: %v", err)
+	}
+	if string(got) != content {
+		t.Errorf("expected %q, got %q", content, string(got))
+	}
+}
+
+func TestExtractTarGz_FilePermissions(t *testing.T) {
+	dest := t.TempDir()
+
+	var buf bytes.Buffer
+	gw := gzip.NewWriter(&buf)
+	tw := tar.NewWriter(gw)
+
+	content := "#!/bin/sh\necho hello"
+	if err := tw.WriteHeader(&tar.Header{
+		Name:     "repo/script.sh",
+		Typeflag: tar.TypeReg,
+		Mode:     0755,
+		Size:     int64(len(content)),
+	}); err != nil {
+		t.Fatalf("failed to write header: %v", err)
+	}
+	if _, err := tw.Write([]byte(content)); err != nil {
+		t.Fatalf("failed to write content: %v", err)
+	}
+
+	tw.Close()
+	gw.Close()
+
+	err := extractTarGz(&buf, dest)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	info, err := os.Stat(filepath.Join(dest, "repo", "script.sh"))
+	if err != nil {
+		t.Fatalf("failed to stat file: %v", err)
+	}
+	if info.Mode().Perm()&0111 == 0 {
+		t.Errorf("expected executable permission, got %v", info.Mode().Perm())
+	}
+}
+
+func TestExtractTarGz_DirectoryTraversal(t *testing.T) {
+	dest := t.TempDir()
+
+	// Create archive with a directory entry that traverses
+	var buf bytes.Buffer
+	gw := gzip.NewWriter(&buf)
+	tw := tar.NewWriter(gw)
+
+	if err := tw.WriteHeader(&tar.Header{
+		Name:     "../../evil-dir/",
+		Typeflag: tar.TypeDir,
+		Mode:     0755,
+	}); err != nil {
+		t.Fatalf("failed to write header: %v", err)
+	}
+
+	tw.Close()
+	gw.Close()
+
+	err := extractTarGz(&buf, dest)
+	if err == nil {
+		t.Fatal("expected error for directory path traversal, got nil")
+	}
+	if !contains(err.Error(), "invalid file path") {
+		t.Errorf("expected 'invalid file path' error, got: %v", err)
+	}
+}
+
+func TestCopyFile(t *testing.T) {
+	t.Run("copies content and permissions", func(t *testing.T) {
+		srcDir := t.TempDir()
+		dstDir := t.TempDir()
+
+		srcPath := filepath.Join(srcDir, "source.txt")
+		dstPath := filepath.Join(dstDir, "dest.txt")
+
+		content := "hello, world!"
+		if err := os.WriteFile(srcPath, []byte(content), 0644); err != nil {
+			t.Fatalf("failed to create source file: %v", err)
+		}
+
+		if err := copyFile(srcPath, dstPath); err != nil {
+			t.Fatalf("copyFile failed: %v", err)
+		}
+
+		got, err := os.ReadFile(dstPath)
+		if err != nil {
+			t.Fatalf("failed to read destination: %v", err)
+		}
+		if string(got) != content {
+			t.Errorf("expected %q, got %q", content, string(got))
+		}
+	})
+
+	t.Run("source not found", func(t *testing.T) {
+		err := copyFile("/nonexistent/file.txt", filepath.Join(t.TempDir(), "out.txt"))
+		if err == nil {
+			t.Fatal("expected error for missing source, got nil")
+		}
+	})
+
+	t.Run("destination directory not found", func(t *testing.T) {
+		srcDir := t.TempDir()
+		srcPath := filepath.Join(srcDir, "src.txt")
+		if err := os.WriteFile(srcPath, []byte("data"), 0644); err != nil {
+			t.Fatalf("failed to create source: %v", err)
+		}
+
+		err := copyFile(srcPath, "/nonexistent/dir/out.txt")
+		if err == nil {
+			t.Fatal("expected error for missing dest dir, got nil")
+		}
+	})
+}
+
+func TestCopyDir(t *testing.T) {
+	t.Run("copies directory tree", func(t *testing.T) {
+		src := t.TempDir()
+		dst := filepath.Join(t.TempDir(), "dest")
+
+		// Create source structure: src/a.txt, src/sub/b.txt
+		if err := os.WriteFile(filepath.Join(src, "a.txt"), []byte("file-a"), 0644); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.MkdirAll(filepath.Join(src, "sub"), 0755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(src, "sub", "b.txt"), []byte("file-b"), 0644); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := copyDir(src, dst); err != nil {
+			t.Fatalf("copyDir failed: %v", err)
+		}
+
+		// Verify copied content
+		gotA, err := os.ReadFile(filepath.Join(dst, "a.txt"))
+		if err != nil {
+			t.Fatalf("failed to read a.txt: %v", err)
+		}
+		if string(gotA) != "file-a" {
+			t.Errorf("a.txt: expected 'file-a', got %q", string(gotA))
+		}
+
+		gotB, err := os.ReadFile(filepath.Join(dst, "sub", "b.txt"))
+		if err != nil {
+			t.Fatalf("failed to read sub/b.txt: %v", err)
+		}
+		if string(gotB) != "file-b" {
+			t.Errorf("sub/b.txt: expected 'file-b', got %q", string(gotB))
+		}
+	})
+
+	t.Run("copies empty directory", func(t *testing.T) {
+		src := t.TempDir()
+		dst := filepath.Join(t.TempDir(), "dest")
+
+		if err := copyDir(src, dst); err != nil {
+			t.Fatalf("copyDir failed on empty dir: %v", err)
+		}
+
+		info, err := os.Stat(dst)
+		if err != nil {
+			t.Fatalf("dest dir not created: %v", err)
+		}
+		if !info.IsDir() {
+			t.Error("expected dest to be a directory")
+		}
+	})
+
+	t.Run("source not found", func(t *testing.T) {
+		err := copyDir("/nonexistent/source", filepath.Join(t.TempDir(), "dest"))
+		if err == nil {
+			t.Fatal("expected error for nonexistent source, got nil")
+		}
+	})
+}
+
+func TestClearCache(t *testing.T) {
+	t.Run("clears populated cache", func(t *testing.T) {
+		cacheDir := t.TempDir()
+		d := &Downloader{cachePath: cacheDir}
+
+		// Create some cached files
+		if err := os.MkdirAll(filepath.Join(cacheDir, "samuel-v1.0.0"), 0755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(cacheDir, "samuel-v1.0.0", "file.txt"), []byte("cached"), 0644); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(cacheDir, "other.txt"), []byte("other"), 0644); err != nil {
+			t.Fatal(err)
+		}
+
+		if err := d.ClearCache(); err != nil {
+			t.Fatalf("ClearCache failed: %v", err)
+		}
+
+		entries, err := os.ReadDir(cacheDir)
+		if err != nil {
+			t.Fatalf("failed to read cache dir: %v", err)
+		}
+		if len(entries) != 0 {
+			t.Errorf("expected empty cache, got %d entries", len(entries))
+		}
+	})
+
+	t.Run("nonexistent cache dir returns nil", func(t *testing.T) {
+		d := &Downloader{cachePath: "/nonexistent/cache/path"}
+
+		if err := d.ClearCache(); err != nil {
+			t.Fatalf("expected nil for nonexistent cache, got: %v", err)
+		}
+	})
+
+	t.Run("empty cache is no-op", func(t *testing.T) {
+		cacheDir := t.TempDir()
+		d := &Downloader{cachePath: cacheDir}
+
+		if err := d.ClearCache(); err != nil {
+			t.Fatalf("ClearCache failed on empty dir: %v", err)
+		}
+	})
+}
+
+func TestGetCacheSize(t *testing.T) {
+	t.Run("calculates size of files", func(t *testing.T) {
+		cacheDir := t.TempDir()
+		d := &Downloader{cachePath: cacheDir}
+
+		// Create files with known sizes
+		data10 := bytes.Repeat([]byte("a"), 10)
+		data20 := bytes.Repeat([]byte("b"), 20)
+
+		if err := os.WriteFile(filepath.Join(cacheDir, "f1.txt"), data10, 0644); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.MkdirAll(filepath.Join(cacheDir, "sub"), 0755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(cacheDir, "sub", "f2.txt"), data20, 0644); err != nil {
+			t.Fatal(err)
+		}
+
+		size, err := d.GetCacheSize()
+		if err != nil {
+			t.Fatalf("GetCacheSize failed: %v", err)
+		}
+		if size != 30 {
+			t.Errorf("expected size 30, got %d", size)
+		}
+	})
+
+	t.Run("empty cache returns zero", func(t *testing.T) {
+		cacheDir := t.TempDir()
+		d := &Downloader{cachePath: cacheDir}
+
+		size, err := d.GetCacheSize()
+		if err != nil {
+			t.Fatalf("GetCacheSize failed: %v", err)
+		}
+		if size != 0 {
+			t.Errorf("expected size 0, got %d", size)
+		}
+	})
+}
+
 // Helper functions
 
 func contains(s, substr string) bool {
