@@ -43,6 +43,15 @@
 - LEARNING: For search.go, `LoadConfig` returns `os.ErrNotExist` when no config file exists — this is a normal case (user hasn't run `samuel init` yet), so only warn on other error types
 - Commit: c3c5562
 
+[2026-02-21T16:30:00Z] [iteration:2] [task:3] COMPLETED: Added unit tests for internal/github/client.go
+- Created client_test.go with 28 test cases covering all exported functions
+- Used `redirectTransport` pattern (custom `http.RoundTripper`) to redirect HTTP requests to `httptest.NewServer` — zero changes to production code
+- Coverage: 89.7% (0% → 89.7%)
+- Table-driven tests for: GetLatestRelease, GetLatestVersionOrBranch, GetTags, DownloadArchive, DownloadBranchArchive, DownloadFile, CheckForUpdates
+- Also tested: NewClient, URL construction (GetArchiveURL, GetBranchArchiveURL), request headers, constants
+- LEARNING: `CheckForUpdates` has a nil pointer dereference if `GetLatestRelease` returns nil (404 case). The function accesses `release.TagName` without nil check. Not fixed in this task — should be a separate bug fix.
+- LEARNING: The `redirectTransport` pattern is reusable for testing any HTTP client code without modifying production code. The transport intercepts `RoundTrip` and rewrites `URL.Host` to point at the test server.
+
 ### Tasks Generated: 10
 | ID | Priority | Title |
 |----|----------|-------|

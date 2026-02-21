@@ -55,7 +55,8 @@
       "id": "3",
       "title": "Add unit tests for internal/github/client.go",
       "description": "The internal/github package has 0% test coverage. client.go (279 LOC) handles GitHub API calls for releases, tags, and archives. Add tests with HTTP test server mocking for key functions.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "b98b986",
       "priority": "high",
       "complexity": "medium",
       "files_to_modify": [
@@ -151,9 +152,9 @@
   ],
   "progress": {
     "total_tasks": 10,
-    "completed_tasks": 1,
-    "current_iteration": 1,
-    "total_iterations_run": 1,
+    "completed_tasks": 2,
+    "current_iteration": 2,
+    "total_iterations_run": 2,
     "status": "in_progress"
   }
 }
