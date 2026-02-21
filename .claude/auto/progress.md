@@ -399,6 +399,17 @@
 - LEARNING: The `core` import is still needed (13 other usages in the file), so no import cleanup was required
 - Commit: 0d77327
 
+[2026-02-22T03:00:00Z] [iteration:20] [task:6] COMPLETED: Refactored runDoctor() into smaller helper functions
+- Split 363-line `runDoctor()` into a 43-line orchestrator that delegates to focused functions
+- Created `doctor_checks.go` (291 lines) with individual check functions: `checkConfigFile`, `checkCLAUDEMD`, `checkAGENTSMD`, `checkDirectoryStructure`, `checkInstalledComponents`, `checkSkillsIntegrity`, `checkAutoHealth`, `checkLocalModifications`
+- Kept `doctor.go` (175 lines) with command registration, `runDoctor`, `printCheckResults`, `printCheckSummary`, `performAutoFix`, `restoreMissingComponents`
+- Introduced `checkInstalledSkills` generic helper to deduplicate the language/framework/workflow check pattern (originally 3 near-identical code blocks)
+- All functions under 50 lines, both files under 300 lines
+- `checkModification` signature simplified: removed unused `_ string` parameter (was `config.Version` but never used)
+- LEARNING: The three component checks (language, framework, workflow) follow an identical pattern: migrate legacy config, iterate names, check SKILL.md existence. A generic function with a `finder func(string) *core.Component` parameter cleanly abstracts this. The only special case is workflows expanding `"all"` to `GetAllWorkflowNames()`, handled in `checkInstalledComponents` before calling the generic helper.
+- LEARNING: Splitting into two files (orchestrator + checks) keeps both under the 300-line limit while the original 470-line single file far exceeded it. The logical grouping (doctor.go = command setup + display + fix, doctor_checks.go = individual checks) is a natural split.
+- Commit: b51ee55
+
 ### Tasks Generated (Fifth Discovery): 10
 | ID | Priority | Title |
 |----|----------|-------|

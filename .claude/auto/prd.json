@@ -95,7 +95,8 @@
       "id": "6",
       "title": "Refactor runDoctor() into smaller helper functions",
       "description": "runDoctor() in doctor.go spans 362 lines (lines 45-407), far exceeding the 50-line guardrail. Extract each health check into separate functions (checkConfig, checkCLAUDEMD, checkSkillsIntegrity, etc.) and extract auto-fix logic into performAutoFix().",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "b51ee55",
       "priority": "medium",
       "complexity": "medium",
       "files_to_modify": [
@@ -660,9 +661,9 @@
   ],
   "progress": {
     "total_tasks": 50,
-    "completed_tasks": 19,
-    "current_iteration": 19,
-    "total_iterations_run": 19,
+    "completed_tasks": 20,
+    "current_iteration": 20,
+    "total_iterations_run": 20,
     "status": "in_progress"
   }
 }
