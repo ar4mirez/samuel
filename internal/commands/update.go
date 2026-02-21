@@ -251,11 +251,13 @@ func categorizeFileChanges(paths []string, cwd, cachePath string) fileChanges {
 
 		localContent, err := os.ReadFile(localPath)
 		if err != nil {
+			ui.Warn("Skipping %s: failed to read local file: %v", path, err)
 			continue
 		}
 
 		cacheContent, err := os.ReadFile(cacheSrcPath)
 		if err != nil {
+			ui.Warn("Skipping %s: failed to read cached file: %v", path, err)
 			continue
 		}
 
