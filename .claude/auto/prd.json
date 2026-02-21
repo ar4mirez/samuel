@@ -189,12 +189,13 @@
       "id": "73",
       "title": "Fix silently discarded os.RemoveAll error in downloader.go dev cache clear",
       "description": "downloader.go:49 calls `os.RemoveAll(cacheDest)` when clearing dev branch cache but discards the error. A failed removal followed by a new download could produce a corrupted mixed state (old + new files). Check the error and return it with context: `if err := os.RemoveAll(cacheDest); err != nil { return fmt.Errorf(\"failed to clear dev cache: %w\", err) }`.",
-      "status": "pending",
+      "status": "completed",
       "priority": "medium",
       "complexity": "low",
       "files_to_modify": [
         "internal/core/downloader.go"
       ],
+      "commit_sha": "781b2ba",
       "source": "pilot-discovery"
     },
     {
@@ -406,9 +407,9 @@
   ],
   "progress": {
     "total_tasks": 30,
-    "completed_tasks": 9,
-    "current_iteration": 35,
-    "total_iterations_run": 35,
+    "completed_tasks": 10,
+    "current_iteration": 36,
+    "total_iterations_run": 36,
     "status": "in_progress"
   }
 }

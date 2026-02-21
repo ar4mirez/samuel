@@ -794,3 +794,10 @@
 - LEARNING: Go's `url.Parse` is very permissive — `"not-a-url"` parses successfully with an empty scheme and the string as the path. Checking `u.Scheme != "https"` catches this case naturally since the scheme will be empty.
 - LEARNING: `url.Parse("https://")` succeeds with `Host: ""` — the host check is necessary to reject scheme-only URLs that `url.Parse` considers valid.
 - Commit: 57a1aa7
+
+[2026-02-22T13:30:00Z] [iteration:36] [task:73] COMPLETED: Fixed silently discarded os.RemoveAll error in downloader.go dev cache clear
+- Changed `os.RemoveAll(cacheDest)` to check and return error with context: `fmt.Errorf("failed to clear dev cache: %w", err)`
+- A failed removal followed by a new download could produce corrupted mixed state (old + new files)
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: This is a one-line fix pattern that recurs across the codebase (tasks 1, 15, 23, 71 all fixed similar `_ =` error suppression). The consistent fix is: check the error, log/warn for non-critical paths, return error for critical paths. Here, cache clearing is critical (corrupted state risk), so returning the error is correct.
+- Commit: 781b2ba
