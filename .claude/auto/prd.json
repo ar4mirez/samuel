@@ -539,7 +539,8 @@
       "id": "41",
       "title": "Add path traversal validation to remove.go component deletion",
       "description": "In remove.go:108, `filePath := filepath.Join(cwd, component.Path)` uses component.Path from samuel.yaml config without validating the resolved path stays within the project directory. A tampered config with `component.Path = '../../etc/important_file'` would cause os.Remove to delete arbitrary files. Add filepath.Clean + strings.HasPrefix containment check before the os.Remove call, consistent with the validateContainedPath pattern used in extractor.go.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "ec2d38b",
       "priority": "high",
       "complexity": "low",
       "files_to_modify": [
@@ -658,9 +659,9 @@
   ],
   "progress": {
     "total_tasks": 50,
-    "completed_tasks": 17,
-    "current_iteration": 17,
-    "total_iterations_run": 17,
+    "completed_tasks": 18,
+    "current_iteration": 18,
+    "total_iterations_run": 18,
     "status": "in_progress"
   }
 }

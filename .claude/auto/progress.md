@@ -347,6 +347,15 @@
 - LEARNING: `getRelevantFrameworks` uses a `seen` map to deduplicate — if two languages share a framework, it only appears once. The mapping covers 11 languages × 3 frameworks each = 33 framework mappings.
 - Commit: 45c720b
 
+[2026-02-22T02:00:00Z] [iteration:18] [task:41] COMPLETED: Added path traversal validation to remove.go component deletion
+- Added `validateRemovePath(projectDir, componentPath)` helper with `filepath.Clean` + `strings.HasPrefix` containment check
+- Applied before `os.Remove` call in `runRemove` — rejects component paths that resolve outside the project directory
+- Added 10 regression tests: 8 table-driven cases (valid paths, traversal attacks, edge cases) + 2 TempDir-based tests
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: `component.Path` actually comes from the hard-coded registry (`core.FindLanguage/Framework/Workflow`), not directly from `samuel.yaml` user input. The risk is more theoretical (crafted registry entry or future code change), but the validation provides defense-in-depth consistent with `validateContainedPath` in `extractor.go`.
+- LEARNING: The `validateRemovePath` pattern is identical to `validateContainedPath` in extractor.go. In a future cleanup iteration, these could be consolidated into a shared utility function in the `core` package by exporting `ValidateContainedPath`.
+- Commit: ec2d38b
+
 ---
 
 [2026-02-21T01:30:00Z] [discovery] FOUND: Fifth discovery iteration — security, coverage, error handling
