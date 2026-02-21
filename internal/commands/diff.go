@@ -193,7 +193,11 @@ func getLocalFileHashes(basePath string) map[string]string {
 			continue
 		}
 		for _, match := range matches {
-			relPath, _ := filepath.Rel(basePath, match)
+			relPath, err := filepath.Rel(basePath, match)
+			if err != nil {
+				ui.Warn("Failed to compute relative path for %q: %v", match, err)
+				continue
+			}
 			if hash, err := hashFile(match); err == nil {
 				hashes[relPath] = hash
 			}
@@ -207,7 +211,11 @@ func getLocalFileHashes(basePath string) map[string]string {
 			return nil
 		}
 		if strings.HasSuffix(path, ".md") {
-			relPath, _ := filepath.Rel(basePath, path)
+			relPath, relErr := filepath.Rel(basePath, path)
+			if relErr != nil {
+				ui.Warn("Failed to compute relative path for %q: %v", path, relErr)
+				return nil
+			}
 			if hash, err := hashFile(path); err == nil {
 				hashes[relPath] = hash
 			}
@@ -236,7 +244,11 @@ func getVersionFileHashes(cachePath string) map[string]string {
 			return nil
 		}
 
-		relPath, _ := filepath.Rel(templatePath, path)
+		relPath, relErr := filepath.Rel(templatePath, path)
+		if relErr != nil {
+			ui.Warn("Failed to compute relative path for %q: %v", path, relErr)
+			return nil
+		}
 		if hash, err := hashFile(path); err == nil {
 			hashes[relPath] = hash
 		}
