@@ -39,288 +39,37 @@ func init() {
 }
 
 func runInit(cmd *cobra.Command, args []string) error {
-	force, _ := cmd.Flags().GetBool("force")
-	nonInteractive, _ := cmd.Flags().GetBool("non-interactive")
-	templateFlag, _ := cmd.Flags().GetString("template")
-	languageFlags, _ := cmd.Flags().GetStringSlice("languages")
-	frameworkFlags, _ := cmd.Flags().GetStringSlice("frameworks")
-
-	// Track if user provided CLI flags (skip confirmation prompt if so)
-	cliProvided := templateFlag != "" || len(languageFlags) > 0 || len(frameworkFlags) > 0
-
-	// Working variable for template name (may be set interactively)
-	templateName := templateFlag
-
-	// Determine target directory
-	targetDir := "."
-	if len(args) > 0 {
-		targetDir = args[0]
-	}
-
-	// Resolve to absolute path
-	absTargetDir, err := filepath.Abs(targetDir)
+	flags, err := parseInitFlags(cmd, args)
 	if err != nil {
-		return fmt.Errorf("invalid path: %w", err)
+		return err
 	}
 
-	// Check if directory exists or needs to be created
-	createDir := false
-	if targetDir != "." {
-		if _, err := os.Stat(absTargetDir); os.IsNotExist(err) {
-			createDir = true
-		}
+	if err := validateInitTarget(flags); err != nil {
+		return err
 	}
 
-	// Check if this is the Samuel repository itself (prevent self-init)
-	if isSamuelRepository(absTargetDir) {
-		return fmt.Errorf("cannot initialize inside the Samuel repository itself.\nUse 'samuel init <project-name>' to create a new project directory")
-	}
-
-	// Check for existing config
-	if core.ConfigExists(absTargetDir) && !force {
-		return fmt.Errorf("Samuel already initialized in %s. Use --force to reinitialize", absTargetDir)
-	}
-
-	// Variables to collect user choices
-	var selectedTemplate *core.Template
-	var selectedLanguages []string
-	var selectedFrameworks []string
-
-	// Interactive mode
-	if !nonInteractive && templateName == "" && len(languageFlags) == 0 {
-		// Select template
-		templateOptions := make([]ui.SelectOption, len(core.Templates))
-		for i, t := range core.Templates {
-			templateOptions[i] = ui.SelectOption{
-				Name:        t.Name,
-				Description: t.Description,
-				Value:       t.Name,
-			}
-		}
-
-		selected, err := ui.Select("Select template", templateOptions)
-		if err != nil {
-			return fmt.Errorf("template selection cancelled: %w", err)
-		}
-		templateName = selected.Value
-	}
-
-	// Get template or use defaults
-	if templateName != "" {
-		selectedTemplate = core.FindTemplate(templateName)
-		if selectedTemplate == nil {
-			return fmt.Errorf("unknown template: %s", templateName)
-		}
-		selectedLanguages = selectedTemplate.Languages
-		selectedFrameworks = selectedTemplate.Frameworks
-	}
-
-	// Override with flags if provided
-	if len(languageFlags) > 0 {
-		selectedLanguages = expandLanguages(languageFlags)
-	}
-	if len(frameworkFlags) > 0 {
-		selectedFrameworks = expandFrameworks(frameworkFlags)
-	}
-
-	// Interactive language selection if not full template, not specified via CLI, and template was selected interactively
-	if !nonInteractive && !cliProvided && selectedTemplate != nil && selectedTemplate.Name != "full" {
-		langOptions := make([]ui.SelectOption, len(core.Languages))
-		for i, l := range core.Languages {
-			langOptions[i] = ui.SelectOption{
-				Name:        l.Name,
-				Description: l.Description,
-				Value:       l.Name,
-			}
-		}
-
-		// Pre-select languages from template
-		defaults := selectedLanguages
-
-		selected, err := ui.MultiSelect("Select languages", langOptions, defaults)
-		if err != nil {
-			return fmt.Errorf("language selection cancelled: %w", err)
-		}
-
-		selectedLanguages = make([]string, len(selected))
-		for i, s := range selected {
-			selectedLanguages[i] = s.Value
-		}
-	}
-
-	// Interactive framework selection if not full template, not specified via CLI, and template was selected interactively
-	if !nonInteractive && !cliProvided && selectedTemplate != nil && selectedTemplate.Name != "full" && len(selectedLanguages) > 0 {
-		// Filter frameworks based on selected languages
-		relevantFrameworks := getRelevantFrameworks(selectedLanguages)
-
-		if len(relevantFrameworks) > 0 {
-			fwOptions := make([]ui.SelectOption, len(relevantFrameworks))
-			for i, fw := range relevantFrameworks {
-				fwOptions[i] = ui.SelectOption{
-					Name:        fw.Name,
-					Description: fw.Description,
-					Value:       fw.Name,
-				}
-			}
-
-			selected, err := ui.MultiSelect("Select frameworks (optional)", fwOptions, nil)
-			if err != nil {
-				// User cancelled - continue without frameworks
-				selectedFrameworks = []string{}
-			} else {
-				selectedFrameworks = make([]string, len(selected))
-				for i, s := range selected {
-					selectedFrameworks[i] = s.Value
-				}
-			}
-		}
-	}
-
-	// Default to starter template if nothing selected
-	if selectedTemplate == nil && len(selectedLanguages) == 0 {
-		selectedTemplate = core.FindTemplate("starter")
-		selectedLanguages = selectedTemplate.Languages
-		selectedFrameworks = selectedTemplate.Frameworks
-	}
-
-	// Show what will be installed
-	ui.Header("Samuel Initialization")
-	ui.TableRow("Target", absTargetDir)
-	ui.TableRow("Languages", fmt.Sprintf("%d selected", len(selectedLanguages)))
-	ui.TableRow("Frameworks", fmt.Sprintf("%d selected", len(selectedFrameworks)))
-	ui.TableRow("Workflows", "all (13)")
-
-	// Confirm in interactive mode (skip if user provided template or languages via CLI flags)
-	if !nonInteractive && !cliProvided {
-		confirmed, err := ui.Confirm("\nProceed with installation?", true)
-		if err != nil || !confirmed {
-			ui.Info("Installation cancelled")
-			return nil
-		}
-	}
-
-	// Start installation
-	spinner := ui.NewSpinner("Downloading framework...")
-	spinner.Start()
-
-	// Initialize downloader
-	downloader, err := core.NewDownloader()
+	sel, err := selectComponents(flags)
 	if err != nil {
-		spinner.Error("Failed to initialize")
-		return fmt.Errorf("failed to initialize downloader: %w", err)
+		return err
 	}
 
-	// Get latest version
-	version, err := downloader.GetLatestVersion()
+	if !displayAndConfirm(flags, sel) {
+		return nil
+	}
+
+	version, cachePath, err := downloadFramework()
 	if err != nil {
-		spinner.Error("Failed to get latest version")
-		return fmt.Errorf("failed to get latest version: %w", err)
+		return err
 	}
 
-	// Download to cache
-	cachePath, err := downloader.DownloadVersion(version)
-	if err != nil {
-		spinner.Error("Download failed")
-		return fmt.Errorf("failed to download framework: %w", err)
-	}
-	spinner.Success(fmt.Sprintf("Downloaded Samuel v%s", version))
-
-	// Create target directory if needed
-	if createDir {
-		if err := os.MkdirAll(absTargetDir, 0755); err != nil {
-			return fmt.Errorf("failed to create directory: %w", err)
-		}
-		ui.Success("Created %s/", filepath.Base(absTargetDir))
+	if err := installAndSetup(flags, sel, version, cachePath); err != nil {
+		return err
 	}
 
-	// Get paths to extract
-	workflows := []string{"all"}
-	paths := core.GetComponentPaths(selectedLanguages, selectedFrameworks, workflows)
-
-	// Extract files
-	extractor := core.NewExtractor(cachePath, absTargetDir)
-	result, err := extractor.Extract(paths, force)
-	if err != nil {
-		return fmt.Errorf("failed to extract files: %w", err)
-	}
-
-	// Update skills section in CLAUDE.md
-	skillsDir := filepath.Join(absTargetDir, ".claude", "skills")
-	claudeMDPath := filepath.Join(absTargetDir, "CLAUDE.md")
-	installedSkills, scanErr := core.ScanSkillsDirectory(skillsDir)
-	if scanErr != nil {
-		ui.Warn("Could not scan skills directory: %v", scanErr)
-	}
-	if len(installedSkills) > 0 {
-		if err := core.UpdateCLAUDEMDSkillsSection(claudeMDPath, installedSkills); err != nil {
-			// Non-fatal error, just log it
-			ui.Warn("Could not update skills section in CLAUDE.md: %v", err)
-		}
-	}
-
-	// Copy CLAUDE.md to AGENTS.md for cross-tool compatibility
-	agentsMDPath := filepath.Join(absTargetDir, "AGENTS.md")
-	if claudeContent, err := os.ReadFile(claudeMDPath); err == nil {
-		if err := os.WriteFile(agentsMDPath, claudeContent, 0644); err != nil {
-			ui.Warn("Could not create AGENTS.md: %v", err)
-		}
-	}
-
-	// Create per-folder CLAUDE.md and AGENTS.md stubs in existing directories
-	syncResult, syncErr := core.SyncFolderCLAUDEMDs(core.SyncOptions{
-		RootDir:  absTargetDir,
-		MaxDepth: 1,
-	})
-	if syncErr != nil {
-		ui.Warn("Could not create per-folder CLAUDE.md files: %v", syncErr)
-	} else if len(syncResult.Created) > 0 {
-		ui.Success("Created %d per-folder CLAUDE.md/AGENTS.md files", len(syncResult.Created))
-	}
-
-	// Report results
-	ui.Success("Installed CLAUDE.md (v%s)", version)
-	ui.Success("Installed AGENTS.md (cross-tool compatibility)")
-	ui.Success("Installed %d language guides", len(selectedLanguages))
-	ui.Success("Installed %d framework guides", len(selectedFrameworks))
-	ui.Success("Installed %d workflows", len(core.Workflows))
-	if len(installedSkills) > 0 {
-		ui.Success("Installed %d skills", len(installedSkills))
-	}
-
-	if len(result.FilesSkipped) > 0 {
-		ui.Warn("Skipped %d existing files (use --force to overwrite)", len(result.FilesSkipped))
-	}
-
-	if len(result.Errors) > 0 {
-		for _, e := range result.Errors {
-			ui.Error("%v", e)
-		}
-	}
-
-	// Create config file
-	config := core.NewConfig(version)
-	config.Installed.Languages = selectedLanguages
-	config.Installed.Frameworks = selectedFrameworks
-	config.Installed.Workflows = workflows
-
-	if err := config.Save(absTargetDir); err != nil {
-		return fmt.Errorf("failed to save config: %w", err)
-	}
-	ui.Success("Created samuel.yaml")
-
-	// Show next steps
-	fmt.Println()
-	ui.Bold("Next steps:")
-	if createDir {
-		ui.ListItem(1, "cd %s", filepath.Base(absTargetDir))
-	}
-	ui.ListItem(1, "Start coding with AI assistance!")
-	ui.ListItem(1, "Run 'samuel doctor' to verify installation")
-
-	return nil
+	return saveInitConfig(flags, sel, version)
 }
 
-// expandLanguages expands short language names
+// expandLanguages expands short language names.
 func expandLanguages(flags []string) []string {
 	aliases := map[string]string{
 		"ts":         "typescript",
@@ -337,13 +86,11 @@ func expandLanguages(flags []string) []string {
 
 	var result []string
 	for _, f := range flags {
-		// Handle comma-separated values
 		for _, name := range strings.Split(f, ",") {
 			name = strings.TrimSpace(strings.ToLower(name))
 			if alias, ok := aliases[name]; ok {
 				name = alias
 			}
-			// Verify it exists
 			if core.FindLanguage(name) != nil {
 				result = append(result, name)
 			}
@@ -352,7 +99,7 @@ func expandLanguages(flags []string) []string {
 	return result
 }
 
-// expandFrameworks expands short framework names
+// expandFrameworks expands short framework names.
 func expandFrameworks(flags []string) []string {
 	aliases := map[string]string{
 		"next":   "nextjs",
@@ -374,23 +121,19 @@ func expandFrameworks(flags []string) []string {
 	return result
 }
 
-// isSamuelRepository checks if the target directory is the Samuel repository itself
-// This prevents users from accidentally initializing inside the framework source
+// isSamuelRepository checks if the target directory is the Samuel repository itself.
+// This prevents users from accidentally initializing inside the framework source.
 func isSamuelRepository(targetDir string) bool {
-	// Check for template/ directory (unique to the Samuel repo structure)
 	templateDir := filepath.Join(targetDir, "template")
 	if info, err := os.Stat(templateDir); err == nil && info.IsDir() {
-		// Also check for template/CLAUDE.md to be sure
 		claudeMD := filepath.Join(templateDir, "CLAUDE.md")
 		if _, err := os.Stat(claudeMD); err == nil {
 			return true
 		}
 	}
 
-	// Check for packages/cli directory (CLI source code)
 	cliDir := filepath.Join(targetDir, "packages", "cli")
 	if info, err := os.Stat(cliDir); err == nil && info.IsDir() {
-		// Check for go.mod with samuel module
 		goMod := filepath.Join(cliDir, "go.mod")
 		if _, err := os.Stat(goMod); err == nil {
 			return true
@@ -400,9 +143,8 @@ func isSamuelRepository(targetDir string) bool {
 	return false
 }
 
-// getRelevantFrameworks returns frameworks related to selected languages
+// getRelevantFrameworks returns frameworks related to selected languages.
 func getRelevantFrameworks(languages []string) []core.Component {
-	// Map languages to their frameworks
 	languageFrameworks := map[string][]string{
 		"typescript": {"react", "nextjs", "express"},
 		"python":     {"django", "fastapi", "flask"},
@@ -434,4 +176,47 @@ func getRelevantFrameworks(languages []string) []core.Component {
 	}
 
 	return result
+}
+
+// reportInitResults displays the installation summary to the user.
+func reportInitResults(result *core.ExtractResult, version string, sel *initSelections, installedSkills []*core.SkillInfo) {
+	ui.Success("Installed CLAUDE.md (v%s)", version)
+	ui.Success("Installed AGENTS.md (cross-tool compatibility)")
+	ui.Success("Installed %d language guides", len(sel.languages))
+	ui.Success("Installed %d framework guides", len(sel.frameworks))
+	ui.Success("Installed %d workflows", len(core.Workflows))
+	if len(installedSkills) > 0 {
+		ui.Success("Installed %d skills", len(installedSkills))
+	}
+	if len(result.FilesSkipped) > 0 {
+		ui.Warn("Skipped %d existing files (use --force to overwrite)", len(result.FilesSkipped))
+	}
+	if len(result.Errors) > 0 {
+		for _, e := range result.Errors {
+			ui.Error("%v", e)
+		}
+	}
+}
+
+// saveInitConfig creates and saves the samuel.yaml config file and shows next steps.
+func saveInitConfig(flags *initFlags, sel *initSelections, version string) error {
+	config := core.NewConfig(version)
+	config.Installed.Languages = sel.languages
+	config.Installed.Frameworks = sel.frameworks
+	config.Installed.Workflows = []string{"all"}
+
+	if err := config.Save(flags.absTargetDir); err != nil {
+		return fmt.Errorf("failed to save config: %w", err)
+	}
+	ui.Success("Created samuel.yaml")
+
+	fmt.Println()
+	ui.Bold("Next steps:")
+	if flags.createDir {
+		ui.ListItem(1, "cd %s", filepath.Base(flags.absTargetDir))
+	}
+	ui.ListItem(1, "Start coding with AI assistance!")
+	ui.ListItem(1, "Run 'samuel doctor' to verify installation")
+
+	return nil
 }
