@@ -349,3 +349,290 @@ func TestConstants(t *testing.T) {
 		t.Error("TemplatePrefix is empty")
 	}
 }
+
+func TestFindSkill(t *testing.T) {
+	tests := []struct {
+		name      string
+		wantFound bool
+	}{
+		{"go-guide", true},
+		{"commit-message", true},
+		{"react", true},
+		{"auto", true},
+		{"typescript-guide", true},
+		{"nonexistent", false},
+		{"", false},
+		{"GO-GUIDE", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FindSkill(tt.name)
+			if (got != nil) != tt.wantFound {
+				t.Errorf("FindSkill(%q) found = %v, want %v",
+					tt.name, got != nil, tt.wantFound)
+			}
+			if got != nil && got.Name != tt.name {
+				t.Errorf("FindSkill(%q).Name = %q", tt.name, got.Name)
+			}
+		})
+	}
+}
+
+func TestGetAllSkillNames(t *testing.T) {
+	names := GetAllSkillNames()
+	if len(names) == 0 {
+		t.Fatal("GetAllSkillNames() returned empty slice")
+	}
+
+	if len(names) != len(Skills) {
+		t.Errorf("GetAllSkillNames() returned %d names, want %d",
+			len(names), len(Skills))
+	}
+
+	expected := []string{
+		"commit-message", "go-guide", "react", "auto", "sync-claude-md",
+	}
+	for _, exp := range expected {
+		found := false
+		for _, name := range names {
+			if name == exp {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("GetAllSkillNames() missing %q", exp)
+		}
+	}
+}
+
+func TestGetLanguageSkills(t *testing.T) {
+	skills := GetLanguageSkills()
+	if len(skills) == 0 {
+		t.Fatal("GetLanguageSkills() returned empty slice")
+	}
+
+	for _, s := range skills {
+		if s.Category != "language" {
+			t.Errorf("GetLanguageSkills() returned skill %q with category %q",
+				s.Name, s.Category)
+		}
+	}
+
+	// Verify known language skills are present
+	expected := map[string]bool{
+		"go-guide":     false,
+		"python-guide": false,
+		"rust-guide":   false,
+	}
+	for _, s := range skills {
+		if _, ok := expected[s.Name]; ok {
+			expected[s.Name] = true
+		}
+	}
+	for name, found := range expected {
+		if !found {
+			t.Errorf("GetLanguageSkills() missing expected skill %q", name)
+		}
+	}
+}
+
+func TestGetFrameworkSkills(t *testing.T) {
+	skills := GetFrameworkSkills()
+	if len(skills) == 0 {
+		t.Fatal("GetFrameworkSkills() returned empty slice")
+	}
+
+	for _, s := range skills {
+		if s.Category != "framework" {
+			t.Errorf("GetFrameworkSkills() returned skill %q with category %q",
+				s.Name, s.Category)
+		}
+	}
+
+	// Verify known framework skills are present
+	expected := map[string]bool{
+		"react":  false,
+		"django": false,
+		"gin":    false,
+	}
+	for _, s := range skills {
+		if _, ok := expected[s.Name]; ok {
+			expected[s.Name] = true
+		}
+	}
+	for name, found := range expected {
+		if !found {
+			t.Errorf("GetFrameworkSkills() missing expected skill %q", name)
+		}
+	}
+}
+
+func TestGetWorkflowSkills(t *testing.T) {
+	skills := GetWorkflowSkills()
+	if len(skills) == 0 {
+		t.Fatal("GetWorkflowSkills() returned empty slice")
+	}
+
+	for _, s := range skills {
+		if s.Category != "workflow" {
+			t.Errorf("GetWorkflowSkills() returned skill %q with category %q",
+				s.Name, s.Category)
+		}
+	}
+
+	// Verify known workflow skills are present
+	expected := map[string]bool{
+		"create-prd":     false,
+		"code-review":    false,
+		"auto":           false,
+		"troubleshooting": false,
+	}
+	for _, s := range skills {
+		if _, ok := expected[s.Name]; ok {
+			expected[s.Name] = true
+		}
+	}
+	for name, found := range expected {
+		if !found {
+			t.Errorf("GetWorkflowSkills() missing expected skill %q", name)
+		}
+	}
+}
+
+func TestSkillCategoryCoverage(t *testing.T) {
+	lang := GetLanguageSkills()
+	fw := GetFrameworkSkills()
+	wf := GetWorkflowSkills()
+
+	categorized := len(lang) + len(fw) + len(wf)
+	// commit-message has no category, so total should be categorized + uncategorized
+	if categorized >= len(Skills) {
+		// All or most skills should have a category
+		return
+	}
+	uncategorized := len(Skills) - categorized
+	if uncategorized > 5 {
+		t.Errorf("Too many uncategorized skills: %d out of %d",
+			uncategorized, len(Skills))
+	}
+}
+
+func TestLanguageToSkillName(t *testing.T) {
+	tests := []struct {
+		langName string
+		want     string
+	}{
+		{"go", "go-guide"},
+		{"python", "python-guide"},
+		{"typescript", "typescript-guide"},
+		{"rust", "rust-guide"},
+		{"", "-guide"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.langName, func(t *testing.T) {
+			got := LanguageToSkillName(tt.langName)
+			if got != tt.want {
+				t.Errorf("LanguageToSkillName(%q) = %q, want %q",
+					tt.langName, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSkillToLanguageName(t *testing.T) {
+	tests := []struct {
+		skillName string
+		want      string
+	}{
+		{"go-guide", "go"},
+		{"python-guide", "python"},
+		{"typescript-guide", "typescript"},
+		{"rust-guide", "rust"},
+		{"react", "react"},
+		{"commit-message", "commit-message"},
+		{"guide", "guide"},
+		{"-guide", "-guide"},
+		{"a-guide", "a"},
+		{"", ""},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.skillName, func(t *testing.T) {
+			got := SkillToLanguageName(tt.skillName)
+			if got != tt.want {
+				t.Errorf("SkillToLanguageName(%q) = %q, want %q",
+					tt.skillName, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestLanguageToSkillNameRoundTrip(t *testing.T) {
+	for _, lang := range Languages {
+		skillName := LanguageToSkillName(lang.Name)
+		langName := SkillToLanguageName(skillName)
+		if langName != lang.Name {
+			t.Errorf("round-trip failed: %q -> %q -> %q",
+				lang.Name, skillName, langName)
+		}
+	}
+}
+
+func TestFrameworkToSkillName(t *testing.T) {
+	tests := []struct {
+		fwName string
+		want   string
+	}{
+		{"react", "react"},
+		{"gin", "gin"},
+		{"django", "django"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.fwName, func(t *testing.T) {
+			got := FrameworkToSkillName(tt.fwName)
+			if got != tt.want {
+				t.Errorf("FrameworkToSkillName(%q) = %q, want %q",
+					tt.fwName, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestWorkflowToSkillName(t *testing.T) {
+	tests := []struct {
+		wfName string
+		want   string
+	}{
+		{"create-prd", "create-prd"},
+		{"auto", "auto"},
+		{"code-review", "code-review"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.wfName, func(t *testing.T) {
+			got := WorkflowToSkillName(tt.wfName)
+			if got != tt.want {
+				t.Errorf("WorkflowToSkillName(%q) = %q, want %q",
+					tt.wfName, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSkillsHaveFields(t *testing.T) {
+	for _, s := range Skills {
+		if s.Name == "" {
+			t.Error("Skill has empty name")
+		}
+		if s.Path == "" {
+			t.Errorf("Skill %q has empty path", s.Name)
+		}
+		if s.Description == "" {
+			t.Errorf("Skill %q has empty description", s.Name)
+		}
+	}
+}
