@@ -35,7 +35,6 @@ func runAdd(cmd *cobra.Command, args []string) error {
 	componentType := args[0]
 	componentName := args[1]
 
-	// Load config
 	config, err := core.LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -44,43 +43,51 @@ func runAdd(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to load config: %w", err)
 	}
 
-	// Validate component type and find component
-	var component *core.Component
-	var alreadyInstalled bool
-
-	switch componentType {
-	case "language", "lang", "l":
-		component = core.FindLanguage(componentName)
-		if component == nil {
-			return fmt.Errorf("unknown language: %s\nRun 'samuel list --available --type languages' to see available languages", componentName)
-		}
-		alreadyInstalled = config.HasLanguage(componentName)
-
-	case "framework", "fw", "f":
-		component = core.FindFramework(componentName)
-		if component == nil {
-			return fmt.Errorf("unknown framework: %s\nRun 'samuel list --available --type frameworks' to see available frameworks", componentName)
-		}
-		alreadyInstalled = config.HasFramework(componentName)
-
-	case "workflow", "wf", "w":
-		component = core.FindWorkflow(componentName)
-		if component == nil {
-			return fmt.Errorf("unknown workflow: %s\nRun 'samuel list --available --type workflows' to see available workflows", componentName)
-		}
-		alreadyInstalled = config.HasWorkflow(componentName)
-
-	default:
-		return fmt.Errorf("unknown component type: %s\nValid types: language, framework, workflow", componentType)
+	component, alreadyInstalled, err := resolveComponent(componentType, componentName, config)
+	if err != nil {
+		return err
 	}
-
-	// Check if already installed
 	if alreadyInstalled {
 		ui.Warn("%s '%s' is already installed", componentType, componentName)
 		return nil
 	}
 
-	// Download the component
+	if err := downloadAndInstall(config.Version, component); err != nil {
+		return err
+	}
+
+	return updateAddConfig(config, componentType, componentName, component.Path)
+}
+
+// resolveComponent validates the component type, finds it in the registry,
+// and checks whether it's already installed in the given config.
+func resolveComponent(componentType, componentName string, config *core.Config) (*core.Component, bool, error) {
+	switch componentType {
+	case "language", "lang", "l":
+		component := core.FindLanguage(componentName)
+		if component == nil {
+			return nil, false, fmt.Errorf("unknown language: %s\nRun 'samuel list --available --type languages' to see available languages", componentName)
+		}
+		return component, config.HasLanguage(componentName), nil
+	case "framework", "fw", "f":
+		component := core.FindFramework(componentName)
+		if component == nil {
+			return nil, false, fmt.Errorf("unknown framework: %s\nRun 'samuel list --available --type frameworks' to see available frameworks", componentName)
+		}
+		return component, config.HasFramework(componentName), nil
+	case "workflow", "wf", "w":
+		component := core.FindWorkflow(componentName)
+		if component == nil {
+			return nil, false, fmt.Errorf("unknown workflow: %s\nRun 'samuel list --available --type workflows' to see available workflows", componentName)
+		}
+		return component, config.HasWorkflow(componentName), nil
+	default:
+		return nil, false, fmt.Errorf("unknown component type: %s\nValid types: language, framework, workflow", componentType)
+	}
+}
+
+// downloadAndInstall downloads the framework version and copies the component to the current directory.
+func downloadAndInstall(version string, component *core.Component) error {
 	spinner := ui.NewSpinner(fmt.Sprintf("Downloading %s...", component.Name))
 	spinner.Start()
 
@@ -90,26 +97,27 @@ func runAdd(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to initialize: %w", err)
 	}
 
-	// Download the specific version
-	cachePath, err := downloader.DownloadVersion(config.Version)
+	cachePath, err := downloader.DownloadVersion(version)
 	if err != nil {
 		spinner.Error("Download failed")
 		return fmt.Errorf("failed to download: %w", err)
 	}
 	spinner.Stop()
 
-	// Get current directory
 	cwd, err := os.Getwd()
 	if err != nil {
 		return fmt.Errorf("failed to get working directory: %w", err)
 	}
 
-	// Copy the file
 	if err := core.CopyFromCache(cachePath, cwd, component.Path); err != nil {
 		return fmt.Errorf("failed to install %s: %w", component.Name, err)
 	}
 
-	// Update config
+	return nil
+}
+
+// updateAddConfig adds the component to the project config and saves it.
+func updateAddConfig(config *core.Config, componentType, componentName, componentPath string) error {
 	switch componentType {
 	case "language", "lang", "l":
 		config.AddLanguage(componentName)
@@ -119,12 +127,16 @@ func runAdd(cmd *cobra.Command, args []string) error {
 		config.AddWorkflow(componentName)
 	}
 
+	cwd, err := os.Getwd()
+	if err != nil {
+		return fmt.Errorf("failed to get working directory: %w", err)
+	}
+
 	if err := config.Save(cwd); err != nil {
 		return fmt.Errorf("failed to update config: %w", err)
 	}
 
-	ui.Success("Installed %s", component.Path)
+	ui.Success("Installed %s", componentPath)
 	ui.Success("Updated samuel.yaml")
-
 	return nil
 }
