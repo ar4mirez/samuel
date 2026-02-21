@@ -414,7 +414,8 @@
       "id": "31",
       "title": "Fix race condition in ui/spinner.go Start/Stop",
       "description": "Spinner.Start() launches a goroutine that reads s.bar on every tick (line 37), while Stop() sets s.bar = nil (line 50) from the main goroutine — no synchronization protects this field. This is a data race: the goroutine can read s.bar as non-nil, then Stop() sets it to nil, then the goroutine calls s.bar.Add(1) on a nil pointer. Fix by using a done channel or sync.Once for shutdown, or protect s.bar with a sync.Mutex.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "0819b18",
       "priority": "high",
       "complexity": "low",
       "files_to_modify": [
@@ -535,9 +536,9 @@
   ],
   "progress": {
     "total_tasks": 40,
-    "completed_tasks": 14,
-    "current_iteration": 14,
-    "total_iterations_run": 14,
+    "completed_tasks": 15,
+    "current_iteration": 15,
+    "total_iterations_run": 15,
     "status": "in_progress"
   }
 }

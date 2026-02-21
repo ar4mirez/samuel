@@ -315,3 +315,13 @@
 - LEARNING: Docker sandbox (`docker sandbox run`) reuses existing sandboxes by name. If a sandbox was previously created in the same test run, subsequent calls to the same sandbox name are fast. But initial creation pulls images and is very slow (23+ seconds). Tests should avoid triggering real sandbox creation.
 - LEARNING: `invokeAgentDocker` has an unreachable error path: `filepath.Rel(projectDir, promptPath)` on Unix only fails when the paths are on different volumes (not possible on Unix). The 86.7% coverage gap is this error path. This is acceptable — the error check is defense-in-depth for potential Windows support.
 - Commit: 1cf5627
+
+[2026-02-22T00:30:00Z] [iteration:15] [task:31] COMPLETED: Fixed race condition in ui/spinner.go Start/Stop
+- Replaced unsynchronized `s.bar` nil check with `done chan struct{}` + `sync.Once` pattern
+- `Start()` goroutine now uses `select` on `done` channel + `time.Ticker` instead of reading a shared pointer
+- `Stop()` uses `sync.Once` to close the `done` channel exactly once — safe for concurrent and repeated calls
+- Added 7 regression tests: basic start/stop, idempotent stop, stop-without-start, concurrent stop (10 goroutines), rapid start/stop, Success(), Error()
+- All tests pass with `-race` flag — no data races detected
+- LEARNING: The `select` on a closed channel approach (`select { case <-s.done: return; default: close(s.done) }`) is NOT safe for concurrent callers — two goroutines can both enter the `default` branch before either closes. `sync.Once` is the correct primitive for one-time channel close.
+- LEARNING: `time.NewTicker` is preferred over `time.Sleep` in goroutine loops because the ticker can be deferred-stopped, ensuring cleanup when the goroutine exits via the `done` channel. The `select` pattern with ticker also avoids busy-waiting during the sleep interval when shutdown is requested.
+- Commit: 0819b18
