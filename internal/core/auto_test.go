@@ -511,6 +511,92 @@ func TestAutoPRD_JSONRoundTrip(t *testing.T) {
 	}
 }
 
+func TestLoadAutoPRD_NumericTaskIDs(t *testing.T) {
+	dir := t.TempDir()
+	prdPath := filepath.Join(dir, "prd.json")
+
+	// Write prd.json with numeric task IDs (as an AI tool might generate)
+	prdJSON := `{
+  "version": "1.0",
+  "project": {"name": "test", "description": "desc", "created_at": "2026-01-01T00:00:00Z", "updated_at": "2026-01-01T00:00:00Z"},
+  "config": {"max_iterations": 50, "quality_checks": [], "ai_tool": "claude", "ai_prompt_file": "", "sandbox": "none"},
+  "tasks": [
+    {"id": 1, "title": "First task", "status": "pending", "priority": "high", "source": "pilot-discovery"},
+    {"id": 2, "title": "Second task", "status": "pending", "priority": "medium", "source": "pilot-discovery"},
+    {"id": 3, "title": "Third task", "status": "completed", "priority": "low", "source": "pilot-discovery"}
+  ],
+  "progress": {"total_tasks": 3, "completed_tasks": 1, "current_iteration": 0, "total_iterations_run": 0, "status": "not_started"}
+}`
+
+	if err := os.WriteFile(prdPath, []byte(prdJSON), 0644); err != nil {
+		t.Fatalf("failed to write test prd.json: %v", err)
+	}
+
+	prd, err := LoadAutoPRD(prdPath)
+	if err != nil {
+		t.Fatalf("LoadAutoPRD failed with numeric IDs: %v", err)
+	}
+
+	if len(prd.Tasks) != 3 {
+		t.Fatalf("expected 3 tasks, got %d", len(prd.Tasks))
+	}
+
+	// Verify numeric IDs were converted to strings
+	expectedIDs := []string{"1", "2", "3"}
+	for i, want := range expectedIDs {
+		if prd.Tasks[i].ID != want {
+			t.Errorf("task %d: expected ID %q, got %q", i, want, prd.Tasks[i].ID)
+		}
+	}
+
+	// Verify other fields parsed correctly
+	if prd.Tasks[0].Title != "First task" {
+		t.Errorf("expected title 'First task', got %q", prd.Tasks[0].Title)
+	}
+	if prd.Tasks[0].Priority != "high" {
+		t.Errorf("expected priority 'high', got %q", prd.Tasks[0].Priority)
+	}
+	if prd.Tasks[2].Status != TaskStatusCompleted {
+		t.Errorf("expected status 'completed', got %q", prd.Tasks[2].Status)
+	}
+}
+
+func TestAutoTask_UnmarshalJSON_MixedIDs(t *testing.T) {
+	// Test a tasks array with mixed string and numeric IDs
+	tasksJSON := `[
+		{"id": "1.0", "title": "String ID", "status": "pending"},
+		{"id": 2, "title": "Numeric ID", "status": "pending"},
+		{"id": "3", "title": "String again", "status": "completed"}
+	]`
+
+	var tasks []AutoTask
+	if err := json.Unmarshal([]byte(tasksJSON), &tasks); err != nil {
+		t.Fatalf("Unmarshal failed with mixed IDs: %v", err)
+	}
+
+	if len(tasks) != 3 {
+		t.Fatalf("expected 3 tasks, got %d", len(tasks))
+	}
+
+	expected := []struct {
+		id    string
+		title string
+	}{
+		{"1.0", "String ID"},
+		{"2", "Numeric ID"},
+		{"3", "String again"},
+	}
+
+	for i, want := range expected {
+		if tasks[i].ID != want.id {
+			t.Errorf("task %d: expected ID %q, got %q", i, want.id, tasks[i].ID)
+		}
+		if tasks[i].Title != want.title {
+			t.Errorf("task %d: expected title %q, got %q", i, want.title, tasks[i].Title)
+		}
+	}
+}
+
 func TestGetAutoPRDPath(t *testing.T) {
 	got := GetAutoPRDPath("/project")
 	want := filepath.Join("/project", ".claude/auto", "prd.json")

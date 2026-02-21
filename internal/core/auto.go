@@ -128,6 +128,53 @@ type AutoTask struct {
 	Source        string   `json:"source,omitempty"`
 }
 
+// UnmarshalJSON implements custom JSON unmarshaling for AutoTask.
+// It handles numeric task IDs gracefully by converting them to strings,
+// which is needed because AI tools sometimes generate "id": 1 instead of "id": "1".
+func (t *AutoTask) UnmarshalJSON(data []byte) error {
+	// Use a type alias to avoid infinite recursion
+	type autoTaskAlias AutoTask
+
+	// First try standard unmarshal (works when id is a string)
+	var alias autoTaskAlias
+	if err := json.Unmarshal(data, &alias); err == nil {
+		*t = AutoTask(alias)
+		return nil
+	}
+
+	// If that failed, try with a raw id field to handle numeric IDs
+	var raw struct {
+		autoTaskAlias
+		RawID json.RawMessage `json:"id"`
+	}
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+
+	*t = AutoTask(raw.autoTaskAlias)
+
+	// Parse the raw ID — could be a string or number
+	var numID float64
+	if err := json.Unmarshal(raw.RawID, &numID); err == nil {
+		// It was a number, convert to string
+		if numID == float64(int(numID)) {
+			t.ID = fmt.Sprintf("%d", int(numID))
+		} else {
+			t.ID = fmt.Sprintf("%g", numID)
+		}
+		return nil
+	}
+
+	// Try as string (shouldn't reach here if first unmarshal worked, but be safe)
+	var strID string
+	if err := json.Unmarshal(raw.RawID, &strID); err != nil {
+		return fmt.Errorf("task id must be a string or number, got: %s", string(raw.RawID))
+	}
+	t.ID = strID
+
+	return nil
+}
+
 // Task source constants
 const (
 	TaskSourceManual    = "manual"

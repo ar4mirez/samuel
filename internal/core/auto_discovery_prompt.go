@@ -43,6 +43,23 @@ Your job is to analyze the project and generate high-value tasks.
    - Use clear, actionable titles
    - Set appropriate priority and complexity
    - Set the "source" field to "pilot-discovery"
+   - Each task in the ` + "`tasks`" + ` array MUST follow this exact structure (all IDs are strings):
+
+` + "```" + `json
+{
+  "id": "1",
+  "title": "Clear actionable title",
+  "description": "What needs to be done and why",
+  "status": "pending",
+  "priority": "high",
+  "complexity": "medium",
+  "files_to_modify": ["path/to/file.go"],
+  "source": "pilot-discovery"
+}
+` + "```" + `
+
+   **IMPORTANT**: The ` + "`id`" + ` field MUST be a string (e.g., ` + "`\"1\"`" + `, ` + "`\"2\"`" + `, ` + "`\"1.1\"`" + `), never a number.
+   Use sequential string IDs starting after the highest existing task ID.
 
 5. **Document findings**:
    - Append a summary of what you discovered to ` + "`.claude/auto/progress.md`" + `
