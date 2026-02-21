@@ -693,3 +693,15 @@
 - LEARNING: `ScanSkillsDirectory` only includes directories that contain a SKILL.md file. A directory without SKILL.md is silently skipped — it doesn't appear in the scan results and doesn't trigger errors. But `LoadSkillInfo` (used by info/validate with specific name) returns info with `Errors: ["missing required file: SKILL.md"]` for such directories.
 - LEARNING: The `os.Chdir(t.TempDir()) + defer restore` pattern is necessary because all 4 command handlers use `os.Getwd()` to find the skills directory. There's no way to inject the working directory without this approach.
 - Commit: 1875291
+
+[2026-02-22T10:30:00Z] [iteration:32] [task:65] COMPLETED: Added unit tests for commands/update.go helper logic
+- Extracted `categorizeFileChanges` from `runUpdate` into a standalone testable function with `fileChanges` struct
+- Created update_test.go with 16 test cases covering 3 functions
+- `fileExists`: 4 tests (existing file, nonexistent, directory, empty path)
+- `categorizeFileChanges`: 10 tests (empty paths, new file, unchanged, modified, removed in new version, mixed categories, nested paths, unreadable local/cache files, empty files)
+- `runUpdate`: 2 tests (no config → error, corrupt config → error)
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: `runUpdate` is heavily coupled to `core.NewDownloader()` which calls `EnsureCacheDir()` and `github.NewClient()`. The only testable early-exit paths that don't hit the downloader are: (1) no config file, (2) corrupt config file. The "already up to date" path still requires `NewDownloader()` to succeed first.
+- LEARNING: Extracting `categorizeFileChanges` as a standalone function is the right approach for this type of orchestration function. The function is pure (depends only on filesystem state) and makes the core business logic testable without mocking HTTP clients or downloaders. This is the same pattern used in other tasks (e.g., task 6 extracting doctor checks).
+- LEARNING: The `fileChanges` struct with named fields is clearer than returning 3 separate slices. It also makes it easy to add new categories (e.g., "deleted files") in the future without changing the function signature.
+- Commit: 690365a
