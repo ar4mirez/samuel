@@ -52,6 +52,17 @@
 - LEARNING: `CheckForUpdates` has a nil pointer dereference if `GetLatestRelease` returns nil (404 case). The function accesses `release.TagName` without nil check. Not fixed in this task — should be a separate bug fix.
 - LEARNING: The `redirectTransport` pattern is reusable for testing any HTTP client code without modifying production code. The transport intercepts `RoundTrip` and rewrites `URL.Host` to point at the test server.
 
+[2026-02-21T17:00:00Z] [iteration:3] [task:4] COMPLETED: Added unit tests for internal/core/skill.go
+- Created skill_test.go with 50 test cases covering all 14 functions
+- Coverage: 95.8% (0% → 95.8%) — 11 functions at 100%, ParseSkillMD at 95%, LoadSkillInfo at 94.7%, ScanSkillsDirectory at 89.5%, CreateSkillScaffold at 75%
+- Used t.TempDir() for all filesystem tests — clean, no manual cleanup needed
+- Table-driven tests for: toTitleCase, ValidateSkillName, ValidateSkillDescription, ValidateSkillCompatibility, ValidateSkillMetadata, ParseSkillMD, CountLines
+- Subtests for filesystem-dependent functions: LoadSkillInfo, ScanSkillsDirectory, CreateSkillScaffold, UpdateCLAUDEMDSkillsSection, dirExists
+- LEARNING: ScanSkillsDirectory correctly skips hidden dirs (prefixed with `.`) and non-directory entries — tested both cases
+- LEARNING: ValidateSkillName with uppercase chars triggers TWO errors (lowercase check + invalid chars check) because uppercase letters fail both conditions
+- LEARNING: ParseSkillMD splitting on empty string returns `[""]` (1 element), not `[]` (0 elements), so the `len(lines) == 0` guard in the function is effectively dead code
+- Commit: 16771cf
+
 ### Tasks Generated: 10
 | ID | Priority | Title |
 |----|----------|-------|

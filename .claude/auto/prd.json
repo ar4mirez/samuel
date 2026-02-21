@@ -68,7 +68,8 @@
       "id": "4",
       "title": "Add unit tests for internal/core/skill.go",
       "description": "skill.go (431 LOC) handles skill parsing, loading, validation, and indexing with no test coverage. This is core business logic that needs tests for ParseSkillFile, ValidateSkill, ScanSkillsDirectory, and related functions.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "16771cf",
       "priority": "high",
       "complexity": "medium",
       "files_to_modify": [
@@ -152,9 +153,9 @@
   ],
   "progress": {
     "total_tasks": 10,
-    "completed_tasks": 2,
-    "current_iteration": 2,
-    "total_iterations_run": 2,
+    "completed_tasks": 3,
+    "current_iteration": 3,
+    "total_iterations_run": 3,
     "status": "in_progress"
   }
 }
