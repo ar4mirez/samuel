@@ -96,12 +96,13 @@
       "id": "66",
       "title": "Refactor runSkillInfo() in commands/skill.go below 50-line limit",
       "description": "runSkillInfo() is 92 lines (1.84x the 50-line limit) at skill.go:284. Extract helper functions for: (1) skill lookup and SKILL.md path resolution, (2) metadata display formatting, (3) file preview rendering. This also helps reduce skill.go (375 lines) closer to the 300-line file limit.",
-      "status": "pending",
+      "status": "completed",
       "priority": "medium",
       "complexity": "medium",
       "files_to_modify": [
         "internal/commands/skill.go"
       ],
+      "commit_sha": "3a077ad",
       "source": "pilot-discovery"
     },
     {
@@ -279,13 +280,133 @@
         "internal/commands/remove.go"
       ],
       "source": "pilot-discovery"
+    },
+    {
+      "id": "81",
+      "title": "Add unit tests for auto_task_handlers.go task management functions",
+      "description": "auto_task_handlers.go (127 LOC) has 0% test coverage and contains the task management CLI handlers used by `samuel auto task` subcommands. Contains testable functions: taskStatusIcon (pure mapping function: pending/in_progress/completed/skipped → emoji), updateTaskStatus (loads PRD, updates task, saves), runAutoTaskAdd (validates args, adds task to PRD). Use t.TempDir() with crafted prd.json files. Table-driven tests for taskStatusIcon covering all status values + unknown status.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/auto_task_handlers_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "82",
+      "title": "Refactor runAdd() in commands/add.go below 50-line limit",
+      "description": "runAdd() is 97 lines (1.94x the 50-line limit) at add.go:34. Mixes component type validation, duplicate checking, download orchestration, extraction, and config update in a single function. Extract helper functions for: (1) resolveComponent (type alias resolution + registry lookup + duplicate check), (2) downloadAndExtract (version resolution + download + extraction), (3) updateAddConfig (config loading + component addition + save). Each extracted function should be independently testable.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/add.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "83",
+      "title": "Add unit tests for commands/add.go component addition logic",
+      "description": "add.go (130 LOC) has 0% test coverage. After task 82 refactors runAdd() into smaller functions, test the extracted helpers: resolveComponent (valid/invalid type aliases, unknown component, already-installed component), updateAddConfig (config loading failures, successful addition). Use t.TempDir() with crafted samuel.yaml configs. The download path is hard to unit test without mocking, so focus on validation and config logic.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/add_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "84",
+      "title": "Refactor executePilotLoop() in auto_pilot.go below 50-line limit",
+      "description": "executePilotLoop() is 100 lines (2x the 50-line limit) at auto_pilot.go:146. Contains the main pilot loop with interleaved discovery and implementation logic, state tracking (lastDiscoveryIter, emptyDiscoveries, consecutiveFailures), and reload operations. Extract: (1) runDiscoveryPhase (discovery iteration + PRD reload + empty discovery tracking, ~25 lines), (2) runImplementationPhase (task selection + implementation iteration + failure tracking, ~20 lines). Keep the main loop orchestration in executePilotLoop at ~40 lines.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/auto_pilot.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "85",
+      "title": "Add unit tests for auto_pilot.go flag parsing functions",
+      "description": "auto_pilot.go (296 LOC) has 0% test coverage for its pure functions. parsePilotFlags (line 102) extracts cobra flags into a struct — testable with a fresh cobra.Command. parseAutoFlags (line 118) validates AITool and sandbox mode — testable with crafted flag values. Test cases: default flag values, invalid AI tool rejection, valid sandbox modes (none/docker/docker-sandbox), invalid sandbox rejection. Use the same cobra.Command helper pattern from init_steps_test.go.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/auto_pilot_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "86",
+      "title": "Refactor runVersion() in commands/version.go below 50-line limit",
+      "description": "runVersion() is 71 lines (1.42x the 50-line limit) at version.go:28. Mixes CLI version display, framework version reading from config, and update checking in a single function. Extract: (1) displayFrameworkVersion (config loading + version display, ~15 lines), (2) checkAndDisplayUpdates (downloader creation + update check + result formatting, ~20 lines). The main runVersion becomes a ~30 line orchestrator.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/version.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "87",
+      "title": "Add unit tests for commands/version.go version display logic",
+      "description": "version.go (98 LOC) has 0% test coverage. After task 86 refactors runVersion(), test the extracted helpers: displayFrameworkVersion (no config → graceful, valid config → version shown), checkAndDisplayUpdates (--check flag behavior). The core runVersion early paths are testable: missing config (graceful degradation), config with version. Use t.TempDir() with crafted samuel.yaml. The update check path requires NewDownloader which hits github — focus on the non-network paths.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/version_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "88",
+      "title": "Add unit tests for commands/sync.go relPath helper and runSync error paths",
+      "description": "sync.go (113 LOC) has 0% test coverage. Contains relPath() pure helper (line 107) that falls back to absolute path on filepath.Rel failure — ideal for table-driven tests. Also test runSync early error paths: missing config file, invalid root directory, --dry-run flag. Use t.TempDir() with crafted samuel.yaml + .claude directory structure. The core sync logic delegates to core.SyncFolderCLAUDEMDs which is tested in sync_test.go.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/sync_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "89",
+      "title": "Add unit tests for auto_pilot_output.go display functions",
+      "description": "auto_pilot_output.go (73 LOC) has 0% test coverage. Contains printPilotDryRun (displays pilot config without executing) and printPilotSummary (shows post-loop statistics). Both are display-only functions that read PRD state and format output. Test printPilotDryRun with various LoopConfig combinations (pilot mode on/off, different iteration counts, quality checks). Test printPilotSummary with crafted auto.PRD structs (various task status distributions). Use stdout capture pattern from output_test.go.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/auto_pilot_output_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "90",
+      "title": "Refactor runSync() in commands/sync.go below 50-line limit",
+      "description": "runSync() is 67 lines (1.34x the 50-line limit) at sync.go:38. Mixes config loading, option assembly, sync execution, and result display in a single function. Extract: (1) displaySyncResults (iterates over results and formats each folder CLAUDE.md status, ~20 lines). This brings runSync to ~45 lines. The result display loop (lines 72-100) contains conditional formatting for created/updated/skipped/error states that is a natural extraction point.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/sync.go"
+      ],
+      "source": "pilot-discovery"
     }
   ],
   "progress": {
-    "total_tasks": 20,
-    "completed_tasks": 6,
-    "current_iteration": 32,
-    "total_iterations_run": 32,
+    "total_tasks": 30,
+    "completed_tasks": 7,
+    "current_iteration": 33,
+    "total_iterations_run": 33,
     "status": "in_progress"
   }
 }

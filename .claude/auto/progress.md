@@ -705,3 +705,71 @@
 - LEARNING: Extracting `categorizeFileChanges` as a standalone function is the right approach for this type of orchestration function. The function is pure (depends only on filesystem state) and makes the core business logic testable without mocking HTTP clients or downloaders. This is the same pattern used in other tasks (e.g., task 6 extracting doctor checks).
 - LEARNING: The `fileChanges` struct with named fields is clearer than returning 3 separate slices. It also makes it easy to add new categories (e.g., "deleted files") in the future without changing the function signature.
 - Commit: 690365a
+
+---
+
+[2026-02-22T11:00:00Z] [discovery] FOUND: Ninth discovery iteration — test coverage, function size violations, refactoring opportunities
+
+### Test Coverage Update
+- Overall: `cmd/samuel` **0%**, `internal/commands` **38.9%** (up from 22.6%), `internal/core` **85.5%**, `internal/github` **89.4%**, `internal/ui` **49.6%**
+- `internal/commands` improved significantly from recent task completions (63, 64, 65, 72)
+- `internal/core` at 85.5% exceeds the 80% business logic target
+- `internal/github` at 89.4% well above target
+
+### Untested Command Files (0% Coverage)
+- `auto_task_handlers.go` (127 LOC) — 7 functions: taskStatusIcon (pure), updateTaskStatus, runAutoTaskAdd, etc.
+- `add.go` (130 LOC) — runAdd at 97 lines, component validation and config update logic
+- `auto_pilot.go` (296 LOC) — parsePilotFlags and parseAutoFlags are pure functions, executePilotLoop is 100 lines
+- `auto_pilot_output.go` (73 LOC) — printPilotDryRun and printPilotSummary display functions
+- `auto_start_handler.go` (139 LOC) — runAutoStart at 80 lines (task 67 tracks refactor)
+- `version.go` (98 LOC) — runVersion at 71 lines, version display and update checking
+- `sync.go` (113 LOC) — runSync at 67 lines, relPath pure helper untested
+- `auto.go` (184 LOC) — init() only, command registration (not testable)
+- `doctor.go` (175 LOC) — orchestrator + display functions (checks tested in doctor_checks_test.go)
+
+### Function Size Violations (NEW — not covered by existing tasks)
+- `runAdd()` in add.go: **97 lines** (1.94x limit) — mixes validation, download, extraction, config update
+- `executePilotLoop()` in auto_pilot.go: **100 lines** (2x limit) — interleaved discovery/implementation loop with state tracking
+- `runVersion()` in version.go: **71 lines** (1.42x limit) — mixes version display and update checking
+- `runSync()` in sync.go: **67 lines** (1.34x limit) — mixes config loading, sync execution, result display
+
+### Code Quality Issues (PERSISTING)
+- 14 pending tasks remain from previous discoveries (tasks 66-80)
+- `internal/commands` at 38.9% is below the 60% overall coverage target
+- 9 non-test files still exceed 300-line limit
+- 8 deprecated `filepath.Walk` calls remain (task 69 pending)
+- 3 duplicate path containment validation functions (task 80 pending)
+
+### Positive Findings
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- `go vet` clean — no issues
+- No panic() calls, no TODO/FIXME/HACK markers, no hardcoded secrets
+- Security posture strong: all critical and high-priority security tasks completed
+- `internal/core` at 85.5% exceeds 80% business logic coverage target
+- 32 iterations completed, 6 tasks completed in current batch (61-65, 71-72)
+- Established test patterns consistently applied (table-driven, t.TempDir, redirectTransport, stdout capture)
+
+### Tasks Generated (Ninth Discovery): 10
+| ID | Priority | Title |
+|----|----------|-------|
+| 81 | medium   | Add unit tests for auto_task_handlers.go task management functions |
+| 82 | medium   | Refactor runAdd() in commands/add.go below 50-line limit |
+| 83 | medium   | Add unit tests for commands/add.go component addition logic |
+| 84 | medium   | Refactor executePilotLoop() in auto_pilot.go below 50-line limit |
+| 85 | medium   | Add unit tests for auto_pilot.go flag parsing functions |
+| 86 | low      | Refactor runVersion() in commands/version.go below 50-line limit |
+| 87 | low      | Add unit tests for commands/version.go version display logic |
+| 88 | low      | Add unit tests for commands/sync.go relPath helper and runSync error paths |
+| 89 | low      | Add unit tests for auto_pilot_output.go display functions |
+| 90 | low      | Refactor runSync() in commands/sync.go below 50-line limit |
+
+[2026-02-22T12:00:00Z] [iteration:33] [task:66] COMPLETED: Refactored runSkillInfo() in commands/skill.go below 50-line limit
+- Split 92-line `runSkillInfo()` into a 37-line orchestrator by extracting two display helpers
+- Created `skill_info.go` (68 lines) with: `displaySkillMetadata(info)` (metadata section, ~28 lines), `displaySkillStructure(info)` (structure + stats section, ~25 lines)
+- Kept validation display inline in `runSkillInfo()` (~10 lines) as it's short enough
+- skill.go reduced from 376 to 320 lines (closer to 300-line limit)
+- All existing tests pass — 8 `TestRunSkillInfo` subtests verify the display helpers work correctly through `runSkillInfo`
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: The split follows the same pattern as doctor.go (task 6) and init.go (task 7): orchestrator stays in the main file, extracted helpers go to a dedicated file. The naming convention `<command>_info.go` is descriptive for display-related helpers.
+- LEARNING: Validation display (~10 lines) was left inline in `runSkillInfo()` because extracting a 10-line function with no logic beyond conditional formatting adds indirection without meaningful benefit. The 37-line result is well under the 50-line limit.
+- Commit: 3a077ad
