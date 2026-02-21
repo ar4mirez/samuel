@@ -1,0 +1,58 @@
+# Auto Pilot Progress
+
+## Discovery Log
+
+[2026-02-21T15:51:24Z] [discovery] FOUND: Initial discovery iteration — analyzed full codebase
+
+### Test Coverage Gaps
+- `internal/github/` — 0% coverage (client.go: 279 LOC, handles GitHub API)
+- `internal/ui/` — 0% coverage (3 files, 418 LOC total)
+- `internal/core/skill.go` — 431 LOC, no tests (skill parsing, validation, indexing)
+- `internal/core/downloader.go` — 262 LOC, no tests (archive download/extraction)
+- `internal/core/auto_tasks.go` — 213 LOC, no tests (task state management)
+- `internal/core/auto_prompt.go` — 104 LOC, no tests (prompt generation)
+- `internal/commands/` — 76% of files untested (16/21 source files)
+
+### Code Quality Violations
+- `runDoctor()` in doctor.go: 362 lines (limit: 50)
+- `runInit()` in init.go: 277 lines (limit: 50)
+- 5 non-test files exceed 300-line limit: doctor.go (468), init.go (434), skill.go (431), config.go (425), extractor.go (378)
+
+### Error Handling Issues
+- `init.go:250` — error from `ScanSkillsDirectory` silently discarded
+- `doctor.go:95` — error from `os.ReadFile` silently discarded
+- `search.go:57` — error from `LoadConfig` silently discarded
+
+### Dead Code
+- `doctor.go:398` — `_ = extractor` silences unused variable warning
+
+### Positive Findings
+- All tests pass (`go test ./...`)
+- No `go vet` warnings
+- No TODO/FIXME/HACK markers in code
+- No unused imports
+- Good error wrapping patterns with `fmt.Errorf(%w)`
+- Comprehensive table-driven tests where tests exist
+
+## Iteration Log
+
+[2026-02-21T16:00:00Z] [iteration:1] [task:1] COMPLETED: Fixed silent error handling in init.go, doctor.go, and search.go
+- init.go: `ScanSkillsDirectory` error now logged via `ui.Warn`
+- doctor.go: `os.ReadFile` error now logged via `ui.Warn`
+- search.go: `LoadConfig` error logged via `ui.Warn` only for non-file-not-found errors (since missing config is expected when project isn't initialized)
+- LEARNING: For search.go, `LoadConfig` returns `os.ErrNotExist` when no config file exists — this is a normal case (user hasn't run `samuel init` yet), so only warn on other error types
+- Commit: c3c5562
+
+### Tasks Generated: 10
+| ID | Priority | Title |
+|----|----------|-------|
+| 1  | high     | Fix silent error handling in init.go, doctor.go, and search.go |
+| 2  | medium   | Remove unused extractor variable in doctor.go |
+| 3  | high     | Add unit tests for internal/github/client.go |
+| 4  | high     | Add unit tests for internal/core/skill.go |
+| 5  | high     | Add unit tests for internal/core/auto_tasks.go |
+| 6  | medium   | Refactor runDoctor() into smaller helper functions |
+| 7  | medium   | Refactor runInit() into smaller helper functions |
+| 8  | high     | Add unit tests for internal/core/downloader.go |
+| 9  | medium   | Add unit tests for internal/core/auto_prompt.go |
+| 10 | low      | Reduce file size of internal/core/skill.go below 300-line limit |

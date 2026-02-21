@@ -1,0 +1,159 @@
+{
+  "version": "1.0",
+  "project": {
+    "name": "samuel",
+    "description": "Autonomous pilot mode - AI-discovered tasks",
+    "created_at": "2026-02-21T15:51:24Z",
+    "updated_at": "2026-02-21T15:51:24Z"
+  },
+  "config": {
+    "max_iterations": 30,
+    "quality_checks": [
+      "go test ./...",
+      "go vet ./...",
+      "go build ./..."
+    ],
+    "ai_tool": "claude",
+    "ai_prompt_file": ".claude/auto/prompt.md",
+    "sandbox": "none",
+    "pilot_mode": true,
+    "pilot_config": {
+      "discover_interval": 5,
+      "max_discovery_tasks": 10
+    },
+    "discovery_prompt_file": ".claude/auto/discovery-prompt.md"
+  },
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Fix silent error handling in init.go, doctor.go, and search.go",
+      "description": "Three places silently discard errors with `_`: init.go:250 discards error from ScanSkillsDirectory, doctor.go:95 discards error from os.ReadFile, search.go:57 discards error from LoadConfig. These should log warnings or return errors to avoid hiding failures.",
+      "status": "completed",
+      "commit_sha": "c3c55622c25dc2efd3c9b16b150ab02282aa2e58",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/init.go",
+        "internal/commands/doctor.go",
+        "internal/commands/search.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "2",
+      "title": "Remove unused extractor variable in doctor.go",
+      "description": "At doctor.go:387-398, an extractor is instantiated but never used, with the warning silenced via `_ = extractor`. Either use it for the intended purpose or remove the dead code.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/doctor.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "3",
+      "title": "Add unit tests for internal/github/client.go",
+      "description": "The internal/github package has 0% test coverage. client.go (279 LOC) handles GitHub API calls for releases, tags, and archives. Add tests with HTTP test server mocking for key functions.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/github/client_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "4",
+      "title": "Add unit tests for internal/core/skill.go",
+      "description": "skill.go (431 LOC) handles skill parsing, loading, validation, and indexing with no test coverage. This is core business logic that needs tests for ParseSkillFile, ValidateSkill, ScanSkillsDirectory, and related functions.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/skill_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "5",
+      "title": "Add unit tests for internal/core/auto_tasks.go",
+      "description": "auto_tasks.go (213 LOC) manages task state transitions and persistence with no test coverage. Add table-driven tests for task status changes, filtering, and edge cases.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/auto_tasks_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "6",
+      "title": "Refactor runDoctor() into smaller helper functions",
+      "description": "runDoctor() in doctor.go spans 362 lines (lines 45-407), far exceeding the 50-line guardrail. Extract each health check into separate functions (checkConfig, checkCLAUDEMD, checkSkillsIntegrity, etc.) and extract auto-fix logic into performAutoFix().",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/doctor.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "7",
+      "title": "Refactor runInit() into smaller helper functions",
+      "description": "runInit() in init.go spans 277 lines (lines 41-318), far exceeding the 50-line guardrail. Extract into helper functions: selectTemplate(), selectLanguages(), selectFrameworks(), downloadAndExtract(), and postInitSetup().",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/init.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "8",
+      "title": "Add unit tests for internal/core/downloader.go",
+      "description": "downloader.go (262 LOC) handles GitHub archive download and tar extraction with no test coverage. This is critical I/O logic. Add tests using temp directories and mock HTTP responses.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/downloader_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "9",
+      "title": "Add unit tests for internal/core/auto_prompt.go",
+      "description": "auto_prompt.go (104 LOC) generates prompts for the autonomous AI loop with no test coverage. Add tests for prompt template rendering and edge cases.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/auto_prompt_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "10",
+      "title": "Reduce file size of internal/core/skill.go below 300-line limit",
+      "description": "skill.go is 431 lines, exceeding the 300-line guardrail for non-test files. Extract skill validation logic into skill_validate.go and/or skill parsing into skill_parse.go to bring each file under the limit.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/skill.go",
+        "internal/core/skill_validate.go"
+      ],
+      "source": "pilot-discovery"
+    }
+  ],
+  "progress": {
+    "total_tasks": 10,
+    "completed_tasks": 1,
+    "current_iteration": 1,
+    "total_iterations_run": 1,
+    "status": "in_progress"
+  }
+}
