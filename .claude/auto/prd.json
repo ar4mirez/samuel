@@ -293,12 +293,13 @@
       "id": "81",
       "title": "Add unit tests for auto_task_handlers.go task management functions",
       "description": "auto_task_handlers.go (127 LOC) has 0% test coverage and contains the task management CLI handlers used by `samuel auto task` subcommands. Contains testable functions: taskStatusIcon (pure mapping function: pending/in_progress/completed/skipped → emoji), updateTaskStatus (loads PRD, updates task, saves), runAutoTaskAdd (validates args, adds task to PRD). Use t.TempDir() with crafted prd.json files. Table-driven tests for taskStatusIcon covering all status values + unknown status.",
-      "status": "pending",
+      "status": "completed",
       "priority": "medium",
       "complexity": "medium",
       "files_to_modify": [
         "internal/commands/auto_task_handlers_test.go"
       ],
+      "commit_sha": "a4d9fe1",
       "source": "pilot-discovery"
     },
     {
@@ -657,9 +658,9 @@
   ],
   "progress": {
     "total_tasks": 50,
-    "completed_tasks": 19,
-    "current_iteration": 45,
-    "total_iterations_run": 45,
+    "completed_tasks": 20,
+    "current_iteration": 46,
+    "total_iterations_run": 46,
     "status": "in_progress"
   }
 }

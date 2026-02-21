@@ -1004,3 +1004,13 @@
 - Added `TestDefaultSearchLimit` to verify constant value
 - LEARNING: Go's `results[:limit]` with negative limit panics with "slice bounds out of range". The condition `len(results) > limit` is always true when limit < 0, so the panic path was guaranteed for any non-empty result set.
 - Commit: 1207ffa
+
+[2026-02-22T16:00:00Z] [iteration:46] [task:81] COMPLETED: Added unit tests for auto_task_handlers.go task management functions
+- Created auto_task_handlers_test.go with 17 tests covering all exported and internal functions
+- `taskStatusIcon`: table-driven tests for all 5 status constants + unknown + empty string
+- `updateTaskStatus`: tested complete/skip/reset flows, task-not-found, missing PRD, corrupt JSON, and progress recalculation on save
+- `runAutoTaskAdd`: success path, duplicate ID rejection, missing PRD, and JSON roundtrip verification
+- `runAutoTaskList`: success with mixed statuses (including subtasks with ParentID), missing PRD
+- `runAutoTaskComplete/Skip/Reset`: end-to-end through cobra handler wrappers
+- LEARNING: Functions using `os.Getwd()` for PRD path resolution require `os.Chdir()` to temp dir in tests, with cleanup via `t.Cleanup(func() { os.Chdir(origDir) })`. The `setupTestPRD` helper creates `.claude/auto/prd.json` in a temp dir for reuse across tests.
+- Commit: a4d9fe1
