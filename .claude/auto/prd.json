@@ -3,8 +3,8 @@
   "project": {
     "name": "samuel",
     "description": "Autonomous pilot mode - AI-discovered tasks",
-    "created_at": "2026-02-21T15:51:24Z",
-    "updated_at": "2026-02-21T23:30:00Z"
+    "created_at": "2026-02-21T21:55:56Z",
+    "updated_at": "2026-02-22T06:30:00Z"
   },
   "config": {
     "max_iterations": 30,
@@ -25,577 +25,98 @@
   },
   "tasks": [
     {
-      "id": "1",
-      "title": "Fix silent error handling in init.go, doctor.go, and search.go",
-      "description": "Three places silently discard errors with `_`: init.go:250 discards error from ScanSkillsDirectory, doctor.go:95 discards error from os.ReadFile, search.go:57 discards error from LoadConfig. These should log warnings or return errors to avoid hiding failures.",
+      "id": "61",
+      "title": "Fix unchecked file.Close() errors after io.Copy in downloader.go and extractor.go",
+      "description": "downloader.go lines 168, 171, 255 and extractor.go line 415 call file.Close() or defer dst.Close() without checking the error after io.Copy writes. On some filesystems, Close() is when buffered data is flushed to disk. A failed Close() means silently corrupted extracted files. Fix by checking Close() error and returning it (for non-deferred) or using a named return + deferred error check pattern.",
       "status": "completed",
-      "commit_sha": "c3c55622c25dc2efd3c9b16b150ab02282aa2e58",
-      "priority": "high",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/init.go",
-        "internal/commands/doctor.go",
-        "internal/commands/search.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "2",
-      "title": "Remove unused extractor variable in doctor.go",
-      "description": "At doctor.go:387-398, an extractor is instantiated but never used, with the warning silenced via `_ = extractor`. Either use it for the intended purpose or remove the dead code.",
-      "status": "completed",
-      "commit_sha": "0d77327",
-      "priority": "medium",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/doctor.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "3",
-      "title": "Add unit tests for internal/github/client.go",
-      "description": "The internal/github package has 0% test coverage. client.go (279 LOC) handles GitHub API calls for releases, tags, and archives. Add tests with HTTP test server mocking for key functions.",
-      "status": "completed",
-      "commit_sha": "b98b986",
       "priority": "high",
       "complexity": "medium",
-      "files_to_modify": [
-        "internal/github/client_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "4",
-      "title": "Add unit tests for internal/core/skill.go",
-      "description": "skill.go (431 LOC) handles skill parsing, loading, validation, and indexing with no test coverage. This is core business logic that needs tests for ParseSkillFile, ValidateSkill, ScanSkillsDirectory, and related functions.",
-      "status": "completed",
-      "commit_sha": "16771cf",
-      "priority": "high",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/core/skill_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "5",
-      "title": "Add unit tests for internal/core/auto_tasks.go",
-      "description": "auto_tasks.go (213 LOC) manages task state transitions and persistence with no test coverage. Add table-driven tests for task status changes, filtering, and edge cases.",
-      "status": "completed",
-      "commit_sha": "3c73231",
-      "priority": "high",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/core/auto_tasks_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "6",
-      "title": "Refactor runDoctor() into smaller helper functions",
-      "description": "runDoctor() in doctor.go spans 362 lines (lines 45-407), far exceeding the 50-line guardrail. Extract each health check into separate functions (checkConfig, checkCLAUDEMD, checkSkillsIntegrity, etc.) and extract auto-fix logic into performAutoFix().",
-      "status": "completed",
-      "commit_sha": "b51ee55",
-      "priority": "medium",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/commands/doctor.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "7",
-      "title": "Refactor runInit() into smaller helper functions",
-      "description": "runInit() in init.go spans 277 lines (lines 41-318), far exceeding the 50-line guardrail. Extract into helper functions: selectTemplate(), selectLanguages(), selectFrameworks(), downloadAndExtract(), and postInitSetup().",
-      "status": "completed",
-      "commit_sha": "f9017e3",
-      "priority": "medium",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/commands/init.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "8",
-      "title": "Add unit tests for internal/core/downloader.go",
-      "description": "downloader.go (262 LOC) handles GitHub archive download and tar extraction with no test coverage. This is critical I/O logic. Add tests using temp directories and mock HTTP responses.",
-      "status": "completed",
-      "commit_sha": "e07b37c",
-      "priority": "high",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/core/downloader_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "9",
-      "title": "Add unit tests for internal/core/auto_prompt.go",
-      "description": "auto_prompt.go (104 LOC) generates prompts for the autonomous AI loop with no test coverage. Add tests for prompt template rendering and edge cases.",
-      "status": "completed",
-      "commit_sha": "3bc2809",
-      "priority": "medium",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/core/auto_prompt_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "10",
-      "title": "Reduce file size of internal/core/skill.go below 300-line limit",
-      "description": "skill.go is 431 lines, exceeding the 300-line guardrail for non-test files. Extract skill validation logic into skill_validate.go and/or skill parsing into skill_parse.go to bring each file under the limit.",
-      "status": "pending",
-      "priority": "low",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/core/skill.go",
-        "internal/core/skill_validate.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "11",
-      "title": "Fix symlink traversal vulnerability in tar extraction",
-      "description": "In downloader.go:124-133, symlink targets (header.Linkname) are not validated during tar extraction. A malicious archive could contain a symlink pointing outside the destination directory (e.g., ../../etc/shadow), allowing subsequent file writes through the symlink to arbitrary locations. Validate that resolved symlink targets stay within the destination directory.",
-      "status": "completed",
-      "commit_sha": "1cf9484",
-      "priority": "critical",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/core/downloader.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "12",
-      "title": "Fix nil pointer dereference in CheckForUpdates",
-      "description": "In client.go:216-228, GetLatestRelease can return (nil, nil) when no releases exist (line 90-92). CheckForUpdates accesses release.TagName without a nil check, causing a panic. Add a nil guard: if release == nil, return an error.",
-      "status": "completed",
-      "commit_sha": "e484979",
-      "priority": "critical",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/github/client.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "13",
-      "title": "Add path traversal validation to extractor.go file operations",
-      "description": "ReadFile, WriteFile, RemoveFile, and BackupFile in extractor.go accept a path parameter and join it with destPath, but never validate the result stays within the destination directory. A path like '../../etc/passwd' would escape. Add filepath.Clean + strings.HasPrefix containment checks to all four functions.",
-      "status": "completed",
-      "commit_sha": "8b69661",
-      "priority": "high",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/core/extractor.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "14",
-      "title": "Add size limits to tar extraction and file downloads",
-      "description": "In downloader.go:117-121, io.Copy has no size limit during tar extraction (decompression bomb risk). In client.go:204-206, io.ReadAll reads entire HTTP response without limit (OOM risk). Add io.LimitReader with reasonable max sizes (e.g., 100MB per extracted file, 10MB per downloaded file).",
-      "status": "completed",
-      "commit_sha": "050f9f6",
-      "priority": "high",
-      "complexity": "low",
       "files_to_modify": [
         "internal/core/downloader.go",
-        "internal/github/client.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "15",
-      "title": "Fix silently discarded filepath.Walk errors in diff.go",
-      "description": "In diff.go:201 and diff.go:223, filepath.Walk return values are discarded with `_ =`. If the walk encounters errors (permission denied, concurrent deletion), diff results will be silently incomplete. Also fix discarded filepath.Glob error at diff.go:192. Handle errors or propagate them to callers.",
-      "status": "completed",
-      "commit_sha": "cacd3f2",
-      "priority": "medium",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/diff.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "16",
-      "title": "Add unit tests for internal/core/extractor.go",
-      "description": "extractor.go (378 LOC) has ~15% coverage with 13 of 17 functions at 0%. This file handles tar extraction, file I/O, backup/restore — critical operations. Add tests for Extract, ExtractAll, shouldSkip, ValidateExtraction, FileExists, ReadFile, WriteFile, RemoveFile, BackupFile, RestoreBackup using t.TempDir().",
-      "status": "completed",
-      "commit_sha": "fbc447e",
-      "priority": "high",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/core/extractor_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "17",
-      "title": "Add unit tests for internal/ui/output.go",
-      "description": "output.go (137 LOC) has 0% coverage. It contains 14 formatting functions (Success, Error, Warn, Info, Print, Bold, Dim, Header, Section, ListItem, etc.) that are the most testable of the UI files. Test by capturing stdout and verifying output format. Also test DisableColors toggle.",
-      "status": "completed",
-      "commit_sha": "73d44fa",
-      "priority": "medium",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/ui/output_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "18",
-      "title": "Refactor runUpdate() into smaller helper functions",
-      "description": "runUpdate() in update.go spans 220 lines (lines 41-261), which is 4.4x the 50-line guardrail limit — the worst violation after runDoctor and runInit. Extract into helpers: checkForUpdate(), downloadUpdate(), applyUpdate(), handleComponentMerge(), and displayUpdateSummary().",
-      "status": "pending",
-      "priority": "medium",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/commands/update.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "19",
-      "title": "Add unit tests for registry.go skill lookup functions",
-      "description": "registry.go has ~85% coverage but 6 skill-related lookup functions at 0%: FindSkill, GetAllSkillNames, GetLanguageSkills, SkillToLanguageName, GetFrameworkSkills, GetWorkflowSkills. Add table-driven tests to cover these pure functions. These are simple data lookups that should be easy to test.",
-      "status": "pending",
-      "priority": "medium",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/core/registry_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "20",
-      "title": "Reduce file size of internal/core/sync.go below 300-line limit",
-      "description": "sync.go is 431 lines, exceeding the 300-line guardrail. Extract CLAUDE.md generation logic into sync_generate.go and/or folder scanning logic into sync_scan.go. The SyncFolderCLAUDEMDs function (60 lines) and related helpers can be logically grouped to bring each file under the limit.",
-      "status": "pending",
-      "priority": "low",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/core/sync.go",
-        "internal/core/sync_generate.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "21",
-      "title": "Fix TOCTOU vulnerability in AITool validation for auto loop",
-      "description": "In auto_loop.go:116, cfg.AITool is passed directly to exec.Command without validation. While parseAutoFlags() calls core.IsValidAITool() at CLI parse time, the PRD file is re-read from disk at each loop iteration (auto_loop.go:74), so a modified prd.json could inject an arbitrary binary path between validation and execution. Add IsValidAITool() check inside invokeAgentLocal() before exec.Command.",
-      "status": "completed",
-      "commit_sha": "4db5316",
-      "priority": "critical",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/core/auto_loop.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "22",
-      "title": "Add path containment validation to RestoreBackup and CopyFromCache",
-      "description": "In extractor.go:319-338, RestoreBackup computes dstPath = filepath.Join(e.destPath, relPath) without calling validateContainedPath, allowing a crafted backup directory to write outside the destination. Similarly, CopyFromCache (line 358+) and helpers copyDirRecursive/copySingleFile lack path containment checks. Add validateContainedPath calls to both RestoreBackup and CopyFromCache for defense-in-depth consistency with ReadFile/WriteFile/RemoveFile.",
-      "status": "completed",
-      "commit_sha": "4f77da2",
-      "priority": "high",
-      "complexity": "low",
-      "files_to_modify": [
         "internal/core/extractor.go"
       ],
+      "commit_sha": "a53222d",
       "source": "pilot-discovery"
     },
     {
-      "id": "23",
-      "title": "Fix silently discarded LoadAutoPRD errors in auto pilot commands",
-      "description": "Four places silently discard LoadAutoPRD errors with `_ :=`: auto_pilot.go:196, auto_pilot.go:225, auto_start_handler.go:124, auto_pilot_output.go:45. When PRD loading fails mid-loop, the code proceeds with nil checks but loses the error context. Log warnings via ui.Warn for non-critical paths (printLoopSummary, printPilotSummary) and return errors for critical paths (pilot loop iteration logic).",
-      "status": "completed",
-      "commit_sha": "d7339f9",
-      "priority": "high",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/auto_pilot.go",
-        "internal/commands/auto_start_handler.go",
-        "internal/commands/auto_pilot_output.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "24",
-      "title": "Replace deprecated filepath.Walk with filepath.WalkDir across codebase",
-      "description": "8 uses of filepath.Walk (deprecated since Go 1.16) exist in 3 files: downloader.go (lines 209, 276), extractor.go (lines 120, 146, 310, 373), diff.go (lines 201, 223). filepath.WalkDir avoids unnecessary os.Lstat calls and is the recommended replacement. Update callback signatures from func(path string, info os.FileInfo, err error) to func(path string, d fs.DirEntry, err error), using d.Info() only where FileInfo fields are needed.",
+      "id": "62",
+      "title": "Add Docker sandbox image name validation in auto_loop.go",
+      "description": "SandboxImage from prd.json (user-editable) is passed directly to docker run without validation (auto_loop.go:146). A tampered prd.json could specify a malicious Docker image. Add an IsValidSandboxImage() function that validates image names match a safe pattern (e.g., alphanumeric with dots, dashes, colons, slashes for registry/image:tag format) and rejects shell metacharacters or absolute paths.",
       "status": "pending",
       "priority": "medium",
       "complexity": "low",
       "files_to_modify": [
-        "internal/core/downloader.go",
-        "internal/core/extractor.go",
-        "internal/commands/diff.go"
+        "internal/core/auto_loop.go",
+        "internal/core/docker.go"
       ],
       "source": "pilot-discovery"
     },
     {
-      "id": "25",
-      "title": "Fix silently discarded filepath.Rel errors in extractor.go",
-      "description": "Three calls to filepath.Rel in extractor.go silently discard errors: line 87 (Extract), line 104 (Extract directory case), line 117 (ExtractAll). If filepath.Rel fails, relPath becomes empty string, which could cause incorrect file path construction or misleading log output. Handle the error by returning it or logging a warning.",
+      "id": "63",
+      "title": "Add unit tests for doctor_checks.go check functions",
+      "description": "doctor_checks.go (291 LOC) was created by the task 6 refactor of runDoctor() but has 0% test coverage. Contains 8 exported check functions (checkConfigFile, checkCLAUDEMD, checkAGENTSMD, checkDirectoryStructure, checkInstalledComponents, checkSkillsIntegrity, checkAutoHealth, checkLocalModifications) plus the generic checkInstalledSkills helper. Use t.TempDir() with crafted project directory structures to test each check function independently.",
       "status": "pending",
       "priority": "medium",
-      "complexity": "low",
+      "complexity": "high",
       "files_to_modify": [
-        "internal/core/extractor.go"
+        "internal/commands/doctor_checks_test.go"
       ],
       "source": "pilot-discovery"
     },
     {
-      "id": "26",
-      "title": "Add unit tests for auto_loop.go agent invocation functions",
-      "description": "auto_loop.go has 5 functions at 0% coverage: InvokeAgent, invokeAgentLocal, invokeAgentDocker, invokeAgentDockerSandbox, buildDockerRunArgs. buildDockerRunArgs is a pure function that constructs Docker CLI arguments — easily testable with table-driven tests. InvokeAgent dispatches based on sandbox mode — test the dispatch logic. The exec.Command functions can be tested by verifying argument construction without actually executing.",
-      "status": "completed",
-      "commit_sha": "1cf5627",
-      "priority": "high",
+      "id": "64",
+      "title": "Add unit tests for init_steps.go step functions",
+      "description": "init_steps.go (284 LOC) was created by the task 7 refactor of runInit() but has 0% test coverage. Contains testable functions: parseInitFlags (struct extraction from cobra command), validateInitTarget (directory validation), downloadFramework (delegates to downloader). Focus on parseInitFlags and validateInitTarget which are pure-ish functions testable without mocking.",
+      "status": "pending",
+      "priority": "medium",
       "complexity": "medium",
       "files_to_modify": [
-        "internal/core/auto_loop_test.go"
+        "internal/commands/init_steps_test.go"
       ],
       "source": "pilot-discovery"
     },
     {
-      "id": "27",
-      "title": "Add unit tests for config.go path and value functions",
-      "description": "config.go has 4 functions below 50% coverage: GetGlobalConfigPath (0%), GetCachePath (0%), EnsureCacheDir (0%), GetValue (45%). These path functions use os.UserHomeDir/os.UserCacheDir — test using environment variable overrides or mock. GetValue needs tests for nested key access (e.g., 'installed.languages') and error cases for unknown keys. Add table-driven tests to fill these coverage gaps.",
+      "id": "65",
+      "title": "Add unit tests for commands/update.go helper logic",
+      "description": "update.go (264 LOC) has 0% test coverage and contains the largest function in the codebase (runUpdate at 219 lines). While runUpdate itself is hard to unit test (orchestration), look for extractable pure functions or test the file comparison logic. At minimum, test the string-to-bytes comparison pattern and the file categorization logic.",
       "status": "pending",
       "priority": "medium",
-      "complexity": "low",
+      "complexity": "high",
       "files_to_modify": [
-        "internal/core/config_test.go"
+        "internal/commands/update_test.go"
       ],
       "source": "pilot-discovery"
     },
     {
-      "id": "28",
-      "title": "Reduce file size of internal/core/config.go below 300-line limit",
-      "description": "config.go is 425 lines, exceeding the 300-line guardrail by 42%. Extract path-related functions (GetGlobalConfigPath, GetCachePath, EnsureCacheDir — lines 289-332) and key-value functions (GetValue, SetValue, GetAllValues, splitAndTrim — lines 335-425) into config_paths.go and config_values.go respectively.",
+      "id": "66",
+      "title": "Refactor runSkillInfo() in commands/skill.go below 50-line limit",
+      "description": "runSkillInfo() is 92 lines (1.84x the 50-line limit) at skill.go:284. Extract helper functions for: (1) skill lookup and SKILL.md path resolution, (2) metadata display formatting, (3) file preview rendering. This also helps reduce skill.go (375 lines) closer to the 300-line file limit.",
       "status": "pending",
-      "priority": "low",
+      "priority": "medium",
       "complexity": "medium",
-      "files_to_modify": [
-        "internal/core/config.go",
-        "internal/core/config_paths.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "29",
-      "title": "Reduce file size of internal/core/registry.go below 300-line limit",
-      "description": "registry.go is 460 lines, exceeding the 300-line guardrail by 53% — the largest non-test file in the codebase. Extract skill lookup functions (FindSkill, GetAllSkillNames, GetLanguageSkills, SkillToLanguageName, GetFrameworkSkills, GetWorkflowSkills) into registry_skills.go. The data definitions and component lookups can stay in registry.go.",
-      "status": "pending",
-      "priority": "low",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/core/registry.go",
-        "internal/core/registry_skills.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "30",
-      "title": "Reduce file size of internal/core/extractor.go below 300-line limit",
-      "description": "extractor.go is 413 lines, exceeding the 300-line guardrail by 38%. Recent additions (validateContainedPath, path traversal checks) have increased the file size. Extract backup/restore functions (BackupFile, RestoreBackup, GetSourcePath, GetDestPath — lines 280-345) and cache copy functions (CopyFromCache, copyDirRecursive, copySingleFile — lines 355-413) into extractor_backup.go.",
-      "status": "pending",
-      "priority": "low",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/core/extractor.go",
-        "internal/core/extractor_backup.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "31",
-      "title": "Fix race condition in ui/spinner.go Start/Stop",
-      "description": "Spinner.Start() launches a goroutine that reads s.bar on every tick (line 37), while Stop() sets s.bar = nil (line 50) from the main goroutine — no synchronization protects this field. This is a data race: the goroutine can read s.bar as non-nil, then Stop() sets it to nil, then the goroutine calls s.bar.Add(1) on a nil pointer. Fix by using a done channel or sync.Once for shutdown, or protect s.bar with a sync.Mutex.",
-      "status": "completed",
-      "commit_sha": "0819b18",
-      "priority": "high",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/ui/spinner.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "32",
-      "title": "Add unit tests for auto_handlers.go pure functions",
-      "description": "auto_handlers.go (280 LOC) has 0% test coverage. Three functions are highly testable pure functions: detectQualityChecks (line 118, detects go.mod/package.json/Cargo.toml/requirements.txt), countTaskStatuses (line 258, counts task statuses), and validateSandbox (line 268, validates sandbox mode). Add table-driven tests using t.TempDir() for detectQualityChecks and constructed AutoPRD structs for countTaskStatuses.",
-      "status": "completed",
-      "commit_sha": "66435a9",
-      "priority": "high",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/auto_handlers_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "33",
-      "title": "Add unit tests for auto_task_handlers.go functions",
-      "description": "auto_task_handlers.go (127 LOC) has 0% test coverage. Contains taskStatusIcon (line 41, pure function mapping status to icon string — perfect for table-driven tests) and updateTaskStatus (line 74, generic task state update). taskStatusIcon has 5 cases (completed, skipped, blocked, in_progress, default). Add tests for taskStatusIcon plus integration-style tests for updateTaskStatus using temp directories with PRD files.",
-      "status": "pending",
-      "priority": "medium",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/auto_task_handlers_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "34",
-      "title": "Add unit tests for init.go helper functions",
-      "description": "init.go (437 LOC) has 0% test coverage but contains 4 testable helper functions: expandLanguages (expands language aliases like 'ts' to 'typescript'), expandFrameworks (expands framework aliases like 'fw' to framework names), isSamuelRepository (detects if target dir is the samuel repo itself), getRelevantFrameworks (returns frameworks associated with selected languages). These are pure/near-pure functions that can be tested with table-driven tests without mocking.",
-      "status": "completed",
-      "commit_sha": "45c720b",
-      "priority": "high",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/init_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "35",
-      "title": "Add unit tests for doctor.go helper functions",
-      "description": "doctor.go (471 LOC) has 0% test coverage but contains testable helpers: extractVersion (line ~420, extracts version string from CLAUDE.md content using regex), checkModification (compares file hashes to detect modifications). extractVersion is a pure function parsing markdown text — easily testable with table-driven tests for valid versions, missing versions, and malformed content.",
-      "status": "pending",
-      "priority": "medium",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/doctor_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "36",
-      "title": "Fix silently discarded filepath.Rel error in sync.go",
-      "description": "In sync.go:221, `rel, _ := filepath.Rel(opts.RootDir, path)` silently discards the error. If filepath.Rel fails (e.g., on Windows with different drive roots), rel becomes an empty string, causing incorrect path construction downstream. This is in the SyncFolderCLAUDEMDs function which processes directory structures — an incorrect relative path could generate CLAUDE.md files with wrong content. Handle the error by logging a warning and skipping the path.",
-      "status": "pending",
-      "priority": "medium",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/core/sync.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "37",
-      "title": "Fix silently discarded filepath.Rel errors in diff.go helper functions",
-      "description": "In diff.go, three calls to filepath.Rel silently discard errors: line 192 in getLocalFileHashes, line 206 in getLocalFileHashes (inside Walk callback), line 233 in getVersionFileHashes. When filepath.Rel fails, relPath becomes empty string, causing incorrect hash map keys. This means file comparisons could silently produce wrong results (files appearing as added/removed when they're actually unchanged). Handle errors by skipping the file and logging a warning.",
-      "status": "pending",
-      "priority": "medium",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/diff.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "38",
-      "title": "Reduce file size of internal/commands/skill.go below 300-line limit",
-      "description": "commands/skill.go is 375 lines, exceeding the 300-line guardrail by 25%. It contains four command handlers (runSkillCreate, runSkillValidate, runSkillList, runSkillInfo) plus CLI registration. Extract runSkillCreate (longest handler, includes scaffold creation and user prompts) and runSkillInfo into a new skill_handlers.go file, keeping the CLI registration and shorter handlers in skill.go.",
-      "status": "pending",
-      "priority": "low",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/commands/skill.go",
-        "internal/commands/skill_handlers.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "39",
-      "title": "Reduce file size of internal/commands/search.go below 300-line limit",
-      "description": "commands/search.go is 337 lines, exceeding the 300-line guardrail by 12%. It contains search logic (matchScore, levenshteinDistance) mixed with CLI display functions. Extract the search algorithm functions (searchComponents, searchLanguages, searchFrameworks, searchWorkflows, searchSkills, matchScore, levenshteinDistance) into search_engine.go, keeping only CLI command registration and display in search.go.",
-      "status": "pending",
-      "priority": "low",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/commands/search.go",
-        "internal/commands/search_engine.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "40",
-      "title": "Fix silently discarded LoadConfig error in list.go",
-      "description": "In list.go:122, `config, _ := core.LoadConfig()` inside listAvailable() silently discards the error. While this is semi-intentional (to allow listing available components without a local installation), non-file-not-found errors (e.g., corrupt YAML, permission denied) should be logged. Apply the same pattern used in search.go (task 1): check os.IsNotExist — if true, proceed with nil config; if other error, log via ui.Warn.",
-      "status": "pending",
-      "priority": "medium",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/list.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "41",
-      "title": "Add path traversal validation to remove.go component deletion",
-      "description": "In remove.go:108, `filePath := filepath.Join(cwd, component.Path)` uses component.Path from samuel.yaml config without validating the resolved path stays within the project directory. A tampered config with `component.Path = '../../etc/important_file'` would cause os.Remove to delete arbitrary files. Add filepath.Clean + strings.HasPrefix containment check before the os.Remove call, consistent with the validateContainedPath pattern used in extractor.go.",
-      "status": "completed",
-      "commit_sha": "ec2d38b",
-      "priority": "high",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/remove.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "42",
-      "title": "Add skill name validation against path traversal in skill.go",
-      "description": "In skill.go:148, user-provided skill name from CLI input is used directly in `filepath.Join(skillsDir, name)` without validation against directory traversal characters. A name like '../../etc' would escape the skills directory. While CreateSkillScaffold validates the name format (ValidateSkillName checks for lowercase alphanumeric), the create command at line 134 also constructs `filepath.Join(cwd, '.claude', 'skills')` before calling ValidateSkillName. Add explicit path containment check after filepath.Join to ensure the resolved path stays within skillsDir.",
-      "status": "pending",
-      "priority": "medium",
-      "complexity": "low",
       "files_to_modify": [
         "internal/commands/skill.go"
       ],
       "source": "pilot-discovery"
     },
     {
-      "id": "43",
-      "title": "Fix silently discarded LoadConfig error in info.go",
-      "description": "In info.go:62, `config, _ := core.LoadConfig()` silently discards the error. Same pattern as list.go (task 40). Non-file-not-found errors (corrupt YAML, permission denied) should be logged via ui.Warn. Apply the os.IsNotExist check pattern: if file doesn't exist, proceed with nil config; if other error, log warning.",
+      "id": "67",
+      "title": "Refactor runAutoStart() in auto_start_handler.go below 50-line limit",
+      "description": "runAutoStart() is 80 lines (1.6x the 50-line limit) at auto_start_handler.go:12. Extract helper functions for: (1) flag parsing and config population, (2) PRD loading and validation, (3) loop configuration assembly. The function mixes flag parsing, PRD loading, config building, and loop invocation which should be separated.",
       "status": "pending",
       "priority": "medium",
-      "complexity": "low",
+      "complexity": "medium",
       "files_to_modify": [
-        "internal/commands/info.go"
+        "internal/commands/auto_start_handler.go"
       ],
       "source": "pilot-discovery"
     },
     {
-      "id": "44",
-      "title": "Add unit tests for config_cmd.go pure functions",
-      "description": "config_cmd.go (216 LOC) has 0% test coverage but contains 2 easily testable pure functions: formatConfigValue (line 192, formats config values with type-specific handling for string, []string, and default) and isValidConfigKey (line 209, checks key against ValidConfigKeys list). Add table-driven tests for both: formatConfigValue with empty string, non-empty string, empty slice, non-empty slice, and non-string types; isValidConfigKey with valid and invalid keys.",
+      "id": "68",
+      "title": "Add URL scheme validation for registry config value in config_cmd.go",
+      "description": "The 'config set registry' command accepts any string without URL format validation (config_cmd.go:162-175). A malicious or accidental registry URL (e.g., http:// instead of https://, or a non-URL string) could redirect future downloads to untrusted sources. Add validation that the registry value is a valid HTTPS URL when the key is 'registry'.",
       "status": "pending",
       "priority": "medium",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/config_cmd_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "45",
-      "title": "Fix silently discarded GetValue error in config_cmd.go",
-      "description": "In config_cmd.go:168, `oldValue, _ := config.GetValue(key)` silently discards the error when reading the old value before setting a new one. While the old value is only used for display purposes (showing 'changed X from Y to Z'), a GetValue error could indicate a deeper config parsing issue. Log the error via ui.Warn if non-nil, since it's non-critical (the Set operation should still proceed).",
-      "status": "pending",
-      "priority": "low",
       "complexity": "low",
       "files_to_modify": [
         "internal/commands/config_cmd.go"
@@ -603,193 +124,38 @@
       "source": "pilot-discovery"
     },
     {
-      "id": "46",
-      "title": "Add unit tests for auto_pilot.go parsePilotFlags and parseAutoFlags",
-      "description": "auto_pilot.go (296 LOC) has 0% test coverage. parsePilotFlags (line 102) and parseAutoFlags (line 118) extract CLI flags into config structs — they can be tested by constructing cobra.Command with preset flag values. parseAutoFlags also validates AITool and sandbox mode. Add table-driven tests for both functions covering: default values, custom values, invalid AITool, and invalid sandbox mode.",
-      "status": "pending",
-      "priority": "medium",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/commands/auto_pilot_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "47",
-      "title": "Add unit tests for diff.go pure functions",
-      "description": "diff.go (290 LOC) has 0% test coverage. Contains testable pure logic: computeDiff (computes added/removed/modified files from two hash maps), getStatusIcon (returns icon string for diff status), and formatDiffOutput (formats diff results for display). computeDiff is a pure function comparing two map[string]string — perfect for table-driven tests. Add tests for: no changes, files added, files removed, files modified, mixed changes.",
-      "status": "pending",
-      "priority": "medium",
-      "complexity": "low",
-      "files_to_modify": [
-        "internal/commands/diff_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "48",
-      "title": "Add unit tests for list.go helper functions",
-      "description": "list.go (164 LOC) has 0% test coverage. Contains two command handlers (listInstalled, listAvailable) that depend on config state. listInstalled reads samuel.yaml to show what's installed; listAvailable calls registry functions. While full integration tests are complex, the formatting and display logic can be tested by constructing core.Config structs with known values and capturing stdout output.",
-      "status": "pending",
-      "priority": "medium",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/commands/list_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "49",
-      "title": "Reduce file size of internal/commands/auto_pilot.go below 300-line limit",
-      "description": "auto_pilot.go is 296 lines, just under the 300-line limit but contains executePilotLoop at 100 lines (2x the 50-line function guardrail). Extract the main loop body (discovery check, task iteration, progress save) into helper functions: shouldRunDiscovery(), executeDiscoveryIteration(), executeTaskIteration(), and saveIterationProgress(). This also improves testability of individual loop phases.",
+      "id": "69",
+      "title": "Replace deprecated filepath.Walk with filepath.WalkDir in core package",
+      "description": "8 uses of deprecated filepath.Walk remain in the codebase (6 in extractor.go, 2 in downloader.go). filepath.WalkDir (available since Go 1.16) is more efficient because it provides fs.DirEntry instead of os.FileInfo, avoiding unnecessary Lstat calls. Replace all 8 uses in the core package, updating callback signatures from (path string, info os.FileInfo, err error) to (path string, d fs.DirEntry, err error). Call d.Info() only where FileInfo fields are actually needed.",
       "status": "pending",
       "priority": "low",
       "complexity": "medium",
-      "files_to_modify": [
-        "internal/commands/auto_pilot.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "50",
-      "title": "Add unit tests for sync.go GenerateFolderCLAUDEMD function",
-      "description": "sync.go (431 LOC) has 0% test coverage in the commands package. The core sync.go has GenerateFolderCLAUDEMD (generates context-aware CLAUDE.md content for subdirectories) and SyncFolderCLAUDEMDs (walks directory tree). GenerateFolderCLAUDEMD is testable with constructed SyncOptions and temp directory structures. Add tests for: root directory, nested subdirectory, directory with Go files, directory with test files, empty directory.",
-      "status": "pending",
-      "priority": "medium",
-      "complexity": "medium",
-      "files_to_modify": [
-        "internal/core/sync_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "51",
-      "title": "Fix silently discarded os.RemoveAll error in downloader.go dev cache clear",
-      "description": "In downloader.go:49, `os.RemoveAll(cacheDest)` silently discards the error when clearing the dev cache before re-download. If the directory cannot be removed (permissions, locked file), the subsequent download proceeds but may fail or produce corrupted state when the old cache partially remains. Log the error via a warning or return it, since this is the dev-version code path where users expect fresh downloads.",
-      "priority": "medium",
-      "complexity": "low",
-      "status": "pending",
-      "files_to_modify": [
-        "internal/core/downloader.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "52",
-      "title": "Fix silently discarded ReadFile errors in update.go file comparison",
-      "description": "In update.go:147-155, two os.ReadFile calls inside the file modification check use `continue` on error, silently skipping the file. This means permission errors or corrupted files are treated as 'unchanged' — the update overwrites them without warning. Log a ui.Warn for non-trivial errors before continuing, so users can diagnose issues when files are unexpectedly not included in the modified-files list.",
-      "priority": "medium",
-      "complexity": "low",
-      "status": "pending",
-      "files_to_modify": [
-        "internal/commands/update.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "53",
-      "title": "Use bytes.Equal instead of string conversion for file comparison in update.go",
-      "description": "In update.go:157, `string(localContent) != string(cacheContent)` converts two byte slices to strings for comparison. This is wasteful — it allocates two new string copies of potentially large file contents. Replace with `!bytes.Equal(localContent, cacheContent)` which compares byte slices in-place with zero allocations. Add `bytes` to imports.",
-      "priority": "low",
-      "complexity": "low",
-      "status": "pending",
-      "files_to_modify": [
-        "internal/commands/update.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "54",
-      "title": "Refactor runAdd() into smaller helper functions",
-      "description": "runAdd() in add.go spans 97 lines (lines 34-130), nearly 2x the 50-line guardrail. Extract into helpers: resolveComponent(componentType, componentName) to handle the switch statement for type validation and component lookup, and installComponent(config, component, componentType, componentName) to handle download, copy, and config update. This also makes the logic more testable.",
-      "priority": "medium",
-      "complexity": "low",
-      "status": "pending",
-      "files_to_modify": [
-        "internal/commands/add.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "55",
-      "title": "Refactor runRemove() into smaller helper functions",
-      "description": "runRemove() in remove.go spans 101 lines (lines 39-139), 2x the 50-line guardrail. Extract into helpers: resolveComponentForRemoval(config, componentType, componentName) for switch-based type validation and installed-check, and removeComponentFiles(cwd, component, config, componentType, componentName) for file deletion and config update. Same pattern as runAdd refactor.",
-      "priority": "medium",
-      "complexity": "low",
-      "status": "pending",
-      "files_to_modify": [
-        "internal/commands/remove.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "56",
-      "title": "Add unit tests for add.go command logic",
-      "description": "add.go (131 LOC) has 0% test coverage. While the full runAdd() requires a GitHub download, the component resolution logic (switch statement for type validation, alias expansion, already-installed check) can be extracted and tested. After task 54 extracts resolveComponent(), add table-driven tests for: valid types (language/lang/l, framework/fw/f, workflow/wf/w), unknown type, unknown component name, and already-installed detection.",
-      "priority": "medium",
-      "complexity": "medium",
-      "status": "pending",
-      "files_to_modify": [
-        "internal/commands/add_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "57",
-      "title": "Add unit tests for version.go runVersion function",
-      "description": "version.go (99 LOC) has 0% test coverage. runVersion (68 lines) exceeds the 50-line guardrail. The function has testable branches: no config (new project), valid config (installed project), config load error (corrupt file), and --check flag for update checking. Test the no-config and valid-config paths by creating samuel.yaml in t.TempDir(). The --check path requires HTTP mocking but the display logic is still testable.",
-      "priority": "medium",
-      "complexity": "medium",
-      "status": "pending",
-      "files_to_modify": [
-        "internal/commands/version_test.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "58",
-      "title": "Refactor DownloadVersion() and extractTarGz() in downloader.go below 50-line limit",
-      "description": "Two functions in downloader.go exceed the 50-line guardrail: DownloadVersion (65 lines, lines 40-104) and extractTarGz (69 lines, lines 124-192). DownloadVersion can be split by extracting findExtractedDir() and moveToCache(). extractTarGz can be split by extracting processRegularFile() and processSymlink() helpers for the tar entry type switch. Both are I/O-heavy functions where the split improves readability.",
-      "priority": "low",
-      "complexity": "medium",
-      "status": "pending",
-      "files_to_modify": [
-        "internal/core/downloader.go"
-      ],
-      "source": "pilot-discovery"
-    },
-    {
-      "id": "59",
-      "title": "Consolidate path containment validation into shared core utility",
-      "description": "Three nearly identical path containment validation functions exist: validateContainedPath in extractor.go (unexported), validateRemovePath in remove.go (unexported), and validateSymlinkTarget in downloader.go (different signature but same concept). Export a single ValidateContainedPath(baseDir, relativePath) function from the core package, and update all three callers to use it. This eliminates code duplication and ensures consistent security behavior.",
-      "priority": "low",
-      "complexity": "medium",
-      "status": "pending",
       "files_to_modify": [
         "internal/core/extractor.go",
-        "internal/commands/remove.go",
         "internal/core/downloader.go"
       ],
       "source": "pilot-discovery"
     },
     {
-      "id": "60",
-      "title": "Add unit tests for remove.go validateRemovePath and removal logic",
-      "description": "remove.go (150 LOC) has test coverage only for validateRemovePath (from task 41). The component resolution switch and config update logic are untested. Add table-driven tests for: valid component types (with aliases), unknown type, component not installed, successful removal flow (using t.TempDir with config), and config save verification. Complements task 55 (refactor) which makes the logic more testable.",
-      "priority": "medium",
-      "complexity": "medium",
+      "id": "70",
+      "title": "Extract magic numbers to named constants in skill.go and ui/prompts.go",
+      "description": "Several magic numbers should be named constants for clarity: skill.go:281-282 uses 80/77 for description truncation, prompts.go:30 uses 10 for prompt list size, prompts.go:92 uses 12 for multi-select list size, spinner.go:25 uses 14 for spinner type, spinner.go:85 uses 40 for progress bar width. Extract each to a descriptively named package-level constant.",
       "status": "pending",
+      "priority": "low",
+      "complexity": "low",
       "files_to_modify": [
-        "internal/commands/remove_test.go"
+        "internal/core/skill.go",
+        "internal/ui/prompts.go",
+        "internal/ui/spinner.go"
       ],
       "source": "pilot-discovery"
     }
   ],
   "progress": {
-    "total_tasks": 60,
-    "completed_tasks": 24,
-    "current_iteration": 24,
-    "total_iterations_run": 24,
+    "total_tasks": 10,
+    "completed_tasks": 1,
+    "current_iteration": 25,
+    "total_iterations_run": 25,
     "status": "in_progress"
   }
 }

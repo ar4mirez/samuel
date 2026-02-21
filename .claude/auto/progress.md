@@ -518,3 +518,71 @@
 - LEARNING: `fatih/color` has two output paths: `Fprintf(writer, ...)` uses the explicit writer, but `Println(...)` uses `c.Output()` which defaults to `color.Output` (package-level var, set to `os.Stdout` at init). Replacing `os.Stdout` alone doesn't capture `Println` output — must also redirect `color.Output`.
 - LEARNING: `Header` function uses both `fmt.Println()` (writes to `os.Stdout`) and `boldColor.Println(title)` (writes to `color.Output`). The two different output targets caused the initial test failure — the title line went to the original stdout while the blank lines went to the pipe.
 - Commit: 73d44fa
+
+---
+
+[2026-02-22T06:30:00Z] [discovery] FOUND: Seventh discovery iteration — file close errors, Docker image validation, new file coverage gaps, code quality
+
+### Data Integrity Issues (NEW)
+- **HIGH**: `downloader.go:168,171` — `file.Close()` after `io.Copy` without error check. On some filesystems, `Close()` flushes buffered data; failed close = silently corrupted extracted files
+- **HIGH**: `downloader.go:255` — `defer dstFile.Close()` in `copyDir` without error check after `io.Copy`. Same corruption risk for directory copies
+- **HIGH**: `extractor.go:415` — `defer dst.Close()` in `copyFile` without error check after `io.Copy`. Same pattern, same risk
+
+### Security Issues (NEW)
+- **MEDIUM**: `auto_loop.go:146` — `SandboxImage` from `prd.json` passed directly to `docker run` without format validation. A tampered `prd.json` could specify a malicious Docker image name
+- **MEDIUM**: `config_cmd.go:162-175` — `config set registry` accepts any string without URL scheme validation. A malicious registry URL could redirect downloads
+
+### Test Coverage Update
+- Overall: `cmd/samuel` **0%**, `internal/commands` **22.2%**, `internal/core` **85.6%**, `internal/github` **89.4%**, `internal/ui` **49.6%**
+- `doctor_checks.go` (291 LOC) — created by task 6 refactor, **0% coverage** (new file, no tests)
+- `init_steps.go` (284 LOC) — created by task 7 refactor, **0% coverage** (new file, no tests)
+- `commands/skill.go` (375 LOC) — **0% coverage**, largest untested command file
+- `commands/update.go` (264 LOC) — **0% coverage**, contains 219-line runUpdate function
+- `commands/auto_start_handler.go` (139 LOC) — **0% coverage**
+- 15 of 21 source files in `internal/commands/` have no corresponding test file
+
+### Code Quality Update
+- 17 functions exceed 50-line limit (top new violations not covered by prior tasks):
+  - `runSkillInfo()` 92 lines (skill.go:284)
+  - `runAutoStart()` 80 lines (auto_start_handler.go:12)
+  - `listInstalled()` 73 lines (list.go:43)
+  - `runVersion()` 71 lines (version.go:28)
+  - `runSync()` 67 lines (sync.go:38)
+  - `runSkillValidate()` 67 lines (skill.go:162)
+- 7 non-test files exceed 300-line limit (registry.go 460, sync.go 431, skill.go 431, config.go 425, extractor.go 419, commands/skill.go 375, search.go 337)
+- 8 deprecated `filepath.Walk` calls remain (6 in extractor.go, 2 in downloader.go)
+- 7 magic numbers without named constants in skill.go, prompts.go, spinner.go
+
+### Positive Findings
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- `go vet` clean — no issues
+- `internal/core` at 85.6% — exceeds 80% business logic target
+- `internal/github` at 89.4% — well above target
+- No panic() calls, no TODO/FIXME/HACK markers, no hardcoded secrets
+- Security posture strong: path traversal, symlink, size limits, TOCTOU, race condition all fixed
+- HTTP client properly configured (30s timeout, size limits, no DefaultClient)
+- All exec.Command calls validated against allowlist
+- Cobra argument counts properly enforced across all commands
+
+### Tasks Generated (Seventh Discovery): 10
+| ID | Priority | Title |
+|----|----------|-------|
+| 61 | high     | Fix unchecked file.Close() errors after io.Copy in downloader.go and extractor.go |
+| 62 | medium   | Add Docker sandbox image name validation in auto_loop.go |
+| 63 | medium   | Add unit tests for doctor_checks.go check functions |
+| 64 | medium   | Add unit tests for init_steps.go step functions |
+| 65 | medium   | Add unit tests for commands/update.go helper logic |
+| 66 | medium   | Refactor runSkillInfo() in commands/skill.go below 50-line limit |
+| 67 | medium   | Refactor runAutoStart() in auto_start_handler.go below 50-line limit |
+| 68 | medium   | Add URL scheme validation for registry config value in config_cmd.go |
+| 69 | low      | Replace deprecated filepath.Walk with filepath.WalkDir in core package |
+| 70 | low      | Extract magic numbers to named constants in skill.go and ui/prompts.go |
+
+[2026-02-22T07:00:00Z] [iteration:25] [task:61] COMPLETED: Fixed unchecked file.Close() errors after io.Copy in downloader.go and extractor.go
+- `extractTarGz`: Normal-path `file.Close()` now checked — returns `fmt.Errorf("failed to close file %q: %w", ...)`. Error-path close (line 168) left unchecked since the primary io.Copy error is more relevant.
+- `copyFile` (downloader.go): Added named return `(err error)` and replaced `defer dstFile.Close()` with deferred closure that checks `cerr := dstFile.Close(); cerr != nil && err == nil` pattern.
+- `copySingleFile` (extractor.go): Same named return + deferred error check pattern applied.
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: The `defer func() { if cerr := f.Close(); cerr != nil && err == nil { err = cerr } }()` pattern requires a named return value. The `err == nil` guard ensures the Close error doesn't mask a more important io.Copy error — if io.Copy already failed, the Close error is secondary.
+- LEARNING: In `copySingleFile`, the `if err := os.MkdirAll(...)` block uses short variable declaration (`:=`) inside the `if` scope, so it does NOT shadow the named return `err`. After the `if` block exits, subsequent uses of `err` still refer to the named return. This is a subtle but important Go scoping distinction.
+- Commit: a53222d
