@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
 	"slices"
 	"strings"
 	"time"
@@ -51,6 +52,26 @@ func GetSupportedSandboxModes() []string {
 // IsValidSandboxMode checks if the given mode is supported.
 func IsValidSandboxMode(mode string) bool {
 	return slices.Contains(GetSupportedSandboxModes(), strings.ToLower(mode))
+}
+
+// validSandboxImagePattern matches Docker image references:
+// [registry/]name[:tag][@digest] with alphanumeric, dots, dashes, underscores,
+// colons, and slashes. Rejects shell metacharacters and absolute paths.
+var validSandboxImagePattern = regexp.MustCompile(
+	`^[a-zA-Z0-9][a-zA-Z0-9._\-/]*(:[a-zA-Z0-9._\-]+)?(@sha256:[a-f0-9]{64})?$`,
+)
+
+// IsValidSandboxImage validates a Docker image name for safe use with docker run.
+// It rejects empty strings, shell metacharacters, absolute paths, and names
+// that don't match the Docker image reference format.
+func IsValidSandboxImage(image string) bool {
+	if image == "" {
+		return false
+	}
+	if strings.HasPrefix(image, "/") || strings.HasPrefix(image, ".") {
+		return false
+	}
+	return validSandboxImagePattern.MatchString(image)
 }
 
 // CheckDockerAvailable verifies Docker is installed and the daemon is running.

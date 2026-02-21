@@ -147,6 +147,11 @@ func invokeAgentDocker(cfg LoopConfig) error {
 	if image == "" {
 		image = DefaultSandboxImage
 	}
+	if !IsValidSandboxImage(image) {
+		return fmt.Errorf(
+			"refused to use invalid sandbox image %q: must match Docker image reference format",
+			image)
+	}
 
 	dockerArgs := buildDockerRunArgs(cfg.ProjectDir, image, cfg.AITool, agentArgs)
 	cmd := exec.Command("docker", dockerArgs...)

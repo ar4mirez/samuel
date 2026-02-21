@@ -272,6 +272,43 @@ func TestInvokeAgentLocal_RunsCommand(t *testing.T) {
 	}
 }
 
+func TestInvokeAgentDocker_RejectsInvalidImage(t *testing.T) {
+	dir := t.TempDir()
+	promptFile := filepath.Join(dir, "prompt.md")
+	if err := os.WriteFile(promptFile, []byte("test"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	tests := []struct {
+		name  string
+		image string
+	}{
+		{"shell injection", "node:lts;rm -rf /"},
+		{"absolute path", "/bin/malicious"},
+		{"command substitution", "$(whoami)"},
+		{"relative path escape", "../escape"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cfg := LoopConfig{
+				ProjectDir:   dir,
+				AITool:       "codex",
+				PromptPath:   promptFile,
+				Sandbox:      SandboxDocker,
+				SandboxImage: tt.image,
+			}
+			err := invokeAgentDocker(cfg)
+			if err == nil {
+				t.Fatalf("expected error for invalid image %q", tt.image)
+			}
+			if !strings.Contains(err.Error(), "invalid sandbox image") {
+				t.Errorf("expected 'invalid sandbox image' error, got: %v", err)
+			}
+		})
+	}
+}
+
 func TestInvokeAgentDocker_PromptReadError(t *testing.T) {
 	dir := t.TempDir()
 	// Prompt path must be inside project dir for filepath.Rel to succeed

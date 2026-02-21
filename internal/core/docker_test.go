@@ -307,3 +307,44 @@ func TestCheckDockerSandboxAvailable(t *testing.T) {
 		t.Logf("CheckDockerSandboxAvailable returned: %v (sandbox plugin may not be installed)", err)
 	}
 }
+
+func TestIsValidSandboxImage(t *testing.T) {
+	tests := []struct {
+		image string
+		want  bool
+	}{
+		// Valid images
+		{"node:lts", true},
+		{"ubuntu:22.04", true},
+		{"python:3.12-slim", true},
+		{"alpine", true},
+		{"ghcr.io/owner/image:latest", true},
+		{"registry.example.com/org/image:v1.2.3", true},
+		{"my-image_name:tag-1.0", true},
+		{"node:lts@sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789", true},
+		{"docker.io/library/node:20", true},
+
+		// Invalid images
+		{"", false},
+		{"/bin/sh", false},
+		{"./malicious", false},
+		{"../escape", false},
+		{"image;rm -rf /", false},
+		{"image$(whoami)", false},
+		{"image`id`", false},
+		{"image|cat /etc/passwd", false},
+		{"image&malicious", false},
+		{"image name with spaces", false},
+		{".hidden-image", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("image=%q", tt.image), func(t *testing.T) {
+			got := IsValidSandboxImage(tt.image)
+			if got != tt.want {
+				t.Errorf("IsValidSandboxImage(%q) = %v, want %v",
+					tt.image, got, tt.want)
+			}
+		})
+	}
+}
