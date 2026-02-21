@@ -96,7 +96,15 @@ func RunAutoLoop(cfg LoopConfig) error {
 }
 
 // InvokeAgent calls the AI tool for one iteration of work.
+// It validates cfg.AITool against the allow-list before execution
+// to prevent arbitrary command injection via modified prd.json.
 func InvokeAgent(cfg LoopConfig) error {
+	if !IsValidAITool(cfg.AITool) {
+		return fmt.Errorf(
+			"refused to invoke invalid AI tool %q (allowed: %v)",
+			cfg.AITool, GetSupportedAITools())
+	}
+
 	switch cfg.Sandbox {
 	case SandboxDockerSandbox:
 		return invokeAgentDockerSandbox(cfg)

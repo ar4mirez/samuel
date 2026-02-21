@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -121,4 +122,49 @@ func TestNotifyCallbacks_NilSafe(t *testing.T) {
 	// Should not panic with nil callbacks
 	notifyIterStart(nil, 1, IterationTypeImplementation)
 	notifyIterEnd(nil, 1, nil)
+}
+
+func TestInvokeAgent_RejectsInvalidAITool(t *testing.T) {
+	tests := []struct {
+		name   string
+		aiTool string
+	}{
+		{"arbitrary binary", "/bin/sh"},
+		{"path traversal", "../../../malicious"},
+		{"empty string", ""},
+		{"shell injection", "claude; rm -rf /"},
+		{"unknown tool", "unsupported-tool"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cfg := LoopConfig{
+				ProjectDir: t.TempDir(),
+				AITool:     tt.aiTool,
+			}
+			err := InvokeAgent(cfg)
+			if err == nil {
+				t.Errorf("expected error for invalid AI tool %q", tt.aiTool)
+			}
+		})
+	}
+}
+
+func TestInvokeAgent_AcceptsValidTools(t *testing.T) {
+	for _, tool := range GetSupportedAITools() {
+		t.Run(tool, func(t *testing.T) {
+			cfg := LoopConfig{
+				ProjectDir: t.TempDir(),
+				AITool:     tool,
+				PromptPath: "/nonexistent/prompt.md",
+			}
+			err := InvokeAgent(cfg)
+			// Should fail with prompt/exec error, NOT with invalid tool error
+			if err != nil && err.Error() == fmt.Sprintf(
+				"refused to invoke invalid AI tool %q (allowed: %v)",
+				tool, GetSupportedAITools()) {
+				t.Errorf("valid tool %q was rejected", tool)
+			}
+		})
+	}
 }

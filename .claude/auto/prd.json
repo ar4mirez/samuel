@@ -276,13 +276,140 @@
         "internal/core/sync_generate.go"
       ],
       "source": "pilot-discovery"
+    },
+    {
+      "id": "21",
+      "title": "Fix TOCTOU vulnerability in AITool validation for auto loop",
+      "description": "In auto_loop.go:116, cfg.AITool is passed directly to exec.Command without validation. While parseAutoFlags() calls core.IsValidAITool() at CLI parse time, the PRD file is re-read from disk at each loop iteration (auto_loop.go:74), so a modified prd.json could inject an arbitrary binary path between validation and execution. Add IsValidAITool() check inside invokeAgentLocal() before exec.Command.",
+      "status": "completed",
+      "priority": "critical",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/auto_loop.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "22",
+      "title": "Add path containment validation to RestoreBackup and CopyFromCache",
+      "description": "In extractor.go:319-338, RestoreBackup computes dstPath = filepath.Join(e.destPath, relPath) without calling validateContainedPath, allowing a crafted backup directory to write outside the destination. Similarly, CopyFromCache (line 358+) and helpers copyDirRecursive/copySingleFile lack path containment checks. Add validateContainedPath calls to both RestoreBackup and CopyFromCache for defense-in-depth consistency with ReadFile/WriteFile/RemoveFile.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/extractor.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "23",
+      "title": "Fix silently discarded LoadAutoPRD errors in auto pilot commands",
+      "description": "Four places silently discard LoadAutoPRD errors with `_ :=`: auto_pilot.go:196, auto_pilot.go:225, auto_start_handler.go:124, auto_pilot_output.go:45. When PRD loading fails mid-loop, the code proceeds with nil checks but loses the error context. Log warnings via ui.Warn for non-critical paths (printLoopSummary, printPilotSummary) and return errors for critical paths (pilot loop iteration logic).",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/auto_pilot.go",
+        "internal/commands/auto_start_handler.go",
+        "internal/commands/auto_pilot_output.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "24",
+      "title": "Replace deprecated filepath.Walk with filepath.WalkDir across codebase",
+      "description": "8 uses of filepath.Walk (deprecated since Go 1.16) exist in 3 files: downloader.go (lines 209, 276), extractor.go (lines 120, 146, 310, 373), diff.go (lines 201, 223). filepath.WalkDir avoids unnecessary os.Lstat calls and is the recommended replacement. Update callback signatures from func(path string, info os.FileInfo, err error) to func(path string, d fs.DirEntry, err error), using d.Info() only where FileInfo fields are needed.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/downloader.go",
+        "internal/core/extractor.go",
+        "internal/commands/diff.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "25",
+      "title": "Fix silently discarded filepath.Rel errors in extractor.go",
+      "description": "Three calls to filepath.Rel in extractor.go silently discard errors: line 87 (Extract), line 104 (Extract directory case), line 117 (ExtractAll). If filepath.Rel fails, relPath becomes empty string, which could cause incorrect file path construction or misleading log output. Handle the error by returning it or logging a warning.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/extractor.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "26",
+      "title": "Add unit tests for auto_loop.go agent invocation functions",
+      "description": "auto_loop.go has 5 functions at 0% coverage: InvokeAgent, invokeAgentLocal, invokeAgentDocker, invokeAgentDockerSandbox, buildDockerRunArgs. buildDockerRunArgs is a pure function that constructs Docker CLI arguments — easily testable with table-driven tests. InvokeAgent dispatches based on sandbox mode — test the dispatch logic. The exec.Command functions can be tested by verifying argument construction without actually executing.",
+      "status": "pending",
+      "priority": "high",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/auto_loop_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "27",
+      "title": "Add unit tests for config.go path and value functions",
+      "description": "config.go has 4 functions below 50% coverage: GetGlobalConfigPath (0%), GetCachePath (0%), EnsureCacheDir (0%), GetValue (45%). These path functions use os.UserHomeDir/os.UserCacheDir — test using environment variable overrides or mock. GetValue needs tests for nested key access (e.g., 'installed.languages') and error cases for unknown keys. Add table-driven tests to fill these coverage gaps.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/config_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "28",
+      "title": "Reduce file size of internal/core/config.go below 300-line limit",
+      "description": "config.go is 425 lines, exceeding the 300-line guardrail by 42%. Extract path-related functions (GetGlobalConfigPath, GetCachePath, EnsureCacheDir — lines 289-332) and key-value functions (GetValue, SetValue, GetAllValues, splitAndTrim — lines 335-425) into config_paths.go and config_values.go respectively.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/config.go",
+        "internal/core/config_paths.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "29",
+      "title": "Reduce file size of internal/core/registry.go below 300-line limit",
+      "description": "registry.go is 460 lines, exceeding the 300-line guardrail by 53% — the largest non-test file in the codebase. Extract skill lookup functions (FindSkill, GetAllSkillNames, GetLanguageSkills, SkillToLanguageName, GetFrameworkSkills, GetWorkflowSkills) into registry_skills.go. The data definitions and component lookups can stay in registry.go.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/registry.go",
+        "internal/core/registry_skills.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "30",
+      "title": "Reduce file size of internal/core/extractor.go below 300-line limit",
+      "description": "extractor.go is 413 lines, exceeding the 300-line guardrail by 38%. Recent additions (validateContainedPath, path traversal checks) have increased the file size. Extract backup/restore functions (BackupFile, RestoreBackup, GetSourcePath, GetDestPath — lines 280-345) and cache copy functions (CopyFromCache, copyDirRecursive, copySingleFile — lines 355-413) into extractor_backup.go.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/extractor.go",
+        "internal/core/extractor_backup.go"
+      ],
+      "source": "pilot-discovery"
     }
   ],
   "progress": {
-    "total_tasks": 20,
-    "completed_tasks": 8,
-    "current_iteration": 8,
-    "total_iterations_run": 8,
+    "total_tasks": 30,
+    "completed_tasks": 9,
+    "current_iteration": 9,
+    "total_iterations_run": 9,
     "status": "in_progress"
   }
 }
