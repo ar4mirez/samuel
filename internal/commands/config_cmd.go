@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 	"strings"
 
@@ -154,6 +155,13 @@ func runConfigSet(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("invalid config key: %s", key)
 	}
 
+	// Validate registry URL scheme before loading config
+	if key == "registry" {
+		if err := validateRegistryURL(value); err != nil {
+			return fmt.Errorf("invalid registry value: %w", err)
+		}
+	}
+
 	config, err := core.LoadConfig()
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -213,4 +221,19 @@ func isValidConfigKey(key string) bool {
 		}
 	}
 	return false
+}
+
+// validateRegistryURL checks that a registry value is a valid HTTPS URL.
+func validateRegistryURL(value string) error {
+	u, err := url.Parse(value)
+	if err != nil {
+		return fmt.Errorf("invalid URL: %w", err)
+	}
+	if u.Scheme != "https" {
+		return fmt.Errorf("registry must use HTTPS scheme, got %q", u.Scheme)
+	}
+	if u.Host == "" {
+		return fmt.Errorf("registry URL must have a host")
+	}
+	return nil
 }

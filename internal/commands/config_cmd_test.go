@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -58,5 +59,39 @@ func TestFormatConfigValue_SingleItem(t *testing.T) {
 	got := formatConfigValue([]string{"single"})
 	if got != "single" {
 		t.Errorf("formatConfigValue([single]) = %q, want %q", got, "single")
+	}
+}
+
+func TestValidateRegistryURL(t *testing.T) {
+	tests := []struct {
+		name    string
+		value   string
+		wantErr bool
+		errMsg  string
+	}{
+		{"valid https", "https://github.com/myorg/myrepo", false, ""},
+		{"valid https with path", "https://github.com/ar4mirez/samuel", false, ""},
+		{"valid https with port", "https://github.com:443/myorg/myrepo", false, ""},
+		{"http rejected", "http://github.com/myorg/myrepo", true, "HTTPS scheme"},
+		{"empty scheme", "github.com/myorg/myrepo", true, "HTTPS scheme"},
+		{"ftp rejected", "ftp://example.com/repo", true, "HTTPS scheme"},
+		{"empty string", "", true, "HTTPS scheme"},
+		{"plain text", "not-a-url", true, "HTTPS scheme"},
+		{"scheme only", "https://", true, "must have a host"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validateRegistryURL(tt.value)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("validateRegistryURL(%q) error = %v, wantErr %v", tt.value, err, tt.wantErr)
+				return
+			}
+			if tt.wantErr && tt.errMsg != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.errMsg) {
+					t.Errorf("validateRegistryURL(%q) error = %v, want error containing %q", tt.value, err, tt.errMsg)
+				}
+			}
+		})
 	}
 }
