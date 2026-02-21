@@ -305,3 +305,13 @@
 - Summary locations (printLoopSummary, printPilotSummary): warn + early return on nil (unchanged behavior, just with error logging)
 - LEARNING: All 4 call sites already had nil guards (`if finalPRD == nil`), so the behavior is safe even without the error. The issue was purely about error visibility — a corrupt prd.json or permission error would be silently swallowed, making debugging difficult.
 - Commit: d7339f9
+
+[2026-02-22T00:00:00Z] [iteration:14] [task:26] COMPLETED: Added unit tests for auto_loop.go agent invocation functions
+- Added 15 new test cases: buildDockerRunArgs (3 tests), InvokeAgent dispatch (4 modes), invokeAgentLocal (2), invokeAgentDocker (2), invokeAgentDockerSandbox (2), RunAutoLoop consecutive failures (1), RunAutoLoop callbacks (1)
+- Coverage improvement: InvokeAgent 100%, invokeAgentLocal 100%, invokeAgentDockerSandbox 100%, buildDockerRunArgs 100%, invokeAgentDocker 86.7%, RunAutoLoop 90%
+- Overall `internal/core` package coverage: 83.9% (up from ~80.4%)
+- Key technique: For dispatch tests, use claude tool with non-existent prompt file to fail fast at GetAgentArgs stage — avoids slow docker container pulls while still verifying the switch dispatches to the correct code path
+- For docker invoke tests, use `nonexistent-image-test:0.0.0` to fail fast on image pull instead of pulling real images
+- LEARNING: Docker sandbox (`docker sandbox run`) reuses existing sandboxes by name. If a sandbox was previously created in the same test run, subsequent calls to the same sandbox name are fast. But initial creation pulls images and is very slow (23+ seconds). Tests should avoid triggering real sandbox creation.
+- LEARNING: `invokeAgentDocker` has an unreachable error path: `filepath.Rel(projectDir, promptPath)` on Unix only fails when the paths are on different volumes (not possible on Unix). The 86.7% coverage gap is this error path. This is acceptable — the error check is defense-in-depth for potential Windows support.
+- Commit: 1cf5627

@@ -350,7 +350,8 @@
       "id": "26",
       "title": "Add unit tests for auto_loop.go agent invocation functions",
       "description": "auto_loop.go has 5 functions at 0% coverage: InvokeAgent, invokeAgentLocal, invokeAgentDocker, invokeAgentDockerSandbox, buildDockerRunArgs. buildDockerRunArgs is a pure function that constructs Docker CLI arguments — easily testable with table-driven tests. InvokeAgent dispatches based on sandbox mode — test the dispatch logic. The exec.Command functions can be tested by verifying argument construction without actually executing.",
-      "status": "pending",
+      "status": "completed",
+      "commit_sha": "1cf5627",
       "priority": "high",
       "complexity": "medium",
       "files_to_modify": [
@@ -534,9 +535,9 @@
   ],
   "progress": {
     "total_tasks": 40,
-    "completed_tasks": 13,
-    "current_iteration": 13,
-    "total_iterations_run": 13,
+    "completed_tasks": 14,
+    "current_iteration": 14,
+    "total_iterations_run": 14,
     "status": "in_progress"
   }
 }
