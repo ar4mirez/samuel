@@ -46,7 +46,9 @@ func (d *Downloader) DownloadVersion(version string) (string, error) {
 		}
 	} else {
 		// Clear dev cache to always get fresh copy
-		os.RemoveAll(cacheDest)
+		if err := os.RemoveAll(cacheDest); err != nil {
+			return "", fmt.Errorf("failed to clear dev cache: %w", err)
+		}
 	}
 
 	// Download archive
