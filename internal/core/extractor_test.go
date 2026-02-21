@@ -3,6 +3,7 @@ package core
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -268,5 +269,176 @@ func TestCopyFromCache_MultipleSubdirectories(t *testing.T) {
 		if string(data) != want {
 			t.Errorf("%s: got %q, want %q", path, string(data), want)
 		}
+	}
+}
+
+func TestValidateContainedPath(t *testing.T) {
+	base := "/safe/base"
+	tests := []struct {
+		name    string
+		path    string
+		wantErr bool
+	}{
+		{"valid simple file", "file.txt", false},
+		{"valid nested file", "sub/dir/file.txt", false},
+		{"traversal with dotdot", "../../etc/passwd", true},
+		{"traversal mixed", "sub/../../etc/passwd", true},
+		{"absolute path joined", "/etc/passwd", false}, // filepath.Join treats as relative on Unix
+		{"dotdot only", "..", true},
+		{"current dir", ".", false},
+		{"trailing dotdot", "subdir/..", false}, // resolves to base itself
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := validateContainedPath(base, tt.path)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("validateContainedPath(%q, %q) error = %v, wantErr %v",
+					base, tt.path, err, tt.wantErr)
+			}
+			if tt.wantErr && err != nil && !strings.Contains(err.Error(), "path traversal") {
+				t.Errorf("expected 'path traversal' in error, got: %v", err)
+			}
+		})
+	}
+}
+
+func TestReadFile_PathTraversal(t *testing.T) {
+	destDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	// Create a file outside destDir
+	outsideDir := t.TempDir()
+	outsideFile := filepath.Join(outsideDir, "secret.txt")
+	if err := os.WriteFile(outsideFile, []byte("secret"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Attempt traversal
+	relPath, _ := filepath.Rel(destDir, outsideFile)
+	_, err := ext.ReadFile(relPath)
+	if err == nil {
+		t.Error("ReadFile should reject path traversal, got nil error")
+	}
+	if err != nil && !strings.Contains(err.Error(), "path traversal") {
+		t.Errorf("expected path traversal error, got: %v", err)
+	}
+}
+
+func TestWriteFile_PathTraversal(t *testing.T) {
+	destDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	err := ext.WriteFile("../../evil.txt", []byte("malicious"))
+	if err == nil {
+		t.Error("WriteFile should reject path traversal, got nil error")
+	}
+}
+
+func TestRemoveFile_PathTraversal(t *testing.T) {
+	destDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	err := ext.RemoveFile("../../important.txt")
+	if err == nil {
+		t.Error("RemoveFile should reject path traversal, got nil error")
+	}
+}
+
+func TestFileExists_PathTraversal(t *testing.T) {
+	destDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	// Create a file outside destDir to confirm it's not detected
+	outsideDir := t.TempDir()
+	outsideFile := filepath.Join(outsideDir, "exists.txt")
+	if err := os.WriteFile(outsideFile, []byte("data"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	relPath, _ := filepath.Rel(destDir, outsideFile)
+	if ext.FileExists(relPath) {
+		t.Error("FileExists should return false for path traversal")
+	}
+}
+
+func TestBackupFile_PathTraversal(t *testing.T) {
+	destDir := t.TempDir()
+	backupDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	// Create a legitimate file in destDir
+	if err := os.WriteFile(filepath.Join(destDir, "legit.txt"), []byte("data"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Attempt source traversal (reading from outside destDir)
+	err := ext.BackupFile("../../etc/passwd", backupDir)
+	if err == nil {
+		t.Error("BackupFile should reject source path traversal")
+	}
+
+	// Attempt destination traversal (writing outside backupDir)
+	err = ext.BackupFile("legit.txt", backupDir)
+	if err != nil {
+		t.Errorf("BackupFile of legit file should succeed: %v", err)
+	}
+}
+
+func TestValidateExtraction_PathTraversal(t *testing.T) {
+	destDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	// Create a file inside destDir
+	if err := os.WriteFile(filepath.Join(destDir, "valid.txt"), []byte("ok"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	missing := ext.ValidateExtraction([]string{"valid.txt", "../../etc/passwd"})
+	if len(missing) != 1 {
+		t.Fatalf("expected 1 missing, got %d: %v", len(missing), missing)
+	}
+	if missing[0] != "../../etc/passwd" {
+		t.Errorf("expected traversal path in missing, got: %s", missing[0])
+	}
+}
+
+func TestReadFile_ValidPath(t *testing.T) {
+	destDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	// Create a valid file
+	subDir := filepath.Join(destDir, "sub")
+	if err := os.MkdirAll(subDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(subDir, "file.txt"), []byte("hello"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	data, err := ext.ReadFile("sub/file.txt")
+	if err != nil {
+		t.Fatalf("ReadFile valid path: %v", err)
+	}
+	if string(data) != "hello" {
+		t.Errorf("got %q, want %q", string(data), "hello")
+	}
+}
+
+func TestWriteFile_ValidPath(t *testing.T) {
+	destDir := t.TempDir()
+	ext := NewExtractor("", destDir)
+
+	err := ext.WriteFile("sub/new.txt", []byte("content"))
+	if err != nil {
+		t.Fatalf("WriteFile valid path: %v", err)
+	}
+
+	data, err := os.ReadFile(filepath.Join(destDir, "sub", "new.txt"))
+	if err != nil {
+		t.Fatalf("failed to read written file: %v", err)
+	}
+	if string(data) != "content" {
+		t.Errorf("got %q, want %q", string(data), "content")
 	}
 }

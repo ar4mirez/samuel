@@ -201,12 +201,29 @@ func shouldSkip(path string) bool {
 	return false
 }
 
+// validateContainedPath checks that a relative path, when joined with a base
+// directory, stays within that directory. Returns the resolved absolute path
+// or an error if the path escapes the base directory (path traversal).
+func validateContainedPath(baseDir, relativePath string) (string, error) {
+	cleanBase := filepath.Clean(baseDir)
+	fullPath := filepath.Clean(filepath.Join(cleanBase, relativePath))
+	// The resolved path must equal the base or be under it
+	if fullPath != cleanBase && !strings.HasPrefix(fullPath, cleanBase+string(os.PathSeparator)) {
+		return "", fmt.Errorf("path traversal detected: %q escapes base directory", relativePath)
+	}
+	return fullPath, nil
+}
+
 // ValidateExtraction checks if extracted files are valid
 func (e *Extractor) ValidateExtraction(paths []string) []string {
 	var missing []string
 
 	for _, path := range paths {
-		fullPath := filepath.Join(e.destPath, path)
+		fullPath, err := validateContainedPath(e.destPath, path)
+		if err != nil {
+			missing = append(missing, path)
+			continue
+		}
 		if _, err := os.Stat(fullPath); os.IsNotExist(err) {
 			missing = append(missing, path)
 		}
@@ -217,20 +234,29 @@ func (e *Extractor) ValidateExtraction(paths []string) []string {
 
 // FileExists checks if a file exists in the destination
 func (e *Extractor) FileExists(path string) bool {
-	fullPath := filepath.Join(e.destPath, path)
-	_, err := os.Stat(fullPath)
+	fullPath, err := validateContainedPath(e.destPath, path)
+	if err != nil {
+		return false
+	}
+	_, err = os.Stat(fullPath)
 	return err == nil
 }
 
 // ReadFile reads a file from the destination
 func (e *Extractor) ReadFile(path string) ([]byte, error) {
-	fullPath := filepath.Join(e.destPath, path)
+	fullPath, err := validateContainedPath(e.destPath, path)
+	if err != nil {
+		return nil, err
+	}
 	return os.ReadFile(fullPath)
 }
 
 // WriteFile writes content to a file in the destination
 func (e *Extractor) WriteFile(path string, content []byte) error {
-	fullPath := filepath.Join(e.destPath, path)
+	fullPath, err := validateContainedPath(e.destPath, path)
+	if err != nil {
+		return err
+	}
 
 	// Ensure parent directory exists
 	if err := os.MkdirAll(filepath.Dir(fullPath), 0755); err != nil {
@@ -242,18 +268,27 @@ func (e *Extractor) WriteFile(path string, content []byte) error {
 
 // RemoveFile removes a file from the destination
 func (e *Extractor) RemoveFile(path string) error {
-	fullPath := filepath.Join(e.destPath, path)
+	fullPath, err := validateContainedPath(e.destPath, path)
+	if err != nil {
+		return err
+	}
 	return os.Remove(fullPath)
 }
 
 // BackupFile creates a backup of a file
 func (e *Extractor) BackupFile(path, backupDir string) error {
-	srcPath := filepath.Join(e.destPath, path)
+	srcPath, err := validateContainedPath(e.destPath, path)
+	if err != nil {
+		return err
+	}
 	if _, err := os.Stat(srcPath); os.IsNotExist(err) {
 		return nil // Nothing to backup
 	}
 
-	dstPath := filepath.Join(backupDir, path)
+	dstPath, err := validateContainedPath(backupDir, path)
+	if err != nil {
+		return err
+	}
 
 	// Ensure backup directory exists
 	if err := os.MkdirAll(filepath.Dir(dstPath), 0755); err != nil {
