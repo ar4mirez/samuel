@@ -801,3 +801,13 @@
 - All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
 - LEARNING: This is a one-line fix pattern that recurs across the codebase (tasks 1, 15, 23, 71 all fixed similar `_ =` error suppression). The consistent fix is: check the error, log/warn for non-critical paths, return error for critical paths. Here, cache clearing is critical (corrupted state risk), so returning the error is correct.
 - Commit: 781b2ba
+
+[2026-02-22T14:00:00Z] [iteration:37] [task:74] COMPLETED: Fixed silently discarded ReadFile errors in update.go file comparison
+- Added `ui.Warn("Skipping %s: failed to read local file: %v", ...)` and `ui.Warn("Skipping %s: failed to read cached file: %v", ...)` in `categorizeFileChanges`
+- Previously, `os.ReadFile` errors silently caused files to be skipped via `continue` — permission denied or I/O errors made files appear "unchanged"
+- The fix was a previous iteration's incomplete work — the code changes were made but not committed
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- Existing tests already covered this path: `TestCategorizeFileChanges/unreadable_local_file_skipped` and `unreadable_cache_file_skipped` (from task 65) — tests output the warning messages as expected
+- LEARNING: When a previous iteration marks a task as `in_progress` but doesn't commit, the next iteration should check `git diff` to see if the work was already done. In this case, the code changes were correct and just needed quality checks + commit.
+- LEARNING: Task 65 already created the test cases for this exact scenario (unreadable files) when it extracted `categorizeFileChanges`, but the `ui.Warn` calls weren't in the code yet. The tests still passed because they only verified the file was skipped (not in any category), not that a warning was logged. The tests now additionally exercise the warning path.
+- Commit: 9d4c70d
