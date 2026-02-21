@@ -11,6 +11,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// defaultSearchLimit is the maximum number of search results returned by default.
+const defaultSearchLimit = 20
+
 // SearchResult represents a search match
 type SearchResult struct {
 	Name        string
@@ -46,7 +49,7 @@ Types (with aliases):
 func init() {
 	rootCmd.AddCommand(searchCmd)
 	searchCmd.Flags().StringP("type", "t", "", "Filter by type: language/lang/l, framework/fw/f, workflow/wf/w, skill/sk/s")
-	searchCmd.Flags().IntP("limit", "n", 20, "Limit number of results")
+	searchCmd.Flags().IntP("limit", "n", defaultSearchLimit, "Limit number of results")
 }
 
 func runSearch(cmd *cobra.Command, args []string) error {
@@ -73,6 +76,9 @@ func runSearch(cmd *cobra.Command, args []string) error {
 }
 
 func sortAndLimitResults(results []SearchResult, limit int) []SearchResult {
+	if limit <= 0 {
+		limit = defaultSearchLimit
+	}
 	sort.Slice(results, func(i, j int) bool {
 		return results[i].Score > results[j].Score
 	})

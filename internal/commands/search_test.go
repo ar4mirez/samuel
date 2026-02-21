@@ -193,6 +193,8 @@ func TestSortAndLimitResults(t *testing.T) {
 		{"limit 3", 3, "b", 3},
 		{"limit 10", 10, "b", 5},
 		{"limit 1", 1, "b", 1},
+		{"negative limit falls back to default", -1, "b", 5},
+		{"zero limit falls back to default", 0, "b", 5},
 	}
 
 	for _, tt := range tests {
@@ -209,6 +211,12 @@ func TestSortAndLimitResults(t *testing.T) {
 				t.Errorf("sortAndLimitResults() first item = %q, want %q", got[0].Name, tt.wantFirst)
 			}
 		})
+	}
+}
+
+func TestDefaultSearchLimit(t *testing.T) {
+	if defaultSearchLimit != 20 {
+		t.Errorf("defaultSearchLimit = %d, want 20", defaultSearchLimit)
 	}
 }
 
