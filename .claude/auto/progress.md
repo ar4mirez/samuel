@@ -773,3 +773,13 @@
 - LEARNING: The split follows the same pattern as doctor.go (task 6) and init.go (task 7): orchestrator stays in the main file, extracted helpers go to a dedicated file. The naming convention `<command>_info.go` is descriptive for display-related helpers.
 - LEARNING: Validation display (~10 lines) was left inline in `runSkillInfo()` because extracting a 10-line function with no logic beyond conditional formatting adds indirection without meaningful benefit. The 37-line result is well under the 50-line limit.
 - Commit: 3a077ad
+
+[2026-02-22T12:30:00Z] [iteration:34] [task:67] COMPLETED: Refactored runAutoStart() in auto_start_handler.go below 50-line limit
+- Split 80-line `runAutoStart()` into a 50-line orchestrator by extracting two helpers
+- `resolveSandboxFlags(cmd, prd)` (15 lines): extracts sandbox, image, template from CLI flags with PRD defaults
+- `buildLoopConfig(cmd, cwd, prd, sandbox, image, template)` (23 lines): creates LoopConfig with CLI overrides, iteration limit, and UI callbacks
+- File grew from 140 to 153 lines — well under the 300-line limit
+- All existing tests pass, all quality checks pass
+- LEARNING: `core.NewLoopConfig()` returns a value type `core.LoopConfig` (not a pointer), and `core.RunAutoLoop()` takes a value type. When extracting `buildLoopConfig`, the return type must be `core.LoopConfig` not `*core.LoopConfig` — the compiler catches this immediately.
+- LEARNING: For small files (140 lines), keeping extracted helpers in the same file is cleaner than creating a separate file. The doctor.go/init.go split pattern (task 6/7) was necessary because those files were 400+ lines. Here, a single file at 153 lines is readable and well-organized.
+- Commit: ee69280
