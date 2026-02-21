@@ -387,7 +387,6 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 						config.Installed.Workflows,
 					)
 
-					extractor := core.NewExtractor(cachePath, cwd)
 					for _, path := range paths {
 						localPath := filepath.Join(cwd, path)
 						if _, err := os.Stat(localPath); os.IsNotExist(err) {
@@ -398,7 +397,6 @@ func runDoctor(cmd *cobra.Command, args []string) error {
 							}
 						}
 					}
-					_ = extractor // silence unused warning
 				}
 			}
 
