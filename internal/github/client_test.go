@@ -428,6 +428,46 @@ func TestDownloadFile(t *testing.T) {
 	}
 }
 
+func TestDownloadFile_SizeLimit(t *testing.T) {
+	origLimit := MaxDownloadFileSize
+	MaxDownloadFileSize = 512 // 512-byte limit for testing
+	defer func() { MaxDownloadFileSize = origLimit }()
+
+	t.Run("oversized_file_rejected", func(t *testing.T) {
+		oversized := strings.Repeat("x", 1024) // 1KB > 512-byte limit
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = w.Write([]byte(oversized))
+		}))
+		defer server.Close()
+		client := newTestClient(server)
+
+		_, err := client.DownloadFile("1.0.0", "big-file.txt")
+		if err == nil {
+			t.Fatal("expected error for oversized file, got nil")
+		}
+		if !strings.Contains(err.Error(), "exceeds maximum download size") {
+			t.Errorf("expected 'exceeds maximum download size' error, got: %v", err)
+		}
+	})
+
+	t.Run("file_at_limit_succeeds", func(t *testing.T) {
+		exactSize := strings.Repeat("y", 512) // exactly at limit
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			_, _ = w.Write([]byte(exactSize))
+		}))
+		defer server.Close()
+		client := newTestClient(server)
+
+		data, err := client.DownloadFile("1.0.0", "ok-file.txt")
+		if err != nil {
+			t.Fatalf("file at exact limit should succeed, got: %v", err)
+		}
+		if len(data) != 512 {
+			t.Errorf("expected 512 bytes, got %d", len(data))
+		}
+	})
+}
+
 func TestCheckForUpdates(t *testing.T) {
 	tests := []struct {
 		name       string

@@ -33,6 +33,10 @@ const (
 	DevVersion = "dev"
 )
 
+// MaxDownloadFileSize is the maximum allowed size for a single file
+// download (10 MB). Prevents out-of-memory from unbounded reads.
+var MaxDownloadFileSize int64 = 10 * 1024 * 1024
+
 // Client provides GitHub API operations
 type Client struct {
 	httpClient *http.Client
@@ -246,7 +250,14 @@ func (c *Client) DownloadFile(version, path string) ([]byte, error) {
 		return nil, fmt.Errorf("download failed: %s", resp.Status)
 	}
 
-	return io.ReadAll(resp.Body)
+	data, err := io.ReadAll(io.LimitReader(resp.Body, MaxDownloadFileSize+1))
+	if err != nil {
+		return nil, fmt.Errorf("failed to read file content: %w", err)
+	}
+	if int64(len(data)) > MaxDownloadFileSize {
+		return nil, fmt.Errorf("file %q exceeds maximum download size (%d bytes)", path, MaxDownloadFileSize)
+	}
+	return data, nil
 }
 
 // VersionInfo contains version comparison information

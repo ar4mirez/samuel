@@ -313,6 +313,88 @@ func TestExtractTarGz_DirectoryTraversal(t *testing.T) {
 	}
 }
 
+func TestExtractTarGz_FileSizeLimit(t *testing.T) {
+	dest := t.TempDir()
+
+	// Save and restore the original limit for test isolation
+	origLimit := MaxExtractedFileSize
+	MaxExtractedFileSize = 1024 // 1KB limit for testing
+	defer func() { MaxExtractedFileSize = origLimit }()
+
+	// Create archive with a file exceeding the limit
+	var buf bytes.Buffer
+	gw := gzip.NewWriter(&buf)
+	tw := tar.NewWriter(gw)
+
+	// Write a file larger than the 1KB test limit
+	oversized := bytes.Repeat([]byte("x"), 2048)
+	if err := tw.WriteHeader(&tar.Header{
+		Name:     "repo/large-file.bin",
+		Typeflag: tar.TypeReg,
+		Mode:     0644,
+		Size:     int64(len(oversized)),
+	}); err != nil {
+		t.Fatalf("failed to write header: %v", err)
+	}
+	if _, err := tw.Write(oversized); err != nil {
+		t.Fatalf("failed to write content: %v", err)
+	}
+
+	tw.Close()
+	gw.Close()
+
+	err := extractTarGz(&buf, dest)
+	if err == nil {
+		t.Fatal("expected error for oversized file, got nil")
+	}
+	if !strings.Contains(err.Error(), "exceeds maximum size") {
+		t.Errorf("expected 'exceeds maximum size' error, got: %v", err)
+	}
+}
+
+func TestExtractTarGz_FileSizeAtLimit(t *testing.T) {
+	dest := t.TempDir()
+
+	origLimit := MaxExtractedFileSize
+	MaxExtractedFileSize = 1024
+	defer func() { MaxExtractedFileSize = origLimit }()
+
+	// File exactly at the limit should succeed
+	exactSize := bytes.Repeat([]byte("y"), 1024)
+	var buf bytes.Buffer
+	gw := gzip.NewWriter(&buf)
+	tw := tar.NewWriter(gw)
+
+	if err := tw.WriteHeader(&tar.Header{
+		Name:     "repo/exact-file.bin",
+		Typeflag: tar.TypeReg,
+		Mode:     0644,
+		Size:     int64(len(exactSize)),
+	}); err != nil {
+		t.Fatalf("failed to write header: %v", err)
+	}
+	if _, err := tw.Write(exactSize); err != nil {
+		t.Fatalf("failed to write content: %v", err)
+	}
+
+	tw.Close()
+	gw.Close()
+
+	err := extractTarGz(&buf, dest)
+	if err != nil {
+		t.Fatalf("file at exact size limit should succeed, got: %v", err)
+	}
+
+	// Verify file was extracted
+	data, err := os.ReadFile(filepath.Join(dest, "repo", "exact-file.bin"))
+	if err != nil {
+		t.Fatalf("failed to read extracted file: %v", err)
+	}
+	if len(data) != 1024 {
+		t.Errorf("expected 1024 bytes, got %d", len(data))
+	}
+}
+
 func TestCopyFile(t *testing.T) {
 	t.Run("copies content and permissions", func(t *testing.T) {
 		srcDir := t.TempDir()

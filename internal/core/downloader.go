@@ -12,6 +12,10 @@ import (
 	"github.com/ar4mirez/samuel/internal/github"
 )
 
+// MaxExtractedFileSize is the maximum allowed size for a single file
+// extracted from a tar archive (100 MB). Prevents decompression bombs.
+var MaxExtractedFileSize int64 = 100 * 1024 * 1024
+
 // Downloader handles downloading and extracting framework files
 type Downloader struct {
 	client    *github.Client
@@ -158,11 +162,16 @@ func extractTarGz(reader io.Reader, dest string) error {
 				return fmt.Errorf("failed to create file: %w", err)
 			}
 
-			if _, err := io.Copy(file, tarReader); err != nil {
+			// Limit read size to prevent decompression bombs
+			n, err := io.Copy(file, io.LimitReader(tarReader, MaxExtractedFileSize+1))
+			if err != nil {
 				file.Close()
 				return fmt.Errorf("failed to write file: %w", err)
 			}
 			file.Close()
+			if n > MaxExtractedFileSize {
+				return fmt.Errorf("file %q exceeds maximum size limit (%d bytes)", header.Name, MaxExtractedFileSize)
+			}
 
 		case tar.TypeSymlink:
 			// Validate symlink target to prevent traversal attacks
