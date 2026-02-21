@@ -397,7 +397,7 @@ func copyDirRecursive(srcDir, dstDir string) error {
 }
 
 // copySingleFile copies a single file from src to dst
-func copySingleFile(srcPath, dstPath string) error {
+func copySingleFile(srcPath, dstPath string) (err error) {
 	if err := os.MkdirAll(filepath.Dir(dstPath), 0755); err != nil {
 		return err
 	}
@@ -412,7 +412,11 @@ func copySingleFile(srcPath, dstPath string) error {
 	if err != nil {
 		return err
 	}
-	defer dst.Close()
+	defer func() {
+		if cerr := dst.Close(); cerr != nil && err == nil {
+			err = cerr
+		}
+	}()
 
 	_, err = io.Copy(dst, src)
 	return err

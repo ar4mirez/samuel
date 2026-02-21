@@ -168,7 +168,9 @@ func extractTarGz(reader io.Reader, dest string) error {
 				file.Close()
 				return fmt.Errorf("failed to write file: %w", err)
 			}
-			file.Close()
+			if err := file.Close(); err != nil {
+				return fmt.Errorf("failed to close file %q: %w", header.Name, err)
+			}
 			if n > MaxExtractedFileSize {
 				return fmt.Errorf("file %q exceeds maximum size limit (%d bytes)", header.Name, MaxExtractedFileSize)
 			}
@@ -236,7 +238,7 @@ func copyDir(src, dst string) error {
 }
 
 // copyFile copies a single file
-func copyFile(src, dst string) error {
+func copyFile(src, dst string) (err error) {
 	srcFile, err := os.Open(src)
 	if err != nil {
 		return err
@@ -252,7 +254,11 @@ func copyFile(src, dst string) error {
 	if err != nil {
 		return err
 	}
-	defer dstFile.Close()
+	defer func() {
+		if cerr := dstFile.Close(); cerr != nil && err == nil {
+			err = cerr
+		}
+	}()
 
 	_, err = io.Copy(dstFile, srcFile)
 	return err
