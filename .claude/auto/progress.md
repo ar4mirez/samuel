@@ -392,6 +392,13 @@
 - Docker env var forwarding uses explicit allowlist (not forwarding all vars)
 - Decompression bomb and download size protections in place
 
+[2026-02-22T02:30:00Z] [iteration:19] [task:2] COMPLETED: Removed unused extractor variable in doctor.go
+- Removed `extractor := core.NewExtractor(cachePath, cwd)` on line 390 and `_ = extractor` on line 401
+- The code uses `core.CopyFromCache(cachePath, cwd, path)` directly — the extractor was never needed
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: The `core` import is still needed (13 other usages in the file), so no import cleanup was required
+- Commit: 0d77327
+
 ### Tasks Generated (Fifth Discovery): 10
 | ID | Priority | Title |
 |----|----------|-------|
