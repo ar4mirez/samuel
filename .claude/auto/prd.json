@@ -532,13 +532,134 @@
         "internal/commands/search.go"
       ],
       "source": "pilot-discovery"
+    },
+    {
+      "id": "101",
+      "title": "Fix potential panic from negative search limit flag in search.go",
+      "description": "search.go:75 calls sortAndLimitResults(results, limit) where limit comes from the --limit CLI flag with no validation. If a user passes --limit -1, the condition len(results) > limit is true, and results[:limit] with a negative limit causes a runtime panic: 'slice bounds out of range [:-1]'. Similarly, --limit 0 silently returns zero results. Add validation: if limit <= 0 { limit = defaultSearchLimit } (where defaultSearchLimit = 20, the current default). This also addresses the magic number for the default.",
+      "status": "completed",
+      "priority": "high",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/search.go"
+      ],
+      "commit_sha": "1207ffa",
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "102",
+      "title": "Add environment variable range validation in auto_loop.go NewLoopConfig",
+      "description": "auto_loop.go:30-42 parses PAUSE_SECONDS and MAX_CONSECUTIVE_FAILURES from environment variables via strconv.Atoi but doesn't validate ranges. A negative PAUSE_SECONDS creates a negative time.Duration (time.Sleep returns immediately — no pause between iterations). A zero MAX_CONSECUTIVE_FAILURES means the loop exits on the first failure (no fault tolerance). Add range validation: if pauseSecs < 0 { pauseSecs = 2 } and if maxConsecFails < 1 { maxConsecFails = 3 } to ensure sensible defaults when invalid values are provided.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/auto_loop.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "103",
+      "title": "Add unit tests for auto_handlers.go init helper functions",
+      "description": "auto_handlers.go (280 LOC) has tests only for detectQualityChecks, countTaskStatuses, and validateSandbox (19 tests). The init helper functions remain untested: initAutoDir (creates auto directory + config + PRD), writeAutoFiles (prompt + progress file creation), printInitSummary (display-only). Test initAutoDir with t.TempDir(): valid dir creates all expected files, existing auto dir is preserved, custom prdPath triggers conversion. Test writeAutoFiles: verify prompt.md content matches config, progress.md created empty. Use stdout capture for printInitSummary.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/commands/auto_handlers_test.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "104",
+      "title": "Refactor extractTarGz() in downloader.go below 50-line limit",
+      "description": "extractTarGz() is 70 lines (1.4x the 50-line limit) at downloader.go:126-196. Contains security-critical code (path traversal checks, decompression bomb prevention, symlink validation) that benefits from clear decomposition. Extract: (1) extractTarEntry(dest, header, tarReader) (~30 lines) — the switch on TypeDir/TypeReg/TypeSymlink with per-type handling. Keep the main loop in extractTarGz at ~35 lines (reader setup + iteration + path sanitization).",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/downloader.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "105",
+      "title": "Refactor DownloadVersion() in downloader.go below 50-line limit",
+      "description": "DownloadVersion() is 66 lines (1.32x the 50-line limit) at downloader.go:40-106. Mixes cache checking, archive downloading, temp directory management, extraction, and cache installation in a single function. Extract: (1) downloadArchive(version) (io.ReadCloser, error) (~15 lines) — dev vs release download dispatch, and (2) installToCache(tempDir, cacheDest) error (~15 lines) — find extracted dir + rename/copy to cache. Keep DownloadVersion as a ~35-line orchestrator.",
+      "status": "pending",
+      "priority": "medium",
+      "complexity": "medium",
+      "files_to_modify": [
+        "internal/core/downloader.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "106",
+      "title": "Refactor MultiSelect() in prompts.go below 50-line limit",
+      "description": "MultiSelect() is 75 lines (1.5x the 50-line limit) at prompts.go:43-118. Contains an interactive selection loop with display item construction, template formatting, prompt execution, and result collection. Extract: (1) buildMultiSelectItems(options, selected) []displayItem (~15 lines) — the display item construction loop including the 'Done' sentinel, and (2) collectSelectedOptions(options, selected) []SelectOption (~10 lines) — the result collection at the end. Keep MultiSelect as a ~45-line loop orchestrator.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/ui/prompts.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "107",
+      "title": "Refactor listInstalled() in list.go below 50-line limit",
+      "description": "listInstalled() is 72 lines (1.44x the 50-line limit) at list.go:43-115. Contains three nearly identical blocks for languages, frameworks, and workflows display. Extract: (1) displayComponentSection(title, installed, total, finder) (~20 lines) — the generic pattern for printing a component category with registry lookup. The three blocks differ only in the config field, registry count, and finder function. The workflows section has special 'all' expansion — handle as a pre-processing step before calling the generic helper.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/list.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "108",
+      "title": "Refactor runSkillValidate() in skill.go below 50-line limit",
+      "description": "runSkillValidate() is 66 lines (1.32x the 50-line limit) at skill.go:162-228. Mixes skill loading (single vs all), validation result accumulation, and result display. Extract: (1) loadSkillsToValidate(skillsDir, args) ([]*core.SkillInfo, error) (~20 lines) — the conditional single/all loading logic, and (2) displayValidationResults(skills) error (~20 lines) — the result counting, per-skill display, and summary. Keep runSkillValidate as a ~25-line orchestrator.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/commands/skill.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "109",
+      "title": "Extract magic numbers in auto_loop.go to named constants",
+      "description": "auto_loop.go:30 uses `pauseSecs := 2` and line 37 uses `maxConsecFails := 3` as magic number defaults for the loop configuration. Extract to package-level constants: `defaultPauseBetweenIterations = 2` and `defaultMaxConsecutiveFailures = 3`. Also extract the env var names as constants: `envPauseSeconds = \"PAUSE_SECONDS\"` and `envMaxConsecutiveFailures = \"MAX_CONSECUTIVE_FAILURES\"` to make the configuration points self-documenting.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/core/auto_loop.go"
+      ],
+      "source": "pilot-discovery"
+    },
+    {
+      "id": "110",
+      "title": "Extract HTTP client timeout to named constant in github/client.go",
+      "description": "github/client.go:51 uses `Timeout: 30 * time.Second` as a hard-coded HTTP client timeout. Extract to a package-level constant: `const httpClientTimeout = 30 * time.Second`. This makes the timeout value discoverable and self-documenting, consistent with the existing `MaxDownloadFileSize` constant on line 38 which follows the same pattern for the download size limit.",
+      "status": "pending",
+      "priority": "low",
+      "complexity": "low",
+      "files_to_modify": [
+        "internal/github/client.go"
+      ],
+      "source": "pilot-discovery"
     }
   ],
   "progress": {
-    "total_tasks": 40,
-    "completed_tasks": 18,
-    "current_iteration": 44,
-    "total_iterations_run": 44,
+    "total_tasks": 50,
+    "completed_tasks": 19,
+    "current_iteration": 45,
+    "total_iterations_run": 45,
     "status": "in_progress"
   }
 }

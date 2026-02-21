@@ -946,3 +946,61 @@
 - LEARNING: The original function had `var backupDir string` at the top of a 60-line block. Extracting `backupModifiedFiles` returns both `(backupDir, error)`, making the control flow clearer: backup is only attempted when there are modified files AND force is off.
 - LEARNING: File size is the binding constraint, not function size. The original 278-line file grew to 304 after adding function signatures and godocs for 5 new functions. Trimming multi-line godocs to single lines (e.g., "backs up modified files, extracts updated files, reports results, and saves the updated config version" → "backs up modified files, extracts updates, and saves the config") saved 4 lines to hit exactly 300.
 - Commit: a31c0fd
+
+---
+
+[2026-02-22T18:00:00Z] [discovery] FOUND: Eleventh discovery iteration — input validation, function size violations, test coverage, magic numbers
+
+### Input Validation Issues (NEW)
+- **HIGH**: `search.go:75` — `sortAndLimitResults(results, limit)` with negative `limit` from `--limit` flag causes runtime panic: `results[:limit]` with limit=-1 → "slice bounds out of range [:-1]". Zero limit silently returns no results. No validation on the flag value.
+- **MEDIUM**: `auto_loop.go:30-42` — `PAUSE_SECONDS` and `MAX_CONSECUTIVE_FAILURES` env vars parsed via `strconv.Atoi` without range validation. Negative `PAUSE_SECONDS` → zero sleep (rapid-fire iterations). Zero `MAX_CONSECUTIVE_FAILURES` → loop exits on first failure (no fault tolerance).
+
+### Function Size Violations (NEW — not covered by existing tasks)
+- `extractTarGz()` in downloader.go: **70 lines** (1.4x limit) — security-critical tar extraction code
+- `DownloadVersion()` in downloader.go: **66 lines** (1.32x limit) — cache + download + extraction orchestration
+- `MultiSelect()` in prompts.go: **75 lines** (1.5x limit) — interactive selection loop with display construction
+- `listInstalled()` in list.go: **72 lines** (1.44x limit) — three near-identical component display blocks
+- `runSkillValidate()` in skill.go: **66 lines** (1.32x limit) — mixes loading, validation, and display
+
+### Test Coverage Update
+- Overall: `cmd/samuel` **0%**, `internal/commands` **~45%**, `internal/core` **~85%**, `internal/github` **89.4%**, `internal/ui` **~50%**
+- `auto_handlers.go` (280 LOC) — only detectQualityChecks/countTaskStatuses/validateSandbox tested; initAutoDir/writeAutoFiles/printInitSummary untested
+- 22 pending tasks remain (tasks 69-100), 18 completed in current batch
+- 12 source files in `internal/commands/` still have no corresponding test file
+
+### Magic Numbers (NEW — not covered by task 70 or 100)
+- `auto_loop.go:30` — `pauseSecs := 2` and `maxConsecFails := 3` (loop defaults)
+- `auto_loop.go:31,38` — `"PAUSE_SECONDS"` and `"MAX_CONSECUTIVE_FAILURES"` env var names inline
+- `github/client.go:51` — `Timeout: 30 * time.Second` (HTTP client timeout)
+
+### Positive Findings
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- `go vet` clean — zero warnings
+- No TODO/FIXME/HACK markers, no hardcoded secrets, no panic() calls
+- Security posture strong: path traversal, symlink, size limits, TOCTOU, race condition, Docker image validation all fixed
+- `internal/core` at ~85% exceeds 80% business logic coverage target
+- `internal/github` at 89.4% well above target
+- 44 iterations completed, 18 tasks completed in current batch
+- Consistent test patterns maintained across all new tests
+
+### Tasks Generated (Eleventh Discovery): 10
+| ID  | Priority | Title |
+|-----|----------|-------|
+| 101 | high     | Fix potential panic from negative search limit flag in search.go |
+| 102 | medium   | Add environment variable range validation in auto_loop.go |
+| 103 | medium   | Add unit tests for auto_handlers.go init helper functions |
+| 104 | medium   | Refactor extractTarGz() in downloader.go below 50-line limit |
+| 105 | medium   | Refactor DownloadVersion() in downloader.go below 50-line limit |
+| 106 | low      | Refactor MultiSelect() in prompts.go below 50-line limit |
+| 107 | low      | Refactor listInstalled() in list.go below 50-line limit |
+| 108 | low      | Refactor runSkillValidate() in skill.go below 50-line limit |
+| 109 | low      | Extract magic numbers in auto_loop.go to named constants |
+| 110 | low      | Extract HTTP client timeout to named constant in github/client.go |
+
+[2026-02-21T23:00:00Z] [iteration:45] [task:101] COMPLETED: Fixed potential panic from negative search limit flag in search.go
+- Added `defaultSearchLimit` constant (value: 20) replacing magic number in flag definition
+- Added validation in `sortAndLimitResults()`: if `limit <= 0`, clamp to `defaultSearchLimit`
+- Added 2 test cases to `TestSortAndLimitResults`: negative limit (-1) and zero limit (0) both fall back to default
+- Added `TestDefaultSearchLimit` to verify constant value
+- LEARNING: Go's `results[:limit]` with negative limit panics with "slice bounds out of range". The condition `len(results) > limit` is always true when limit < 0, so the panic path was guaranteed for any non-empty result set.
+- Commit: 1207ffa
