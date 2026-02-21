@@ -820,3 +820,14 @@
 - LEARNING: The `core` package has no dependency on `ui` — error reporting in `core` uses `result.Errors` (append to a slice) rather than direct console output. This is the correct pattern for a library package. The calling code (in `commands/sync.go`) can decide how to present errors to the user.
 - LEARNING: `filepath.Rel` only fails on Unix when the two paths are on different volumes (which doesn't happen on Unix — volumes are a Windows concept). So this error path is primarily for Windows cross-volume scenarios. The fix is still correct for defense-in-depth and avoids the `_ =` anti-pattern.
 - Commit: cd347a9
+
+[2026-02-22T15:00:00Z] [iteration:39] [task:76] COMPLETED: Added unit tests for commands/list.go helper functions
+- Created list_test.go with 22 test cases covering 3 functions
+- `listInstalled`: 12 tests (no config, corrupt config, empty config, languages only, frameworks only, workflows all, specific workflows, unknown component names, type filter languages/frameworks/workflows, mixed components)
+- `listAvailable`: 7 tests (no config, with config marks installed, all workflows installed, type filter languages/frameworks/workflows, corrupt config warns and continues)
+- `runList`: 3 tests (default calls listInstalled, --available flag calls listAvailable, type filter passed through)
+- Used `setupListTestDir` helper with `core.Config.Save(dir)` + `os.Chdir` pattern for config setup
+- All quality checks pass: `go test ./...`, `go vet ./...`, `go build ./...`
+- LEARNING: `listInstalled` returns a proper error on corrupt config (non-ErrNotExist), while `listAvailable` warns and continues with nil config. This asymmetry is intentional: `listInstalled` requires a valid config to show installed items, while `listAvailable` uses config only as an optional enhancement to mark installed items.
+- LEARNING: The `listInstalled` workflows section has special handling: when `config.Installed.Workflows` is `["all"]`, the count shows the full `len(core.Workflows)` and iterates over all workflow entries from the registry instead of the config list. This is the same "all" expansion pattern used in doctor_checks.go.
+- LEARNING: Unknown component names (not in registry) are displayed without descriptions — `FindLanguage/FindFramework/FindWorkflow` returns nil, and the fallback path just prints the name. This is forward-compatible with newer registry versions.

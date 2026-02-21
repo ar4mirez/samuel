@@ -228,7 +228,7 @@
       "id": "76",
       "title": "Add unit tests for commands/list.go helper functions",
       "description": "list.go (164 LOC) has 0% test coverage. Contains listInstalled (73 lines) and listAvailable (69 lines) which format component listings. Test the formatting/display logic by setting up samuel.yaml configs with various component combinations (languages only, frameworks only, workflows, mixed). Verify output includes expected component names and categories.",
-      "status": "pending",
+      "status": "completed",
       "priority": "medium",
       "complexity": "medium",
       "files_to_modify": [
@@ -409,9 +409,9 @@
   ],
   "progress": {
     "total_tasks": 30,
-    "completed_tasks": 12,
-    "current_iteration": 38,
-    "total_iterations_run": 38,
+    "completed_tasks": 13,
+    "current_iteration": 39,
+    "total_iterations_run": 39,
     "status": "in_progress"
   }
 }
