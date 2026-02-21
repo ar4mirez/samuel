@@ -134,7 +134,7 @@
       "id": "9",
       "title": "Add unit tests for internal/core/auto_prompt.go",
       "description": "auto_prompt.go (104 LOC) generates prompts for the autonomous AI loop with no test coverage. Add tests for prompt template rendering and edge cases.",
-      "status": "pending",
+      "status": "completed",
       "priority": "medium",
       "complexity": "low",
       "files_to_modify": [
@@ -784,9 +784,9 @@
   ],
   "progress": {
     "total_tasks": 60,
-    "completed_tasks": 21,
-    "current_iteration": 21,
-    "total_iterations_run": 21,
+    "completed_tasks": 22,
+    "current_iteration": 22,
+    "total_iterations_run": 22,
     "status": "in_progress"
   }
 }
