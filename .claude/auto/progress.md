@@ -586,3 +586,13 @@
 - LEARNING: The `defer func() { if cerr := f.Close(); cerr != nil && err == nil { err = cerr } }()` pattern requires a named return value. The `err == nil` guard ensures the Close error doesn't mask a more important io.Copy error — if io.Copy already failed, the Close error is secondary.
 - LEARNING: In `copySingleFile`, the `if err := os.MkdirAll(...)` block uses short variable declaration (`:=`) inside the `if` scope, so it does NOT shadow the named return `err`. After the `if` block exits, subsequent uses of `err` still refer to the named return. This is a subtle but important Go scoping distinction.
 - Commit: a53222d
+
+[2026-02-22T07:30:00Z] [iteration:26] [task:62] COMPLETED: Added Docker sandbox image name validation in auto_loop.go
+- Added `IsValidSandboxImage()` function in `docker.go` using a regex pattern matching Docker image reference format: `[registry/]name[:tag][@digest]`
+- Rejects: empty strings, absolute paths (`/bin/sh`), relative path escapes (`../`), shell metacharacters (`;`, `$()`, backticks, `|`, `&`, spaces)
+- Accepts: standard images (`node:lts`), registry-prefixed (`ghcr.io/owner/image:latest`), digest-pinned (`node:lts@sha256:...`)
+- Added validation call in `invokeAgentDocker` before image is passed to `buildDockerRunArgs`
+- Added 20 test cases in `TestIsValidSandboxImage` (9 valid, 11 invalid) and 4 regression tests in `TestInvokeAgentDocker_RejectsInvalidImage`
+- LEARNING: Docker image names always start with an alphanumeric character — names starting with `.` or `/` are filesystem paths, not image references. The regex `^[a-zA-Z0-9]` naturally rejects both absolute and relative path attacks.
+- LEARNING: `exec.Command("docker", "run", image)` does NOT invoke a shell, so shell metacharacters in `image` won't cause command injection. However, a malicious image name like `evil-registry.com/backdoor:latest` is still dangerous because Docker will pull and run it. The validation ensures the format is valid but cannot prevent pulling from untrusted registries — that's a policy decision outside scope.
+- Commit: 8f60188

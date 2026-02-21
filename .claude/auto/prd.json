@@ -42,13 +42,14 @@
       "id": "62",
       "title": "Add Docker sandbox image name validation in auto_loop.go",
       "description": "SandboxImage from prd.json (user-editable) is passed directly to docker run without validation (auto_loop.go:146). A tampered prd.json could specify a malicious Docker image. Add an IsValidSandboxImage() function that validates image names match a safe pattern (e.g., alphanumeric with dots, dashes, colons, slashes for registry/image:tag format) and rejects shell metacharacters or absolute paths.",
-      "status": "pending",
+      "status": "completed",
       "priority": "medium",
       "complexity": "low",
       "files_to_modify": [
         "internal/core/auto_loop.go",
         "internal/core/docker.go"
       ],
+      "commit_sha": "8f60188",
       "source": "pilot-discovery"
     },
     {
@@ -153,9 +154,9 @@
   ],
   "progress": {
     "total_tasks": 10,
-    "completed_tasks": 1,
-    "current_iteration": 25,
-    "total_iterations_run": 25,
+    "completed_tasks": 2,
+    "current_iteration": 26,
+    "total_iterations_run": 26,
     "status": "in_progress"
   }
 }
