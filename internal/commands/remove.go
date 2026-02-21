@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/ar4mirez/samuel/internal/core"
 	"github.com/ar4mirez/samuel/internal/ui"
@@ -104,8 +105,11 @@ func runRemove(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to get working directory: %w", err)
 	}
 
-	// Remove the file
-	filePath := filepath.Join(cwd, component.Path)
+	// Remove the file (validate path stays within project directory)
+	filePath, err := validateRemovePath(cwd, component.Path)
+	if err != nil {
+		return err
+	}
 	if _, err := os.Stat(filePath); err == nil {
 		if err := os.Remove(filePath); err != nil {
 			return fmt.Errorf("failed to remove file: %w", err)
@@ -132,4 +136,15 @@ func runRemove(cmd *cobra.Command, args []string) error {
 	ui.Success("Updated samuel.yaml")
 
 	return nil
+}
+
+// validateRemovePath checks that a component path, when joined with the
+// project directory, stays within that directory (prevents path traversal).
+func validateRemovePath(projectDir, componentPath string) (string, error) {
+	cleanDir := filepath.Clean(projectDir)
+	fullPath := filepath.Clean(filepath.Join(cleanDir, componentPath))
+	if fullPath != cleanDir && !strings.HasPrefix(fullPath, cleanDir+string(os.PathSeparator)) {
+		return "", fmt.Errorf("path traversal detected: component path %q escapes project directory", componentPath)
+	}
+	return fullPath, nil
 }
