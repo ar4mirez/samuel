@@ -458,6 +458,14 @@ func TestCheckForUpdates(t *testing.T) {
 			wantLatest: "1.0.0",
 		},
 		{
+			name: "no_releases_returns_error",
+			handler: func(w http.ResponseWriter, _ *http.Request) {
+				w.WriteHeader(http.StatusNotFound)
+			},
+			current: "1.0.0",
+			wantErr: true,
+		},
+		{
 			name: "api_error",
 			handler: func(w http.ResponseWriter, _ *http.Request) {
 				w.WriteHeader(http.StatusInternalServerError)

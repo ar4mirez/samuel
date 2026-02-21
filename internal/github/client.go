@@ -264,6 +264,10 @@ func (c *Client) CheckForUpdates(currentVersion string) (*VersionInfo, error) {
 		return nil, err
 	}
 
+	if release == nil {
+		return nil, fmt.Errorf("no releases found for %s/%s", c.owner, c.repo)
+	}
+
 	// Strip 'v' prefix if present
 	latestVersion := release.TagName
 	if len(latestVersion) > 0 && latestVersion[0] == 'v' {
